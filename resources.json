@@ -1,0 +1,7 @@
+{
+    "packages" : {
+        "NL-placeholder"        : "resources/placeholder/placeholder.json",
+        "NL-camera"                 : "resources/camera.json",
+        "NL-lights"                 : "resources/lights/lights.json"
+    }
+}

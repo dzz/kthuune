@@ -1,0 +1,15 @@
+{
+    "description" : "Base view for Camera",
+    "preload" : true,
+    "resources" : {
+        "coordsys" : [ 
+            {
+                "name"              : "default_view",
+                "mode"              : "centered_view",
+                "width"             : 15,
+                "height"            : 10,
+                "y_axis"            : "down"
+            }
+        ]
+    }
+}
