@@ -1,6 +1,17 @@
 from random import uniform, choice
 from math import hypot
 
+
+def map_txt_spec( df, txt_spec, probability, effect  ):
+    for row_idx,row in enumerate(txt_spec):
+        row_spec = row[0].replace(" ","")
+        for col_idx,char in enumerate(row_spec):
+            x = (float(col_idx) / float(len(row_spec))) * float( df.width )
+            y = (float(row_idx) / float(len(txt_spec))) * float( df.height )
+
+            if(uniform(0.0,1.0) < probability ):
+                effect( char,[x,y] )
+
 class ForestGraveyard():
     def __init__(self):
         pass
@@ -53,8 +64,10 @@ class ForestGraveyard():
     def generate_trees( self, df ):
         pass
 
+
+
     def generate_sigil_points( self, df):
-        txt_spect = [
+        txt_spec = [
             [ "# # # # # # # # # #" ],
             [ "# _ _`_ _ _ ` _ _ #" ],
             [ "#_ XX` yyyy_`_XX _#" ],
@@ -70,16 +83,6 @@ class ForestGraveyard():
 
         sigil_points = []
 
-        for row_idx,row in enumerate(txt_spect):
-            row_spec = row[0].replace(" ","")
-            for col_idx,char in enumerate(row_spec):
-                x = (float(col_idx) / float(len(row_spec))) * float( df.width )
-                y = (float(row_idx) / float(len(txt_spect))) * float( df.height )
-
-                if(uniform(0.0,1.0) < 0.8):
-                    sigil_points.append({
-                        "sigil": char,
-                        "p": [x + uniform(-0.5,0.5),y + uniform(-0.5,0.5) ]
-                    })
+        map_txt_spec( df, txt_spec, 0.8, lambda char, p : sigil_points.append({ "sigil": char, "p": p } ) )
         self.sigil_points = sigil_points
 
