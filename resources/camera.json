@@ -6,8 +6,8 @@
             {
                 "name"              : "default_view",
                 "mode"              : "centered_view",
-                "width"             : 15,
-                "height"            : 10,
+                "width"             : 16,
+                "height"            : 9,
                 "y_axis"            : "down"
             }
         ]

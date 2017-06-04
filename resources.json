@@ -2,6 +2,9 @@
     "packages" : {
         "NL-placeholder"        : "resources/placeholder/placeholder.json",
         "NL-camera"                 : "resources/camera.json",
-        "NL-lights"                 : "resources/lights/lights.json"
+        "NL-lights"                 : "resources/lights/lights.json",
+
+        "KT-player" : "resources/player/player.json",
+        "KT-compositor" : "resources/compositor/compositor.json"
     }
 }
