@@ -2,7 +2,7 @@
     "preload": true,
     "resources" : {
         "texture" : [
-            { "name" : "player", "filename" : "{package_path}/player.png", "filtered" : false }
+            { "name" : "player", "filename" : "{package_path}/player.png", "filtered" : true }
         ]
     }
 }

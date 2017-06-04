@@ -9,7 +9,7 @@ class Game( BaseGame ):
         self.camera         = self.create_tickable( Camera( p = [0.0,0.0], zoom = 0.25 ) )
         self.controllers    = self.create_tickable( Controllers() )
         self.player         = self.create_tickable( Player( controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 1.0,1.0] ) )
-        self.floor          = self.create_tickable( DungeonFloor( width = 32, height = 32, camera = self.camera, player = self.player, objects=[] ) )
+        self.floor          = self.create_tickable( DungeonFloor( width = 128, height = 128, camera = self.camera, player = self.player, objects=[] ) )
 
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
 
