@@ -5,6 +5,7 @@
         "NL-lights"                 : "resources/lights/lights.json",
 
         "KT-player" : "resources/player/player.json",
-        "KT-compositor" : "resources/compositor/compositor.json"
+        "KT-compositor" : "resources/compositor/compositor.json",
+        "KT-tiles"      : "resources/tiles/tiles.json"
     }
 }
