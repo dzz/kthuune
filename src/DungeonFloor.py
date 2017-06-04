@@ -27,7 +27,7 @@ class DungeonFloor( Floor, BGL.auto_configurable):
             configuration = {
                 "layers" : [
                     { 
-                        "data" : list(map( lambda x: choice(range(1,20)), range(0, self.width*self.height))),
+                        "data" : self.generator.get_tiledata(),
                         "width": self.width,
                         "height": self.height,
                         "name": "floor"
