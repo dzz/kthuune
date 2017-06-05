@@ -11,16 +11,21 @@ class DungeonFloor( Floor, BGL.auto_configurable):
             "height" : 32, 
             "generator" : ForestGraveyard(),
             "renderer_config" : {
-                "vision_lightmap_width" : 128,
-                "vision_lightmap_height" : 128,
+                "vision_lightmap_width" : 64,
+                "vision_lightmap_height" : 64,
+                "photon_map_width" : 512,
+                "photon_map_height" : 512,
+                "static_lightmap_width" : 1024,
+                "static_lightmap_height" : 1024,
                 "photon_mapper_config" : { 
-                    'photon_radius' : 80.0,
-                    'photon_emitter_power' : 0.02,
-                    'photon_decay' : 0.98,
+                    'stream' : False,
+                    'photon_radius' : 100.0,
+                    'photon_emitter_power' : 0.1,
+                    'photon_decay' : 1.0,
                     'photon_decay_jitter' : 0.02,
-                    'photon_max_bounces' : 20,
-                    'num_photons' : 32,
-                    'photon_observe_chance' : 0.1
+                    'photon_max_bounces' : 10,
+                    'num_photons' : 8,
+                    'photon_observe_chance' : 0.5
                 }
             }
         }, **kwargs )
@@ -56,7 +61,12 @@ class DungeonFloor( Floor, BGL.auto_configurable):
 
         floor_configuration = kwargs
         floor_configuration.update({
-            "tilemap" : Tilemap( beagle_tilemap = beagle_tilemap )
+            "tilemap" : Tilemap( beagle_tilemap = beagle_tilemap, channel_textures = {
+                "height" : BGL.assets.get("KT-tiles/texture/plain_tiles"),
+                "reflection" : BGL.assets.get("KT-tiles/texture/plain_tiles")
+            } ),
+            "objects" : self.generator.get_objects(),
+            "renderer_config" : self.renderer_config
         })
         
         self.light_occluders = self.generator.get_light_occluders()

@@ -1,6 +1,6 @@
 from random import uniform, choice
 from math import hypot
-
+from Newfoundland.Object import Object
 
 def map_txt_spec( df, txt_spec, probability, times, jitter, effect  ):
     for row_idx,row in enumerate(txt_spec):
@@ -21,15 +21,19 @@ class ForestGraveyard():
         self.generate_sigil_points( dungeon_floor )
         self.generate_tiledata(  dungeon_floor )
         self.generate_trees( dungeon_floor )
-        self.generate_forest_light(dungeon_floor)
+        self.generate_photon_emitters(dungeon_floor)
 
         self.light_occluders = self.tree_occluders
         self.light_occluders.extend( self.get_base_occluders(dungeon_floor) )
 
+        self.objects = []
+        self.generate_static_lights(dungeon_floor)
+        
+
+    def get_objects(self):
+        return self.objects
 
     def get_base_occluders(self, df):
-
-         
         lines = [
             [ [-0.5*df.width, -0.5*df.height],[0.5*df.width, -0.5*df.height] ],
             [ [ 0.5*df.width, -0.5*df.height],[0.5*df.width, 0.5*df.height] ],
@@ -51,15 +55,15 @@ class ForestGraveyard():
 
         print(sigil)
         if sigil == "#":
-            return choice( range(14,20) )
+            return choice( range(1,20) )
         if sigil == "_":
-            return choice( range(4,8) )
+            return choice( range(10,20) )
         if sigil == "y":
-            return choice( range(4,5) )
+            return choice( range(5,15) )
         if sigil == "`":
-            return choice( range(1,3) )
+            return choice( range(1,10) )
         if sigil == "X":
-            return choice( range(10,14) )
+            return choice( range(2,18) )
         exit()
 
             
@@ -88,7 +92,33 @@ class ForestGraveyard():
 
 
 
-    def generate_forest_light(self, df):
+    def generate_static_lights(self, df):
+        static_lights = []
+        txt_spec = [
+            [ "  1     1  " ],
+            [ " 2   3   2 " ],
+            [ "  1     1  " ] 
+        ]
+
+        def generate_light(char, p):
+            p[0] = p[0]-(df.width/2) + uniform(-1.0,1.0)
+            p[1] = p[1]-(df.height/2) + uniform(-1.0,1.0)
+
+            light_styles = {
+                '1' : [ Object.LightTypes.STATIC_SHADOWCASTER, [ 0.1,0.3,0.1,1.0], 25.0 ],
+                '2' : [ Object.LightTypes.STATIC_SHADOWCASTER, [ 0.5,0.3,0.8,1.0], 50.0 ],
+                '3' : [ Object.LightTypes.STATIC_SHADOWCASTER, [ 0.8,0.6,0.0,1.0], 100.0 ],
+            } 
+
+            style = light_styles[char]
+
+            return [ Object( visible = False, light_type = style[0], p = p, light_radius=style[2], color = style[1] ) ]
+
+        map_txt_spec( df, txt_spec, 1.0, 2, 25.0, lambda char, p : static_lights.extend(generate_light(char, p)))
+        self.objects.extend( static_lights )
+
+
+    def generate_photon_emitters(self, df):
         photon_emitters = []
         txt_spec = [
             [ "2,,,,,,2" ],
@@ -114,7 +144,7 @@ class ForestGraveyard():
             emitter_def = [ p[0],p[1], 1.0,1.0, colormap[char] ]
             return [ emitter_def ]
 
-        map_txt_spec( df, txt_spec, 1.0, 3, 3.0, lambda char, p : photon_emitters.extend(generate_emitter(char, p)))
+        map_txt_spec( df, txt_spec, 0.6, 3, 3.0, lambda char, p : photon_emitters.extend(generate_emitter(char, p)))
         self.photon_emitters = photon_emitters
 
     def generate_trees( self, df ):
