@@ -59,18 +59,18 @@ void main(void) {
     vec4 lit_floor = ((light_texel*floor_texel)*1.0)*(1.0-object_texel.a);
     vec4 lit_object = object_texel * photon_texel;
 
-    lit_object.a = 1.0;
+    float ooa = object_texel.a;
 
-    vec4 lit_reflection = reflect_texel * light_texel * reflect_map_texel * (1.0 -object_texel.a);
+    vec4 lit_reflection = reflect_texel * light_texel * reflect_map_texel;
 
     lit_floor = lit_floor + lit_reflection;
 
     
-    //gl_FragColor = vision_texel * floor_texel;
-    //gl_FragColor = (floor_texel * (1.0-object_texel.a)) + object_texel * vision_texel;
-    gl_FragColor = (lit_floor*light_texel + lit_object);
-    //gl_FragColor = photon_texel + floor_texel;
-    //gl_FragColor = photon_texel + floor_texel;
+    vec4 ot = object_texel + light_texel;
+    gl_FragColor = ((lit_floor*light_texel)*(1.0-ooa)) + (vec4(ot.r*ooa,ot.g*ooa,ot.b*ooa, ooa));
+
+
+//    gl_FragColor = (lit_floor*light_texel + lit_object);
 
 }
 

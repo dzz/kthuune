@@ -1,6 +1,29 @@
 from random import uniform, choice
 from math import hypot
 from Newfoundland.Object import Object
+from Beagle import API as BGL
+
+class TreeTop(Object):
+        def __init__(self,**kwargs):
+            overrides = {
+                    "num" : 0,
+                    "texture" : BGL.assets.get("KT-forest/texture/treetop"),
+                    'tick_type' : Object.TickTypes.TICK_FOREVER,
+                    'size' : [5.0,5.0],
+                    'rad' : uniform(-3.14,3.14),
+                    'parallax' : 1.2,
+                    'z_index' : 100
+                }
+            overrides.update(kwargs)
+            Object.__init__(self,**overrides)
+
+        def get_shader_params(self):
+            params = Object.get_shader_params(self)
+            tw = params["translation_world"]
+            tw[0] = tw[0]*self.parallax
+            tw[1] = tw[1]*self.parallax
+            params["translation_world" ] = tw
+            return params
 
 def map_txt_spec( df, txt_spec, probability, times, jitter, effect  ):
     for row_idx,row in enumerate(txt_spec):
@@ -18,6 +41,8 @@ class ForestGraveyard():
         pass
 
     def compile(self, dungeon_floor ):
+        self.objects = []
+
         self.generate_sigil_points( dungeon_floor )
         self.generate_tiledata(  dungeon_floor )
         self.generate_trees( dungeon_floor )
@@ -25,8 +50,6 @@ class ForestGraveyard():
 
         self.light_occluders = self.tree_occluders
         self.light_occluders.extend( self.get_base_occluders(dungeon_floor) )
-
-        self.objects = []
         self.generate_static_lights(dungeon_floor)
         
 
@@ -164,7 +187,21 @@ class ForestGraveyard():
 
         tree_occluders = []
 
-        def generate_tree(char,p):
+        def generate_tree_objects(char,p):
+            size = None
+            if char == "Q":
+                size = uniform(15,30)
+            if char == "e":
+                size = uniform(5,10)
+            if char == "`":
+                size = uniform(3,7)
+            if(size is None):
+                return []
+            p[0] = p[0]-(df.width/2) + uniform(-1.0,1.0)
+            p[1] = p[1]-(df.height/2) + uniform(-1.0,1.0)
+            return [ TreeTop( p = p, size = [ size*2, size*2 ], parallax = uniform(1.1,1.8) ) ]
+            
+        def generate_tree_occluders(char,p):
             size = None
             if char == "Q":
                 size = uniform(3.5,16.2)
@@ -194,7 +231,12 @@ class ForestGraveyard():
             lines.extend( [ [ points[0], points[1] ] , [ points[1], points[2] ] , [ points[2], points[3] ] , [ points[3], points[0] ] ] )
             return lines
 
-        map_txt_spec( df, txt_spec, 0.9, 1, 2.0, lambda char, p : tree_occluders.extend(generate_tree(char, p)))
+        tree_objects = []
+        map_txt_spec( df, txt_spec, 0.9, 2, 2.0, lambda char, p : tree_objects.extend(generate_tree_objects(char, p)))
+        tree_objects.sort( key =lambda x: x.parallax )
+        self.objects.extend(tree_objects)
+
+        map_txt_spec( df, txt_spec, 0.9, 1, 2.0, lambda char, p : tree_occluders.extend(generate_tree_occluders(char, p)))
         self.tree_occluders = tree_occluders 
 
     def generate_sigil_points( self, df):

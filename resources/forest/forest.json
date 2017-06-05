@@ -1,0 +1,8 @@
+{
+    "preload": true,
+    "resources" : {
+        "texture" : [
+            { "name" : "treetop", "filename" : "{package_path}/treetop.png", "filtered" : true }
+        ]
+    }
+}
