@@ -2,6 +2,7 @@ from random import uniform, choice
 from math import hypot
 from Newfoundland.Object import Object
 from Beagle import API as BGL
+from math import sin,cos
 
 class TreeTop(Object):
         def __init__(self,**kwargs):
@@ -12,10 +13,19 @@ class TreeTop(Object):
                     'size' : [5.0,5.0],
                     'rad' : uniform(-3.14,3.14),
                     'parallax' : 1.2,
-                    'z_index' : 100
+                    'z_index' : 100,
+                    'wind_speed' : uniform(0.01,0.03),
+                    'wind_mod' : uniform(1.1,1.2)
                 }
             overrides.update(kwargs)
             Object.__init__(self,**overrides)
+            self.t = 0
+
+        def tick(self):
+            self.t = self.t + 0.01
+            self.size[0] = self.size[0] + (sin(self.t* self.wind_speed)*0.01)
+            self.size[1] = self.size[1] + (cos(self.t* self.wind_speed*self.wind_mod)*0.01)
+            return True
 
         def get_shader_params(self):
             params = Object.get_shader_params(self)
@@ -190,7 +200,7 @@ class ForestGraveyard():
         def generate_tree_objects(char,p):
             size = None
             if char == "Q":
-                size = uniform(15,30)
+                size = uniform(10,25)
             if char == "e":
                 size = uniform(5,10)
             if char == "`":
@@ -199,7 +209,7 @@ class ForestGraveyard():
                 return []
             p[0] = p[0]-(df.width/2) + uniform(-1.0,1.0)
             p[1] = p[1]-(df.height/2) + uniform(-1.0,1.0)
-            return [ TreeTop( p = p, size = [ size*2, size*2 ], parallax = uniform(1.1,1.8) ) ]
+            return [ TreeTop( p = p, size = [ size*0.6, size*0.6 ], parallax = uniform(1.1,1.8) ) ]
             
         def generate_tree_occluders(char,p):
             size = None

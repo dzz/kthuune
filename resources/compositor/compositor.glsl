@@ -37,7 +37,7 @@ void main(void) {
     vec2 orient = vec2( sin( centered_uv.x*3.14),cos(centered_uv.y*3.14) ) * 0.05;
     vec2 height_mod = height_texel.r * orient * 0.1;
 
-    vec4 photon_texel =  cheap_blur(uv + (height_mod*5), photon_buffer, 1.0/640) * (height_texel.r*0.5);
+    vec4 photon_texel =  cheap_blur(uv + (height_mod*5), photon_buffer, 1.0/640);
     vec4 floor_texel = texture(floor_buffer,uv + height_mod*0.5);
     vec4 light_texel = cheap_blur( uv + height_mod , light_buffer, 0.1);
     vec4 object_texel = cheap_blur( uv, object_buffer, 1.0/320.0 );//texture(object_buffer, uv);
@@ -66,7 +66,10 @@ void main(void) {
     lit_floor = lit_floor + lit_reflection;
 
     
-    vec4 ot = object_texel + light_texel;
+    lit_floor.a = 1.0;
+    light_texel.a = 1.0;
+
+    vec4 ot = object_texel * light_texel + (0.1*photon_texel);
     gl_FragColor = ((lit_floor*light_texel)*(1.0-ooa)) + (vec4(ot.r*ooa,ot.g*ooa,ot.b*ooa, ooa));
 
 
