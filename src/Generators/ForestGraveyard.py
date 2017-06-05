@@ -112,7 +112,7 @@ class ForestGraveyard():
 
             style = light_styles[char]
 
-            return [ Object( visible = False, light_type = style[0], p = p, light_radius=style[2], color = style[1] ) ]
+            return [ Object( visible = False, light_type = style[0], p = p, light_radius=style[2], color = list( map( lambda x: x*0.7,style[1]))) ]
 
         map_txt_spec( df, txt_spec, 1.0, 2, 25.0, lambda char, p : static_lights.extend(generate_light(char, p)))
         self.objects.extend( static_lights )

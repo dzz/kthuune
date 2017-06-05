@@ -30,21 +30,24 @@ void main(void) {
     vec2 centered_uv = (uv+vec2(-0.5,-0.5))*2;
     centered_uv*= centered_uv;
 
-    vec2 par_mod = camera_position * 0.01 * vec2(1.0,-1.0)*0.5;
+    vec2 par_mod = camera_position * 0.3 * vec2(1.0,-1.0)*0.15;
 
     vec4 height_texel = texture(height_buffer, uv);
     
-    vec2 orient = vec2( sin( centered_uv.x*3.14),cos(centered_uv.y*3.14) ) * 0.1;
-    vec2 height_mod = height_texel.r * orient * 0.05;
+    vec2 orient = vec2( sin( centered_uv.x*3.14),cos(centered_uv.y*3.14) ) * 0.05;
+    vec2 height_mod = height_texel.r * orient * 0.1;
 
-    vec4 photon_texel =  cheap_blur(uv + (height_mod*5), photon_buffer, 0.03) * height_texel.r;
+    vec4 photon_texel =  cheap_blur(uv + (height_mod*5), photon_buffer, 1.0/640) * (height_texel.r*0.5);
     vec4 floor_texel = texture(floor_buffer,uv + height_mod*0.5);
     vec4 light_texel = cheap_blur( uv + height_mod , light_buffer, 0.1);
     vec4 object_texel = cheap_blur( uv, object_buffer, 1.0/320.0 );//texture(object_buffer, uv);
     vec4 vision_texel = cheap_blur( uv, vision_buffer, 1.0/160.0 );
     vec4 reflect_texel = texture(reflect_buffer, uv );
     
-    vec4 reflect_map_texel = texture(reflect_map, (orient + par_mod) - (height_mod*2));
+    //vec4 reflect_map_texel = texture(reflect_map, (orient + par_mod) - (height_mod*2));
+
+    vec2 base_reflect_uv = (orient + par_mod) - (height_mod*2);
+    vec4 reflect_map_texel = cheap_blur( base_reflect_uv*0.25, reflect_map, 1.0/256 );
 
     // these are just some basics, to be parameterized and tweaked in the future 
 
