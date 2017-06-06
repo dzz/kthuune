@@ -54,10 +54,10 @@ void main(void) {
 
     //light_texel = ((light_texel*light_texel) + (photon_texel*photon_texel)/2.0);
 
-    light_texel = photon_texel+light_texel;
+    light_texel = (photon_texel*0.8)+(light_texel*0.33)*1.37;
     light_texel = light_texel * vision_texel;
     vec4 lit_floor = ((light_texel*floor_texel)*1.0)*(1.0-object_texel.a);
-    vec4 lit_object = object_texel * photon_texel;
+    vec4 lit_object = object_texel * light_texel;
 
     float ooa = object_texel.a;
 
@@ -66,6 +66,7 @@ void main(void) {
     lit_floor = lit_floor + lit_reflection;
 
     
+    lit_floor = lit_floor + (light_texel*light_texel);
     lit_floor.a = 1.0;
     light_texel.a = 1.0;
 

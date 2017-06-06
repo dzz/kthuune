@@ -145,7 +145,7 @@ class ForestGraveyard():
 
             style = light_styles[char]
 
-            return [ Object( visible = False, light_type = style[0], p = p, light_radius=style[2], color = list( map( lambda x: x*0.7,style[1]))) ]
+            return [ Object( visible = False, light_type = style[0], p = p, light_radius=style[2], color = list( map( lambda x: x*0.8,style[1]))) ]
 
         map_txt_spec( df, txt_spec, 1.0, 2, 25.0, lambda char, p : static_lights.extend(generate_light(char, p)))
         self.objects.extend( static_lights )
@@ -156,11 +156,11 @@ class ForestGraveyard():
         txt_spec = [
             [ "2,,,,,,2" ],
             [ ",2,11,2," ],
-            [ ",,,11,,," ],
-            [ "3,3113,3" ],
-            [ ",,,11,,," ],
+            [ ",1,13,1," ],
+            [ "3,1113,3" ],
+            [ "1,,31,2," ],
             [ ",2,11,2," ],
-            [ "2,,,,,,2" ]
+            [ "2,,1,,,2" ]
          ]
 
         def generate_emitter(char,p):
@@ -186,13 +186,13 @@ class ForestGraveyard():
             [ "Q _ _`_ _ _ ` _ _ Q" ],
             [ "Q_ ee` yyyy_`_ee _Q" ],
             [ "Q_ ee` yyyy_`_ee _Q" ],
-            [ "Q_ _ ` ` ` ``_ _ _Q" ],
-            [ "Q_ ee_ _ _ _ _ee _Q" ],
+            [ "Q_ _ ` ` ` ``Q _ _Q" ],
+            [ "Q_ ee_y_ _y_ _ee _Q" ],
+            [ "Q_ ee_ _ ` _ yee _Q" ],
+            [ "Q_ _ y _ ` _ ___y_Q" ],
+            [ "Q_ ee_ _Q` _ _ee _Q" ],
             [ "Q_ ee_ _ ` _ _ee _Q" ],
-            [ "Q_ _ _ _ ` _ ___ _Q" ],
-            [ "Q_ ee_ _ ` _ _ee _Q" ],
-            [ "Q_ ee_ _ ` _ _ee _Q" ],
-            [ "Q_ _ _ _ ` _ _ _ _Q" ],
+            [ "Q_ _ _y_ ` y _ _ _Q" ],
             [ "Q Q Q Q Q Q Q Q Q Q" ] ]
 
         tree_occluders = []
@@ -242,7 +242,7 @@ class ForestGraveyard():
             return lines
 
         tree_objects = []
-        map_txt_spec( df, txt_spec, 0.9, 2, 2.0, lambda char, p : tree_objects.extend(generate_tree_objects(char, p)))
+        map_txt_spec( df, txt_spec, 0.9, 4, 5.0, lambda char, p : tree_objects.extend(generate_tree_objects(char, p)))
         tree_objects.sort( key =lambda x: x.parallax )
         self.objects.extend(tree_objects)
 
