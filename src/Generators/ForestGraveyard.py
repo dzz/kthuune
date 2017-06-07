@@ -33,6 +33,7 @@ class TreeTop(Object):
             tw[0] = tw[0]*self.parallax
             tw[1] = tw[1]*self.parallax
             params["translation_world" ] = tw
+            params["filter_color"] = [0.8,uniform(0.0,1.0),0.8,0.8]
             return params
 
 def map_txt_spec( df, txt_spec, probability, times, jitter, effect  ):
@@ -86,7 +87,6 @@ class ForestGraveyard():
 
     def get_sigil_tiledata( self, sigil ):
 
-        print(sigil)
         if sigil == "#":
             return choice( range(1,20) )
         if sigil == "_":
@@ -101,12 +101,9 @@ class ForestGraveyard():
 
             
     def generate_tiledata( self, df ):
-        print(self.sigil_points)
         tile_data = [0]*(df.width*df.height)
         for x in range(0, df.width):
-            print(x)
             for y in range(0, df.height):
-                print(y)
                 closest_sigil_point = None
                 score = None
                 for sigil_point in self.sigil_points:
@@ -117,13 +114,10 @@ class ForestGraveyard():
                     elif d < score:
                         closest_sigil_point = sigil_point
                         score = d
-                print(closest_sigil_point["sigil"])
                 tile_data[  (y * df.width) + x ]  = self.get_sigil_tiledata(closest_sigil_point["sigil"])
+                #tile_data[  (y * df.width) + x ]  = 1
 
         self.tile_data = tile_data
-
-
-
 
     def generate_static_lights(self, df):
         static_lights = []
@@ -221,7 +215,7 @@ class ForestGraveyard():
                 size = 0.6
 
 
-            if(size is None):
+            if(size is None or uniform(0.0,1.0) < 0.5):
                 return []
 
             p[0] = p[0]-(df.width/2) + uniform(-1.0,1.0)

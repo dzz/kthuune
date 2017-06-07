@@ -20,12 +20,12 @@ class DungeonFloor( Floor, BGL.auto_configurable):
                 "photon_mapper_config" : { 
                     'stream' : False,
                     'photon_radius' : 90.0,
-                    'photon_emitter_power' : 0.015,
-                    'photon_decay' : 0.95,
-                    'photon_decay_jitter' : 0.02,
-                    'photon_max_bounces' : 10,
-                    'num_photons' : 40,
-                    'photon_observe_chance' : 0.35
+                    'photon_emitter_power' : 0.012,
+                    'photon_decay' : 0.90,
+                    'photon_decay_jitter' : 0.2,
+                    'photon_max_bounces' : 8,
+                    'num_photons' : 30,
+                    'photon_observe_chance' : 0.15
                 }
             }
         }, **kwargs )
