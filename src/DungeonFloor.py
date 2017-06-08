@@ -19,7 +19,7 @@ class DungeonFloor( Floor, BGL.auto_configurable):
                 "static_lightmap_height" : 1024,
                 "photon_mapper_config" : { 
                     'stream' : False,
-                    'photon_radius' : 90.0,
+                    'photon_radius' : 180.0,
                     'photon_emitter_power' : 0.012,
                     'photon_decay' : 0.90,
                     'photon_decay_jitter' : 0.2,

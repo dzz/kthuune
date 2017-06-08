@@ -33,16 +33,17 @@ void main(void) {
 
     vec4 height_texel = cheap_blur(uv, height_buffer, 1.0/120 );
 
-    float parallax_ratio = 0.1 * height_texel.r;
+    float parallax_ratio = 0.01+ (0.08 * height_texel.r);
     float from_c = length(centered_uv);
 
-    vec2 parallaxed_uv = uv * (1.0+(parallax_ratio * from_c ));
+    vec2 parallaxed_uv = ((uv-vec2(0.5,0.5)) * (1.0+(parallax_ratio * from_c ))) + vec2(0.5,0.5);
     
 
-    vec4 photon_texel =  cheap_blur(parallaxed_uv, photon_buffer, 1.0/640);
+    vec4 photon_texel =  cheap_blur(uv, photon_buffer, 1.0/640);
     vec4 floor_texel = texture(floor_buffer,parallaxed_uv);
-    vec4 light_texel = cheap_blur( parallaxed_uv, light_buffer, 0.1);
-    vec4 object_texel = cheap_blur( parallaxed_uv, object_buffer, 1.0/320.0 );
+    vec4 light_texel = cheap_blur( uv, light_buffer, 1.0/60);
+    vec4 object_texel = texture( object_buffer, parallaxed_uv );
+    //vec4 object_texel = cheap_blur( parallaxed_uv, object_buffer, 1.0/320.0 );
     vec4 vision_texel = cheap_blur( parallaxed_uv, vision_buffer, 1.0/160.0 );
 
 
@@ -53,8 +54,8 @@ void main(void) {
     //vec4 reflect_map_texel = cheap_blur( base_reflect_parallaxed_uv*0.25, reflect_map, 1.0/256 );
 
 
-    float exposure = 1.5;
-    float ambiance = 0.1;
+    float exposure = 1.8;
+    float ambiance = 0.2;
 
     vec4 LitObject = object_texel * (light_texel * exposure);
     vec4 LitFloor = ( (photon_texel * floor_texel * light_texel) * exposure) + (ambiance*photon_texel);

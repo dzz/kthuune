@@ -10,7 +10,7 @@ class TreeTop(Object):
                     "num" : 0,
                     "texture" : BGL.assets.get("KT-forest/texture/treetop"),
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
-                    'size' : [5.0,5.0],
+                    'size' : [ 5.0,5.0],
                     'rad' : uniform(-3.14,3.14),
                     'parallax' : 1.2,
                     'z_index' : 100,
@@ -20,11 +20,12 @@ class TreeTop(Object):
             overrides.update(kwargs)
             Object.__init__(self,**overrides)
             self.t = 0
+            self.base_size = [ self.size[0], self.size[1] ]
 
         def tick(self):
             self.t = self.t + 0.01
-            self.size[0] = self.size[0] + (sin(self.t* self.wind_speed)*0.01)
-            self.size[1] = self.size[1] + (cos(self.t* self.wind_speed*self.wind_mod)*0.01)
+            self.size[0] = self.base_size[0] * ( 4.0 + (3.5*(sin(self.t* self.wind_speed))))
+            self.size[1] = self.base_size[1] * ( 4.0 + (3.5*(cos(self.t* self.wind_speed*self.wind_mod))))
             return True
 
         def get_shader_params(self):
@@ -33,7 +34,7 @@ class TreeTop(Object):
             tw[0] = tw[0]*self.parallax
             tw[1] = tw[1]*self.parallax
             params["translation_world" ] = tw
-            params["filter_color"] = [0.8,uniform(0.0,1.0),0.8,0.8]
+            params["filter_color"] = [0.8,uniform(0.0,1.0),0.8,0.6]
             return params
 
 def map_txt_spec( df, txt_spec, probability, times, jitter, effect  ):
