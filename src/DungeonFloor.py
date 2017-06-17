@@ -1,5 +1,6 @@
 from Beagle import API as BGL
-from Newfoundland import Floor, Tilemap
+from Newfoundland.Floor import Floor
+from Newfoundland.Tilemap import Tilemap
 from random import choice
 from .Generators.ForestGraveyard import ForestGraveyard
 

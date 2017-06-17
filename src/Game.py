@@ -1,5 +1,9 @@
-from Newfoundland import Camera, Controllers, Player, BaseGame, Floor
 from Beagle import API as BGL
+from Newfoundland.Camera import Camera
+from Newfoundland.Controllers import Controllers
+from Newfoundland.Player import Player
+from Newfoundland.Floor import Floor
+from Newfoundland.BaseGame import BaseGame
 
 from .DungeonFloor import DungeonFloor
 from .DungeonCamera import DungeonCamera
@@ -10,7 +14,7 @@ class Game( BaseGame ):
     def initialize(self):
         self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.5 ) )
         self.controllers    = self.create_tickable( Controllers() )
-        self.player         = self.create_tickable( Player( sight_radius = 70.0, speed = 0.07, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 1.0,1.0] ) )
+        self.player         = self.create_tickable( Player( sight_radius = 70.0, speed = 2.00, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 1.0,1.0] ) )
         self.floor          = self.create_tickable( DungeonFloor( width = 256, height = 256, camera = self.camera, player = self.player, objects=[] ) )
 
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")

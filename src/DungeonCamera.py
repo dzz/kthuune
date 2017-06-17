@@ -1,4 +1,4 @@
-from Newfoundland import Camera
+from Newfoundland.Camera import Camera
 
 class DungeonCamera (Camera):
 
