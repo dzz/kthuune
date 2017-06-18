@@ -3,6 +3,8 @@ from math import hypot
 from Newfoundland.Object import Object
 from Beagle import API as BGL
 from math import sin,cos
+from .txt_specs import *
+import random
 
 class TreeTop(Object):
         def __init__(self,**kwargs):
@@ -14,7 +16,7 @@ class TreeTop(Object):
                     'rad' : uniform(-3.14,3.14),
                     'parallax' : 1.2,
                     'z_index' : 100,
-                    'wind_speed' : uniform(0.01,0.03),
+                    'wind_speed' : uniform(0.01,0.2),
                     'wind_mod' : uniform(1.1,1.2)
                 }
             overrides.update(kwargs)
@@ -24,8 +26,8 @@ class TreeTop(Object):
 
         def tick(self):
             self.t = self.t + 0.01
-            self.size[0] = self.base_size[0] * ( 4.0 + (3.5*(sin(self.t* self.wind_speed))))
-            self.size[1] = self.base_size[1] * ( 4.0 + (3.5*(cos(self.t* self.wind_speed*self.wind_mod))))
+            self.size[0] = self.base_size[0] * ( 4.0 + (1.5*(sin(self.t* self.wind_speed))))
+            self.size[1] = self.base_size[1] * ( 4.0 + (1.5*(cos(self.t* self.wind_speed*self.wind_mod))))
             return True
 
         def get_shader_params(self):
@@ -37,7 +39,9 @@ class TreeTop(Object):
             params["filter_color"] = [0.8,uniform(0.0,1.0),0.8,0.6]
             return params
 
-def map_txt_spec( df, txt_spec, probability, times, jitter, effect  ):
+def map_txt_spec( df, txt_spec_raw, probability, times, jitter, effect  ):
+
+    txt_spec = random.sample(txt_spec_raw, len(txt_spec_raw)) 
     for row_idx,row in enumerate(txt_spec):
         row_spec = row[0]
         for col_idx,char in enumerate(row_spec):
@@ -122,11 +126,13 @@ class ForestGraveyard():
 
     def generate_static_lights(self, df):
         static_lights = []
-        txt_spec = [
-            [ "  1     1  " ],
-            [ " 2   3   2 " ],
-            [ "  1     1  " ] 
-        ]
+        # txt_spec = [
+        #     [ "  1     1  " ],
+        #     [ " 2   3   2 " ],
+        #     [ "  1     1  " ] 
+        # ]
+
+        txt_spec = choice(light_specs)
 
         def generate_light(char, p):
             p[0] = p[0]-(df.width/2) + uniform(-1.0,1.0)
@@ -148,15 +154,16 @@ class ForestGraveyard():
 
     def generate_photon_emitters(self, df):
         photon_emitters = []
-        txt_spec = [
-            [ "2,,,,,,2" ],
-            [ ",2,11,2," ],
-            [ ",1,13,1," ],
-            [ "3,1113,3" ],
-            [ "1,,31,2," ],
-            [ ",2,11,2," ],
-            [ "2,,1,,,2" ]
-         ]
+        txt_spec = choice( photon_specs )
+        ##txt_spec = [
+        ##    [ "2,,,,,,2" ],
+        ##    [ ",2,11,2," ],
+        ##    [ ",1,13,1," ],
+        ##    [ "3,1113,3" ],
+        ##    [ "1,,31,2," ],
+        ##    [ ",2,11,2," ],
+        ##    [ "2,,1,,,2" ]
+        ## ]
 
         def generate_emitter(char,p):
             if char is ',':
@@ -176,30 +183,31 @@ class ForestGraveyard():
         self.photon_emitters = photon_emitters
 
     def generate_trees( self, df ):
-        txt_spec = [
-            [ "Q Q Q Q Q Q Q Q Q Q" ],
-            [ "Q _ _`_ _ _ ` _ _ Q" ],
-            [ "Q_ ee` yyyy_`_ee _Q" ],
-            [ "Q_ ee` yyyy_`_ee _Q" ],
-            [ "Q_ _ ` ` ` ``Q _ _Q" ],
-            [ "Q_ ee_y_ _y_ _ee _Q" ],
-            [ "Q_ ee_ _ ` _ yee _Q" ],
-            [ "Q_ _ y _ ` _ ___y_Q" ],
-            [ "Q_ ee_ _Q` _ _ee _Q" ],
-            [ "Q_ ee_ _ ` _ _ee _Q" ],
-            [ "Q_ _ _y_ ` y _ _ _Q" ],
-            [ "Q Q Q Q Q Q Q Q Q Q" ] ]
+        ##txt_spec = [
+        ##    [ "Q Q Q Q Q Q Q Q Q Q" ],
+        ##    [ "Q _ _`_ _ _ ` _ _ Q" ],
+        ##    [ "Q_ ee` yyyy_`_ee _Q" ],
+        ##    [ "Q_ ee` yyyy_`_ee _Q" ],
+        ##    [ "Q_ _ ` ` ` ``Q _ _Q" ],
+        ##    [ "Q_ ee_y_ _y_ _ee _Q" ],
+        ##    [ "Q_ ee_ _ ` _ yee _Q" ],
+        ##    [ "Q_ _ y _ ` _ ___y_Q" ],
+        ##    [ "Q_ ee_ _Q` _ _ee _Q" ],
+        ##    [ "Q_ ee_ _ ` _ _ee _Q" ],
+        ##    [ "Q_ _ _y_ ` y _ _ _Q" ],
+        ##    [ "Q Q Q Q Q Q Q Q Q Q" ] ]
+        txt_spec = choice(tree_specs)
 
         tree_occluders = []
 
         def generate_tree_objects(char,p):
             size = None
             if char == "Q":
-                size = uniform(10,25)
+                size = uniform(5,15)
             if char == "e":
-                size = uniform(5,10)
-            if char == "`":
                 size = uniform(3,7)
+            if char == "`":
+                size = uniform(2,5)
             if(size is None):
                 return []
             p[0] = p[0]-(df.width/2) + uniform(-1.0,1.0)
@@ -224,9 +232,13 @@ class ForestGraveyard():
             points = []
 
             points.append( [ 0.0, -1*size ] )
+            points.append( [ 0.5*size, -0.5*size ] )
             points.append( [ size, 0.0 ] )
+            points.append( [ 0.5*size, 0.5*size ] )
             points.append( [ 0.0, 1*size ] )
+            points.append( [ -0.5*size, 0.5*size ] )
             points.append( [ -1*size, 0.0 ] )
+            points.append( [ -0.5*size, -0.5*size ] )
 
             for point in points:
                 point[0] = point[0] + p[0] + uniform(-0.1 * size, 0.1*size )
@@ -241,24 +253,25 @@ class ForestGraveyard():
         tree_objects.sort( key =lambda x: x.parallax )
         self.objects.extend(tree_objects)
 
-        map_txt_spec( df, txt_spec, 0.9, 1, 2.0, lambda char, p : tree_occluders.extend(generate_tree_occluders(char, p)))
+        map_txt_spec( df, txt_spec, 1.0, 2, 2.0, lambda char, p : tree_occluders.extend(generate_tree_occluders(char, p)))
         self.tree_occluders = tree_occluders 
 
     def generate_sigil_points( self, df):
-        txt_spec = [
-            [ "# # # # # # # # # #" ],
-            [ "# _ _`_ _ _ ` _ _ #" ],
-            [ "#_ XX` yyyy_`_XX _#" ],
-            [ "#_ XX` yyyy_`_XX _#" ],
-            [ "#_ _ ` ` ` ``_ _ _#" ],
-            [ "#_ XX_ _ _ _ _XX _#" ],
-            [ "#_ XX_ _ ` _ _XX _#" ],
-            [ "#_ _ _ _ ` _ ___ _#" ],
-            [ "#_ XX_ _ ` _ _XX _#" ],
-            [ "#_ XX_ _ ` _ _XX _#" ],
-            [ "#_ _ _ _ ` _ _ _ _#" ],
-            [ "# # # # # # # # # #" ] ]
+        #txt_spec = [
+        #    [ "# # # # # # # # # #" ],
+        #    [ "# _ _`_ _ _ ` _ _ #" ],
+        #    [ "#_ XX` yyyy_`_XX _#" ],
+        #    [ "#_ XX` yyyy_`_XX _#" ],
+        #    [ "#_ _ ` ` ` ``_ _ _#" ],
+        #    [ "#_ XX_ _ _ _ _XX _#" ],
+        #    [ "#_ XX_ _ ` _ _XX _#" ],
+        #    [ "#_ _ _ _ ` _ ___ _#" ],
+        #    [ "#_ XX_ _ ` _ _XX _#" ],
+        #    [ "#_ XX_ _ ` _ _XX _#" ],
+        #    [ "#_ _ _ _ ` _ _ _ _#" ],
+        #    [ "# # # # # # # # # #" ] ]
 
+        txt_spec = choice( sigil_specs )
         sigil_points = []
 
         map_txt_spec( df, txt_spec, 0.8, 2, 1.0, lambda char, p : sigil_points.append({ "sigil": char, "p": p } ) )

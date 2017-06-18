@@ -12,8 +12,8 @@ class DungeonFloor( Floor, BGL.auto_configurable):
             "height" : 32, 
             "generator" : ForestGraveyard(),
             "renderer_config" : {
-                "vision_lightmap_width" : 64,
-                "vision_lightmap_height" : 64,
+                "vision_lightmap_width" : 256,
+                "vision_lightmap_height" : 256,
                 "photon_map_width" : 512,
                 "photon_map_height" : 512,
                 "static_lightmap_width" : 1024,
@@ -21,12 +21,12 @@ class DungeonFloor( Floor, BGL.auto_configurable):
                 "photon_mapper_config" : { 
                     'stream' : False,
                     'photon_radius' : 180.0,
-                    'photon_emitter_power' : 0.012,
+                    'photon_emitter_power' : 0.020,
                     'photon_decay' : 0.90,
                     'photon_decay_jitter' : 0.2,
                     'photon_max_bounces' : 8,
                     'num_photons' : 30,
-                    'photon_observe_chance' : 0.15
+                    'photon_observe_chance' : 0.25
                 }
             }
         }, **kwargs )
