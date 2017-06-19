@@ -2,7 +2,7 @@ from random import uniform, choice
 from math import hypot
 from Newfoundland.Object import Object
 from Beagle import API as BGL
-from math import sin,cos
+from math import sin,cos,pi
 from .txt_specs import *
 import random
 
@@ -28,6 +28,15 @@ class TreeTop(Object):
             self.t = self.t + 0.01
             self.size[0] = self.base_size[0] * ( 4.0 + (1.5*(sin(self.t* self.wind_speed))))
             self.size[1] = self.base_size[1] * ( 4.0 + (1.5*(cos(self.t* self.wind_speed*self.wind_mod))))
+            return True
+
+        def should_draw(self):
+            p = self.get_shader_params()['translation_world']
+            visRad = 50
+            if(p[0]<-visRad): return False
+            if(p[1]<-visRad): return False
+            if(p[0]>visRad): return False
+            if(p[1]>visRad): return False
             return True
 
         def get_shader_params(self):
@@ -61,24 +70,65 @@ class ForestGraveyard():
 
         self.generate_sigil_points( dungeon_floor )
         self.generate_tiledata(  dungeon_floor )
-        self.generate_trees( dungeon_floor )
+        #self.generate_trees( dungeon_floor )
         self.generate_photon_emitters(dungeon_floor)
 
-        self.light_occluders = self.tree_occluders
-        self.light_occluders.extend( self.get_base_occluders(dungeon_floor) )
+        #self.light_occluders = self.tree_occluders
+
+        self.map_edges = self.gen_edges( dungeon_floor )
+        self.light_occluders = []
+        self.light_occluders.extend( self.map_edges )
+
+        self.generate_edge_trees()
         self.generate_static_lights(dungeon_floor)
         
+
+    def generate_edge_trees(self):
+        for edge in self.map_edges:
+            for x in range(0,choice(range(4,20))):
+                size = uniform(2.0,8.0)
+                dx = edge[1][0] - edge[0][0]
+                dy = edge[1][1] - edge[0][1]
+                d = uniform(0.0,1.0)
+                px,py = d*dx,d*dy
+                x,y = edge[0][0]+px,edge[0][1]+py
+                p = [x,y]
+                self.objects.append( TreeTop( p=p, size=[size,size],parralax = uniform(1.1,1.8)) )
+
+
+
 
     def get_objects(self):
         return self.objects
 
-    def get_base_occluders(self, df):
-        lines = [
-            [ [-0.5*df.width, -0.5*df.height],[0.5*df.width, -0.5*df.height] ],
-            [ [ 0.5*df.width, -0.5*df.height],[0.5*df.width, 0.5*df.height] ],
-            [ [0.5*df.width, 0.5*df.height],[-0.5*df.width, 0.5*df.height] ],
-            [ [-0.5*df.width, 0.5*df.height],[-0.5*df.width, -0.5*df.height] ]
-        ]
+    def gen_edges(self, df):
+
+        r = 0.0
+
+        points = []
+        dfilt = None
+        while(r < 2*pi):
+            r = r + uniform(0.01,0.2)
+            rad = min(df.width,df.height)*0.5
+            d = uniform(0.5*rad, 1.0*rad)
+            if dfilt is None:
+                dfilt = d
+            else:
+                dfilt = (d*0.2)+(dfilt*0.8)
+            points.append( [ cos(r)*dfilt, sin(r)*dfilt ] )
+
+
+        lines = []
+        for i in range(0, len(points)-1):
+            lines.append( [ points[i],points[i+1]] )
+
+        lines.append( [ points[len(points)-1],points[0]] )
+        ## lines = [
+        ##     [ [-0.5*df.width, -0.5*df.height],[0.5*df.width, -0.5*df.height] ],
+        ##     [ [ 0.5*df.width, -0.5*df.height],[0.5*df.width, 0.5*df.height] ],
+        ##     [ [0.5*df.width, 0.5*df.height],[-0.5*df.width, 0.5*df.height] ],
+        ##     [ [-0.5*df.width, 0.5*df.height],[-0.5*df.width, -0.5*df.height] ]
+        ## ]
         return lines
 
     def get_light_occluders(self):
@@ -109,18 +159,21 @@ class ForestGraveyard():
         tile_data = [0]*(df.width*df.height)
         for x in range(0, df.width):
             for y in range(0, df.height):
-                closest_sigil_point = None
-                score = None
-                for sigil_point in self.sigil_points:
-                    d = hypot( sigil_point["p"][0]-x, sigil_point["p"][1]-y)
-                    if not score:
-                        score = d
-                        closest_sigil_point = sigil_point
-                    elif d < score:
-                        closest_sigil_point = sigil_point
-                        score = d
-                tile_data[  (y * df.width) + x ]  = self.get_sigil_tiledata(closest_sigil_point["sigil"])
-                #tile_data[  (y * df.width) + x ]  = 1
+                ####### closest_sigil_point = None
+                ####### score = None
+                ####### for sigil_point in self.sigil_points:
+
+                #######     a =sigil_point["p"][0]-x
+                #######     b =sigil_point["p"][1]-y
+                #######     d = abs(a) + abs(b)
+                #######     if not score:
+                #######         score = d
+                #######         closest_sigil_point = sigil_point
+                #######     elif d < score:
+                #######         closest_sigil_point = sigil_point
+                #######         score = d
+                ####### tile_data[  (y * df.width) + x ]  = self.get_sigil_tiledata(closest_sigil_point["sigil"])
+                tile_data[  (y * df.width) + x ]  = choice(range(1,20))
 
         self.tile_data = tile_data
 
