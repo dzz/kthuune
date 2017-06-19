@@ -174,7 +174,7 @@ void main(void) {
     float ambiance = 0.5;
 
     vec4 LitObject = object_texel * (light_texel * exposure);
-    vec4 LitFloor = ( (photon_texel * floor_texel * light_texel) * exposure) + (ambiance*(photon_texel+((clouds(inv_parallaxed_UV)+light_texel*floor_texel)*vision_texel)));
+    vec4 LitFloor = ( (photon_texel * floor_texel * light_texel) * exposure) + (ambiance*(photon_texel+((clouds(inv_parallaxed_UV)+(light_texel*light_texel))*vision_texel)));
 
     float mask = 1.0 - LitObject.a;
     vec4 SeenFloor = (LitFloor * vision_texel) * mask;
@@ -182,6 +182,7 @@ void main(void) {
     LitObject = LitObject * LitObject.a;
 
     gl_FragColor = SeenFloor + LitObject;
+//gl_FragColor =light_texel;
 
 }
 

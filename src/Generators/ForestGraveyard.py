@@ -9,11 +9,32 @@ import random
 class Fire(Object):
         def __init__(self,**kwargs):
             overrides = {
+                    'texture' : None,
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
-                    'size' : [ 5.0,5.0],
+                    'light_radius' : 25.0,
+                    'light_type' : Object.LightTypes.DYNAMIC_SHADOWCASTER
                 }
             overrides.update(kwargs)
             Object.__init__(self,**overrides)
+            self.base_p = self.p
+            self.base_radius = self.light_radius
+
+        def tick(self):
+            rad_jitter = uniform(0.8,1.2)
+            self.light_radius = (self.light_radius*0.9)+(self.base_radius * rad_jitter*0.1)
+            jitter = [uniform(-1.2,1.2), uniform(-1.2,1.2) ]
+            np = [ self.base_p[0] + jitter[0], self.base_p[1]+jitter[1] ]
+            self.p = [ np[0]*0.02 + self.p[0]*0.98,np[1]*0.02 + self.p[1]*0.98 ]
+            ncolor = [ uniform(0.6,0.9), uniform(0.3,0.6), uniform(0.1,0.3),1.0]
+            for i in range(0,4):
+                self.color[i] = self.color[i]*0.9+ncolor[i]*0.1
+
+            return True
+
+        def render(self):
+            return 
+
+
 
 class TreeTop(Object):
         def __init__(self,**kwargs):
@@ -156,7 +177,14 @@ class ForestGraveyard():
         self.generate_edge_trees()
         self.generate_inner_trees(dungeon_floor)
         self.generate_static_lights(dungeon_floor)
-        
+        self.generate_fires(dungeon_floor) 
+
+    def generate_fires(self,df):
+        for f in range(0,20):
+            px,py = uniform(-df.width,df.width),uniform(-df.height,df.height)
+            px*=0.4
+            py*=0.4
+            self.objects.append( Fire( p=[px,py] ) )
 
     def generate_inner_trees(self,df):
 
