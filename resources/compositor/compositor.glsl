@@ -47,7 +47,7 @@ vec4 cheap_blur( vec2 p_uv, sampler2D p_buffer, float p_size ) {
 void main(void) {
 
 
-    vec2 UV = vec2(0.2,0.2)+(uv*0.6)*((0.9)+(0.1*noise1(camera_position+uv+tick)));
+    vec2 UV = vec2(0.1,0.1)+(uv*0.8);
     vec2 centered_UV = (UV+vec2(-0.5,-0.5))*2;
     centered_UV*= centered_UV;
 
