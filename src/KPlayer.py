@@ -14,6 +14,6 @@ class KPlayer(Player):
 
     def tick(self):
         Player.tick(self)
-        impulse = uniform(5.0,15.0)
+        impulse = uniform(5.0,35.0)
 
         self.light_radius = (self.light_radius*0.96) + (impulse*0.04)

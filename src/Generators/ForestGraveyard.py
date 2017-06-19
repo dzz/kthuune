@@ -6,6 +6,15 @@ from math import sin,cos,pi
 from .txt_specs import *
 import random
 
+class Fire(Object):
+        def __init__(self,**kwargs):
+            overrides = {
+                    'tick_type' : Object.TickTypes.TICK_FOREVER,
+                    'size' : [ 5.0,5.0],
+                }
+            overrides.update(kwargs)
+            Object.__init__(self,**overrides)
+
 class TreeTop(Object):
         def __init__(self,**kwargs):
             overrides = {
@@ -23,6 +32,7 @@ class TreeTop(Object):
             Object.__init__(self,**overrides)
             self.t = 0
             self.base_size = [ self.size[0], self.size[1] ]
+            self.draw_color = [0.8,uniform(0.0,1.0),0.8,uniform(0.6,0.9)]
 
         def tick(self):
             self.t = self.t + 0.01
@@ -32,7 +42,7 @@ class TreeTop(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 50
+            visRad = 70
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
@@ -45,7 +55,71 @@ class TreeTop(Object):
             tw[0] = tw[0]*self.parallax
             tw[1] = tw[1]*self.parallax
             params["translation_world" ] = tw
-            params["filter_color"] = [0.8,uniform(0.0,1.0),0.8,0.6]
+            params["filter_color"] = self.draw_color 
+            return params
+
+class TreeRoots(Object):
+        def __init__(self,**kwargs):
+            overrides = {
+                    "num" : 0,
+                    "texture" : BGL.assets.get("KT-forest/texture/treeroots"),
+                    'tick_type' : Object.TickTypes.TICK_FOREVER,
+                    'size' : [ 5.0,5.0],
+                    'rad' : uniform(-3.14,3.14),
+                    'z_index' : -100,
+                }
+            overrides.update(kwargs)
+            Object.__init__(self,**overrides)
+            self.t = 0
+            self.base_size = [ self.size[0], self.size[1] ]
+            self.draw_color = [0.8,uniform(0.0,1.0),0.8,uniform(0.6,0.7)]
+
+        def should_draw(self):
+            p = self.get_shader_params()['translation_world']
+            visRad = 100
+            if(p[0]<-visRad): return False
+            if(p[1]<-visRad): return False
+            if(p[0]>visRad): return False
+            if(p[1]>visRad): return False
+            return True
+
+        def get_shader_params(self):
+            params = Object.get_shader_params(self)
+            tw = params["translation_world"]
+            params["translation_world" ] = tw
+            params["filter_color"] = self.draw_color 
+            return params
+
+class TreeShadow(Object):
+        def __init__(self,**kwargs):
+            overrides = {
+                    "num" : 0,
+                    "texture" : BGL.assets.get("KT-forest/texture/treetop"),
+                    'tick_type' : Object.TickTypes.TICK_FOREVER,
+                    'size' : [ 5.0,5.0],
+                    'rad' : uniform(-3.14,3.14),
+                    'z_index' : -100,
+                }
+            overrides.update(kwargs)
+            Object.__init__(self,**overrides)
+            self.t = 0
+            self.base_size = [ self.size[0], self.size[1] ]
+            self.draw_color = [0.8,uniform(0.0,1.0),0.8,uniform(0.4,0.6) ]
+
+        def should_draw(self):
+            p = self.get_shader_params()['translation_world']
+            visRad = 150
+            if(p[0]<-visRad): return False
+            if(p[1]<-visRad): return False
+            if(p[0]>visRad): return False
+            if(p[1]>visRad): return False
+            return True
+
+        def get_shader_params(self):
+            params = Object.get_shader_params(self)
+            tw = params["translation_world"]
+            params["translation_world" ] = tw
+            params["filter_color"] = self.draw_color 
             return params
 
 def map_txt_spec( df, txt_spec_raw, probability, times, jitter, effect  ):
@@ -80,8 +154,46 @@ class ForestGraveyard():
         self.light_occluders.extend( self.map_edges )
 
         self.generate_edge_trees()
+        self.generate_inner_trees(dungeon_floor)
         self.generate_static_lights(dungeon_floor)
         
+
+    def generate_inner_trees(self,df):
+
+        occluders = []
+        for t in range(0,35):
+            print("MAKING TREE")
+            px,py = uniform(-df.width,df.width),uniform(-df.height,df.height)
+            px*=0.4
+            py*=0.4
+            rad = uniform(3.2,6.3)
+            occluders.extend( self.gen_rand_circle_lines( 0.5,1.5, rad, [px,py]))
+
+            size = uniform(1.0,8.0)
+            plx = uniform(2.2,3.8)
+
+            for tt in range(1,choice(range(2,4))):
+                p = [px+uniform(-3.0,3.0),py+uniform(-3.0,3.0)]
+                self.objects.append( TreeTop( p=p, size=[size,size],parralax = plx) )
+                size = size * uniform(1.2,1.5)
+                plx = plx * uniform(1.2,1.5)
+
+            for tt in range(2,choice(range(2,5))):
+                size = uniform(10.0,40.0)
+                p = [px+uniform(-2.0,2.0),py+uniform(-2.0,2.0)]
+                self.objects.append( TreeRoots( p=p, size=[size,size]) )
+                if(choice([True,False])):
+                    self.objects.append( TreeShadow( p=p, size=[size*2,size*2]) )
+
+
+            ##for tt in range(2,choice(range(3,15))):
+            ##    p = [px+uniform(-3.0,3.0),py+uniform(-3.0,3.0)]
+            ##    self.objects.append( TreeTop( p=p, size=[size,size],parralax = plx) )
+            ##    size = size * uniform(1.2,1.5)
+            ##    plx = plx * uniform(1.2,1.5)
+
+        self.light_occluders.extend(occluders)
+
 
     def generate_edge_trees(self):
         for edge in self.map_edges:
@@ -101,21 +213,20 @@ class ForestGraveyard():
     def get_objects(self):
         return self.objects
 
-    def gen_edges(self, df):
 
-        r = 0.0
-
+    def gen_rand_circle_lines(self,min_step,max_step,rad, p=[0.0,0.0]):
+        r = -pi
         points = []
         dfilt = None
-        while(r < 2*pi):
-            r = r + uniform(0.01,0.2)
-            rad = min(df.width,df.height)*0.5
+        while(r < pi):
+            r = r + uniform(min_step,max_step)
+            #rad = min(df.width,df.height)*0.5
             d = uniform(0.5*rad, 1.0*rad)
             if dfilt is None:
                 dfilt = d
             else:
                 dfilt = (d*0.2)+(dfilt*0.8)
-            points.append( [ cos(r)*dfilt, sin(r)*dfilt ] )
+            points.append( [ (cos(r)*dfilt)+p[0], (sin(r)*dfilt)+p[1] ] )
 
 
         lines = []
@@ -123,6 +234,31 @@ class ForestGraveyard():
             lines.append( [ points[i],points[i+1]] )
 
         lines.append( [ points[len(points)-1],points[0]] )
+        return lines
+
+    def gen_edges(self, df):
+
+
+        return self.gen_rand_circle_lines( 0.01,0.2, min(df.width,df.height)*0.5)
+        ## r = 0.0
+        ## points = []
+        ## dfilt = None
+        ## while(r < 2*pi):
+        ##     r = r + uniform(0.01,0.2)
+        ##     rad = min(df.width,df.height)*0.5
+        ##     d = uniform(0.5*rad, 1.0*rad)
+        ##     if dfilt is None:
+        ##         dfilt = d
+        ##     else:
+        ##         dfilt = (d*0.2)+(dfilt*0.8)
+        ##     points.append( [ cos(r)*dfilt, sin(r)*dfilt ] )
+
+
+        ### lines = []
+        ### for i in range(0, len(points)-1):
+        ###     lines.append( [ points[i],points[i+1]] )
+
+        ### lines.append( [ points[len(points)-1],points[0]] )
         ## lines = [
         ##     [ [-0.5*df.width, -0.5*df.height],[0.5*df.width, -0.5*df.height] ],
         ##     [ [ 0.5*df.width, -0.5*df.height],[0.5*df.width, 0.5*df.height] ],
@@ -201,7 +337,11 @@ class ForestGraveyard():
 
             return [ Object( visible = False, light_type = style[0], p = p, light_radius=style[2], color = list( map( lambda x: x*0.8,style[1]))) ]
 
-        map_txt_spec( df, txt_spec, 1.0, 2, 25.0, lambda char, p : static_lights.extend(generate_light(char, p)))
+
+        for x in range(0,25):
+            p = [ uniform(-0.5,0.5)*df.width, uniform(-0.5,0.5)*df.height ]
+            static_lights.extend( generate_light(choice(['1','2','3']),p) )
+        #map_txt_spec( df, txt_spec, 1.0, 2, 25.0, lambda char, p : static_lights.extend(generate_light(char, p)))
         self.objects.extend( static_lights )
 
 

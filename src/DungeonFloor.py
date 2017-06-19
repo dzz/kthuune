@@ -14,19 +14,19 @@ class DungeonFloor( Floor, BGL.auto_configurable):
             "renderer_config" : {
                 "vision_lightmap_width" : 256,
                 "vision_lightmap_height" : 256,
-                "photon_map_width" : 512,
-                "photon_map_height" : 512,
+                "photon_map_width" : 64,
+                "photon_map_height" : 64,
                 "static_lightmap_width" : 256,
                 "static_lightmap_height" : 256,
                 "photon_mapper_config" : { 
-                    'stream' : True,
-                    'photon_radius' : 220.0,
+                    'stream' : False,
+                    'photon_radius' : 80.0,
                     'photon_emitter_power' : 0.010,
-                    'photon_decay' : 0.10,
+                    'photon_decay' : 0.9,
                     'photon_decay_jitter' : 0.2,
-                    'photon_max_bounces' : 16,
-                    'num_photons' : 15,
-                    'photon_observe_chance' : 0.4
+                    'photon_max_bounces' : 5,
+                    'num_photons' : 5,
+                    'photon_observe_chance' : 0.8
                 },
                 "compositor_config" : {
                     "photon_buffer_size" : "screen*0.25",
