@@ -9,7 +9,7 @@ def make(cls, attrs):
 
 class area():
     min_portals = 2
-    max_portals = 4
+    max_portals = 3
     def __init__(self, gen_portals = True ):
         self.depth = 0
         self.ring = 0
@@ -73,9 +73,34 @@ def reduce_layer(areas, layer, amount):
     areas.sort( key=lambda x:x.depth )
     return areas
 
+def generate_tunnels(areas, amount = 0.33):
+    #only make tunnels between adjacent rings
+    areas.sort( key=lambda x:x.ring)
+    ntuns = int(len(areas)*amount)
+    for x in range(0,ntuns):
+        source_idx = choice(range(0,len(areas)))
+        if(source_idx == (len(areas)-1)):
+            source_idx = len(areas)-2
+        target_idx = source_idx+1
+        sa = areas[source_idx]
+        ta = areas[target_idx]
+        sa.portals.append( make(portal, { "left_area" : sa, "left_p" : sa.get_random_portal_point(), "right_area" : ta, "right_p" : ta.get_random_portal_point() } ))
+
+def make_portals_bidirectional(areas):
+    tportals = []
+    for a in areas:
+        tportals.extend(a.portals)
+
+    for p in tportals:
+        p.right_area.portals.append(p)
+
+
+class genparams():
+    max_depth = 6
+
 def generate_areas():
     layer = 0
-    max_depth = 6
+    max_depth = genparams.max_depth
     root_area = make( area, { "ring" : 1})
 
     areas = [ root_area ]
@@ -95,12 +120,31 @@ def generate_areas():
 
     for l in range(0, max_depth):
         layer_areas = list(filter(lambda x:x.depth==l, areas))
-        ring_size = len(layer_areas)/2
+        ring_size = len(layer_areas)//2
         dbg_rings = []
         for idx, a in enumerate(layer_areas):
             a.ring = idx-ring_size
             dbg_rings.append(a.ring)
-        print(l, len(layer_areas),dbg_rings)
+        generate_tunnels(layer_areas)
+
+    make_portals_bidirectional(areas)
     return areas
 
-generate_areas()
+def show_layers(areas):
+    for l in range(0, genparams.max_depth):
+        layer_areas = list(filter(lambda x:x.depth==l, areas))
+        print(len(layer_areas), list(map(lambda x:x.ring,layer_areas)))
+
+def generate_qualified_areas():
+    def qualify(areas):
+        top_areas = list(filter(lambda x:x.depth==0, areas))
+
+        if len(top_areas) not in [12,14,16]:
+            return False
+        return True
+
+    areas = generate_areas()
+    while not qualify(areas):
+        areas = generate_areas()
+
+    show_layers(areas)

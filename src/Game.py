@@ -9,10 +9,16 @@ from .DungeonFloor import DungeonFloor
 from .DungeonCamera import DungeonCamera
 from .KPlayer import KPlayer
 
+from .superstructure import generate_qualified_areas
 
 class Game( BaseGame ):
 
     def initialize(self):
+
+        areas = generate_qualified_areas()
+
+        starting_area = filter(lambda x: x.ring==0 and x.depth==0).__next__
+
         self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.2 ) )
         self.controllers    = self.create_tickable( Controllers() )
         self.player         = self.create_tickable( KPlayer( sight_radius = 70.0, speed = 3.50, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 1.0,1.0] ) )
@@ -28,4 +34,3 @@ class Game( BaseGame ):
 
     def tick(self):
         BaseGame.tick(self)
-
