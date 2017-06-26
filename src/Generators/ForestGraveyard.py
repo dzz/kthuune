@@ -32,7 +32,7 @@ class Fire(Object):
             return True
 
         def render(self):
-            return 
+            return
 
 
 
@@ -76,7 +76,7 @@ class TreeTop(Object):
             tw[0] = tw[0]*self.parallax
             tw[1] = tw[1]*self.parallax
             params["translation_world" ] = tw
-            params["filter_color"] = self.draw_color 
+            params["filter_color"] = self.draw_color
             return params
 
 class TreeRoots(Object):
@@ -108,7 +108,7 @@ class TreeRoots(Object):
             params = Object.get_shader_params(self)
             tw = params["translation_world"]
             params["translation_world" ] = tw
-            params["filter_color"] = self.draw_color 
+            params["filter_color"] = self.draw_color
             return params
 
 class TreeShadow(Object):
@@ -140,12 +140,12 @@ class TreeShadow(Object):
             params = Object.get_shader_params(self)
             tw = params["translation_world"]
             params["translation_world" ] = tw
-            params["filter_color"] = self.draw_color 
+            params["filter_color"] = self.draw_color
             return params
 
 def map_txt_spec( df, txt_spec_raw, probability, times, jitter, effect  ):
 
-    txt_spec = random.sample(txt_spec_raw, len(txt_spec_raw)) 
+    txt_spec = random.sample(txt_spec_raw, len(txt_spec_raw))
     for row_idx,row in enumerate(txt_spec):
         row_spec = row[0]
         for col_idx,char in enumerate(row_spec):
@@ -165,10 +165,10 @@ class ForestGraveyard():
 
         self.generate_sigil_points( dungeon_floor )
         self.generate_tiledata(  dungeon_floor )
-        #self.generate_trees( dungeon_floor )
+        self.generate_trees( dungeon_floor )
         self.generate_photon_emitters(dungeon_floor)
 
-        #self.light_occluders = self.tree_occluders
+        self.light_occluders = self.tree_occluders
 
         self.map_edges = self.gen_edges( dungeon_floor )
         self.light_occluders = []
@@ -177,7 +177,7 @@ class ForestGraveyard():
         self.generate_edge_trees()
         self.generate_inner_trees(dungeon_floor)
         self.generate_static_lights(dungeon_floor)
-        self.generate_fires(dungeon_floor) 
+        self.generate_fires(dungeon_floor)
 
     def generate_fires(self,df):
         for f in range(0,20):
@@ -189,7 +189,7 @@ class ForestGraveyard():
     def generate_inner_trees(self,df):
 
         occluders = []
-        for t in range(0,35):
+        for t in range(0,18):
             print("MAKING TREE")
             px,py = uniform(-df.width,df.width),uniform(-df.height,df.height)
             px*=0.4
@@ -300,7 +300,7 @@ class ForestGraveyard():
 
     def get_tiledata(self):
         return self.tile_data
-    
+
     def get_photon_emitters(self):
         return self.photon_emitters
 
@@ -318,7 +318,7 @@ class ForestGraveyard():
             return choice( range(2,18) )
         exit()
 
-            
+
     def generate_tiledata( self, df ):
         tile_data = [0]*(df.width*df.height)
         for x in range(0, df.width):
@@ -346,7 +346,7 @@ class ForestGraveyard():
         # txt_spec = [
         #     [ "  1     1  " ],
         #     [ " 2   3   2 " ],
-        #     [ "  1     1  " ] 
+        #     [ "  1     1  " ]
         # ]
 
         txt_spec = choice(light_specs)
@@ -359,7 +359,7 @@ class ForestGraveyard():
                 '1' : [ Object.LightTypes.STATIC_SHADOWCASTER, [ 0.1,0.3,0.1,1.0], 25.0 ],
                 '2' : [ Object.LightTypes.STATIC_SHADOWCASTER, [ 0.5,0.3,0.8,1.0], 50.0 ],
                 '3' : [ Object.LightTypes.STATIC_SHADOWCASTER, [ 0.8,0.6,0.0,1.0], 100.0 ],
-            } 
+            }
 
             style = light_styles[char]
 
@@ -434,7 +434,7 @@ class ForestGraveyard():
             p[0] = p[0]-(df.width/2) + uniform(-1.0,1.0)
             p[1] = p[1]-(df.height/2) + uniform(-1.0,1.0)
             return [ TreeTop( p = p, size = [ size*0.6, size*0.6 ], parallax = uniform(1.1,1.8) ) ]
-            
+
         def generate_tree_occluders(char,p):
             size = None
             if char == "Q":
@@ -475,7 +475,7 @@ class ForestGraveyard():
         self.objects.extend(tree_objects)
 
         map_txt_spec( df, txt_spec, 1.0, 2, 2.0, lambda char, p : tree_occluders.extend(generate_tree_occluders(char, p)))
-        self.tree_occluders = tree_occluders 
+        self.tree_occluders = tree_occluders
 
     def generate_sigil_points( self, df):
         #txt_spec = [
@@ -497,4 +497,3 @@ class ForestGraveyard():
 
         map_txt_spec( df, txt_spec, 0.8, 2, 1.0, lambda char, p : sigil_points.append({ "sigil": char, "p": p } ) )
         self.sigil_points = sigil_points
-

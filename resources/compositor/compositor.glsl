@@ -26,9 +26,9 @@ precision mediump float;
 //uniform vec2 u_mouse;
 //uniform float u_time;
 
-float random (in vec2 _st) { 
+float random (in vec2 _st) {
     return fract(sin(dot(_st.xy,
-                         vec2(12.9898,78.233)))* 
+                         vec2(12.9898,78.233)))*
         43758.5453123);
 }
 
@@ -46,8 +46,8 @@ float noise (in vec2 _st) {
 
     vec2 u = f * f * (3.0 - 2.0 * f);
 
-    return mix(a, b, u.x) + 
-            (c - a)* u.y * (1.0 - u.x) + 
+    return mix(a, b, u.x) +
+            (c - a)* u.y * (1.0 - u.x) +
             (d - b) * u.x * u.y;
 }
 
@@ -58,7 +58,7 @@ float fbm ( in vec2 _st) {
     float a = 0.5;
     vec2 shift = vec2(100.0);
     // Rotate to reduce axial bias
-    mat2 rot = mat2(cos(0.5), sin(0.5), 
+    mat2 rot = mat2(cos(0.5), sin(0.5),
                     -sin(0.5), cos(0.50));
     for (int i = 0; i < NUM_OCTAVES; ++i) {
         v += a * noise(_st);
@@ -110,7 +110,7 @@ vec4 clouds(vec2 coord) {
 //  float fc = fract(p);
 //	return mix(rand(fl), rand(fl + 1.0), fc);
 //}
-	
+
 
 vec4 cheap_blur( vec2 p_uv, sampler2D p_buffer, float p_size ) {
 
@@ -118,7 +118,7 @@ vec4 cheap_blur( vec2 p_uv, sampler2D p_buffer, float p_size ) {
     float lmod = 1;
 
     float P = p_size;
-    vec4 sampled =  
+    vec4 sampled =
                     texture( p_buffer, p_uv + lmod*vec2( P, 0.0 ) ) +
                     texture( p_buffer, p_uv + lmod*vec2( -P, 0.0 ) ) +
                     texture( p_buffer, p_uv + lmod*vec2( 0.0, P ) ) +
@@ -145,14 +145,14 @@ void main(void) {
     vec4 cloudsrc = clouds(camera_position+uv*-0.7);
     vec2 obj_dist = ((cloudsrc.xy)-vec2(0.5,0.5))*0.02;
 
-    float parallax_ratio = 0.1+ (0.1 * height_texel.r + obj_dist.r);
     float from_c = length(centered_UV);
+    float parallax_ratio = 0.1+ (0.1 * height_texel.r + obj_dist.r)*from_c;
 
     from_c = from_c*from_c;
 
     vec2 parallaxed_UV = ((UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * from_c ))) + vec2(0.5,0.5);
     vec2 inv_parallaxed_UV = ((UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * (2.0-from_c) ))) + vec2(0.5,0.5);
-    
+
 
 
     vec4 photon_texel =  cheap_blur(UV, photon_buffer, (from_c)*(1.0/640));
@@ -185,4 +185,3 @@ void main(void) {
 //gl_FragColor =light_texel;
 
 }
-

@@ -125,7 +125,9 @@ def generate_areas():
         for idx, a in enumerate(layer_areas):
             a.ring = idx-ring_size
             dbg_rings.append(a.ring)
-        generate_tunnels(layer_areas)
+
+        if l is not 0:
+            generate_tunnels(layer_areas)
 
     make_portals_bidirectional(areas)
     return areas
@@ -147,4 +149,4 @@ def generate_qualified_areas():
     while not qualify(areas):
         areas = generate_areas()
 
-    show_layers(areas)
+    return areas
