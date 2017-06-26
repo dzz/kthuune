@@ -6,6 +6,7 @@ from random import choice
 from .Generators.ForestGraveyard import ForestGraveyard, TreeRoots,Fire
 from .Generators.BasicGenerator import BasicGenerator
 from random import uniform
+from math import sin,cos
 
 class Portal(Object):
     def __init__(self,**kwargs):
@@ -23,8 +24,8 @@ class DungeonFloor( Floor, BGL.auto_configurable):
         {
             "width" : 32,
             "height" : 32,
-            #"generator" : ForestGraveyard(),
-            "generator" : BasicGenerator(),
+            "generator" : ForestGraveyard(),
+            #"generator" : BasicGenerator(),
             "area" : None,
             "renderer_config" : {
                 "vision_lightmap_width" : 256,
@@ -68,7 +69,11 @@ class DungeonFloor( Floor, BGL.auto_configurable):
         )
 
 
-        self.generator.compile( self )
+        if self.area:
+            pobjs = self.generate_portal_objects()
+            self.generator.compile( self, pobjs  )
+        else:
+            self.generator.compile( self, []  )
 
         beagle_tilemap = BGL.tilemap(
             tileset = beagle_tileset,
@@ -94,9 +99,6 @@ class DungeonFloor( Floor, BGL.auto_configurable):
             "renderer_config" : self.renderer_config
         })
 
-        if(self.area):
-            floor_configuration["objects"].extend(self.generate_portal_objects())
-
         self.light_occluders = self.generator.get_light_occluders()
         self.photon_emitters = self.generator.get_photon_emitters()
 
@@ -108,6 +110,12 @@ class DungeonFloor( Floor, BGL.auto_configurable):
 
     def generate_portal_objects(self):
         objs = []
+
+        rad = 0.0
+        rad_delt = (3.14*2)/float(len(self.area.portals))
+        min_d = self.width/50.0;
+        max_d = self.width/2.5;
+
         for portal in self.area.portals:
 
             if portal.left_area is self.area:
@@ -117,9 +125,11 @@ class DungeonFloor( Floor, BGL.auto_configurable):
                 #portal_p = portal.right_p
                 portal_target = portal.left_area
 
-            x = uniform(0.0,self.width/2) -(self.width/4)
-            y = uniform(0.0,self.height/2) - (self.height/4)
+            d = uniform(min_d,max_d)
+            x = cos(rad)*d;
+            y = sin(rad)*d;
 
+            rad = rad+rad_delt
             portal_object = Portal( p = [x,y], size = [3.0,3.0], portal_target = portal_target )
 
             print("MADE: ",portal_object, "AT :", portal_object.p)

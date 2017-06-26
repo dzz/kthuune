@@ -160,8 +160,10 @@ class ForestGraveyard():
     def __init__(self):
         pass
 
-    def compile(self, dungeon_floor ):
+    def compile(self, dungeon_floor, base_objects ):
         self.objects = []
+        if(base_objects):
+            self.objects.extend(base_objects)
 
         self.generate_sigil_points( dungeon_floor )
         self.generate_tiledata(  dungeon_floor )
@@ -180,11 +182,8 @@ class ForestGraveyard():
         self.generate_fires(dungeon_floor)
 
     def generate_fires(self,df):
-        for f in range(0,20):
-            px,py = uniform(-df.width,df.width),uniform(-df.height,df.height)
-            px*=0.4
-            py*=0.4
-            self.objects.append( Fire( p=[px,py] ) )
+        for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
+            self.objects.append( Fire( p=pobj.p) )
 
     def generate_inner_trees(self,df):
 

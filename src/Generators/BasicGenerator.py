@@ -10,8 +10,12 @@ class BasicGenerator():
     def __init__(self):
         pass
 
-    def compile(self, dungeon_floor ):
+    def compile(self, dungeon_floor, base_objects ):
+
         self.objects = []
+        if(base_objects):
+            self.objects.extend(base_objects)
+
         self.light_occluders = []
         self.photon_emitters = []
         self.df = dungeon_floor
