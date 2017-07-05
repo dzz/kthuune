@@ -143,7 +143,8 @@ void main(void) {
     vec4 height_texel = cheap_blur(UV, height_buffer, 1.0/120 );
 
 
-    float from_c = length(centered_UV);
+    float from_c = (length(centered_UV * vec2(1.7,1.0)))*1.2;
+    
     float parallax_ratio = 0.1+ (0.1 * height_texel.r )*from_c;
 
     from_c = from_c*from_c;
@@ -153,12 +154,12 @@ void main(void) {
 
 
 
-    vec4 photon_texel =  cheap_blur(UV, photon_buffer, (from_c)*(1.0/640));
+    vec4 photon_texel =  cheap_blur(UV, photon_buffer, (from_c)*(1.0/32));
     vec4 floor_texel = texture(floor_buffer,parallaxed_UV);
     vec4 light_texel = cheap_blur( UV, light_buffer, (from_c)*1.0/60);
     vec4 object_texel = texture( object_buffer, parallaxed_UV);
     //vec4 object_texel = cheap_blur( parallaxed_UV, object_buffer, 1.0/320.0 );
-    vec4 vision_texel = cheap_blur( parallaxed_UV, vision_buffer, (from_c)*(1.0/160.0) );
+    vec4 vision_texel = cheap_blur( parallaxed_UV, vision_buffer, (from_c)*(1.0/32.0) );
 
 
 

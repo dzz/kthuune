@@ -11,7 +11,7 @@ class Fire(Object):
             overrides = {
                     'texture' : None,
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
-                    'light_radius' : 25.0,
+                    'light_radius' : 125.0,
                     'light_type' : Object.LightTypes.DYNAMIC_SHADOWCASTER
                 }
             overrides.update(kwargs)
@@ -197,7 +197,7 @@ class ForestGraveyard():
 
         self.tree_pts = []
         occluders = []
-        for t in range(0,18):
+        for t in range(0,25):
             print("MAKING TREE")
             px,py = uniform(-df.width,df.width),uniform(-df.height,df.height)
             px*=0.4
@@ -212,14 +212,14 @@ class ForestGraveyard():
             pobjs = filter( lambda x: "portal_target" in x.__dict__, self.objects)
             for tt in range(2,choice(range(4,5))):
                 valid = False
-
                 while not valid:
-                    min_dist = 15
+                    valid = True
+                    min_dist = 25
                     p = [px+uniform(-3.0,3.0),py+uniform(-3.0,3.0)]
                     for obj in pobjs:
                         if hypot( p[0]-obj.p[0], p[1]-obj.p[1])<min_dist: 
-                            continue
-                    valid = True
+                            valid = False
+                            break
 
                 tt = TreeTop( p=p, size=[size,size],parralax = plx) 
                 self.objects.append( tt )
@@ -343,20 +343,24 @@ class ForestGraveyard():
 
     
     def evaluate_tile(self,rx,ry):
+
         win_d = 0
         win_range = None 
+        second_range = None
         for pt in self.vpts:
             d = hypot(rx-pt[1], ry-pt[2])
             if win_range is None:
                 win_d = d
                 win_range = pt[0]
+                second_range = win_range
             else:
                 if( d< win_d):
                     win_d = d
+                    second_range = win_range
                     win_range = pt[0]
 
-        #print(win_range)
-        return choice( win_range )
+        
+        return choice( choice([win_range, second_range]) )
                  
 
     
@@ -367,11 +371,15 @@ class ForestGraveyard():
         self.height = self.df.height
 
         for pt in self.tree_pts:
-            self.vpts.append( ( (9,19) , pt[0], pt[1] ) )
-        for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
-            self.vpts.append( ( (1,8) , pobj.p[0], pobj.p[1] ) )
+            self.vpts.append( ( (1,10) , pt[0], pt[1] ) )
 
-        for i in range(8,13):
+        #for x in range(0,50):
+        #    self.vpts.append( ( (1,1) , uniform(-self.width, self.width), uniform(-self.height, self.height)) )
+
+        for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
+            self.vpts.append( ( (11,19) , pobj.p[0], pobj.p[1] ) )
+
+        for i in range(0,8):
             self.vpts.append(((5,15) , uniform(-self.width, self.width), uniform(-self.height,self.height)))
 
 

@@ -143,7 +143,7 @@ class DungeonFloor( Floor, BGL.auto_configurable):
 
         idx = 0
         while len(objs) is not len(self.area.portals):
-            min_dist = 25
+            min_dist = 40
             portal = self.area.portals[idx]
             if portal.left_area is self.area:
                 #portal_p = portal.left_p
@@ -156,9 +156,13 @@ class DungeonFloor( Floor, BGL.auto_configurable):
             tx = uniform(-self.width,self.width)*0.5
             ty = uniform(-self.height,self.height)*0.5
            
+            valid = True
             for obj in objs:
                 if hypot( tx-obj.p[0], ty-obj.p[1])<min_dist: 
-                    continue
+                    valid = False
+                    break
+            if not valid:
+                continue
             portal_object = Portal( p = [tx,ty], portal_target = portal_target )
             objs.append(portal_object)
             idx = idx + 1
