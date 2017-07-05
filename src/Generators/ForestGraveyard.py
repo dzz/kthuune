@@ -113,19 +113,22 @@ class TreeRoots(Object):
 
 class TreeShadow(Object):
         def __init__(self,**kwargs):
+            self.scale = 12
+            tt = kwargs['TreeTop']
             overrides = {
                     "num" : 0,
                     "texture" : BGL.assets.get("KT-forest/texture/treetop"),
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
-                    'size' : [ 5.0,5.0],
-                    'rad' : uniform(-3.14,3.14),
+                    'size' : [ self.scale*tt.size[0],self.scale*tt.size[1]],
+                    'rad' : tt.rad,
                     'z_index' : -100,
+                    'tt' : tt
                 }
             overrides.update(kwargs)
             Object.__init__(self,**overrides)
             self.t = 0
             self.base_size = [ self.size[0], self.size[1] ]
-            self.draw_color = [0.8,uniform(0.0,1.0),0.8,uniform(0.4,0.6) ]
+            self.draw_color = [0.8,uniform(0.0,1.0),0.8,uniform(0.3,0.4)]
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
@@ -137,6 +140,7 @@ class TreeShadow(Object):
             return True
 
         def get_shader_params(self):
+
             params = Object.get_shader_params(self)
             tw = params["translation_world"]
             params["translation_world" ] = tw
@@ -166,20 +170,21 @@ class ForestGraveyard():
             self.objects.extend(base_objects)
 
         self.generate_sigil_points( dungeon_floor )
-        self.generate_tiledata(  dungeon_floor )
-        self.generate_trees( dungeon_floor )
+        #self.generate_trees( dungeon_floor )
         self.generate_photon_emitters(dungeon_floor)
 
-        self.light_occluders = self.tree_occluders
+        #self.light_occluders = self.tree_occluders
+        self.light_occluders = []
 
         self.map_edges = self.gen_edges( dungeon_floor )
         self.light_occluders = []
         self.light_occluders.extend( self.map_edges )
 
-        self.generate_edge_trees()
+        #self.generate_edge_trees()
         self.generate_inner_trees(dungeon_floor)
         self.generate_static_lights(dungeon_floor)
         self.generate_fires(dungeon_floor)
+        self.generate_tiledata(  dungeon_floor )
 
     def generate_fires(self,df):
         for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
@@ -187,6 +192,7 @@ class ForestGraveyard():
 
     def generate_inner_trees(self,df):
 
+        self.tree_pts = []
         occluders = []
         for t in range(0,18):
             print("MAKING TREE")
@@ -194,23 +200,28 @@ class ForestGraveyard():
             px*=0.4
             py*=0.4
             rad = uniform(3.2,6.3)
-            occluders.extend( self.gen_rand_circle_lines( 0.5,1.5, rad, [px,py]))
+            occluders.extend( self.gen_rand_circle_lines( 0.1,1.0, rad, [px,py]))
 
             size = uniform(1.0,8.0)
             plx = uniform(2.2,3.8)
 
-            for tt in range(1,choice(range(2,4))):
+            self.tree_pts.append([px,py])
+            for tt in range(2,choice(range(4,5))):
                 p = [px+uniform(-3.0,3.0),py+uniform(-3.0,3.0)]
-                self.objects.append( TreeTop( p=p, size=[size,size],parralax = plx) )
+
+                tt = TreeTop( p=p, size=[size,size],parralax = plx) 
+                self.objects.append( tt )
+                #tt.visible = False
+                self.objects.append( TreeShadow(p=p, TreeTop=tt) )
                 size = size * uniform(1.2,1.5)
-                plx = plx * uniform(1.2,1.5)
+                plx = plx * uniform(1.1,1.3)
 
             for tt in range(2,choice(range(2,5))):
                 size = uniform(10.0,40.0)
                 p = [px+uniform(-2.0,2.0),py+uniform(-2.0,2.0)]
                 self.objects.append( TreeRoots( p=p, size=[size,size]) )
-                if(choice([True,False])):
-                    self.objects.append( TreeShadow( p=p, size=[size*2,size*2]) )
+            #    if(choice([True,False])):
+            #        self.objects.append( TreeShadow( p=p, size=[size*2,size*2]) )
 
 
             ##for tt in range(2,choice(range(3,15))):
@@ -232,7 +243,7 @@ class ForestGraveyard():
                 px,py = d*dx,d*dy
                 x,y = edge[0][0]+px,edge[0][1]+py
                 p = [x,y]
-                self.objects.append( TreeTop( p=p, size=[size,size],parralax = uniform(1.1,1.8)) )
+                #self.objects.append( TreeTop( p=p, size=[size,size],parralax = uniform(1.1,1.8)) )
 
 
 
@@ -264,8 +275,6 @@ class ForestGraveyard():
         return lines
 
     def gen_edges(self, df):
-
-
         return self.gen_rand_circle_lines( 0.01,0.2, min(df.width,df.height)*0.5)
         ## r = 0.0
         ## points = []
@@ -318,7 +327,47 @@ class ForestGraveyard():
         exit()
 
 
+    
+    def evaluate_tile(self,rx,ry):
+        win_d = 0
+        win_range = None 
+        for pt in self.vpts:
+            d = hypot(rx-pt[1], ry-pt[2])
+            if win_range is None:
+                win_d = d
+                win_range = pt[0]
+            else:
+                if( d< win_d):
+                    win_d = d
+                    win_range = pt[0]
+
+        #print(win_range)
+        return choice( win_range )
+                 
+
+    
+    def generate_voroni_pts(self):
+        self.vpts = []
+
+        self.width = self.df.width #i give up
+        self.height = self.df.height
+
+        for pt in self.tree_pts:
+            self.vpts.append( ( (9,19) , pt[0], pt[1] ) )
+        for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
+            self.vpts.append( ( (1,8) , pobj.p[0], pobj.p[1] ) )
+
+        for i in range(8,13):
+            self.vpts.append(((5,15) , uniform(-self.width, self.width), uniform(-self.height,self.height)))
+
+
+
+
     def generate_tiledata( self, df ):
+
+        self.df = df #i give up
+        self.generate_voroni_pts()
+
         tile_data = [0]*(df.width*df.height)
         for x in range(0, df.width):
             for y in range(0, df.height):
@@ -336,7 +385,12 @@ class ForestGraveyard():
                 #######         closest_sigil_point = sigil_point
                 #######         score = d
                 ####### tile_data[  (y * df.width) + x ]  = self.get_sigil_tiledata(closest_sigil_point["sigil"])
-                tile_data[  (y * df.width) + x ]  = choice(range(1,20))
+
+                rx = float(x*2)-(df.width)
+                ry = float(y*2)-(df.height)
+
+                tval = self.evaluate_tile(rx,ry)
+                tile_data[  (y * df.width) + x ]  = tval
 
         self.tile_data = tile_data
 
@@ -432,6 +486,9 @@ class ForestGraveyard():
                 return []
             p[0] = p[0]-(df.width/2) + uniform(-1.0,1.0)
             p[1] = p[1]-(df.height/2) + uniform(-1.0,1.0)
+
+
+            self.tree_pts.append(p)
             return [ TreeTop( p = p, size = [ size*0.6, size*0.6 ], parallax = uniform(1.1,1.8) ) ]
 
         def generate_tree_occluders(char,p):
