@@ -6,7 +6,7 @@ from random import choice
 from .Generators.ForestGraveyard import ForestGraveyard, TreeRoots,Fire
 from .Generators.BasicGenerator import BasicGenerator
 from random import uniform
-from math import sin,cos
+from math import sin,cos,hypot
 
 
 class Portal(Object):
@@ -32,12 +32,12 @@ class DungeonFloor( Floor, BGL.auto_configurable):
             #"generator" : BasicGenerator(),
             "area" : None,
             "renderer_config" : {
-                "vision_lightmap_width" : 1920,
-                "vision_lightmap_height" : 1080,
-                "photon_map_width" : 1024,
-                "photon_map_height" : 1024,
-                "static_lightmap_width" : 1024,
-                "static_lightmap_height" : 1024,
+                "vision_lightmap_width" : 512,
+                "vision_lightmap_height" : 512,
+                "photon_map_width" : 256,
+                "photon_map_height" : 256,
+                "static_lightmap_width" : 512,
+                "static_lightmap_height" : 512,
                 "photon_mapper_config" : {
                     'stream' : False,
                     'photon_radius' : 80.0,
@@ -55,7 +55,7 @@ class DungeonFloor( Floor, BGL.auto_configurable):
                     "object_buffer_size" : "screen",
                     "height_buffer_size" : "screen",
                     "reflect_buffer_size" : "screen",
-                    "vision_buffer_size" : "scren"
+                    "vision_buffer_size" : "screen"
                 }
             }
         }, **kwargs )
@@ -113,15 +113,38 @@ class DungeonFloor( Floor, BGL.auto_configurable):
 
 
     def generate_portal_objects(self):
+        #objs = []
+
+        #rad = 0.0
+        #rad_delt = (3.14*2)/float(len(self.area.portals))
+        #min_d = self.width/50.0;
+        #max_d = self.width/2.5;
+
+        #for portal in self.area.portals:
+
+        #    if portal.left_area is self.area:
+        #        #portal_p = portal.left_p
+        #        portal_target = portal.right_area
+        #    elif portal.right_area is self.area:
+        #        #portal_p = portal.right_p
+        #        portal_target = portal.left_area
+
+        #    d = uniform(min_d,max_d)
+        #    x = cos(rad)*d;
+        #    y = sin(rad)*d;
+
+        #    rad = rad+rad_delt
+        #    portal_object = Portal( p = [x,y], portal_target = portal_target )
+
+        #    print("MADE: ",portal_object, "AT :", portal_object.p)
+        #    objs.append(portal_object)
+
         objs = []
 
-        rad = 0.0
-        rad_delt = (3.14*2)/float(len(self.area.portals))
-        min_d = self.width/50.0;
-        max_d = self.width/2.5;
-
-        for portal in self.area.portals:
-
+        idx = 0
+        while len(objs) is not len(self.area.portals):
+            min_dist = 25
+            portal = self.area.portals[idx]
             if portal.left_area is self.area:
                 #portal_p = portal.left_p
                 portal_target = portal.right_area
@@ -129,15 +152,17 @@ class DungeonFloor( Floor, BGL.auto_configurable):
                 #portal_p = portal.right_p
                 portal_target = portal.left_area
 
-            d = uniform(min_d,max_d)
-            x = cos(rad)*d;
-            y = sin(rad)*d;
 
-            rad = rad+rad_delt
-            portal_object = Portal( p = [x,y], portal_target = portal_target )
-
-            print("MADE: ",portal_object, "AT :", portal_object.p)
+            tx = uniform(-self.width,self.width)*0.5
+            ty = uniform(-self.height,self.height)*0.5
+           
+            for obj in objs:
+                if hypot( tx-obj.p[0], ty-obj.p[1])<min_dist: 
+                    continue
+            portal_object = Portal( p = [tx,ty], portal_target = portal_target )
             objs.append(portal_object)
+            idx = idx + 1
+ 
         return objs
 
     def get_occluders(self):

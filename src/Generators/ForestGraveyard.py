@@ -192,6 +192,7 @@ class ForestGraveyard():
         for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
             self.objects.append( Fire( p=pobj.p) )
 
+
     def generate_inner_trees(self,df):
 
         self.tree_pts = []
@@ -208,8 +209,17 @@ class ForestGraveyard():
             plx = uniform(2.2,3.8)
 
             self.tree_pts.append([px,py])
+            pobjs = filter( lambda x: "portal_target" in x.__dict__, self.objects)
             for tt in range(2,choice(range(4,5))):
-                p = [px+uniform(-3.0,3.0),py+uniform(-3.0,3.0)]
+                valid = False
+
+                while not valid:
+                    min_dist = 15
+                    p = [px+uniform(-3.0,3.0),py+uniform(-3.0,3.0)]
+                    for obj in pobjs:
+                        if hypot( p[0]-obj.p[0], p[1]-obj.p[1])<min_dist: 
+                            continue
+                    valid = True
 
                 tt = TreeTop( p=p, size=[size,size],parralax = plx) 
                 self.objects.append( tt )
