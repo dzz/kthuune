@@ -86,16 +86,16 @@ vec4 clouds(vec2 coord) {
 
     float f = fbm(st+r);
 
-    color = mix(vec3(0.101961,0.619608,0.666667),
-                vec3(0.666667,0.666667,0.498039),
+    color = mix(vec3(0.5,0.5,0.5),
+                vec3(1.0,1.0,1.0),
                 clamp((f*f)*4.0,0.0,1.0));
 
     color = mix(color,
-                vec3(0,0,0.164706),
+                vec3(0.5,0.5,0.5),
                 clamp(length(q),0.0,1.0));
 
     color = mix(color,
-                vec3(0.666667,1,1),
+                vec3(1.0,1,1),
                 clamp(length(r.x),0.0,1.0));
 
     vec4 ret = vec4((f*f*f+.6*f*f+.5*f)*color,1.);
@@ -142,11 +142,9 @@ void main(void) {
 
     vec4 height_texel = cheap_blur(UV, height_buffer, 1.0/120 );
 
-    vec4 cloudsrc = clouds(camera_position+uv*-0.7);
-    vec2 obj_dist = ((cloudsrc.xy)-vec2(0.5,0.5))*0.02;
 
     float from_c = length(centered_UV);
-    float parallax_ratio = 0.1+ (0.1 * height_texel.r + obj_dist.r)*from_c;
+    float parallax_ratio = 0.1+ (0.1 * height_texel.r )*from_c;
 
     from_c = from_c*from_c;
 
@@ -157,7 +155,7 @@ void main(void) {
 
     vec4 photon_texel =  cheap_blur(UV, photon_buffer, (from_c)*(1.0/640));
     vec4 floor_texel = texture(floor_buffer,parallaxed_UV);
-    vec4 light_texel = cheap_blur( UV, light_buffer, (from_c)*1.0/60)*(0.8+(0.2*clouds(parallaxed_UV)));
+    vec4 light_texel = cheap_blur( UV, light_buffer, (from_c)*1.0/60);
     vec4 object_texel = texture( object_buffer, parallaxed_UV);
     //vec4 object_texel = cheap_blur( parallaxed_UV, object_buffer, 1.0/320.0 );
     vec4 vision_texel = cheap_blur( parallaxed_UV, vision_buffer, (from_c)*(1.0/160.0) );
@@ -170,18 +168,25 @@ void main(void) {
     //vec4 reflect_map_texel = cheap_blur( base_reflect_parallaxed_UV*0.25, reflect_map, 1.0/256 );
 
 
-    float exposure = 2.2;
+    float exposure = 1.2;
     float ambiance = 0.5;
 
     vec4 LitObject = object_texel * (light_texel * exposure);
-    vec4 LitFloor = ( (photon_texel * floor_texel * light_texel) * exposure) + (ambiance*(photon_texel+((clouds(inv_parallaxed_UV)+(light_texel*light_texel))*vision_texel)));
+    ///
+    //vec4 LitFloor = ( (photon_texel * floor_texel * light_texel) * exposure) + (ambiance*(photon_texel+((clouds(inv_parallaxed_UV)+(light_texel*light_texel))*vision_texel)));
+    ///
+
+    vec4 LitFloor = ((vec4(0.5,0.5,0.5,1.0)+clouds(parallaxed_UV))*(4*photon_texel))+((light_texel*3)*clouds(inv_parallaxed_UV))*floor_texel;
 
     float mask = 1.0 - LitObject.a;
     vec4 SeenFloor = (LitFloor * vision_texel) * mask;
 
     LitObject = LitObject * LitObject.a;
 
-    gl_FragColor = SeenFloor + LitObject;
+    //vec4 combined_light = ((photon_texel + light_texel) * 1.3);
+
+    gl_FragColor = (SeenFloor + LitObject) * vision_texel;
+    //gl_FragColor = (clouds(parallaxed_UV)*(4*photon_texel))+(light_texel*clouds(inv_parallaxed_UV))*floor_texel;
 //gl_FragColor =light_texel;
 
 }

@@ -28,8 +28,8 @@ class DungeonFloor( Floor, BGL.auto_configurable):
             #"generator" : BasicGenerator(),
             "area" : None,
             "renderer_config" : {
-                "vision_lightmap_width" : 1024,
-                "vision_lightmap_height" : 1024,
+                "vision_lightmap_width" : 1920,
+                "vision_lightmap_height" : 1080,
                 "photon_map_width" : 1024,
                 "photon_map_height" : 1024,
                 "static_lightmap_width" : 1024,

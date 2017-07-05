@@ -53,7 +53,7 @@ class TreeTop(Object):
             Object.__init__(self,**overrides)
             self.t = 0
             self.base_size = [ self.size[0], self.size[1] ]
-            self.draw_color = [0.8,uniform(0.0,1.0),0.8,uniform(0.6,0.9)]
+            self.draw_color = [0.8,uniform(0.0,1.0),0.8,uniform(0.8,1.0)]
 
         def tick(self):
             self.t = self.t + 0.01
@@ -180,15 +180,16 @@ class ForestGraveyard():
         self.light_occluders = []
         self.light_occluders.extend( self.map_edges )
 
-        #self.generate_edge_trees()
         self.generate_inner_trees(dungeon_floor)
+        self.generate_edge_trees()
         self.generate_static_lights(dungeon_floor)
         self.generate_fires(dungeon_floor)
         self.generate_tiledata(  dungeon_floor )
 
     def generate_fires(self,df):
-        for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
-            self.objects.append( Fire( p=pobj.p) )
+        pass
+        #for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
+        #    self.objects.append( Fire( p=pobj.p) )
 
     def generate_inner_trees(self,df):
 
@@ -200,7 +201,7 @@ class ForestGraveyard():
             px*=0.4
             py*=0.4
             rad = uniform(3.2,6.3)
-            occluders.extend( self.gen_rand_circle_lines( 0.1,1.0, rad, [px,py]))
+            occluders.extend( self.gen_rand_circle_lines( 0.5,1.5, rad, [px,py]))
 
             size = uniform(1.0,8.0)
             plx = uniform(2.2,3.8)
@@ -243,7 +244,8 @@ class ForestGraveyard():
                 px,py = d*dx,d*dy
                 x,y = edge[0][0]+px,edge[0][1]+py
                 p = [x,y]
-                #self.objects.append( TreeTop( p=p, size=[size,size],parralax = uniform(1.1,1.8)) )
+                self.tree_pts.append(p)
+                self.objects.append( TreeTop( p=p, size=[size,size],parralax = uniform(1.1,1.8)) )
 
 
 
