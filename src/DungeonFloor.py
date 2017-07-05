@@ -8,11 +8,15 @@ from .Generators.BasicGenerator import BasicGenerator
 from random import uniform
 from math import sin,cos
 
+
 class Portal(Object):
     def __init__(self,**kwargs):
         overrides = {
+                        "texture" : BGL.assets.get('KT-forest/texture/portal'),
                         'light_radius' : 25.0,
+                        'size': [ 13.0, 13.0] ,
                         'light_color' : [ 0.7,1.0,1.0,1.0],
+                        'rad' : uniform(-3.14,3.14),
                         'light_type' : Object.LightTypes.DYNAMIC_SHADOWCASTER
                     }
         overrides.update(kwargs)
@@ -130,7 +134,7 @@ class DungeonFloor( Floor, BGL.auto_configurable):
             y = sin(rad)*d;
 
             rad = rad+rad_delt
-            portal_object = Portal( p = [x,y], size = [3.0,3.0], portal_target = portal_target )
+            portal_object = Portal( p = [x,y], portal_target = portal_target )
 
             print("MADE: ",portal_object, "AT :", portal_object.p)
             objs.append(portal_object)

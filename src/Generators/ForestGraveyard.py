@@ -40,7 +40,9 @@ class TreeTop(Object):
         def __init__(self,**kwargs):
             overrides = {
                     "num" : 0,
-                    "texture" : BGL.assets.get("KT-forest/texture/treetop"),
+                    "texture" : choice( [
+                            BGL.assets.get("KT-forest/texture/treetop"),
+                            BGL.assets.get("KT-forest/texture/treetop2") ] ),
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
                     'size' : [ 5.0,5.0],
                     'rad' : uniform(-3.14,3.14),
@@ -187,9 +189,8 @@ class ForestGraveyard():
         self.generate_tiledata(  dungeon_floor )
 
     def generate_fires(self,df):
-        pass
-        #for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
-        #    self.objects.append( Fire( p=pobj.p) )
+        for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
+            self.objects.append( Fire( p=pobj.p) )
 
     def generate_inner_trees(self,df):
 
@@ -244,7 +245,8 @@ class ForestGraveyard():
                 px,py = d*dx,d*dy
                 x,y = edge[0][0]+px,edge[0][1]+py
                 p = [x,y]
-                self.tree_pts.append(p)
+                if(uniform(0.0,1.0)>0.7):
+                    self.tree_pts.append(p)
                 self.objects.append( TreeTop( p=p, size=[size,size],parralax = uniform(1.1,1.8)) )
 
 

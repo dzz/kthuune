@@ -3,7 +3,9 @@
     "resources" : {
         "texture" : [
             { "name" : "treetop", "filename" : "{package_path}/treetop.png", "filtered" : true },
-            { "name" : "treeroots", "filename" : "{package_path}/roots.png", "filtered" : true }
+            { "name" : "treetop2", "filename" : "{package_path}/treetop2.png", "filtered" : true },
+            { "name" : "treeroots", "filename" : "{package_path}/roots.png", "filtered" : true },
+            { "name" : "portal", "filename" : "{package_path}/portal.png", "filtered" : true }
         ]
     }
 }

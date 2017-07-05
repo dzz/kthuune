@@ -86,13 +86,13 @@ vec4 clouds(vec2 coord) {
 
     float f = fbm(st+r);
 
-    color = mix(vec3(0.5,0.5,0.5),
+    color = mix(vec3(0.7,0.8,0.9),
                 vec3(1.0,1.0,1.0),
                 clamp((f*f)*4.0,0.0,1.0));
 
     color = mix(color,
-                vec3(0.5,0.5,0.5),
-                clamp(length(q),0.0,1.0));
+                vec3(0.8,0.7,0.9),
+                clamp(length(q),1.0,1.0));
 
     color = mix(color,
                 vec3(1.0,1,1),
