@@ -7,15 +7,16 @@ from .Generators.ForestGraveyard import ForestGraveyard, TreeRoots,Fire
 from .Generators.BasicGenerator import BasicGenerator
 from random import uniform
 from math import sin,cos,hypot
+from .AimingBeam import AimingBeam
 
 
 class Portal(Object):
     def __init__(self,**kwargs):
         overrides = {
                         "texture" : BGL.assets.get('KT-forest/texture/portal'),
-                        'light_radius' : 25.0,
+                        'light_radius' : 65.0,
                         'size': [ 13.0, 13.0] ,
-                        'light_color' : [ 0.7,1.0,1.0,1.0],
+                        'light_color' : [ 0.2,0.4,0.4,0.4],
                         'rad' : uniform(-3.14,3.14),
                         'light_type' : Object.LightTypes.DYNAMIC_SHADOWCASTER
                     }
@@ -102,6 +103,8 @@ class DungeonFloor( Floor, BGL.auto_configurable):
             "objects" : self.generator.get_objects(),
             "renderer_config" : self.renderer_config
         })
+
+        floor_configuration["objects"].append( AimingBeam() )
 
         self.light_occluders = self.generator.get_light_occluders()
         self.photon_emitters = self.generator.get_photon_emitters()

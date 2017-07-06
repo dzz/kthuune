@@ -13,6 +13,7 @@ uniform sampler2D photon_buffer;
 uniform sampler2D height_buffer;
 uniform sampler2D reflect_buffer;
 uniform sampler2D reflect_map;
+
 in vec2 uv;
 
 // Author @patriciogv - 2015
@@ -136,8 +137,15 @@ void main(void) {
 
 
     vec2 UV = vec2(0.1,0.1)+(uv*0.8);
+
+    float x_scale = 0.8+(0.6*(UV.y*UV.y));
+    UV.x -= 0.5;
+    UV.x *= x_scale;
+    UV.x += 0.5;
+
     vec2 centered_UV = (UV+vec2(-0.5,-0.5))*2;
     centered_UV*= centered_UV;
+
 
 
     vec4 height_texel = cheap_blur(UV, height_buffer, 1.0/120 );
@@ -177,7 +185,8 @@ void main(void) {
     //vec4 LitFloor = ( (photon_texel * floor_texel * light_texel) * exposure) + (ambiance*(photon_texel+((clouds(inv_parallaxed_UV)+(light_texel*light_texel))*vision_texel)));
     ///
 
-    vec4 LitFloor = ((vec4(0.5,0.5,0.5,1.0)+clouds(parallaxed_UV))*(4*photon_texel))+((light_texel*3)*clouds(inv_parallaxed_UV))*floor_texel;
+    
+    vec4 LitFloor = ((light_texel+clouds(parallaxed_UV))*(4*photon_texel))+((light_texel*3)*clouds(inv_parallaxed_UV))*floor_texel;
 
     float mask = 1.0 - LitObject.a;
     vec4 SeenFloor = (LitFloor * vision_texel) * mask;

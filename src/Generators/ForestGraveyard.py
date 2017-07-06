@@ -6,12 +6,27 @@ from math import sin,cos,pi
 from .txt_specs import *
 import random
 
+class Shrub(Object):
+        textures = [
+            BGL.assets.get('KT-forest/texture/shrub0000'),
+            BGL.assets.get('KT-forest/texture/shrub0001'),
+            BGL.assets.get('KT-forest/texture/shrub0002'),
+            BGL.assets.get('KT-forest/texture/shrub0003'),
+        ]
+        def __init__(self,**kwargs):
+            Object.__init__(self,**kwargs)
+            self.texture = choice( Shrub.textures )
+            self.z_index = 1
+            sz = uniform(5.0,9.0)
+            self.size = [ sz,sz ]
+            self.tick_type = Object.TickTypes.TICK_FOREVER
+
 class Fire(Object):
         def __init__(self,**kwargs):
             overrides = {
                     'texture' : None,
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
-                    'light_radius' : 125.0,
+                    'light_radius' : 30.0,
                     'light_type' : Object.LightTypes.DYNAMIC_SHADOWCASTER
                 }
             overrides.update(kwargs)
@@ -171,6 +186,7 @@ class ForestGraveyard():
         if(base_objects):
             self.objects.extend(base_objects)
 
+
         self.generate_sigil_points( dungeon_floor )
         #self.generate_trees( dungeon_floor )
         self.generate_photon_emitters(dungeon_floor)
@@ -188,6 +204,14 @@ class ForestGraveyard():
         self.generate_fires(dungeon_floor)
         self.generate_tiledata(  dungeon_floor )
 
+        for x in range(0,300):
+            px = uniform( -dungeon_floor.width*0.4, dungeon_floor.width*0.4)
+            py = uniform( -dungeon_floor.height*0.4, dungeon_floor.height*0.4)
+            print("SHRUB",px,py)
+            self.objects.append( Shrub( p = [px,py] ) )
+
+
+
     def generate_fires(self,df):
         for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
             self.objects.append( Fire( p=pobj.p) )
@@ -197,7 +221,9 @@ class ForestGraveyard():
 
         self.tree_pts = []
         occluders = []
-        for t in range(0,25):
+        trees = 25
+
+        for t in range(0,trees):
             print("MAKING TREE")
             px,py = uniform(-df.width,df.width),uniform(-df.height,df.height)
             px*=0.4
@@ -412,6 +438,8 @@ class ForestGraveyard():
                 ry = float(y*2)-(df.height)
 
                 tval = self.evaluate_tile(rx,ry)
+                #tval = 1
+
                 tile_data[  (y * df.width) + x ]  = tval
 
         self.tile_data = tile_data
@@ -431,9 +459,9 @@ class ForestGraveyard():
             p[1] = p[1]-(df.height/2) + uniform(-1.0,1.0)
 
             light_styles = {
-                '1' : [ Object.LightTypes.STATIC_SHADOWCASTER, [ 0.1,0.3,0.1,1.0], 25.0 ],
-                '2' : [ Object.LightTypes.STATIC_SHADOWCASTER, [ 0.5,0.3,0.8,1.0], 50.0 ],
-                '3' : [ Object.LightTypes.STATIC_SHADOWCASTER, [ 0.8,0.6,0.0,1.0], 100.0 ],
+                '1' : [ Object.LightTypes.STATIC_SHADOWCASTER, [ 0.1,0.3,0.1,1.0], 15.0 ],
+                '2' : [ Object.LightTypes.STATIC_SHADOWCASTER, [ 0.5,0.3,0.8,1.0], 25.0 ],
+                '3' : [ Object.LightTypes.STATIC_SHADOWCASTER, [ 0.8,0.6,0.0,1.0], 40.0 ],
             }
 
             style = light_styles[char]

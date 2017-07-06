@@ -12,7 +12,8 @@ class KPlayer(Player):
             "light_type" : Object.LightTypes.DYNAMIC_SHADOWCASTER,
             "light_radius" : 15.0,
             "light_color" : [ 0.65,0.45,0.3,1.0],
-            "walk_tick" : 0
+            "walk_tick" : 0,
+            "z_index" : 1
         }
         overrides.update(kwargs)
         Player.__init__(self, **overrides)
