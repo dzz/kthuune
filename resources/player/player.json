@@ -2,7 +2,25 @@
     "preload": true,
     "resources" : {
         "texture" : [
-            { "name" : "player", "filename" : "{package_path}/player.png", "filtered" : true }
+            { "name" : "player", "filename" : "{package_path}/player.png", "filtered" : true },
+            { "name" : "knight0000", "filename" : "{package_path}/knight0000.png", "filtered" : false },
+            { "name" : "knight0001", "filename" : "{package_path}/knight0001.png", "filtered" : false },
+            { "name" : "knight0002", "filename" : "{package_path}/knight0002.png", "filtered" : false },
+            { "name" : "knight0003", "filename" : "{package_path}/knight0003.png", "filtered" : false },
+            { "name" : "knight0004", "filename" : "{package_path}/knight0004.png", "filtered" : false },
+            { "name" : "knight0005", "filename" : "{package_path}/knight0005.png", "filtered" : false },
+            { "name" : "knight0006", "filename" : "{package_path}/knight0006.png", "filtered" : false },
+            { "name" : "knight0007", "filename" : "{package_path}/knight0007.png", "filtered" : false },
+            { "name" : "knight0008", "filename" : "{package_path}/knight0008.png", "filtered" : false },
+            { "name" : "knight0009", "filename" : "{package_path}/knight0009.png", "filtered" : false },
+            { "name" : "knight0010", "filename" : "{package_path}/knight0010.png", "filtered" : false },
+            { "name" : "knight0011", "filename" : "{package_path}/knight0011.png", "filtered" : false },
+            { "name" : "knight0012", "filename" : "{package_path}/knight0012.png", "filtered" : false },
+            { "name" : "knight0013", "filename" : "{package_path}/knight0013.png", "filtered" : false },
+            { "name" : "knight0014", "filename" : "{package_path}/knight0014.png", "filtered" : false },
+            { "name" : "knight0015", "filename" : "{package_path}/knight0015.png", "filtered" : false },
+            { "name" : "knight0016", "filename" : "{package_path}/knight0016.png", "filtered" : false },
+            { "name" : "knight0017", "filename" : "{package_path}/knight0017.png", "filtered" : false }
         ]
     }
 }
