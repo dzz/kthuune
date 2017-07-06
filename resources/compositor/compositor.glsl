@@ -138,10 +138,14 @@ void main(void) {
 
     vec2 UV = vec2(0.1,0.1)+(uv*0.8);
 
+    vec2 inv_UV = UV;
     float x_scale = 0.8+(0.6*(UV.y*UV.y));
     UV.x -= 0.5;
     UV.x *= x_scale;
     UV.x += 0.5;
+    inv_UV.x -= 0.5;
+    inv_UV.x *= 2.0-x_scale;
+    inv_UV.x += 0.5;
 
     vec2 centered_UV = (UV+vec2(-0.5,-0.5))*2;
     centered_UV*= centered_UV;
@@ -158,15 +162,15 @@ void main(void) {
     from_c = from_c*from_c;
 
     vec2 parallaxed_UV = ((UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * from_c ))) + vec2(0.5,0.5);
-    vec2 inv_parallaxed_UV = ((UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * (2.0-from_c) ))) + vec2(0.5,0.5);
+    vec2 inv_parallaxed_UV = ((inv_UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * (2.0-from_c) ))) + vec2(0.5,0.5);
 
 
 
     vec4 photon_texel =  cheap_blur(UV, photon_buffer, (from_c)*(1.0/32));
     vec4 floor_texel = texture(floor_buffer,parallaxed_UV);
     vec4 light_texel = cheap_blur( UV, light_buffer, (from_c)*1.0/60);
-    vec4 object_texel = texture( object_buffer, parallaxed_UV);
-    //vec4 object_texel = cheap_blur( parallaxed_UV, object_buffer, 1.0/320.0 );
+    vec4 object_texel = texture( object_buffer, inv_parallaxed_UV);
+    //vec4 object_texel = cheap_blur( inv_parallaxed_UV, object_buffer, 1.0/320.0 );
     vec4 vision_texel = cheap_blur( parallaxed_UV, vision_buffer, (from_c)*(1.0/32.0) );
 
 
