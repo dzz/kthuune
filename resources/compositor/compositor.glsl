@@ -52,7 +52,7 @@ float noise (in vec2 _st) {
             (d - b) * u.x * u.y;
 }
 
-#define NUM_OCTAVES 4
+#define NUM_OCTAVES 3
 
 float fbm ( in vec2 _st) {
     float v = 0.0;
@@ -123,14 +123,15 @@ vec4 cheap_blur( vec2 p_uv, sampler2D p_buffer, float p_size ) {
                     texture( p_buffer, p_uv + lmod*vec2( P, 0.0 ) ) +
                     texture( p_buffer, p_uv + lmod*vec2( -P, 0.0 ) ) +
                     texture( p_buffer, p_uv + lmod*vec2( 0.0, P ) ) +
-                    texture( p_buffer, p_uv + lmod*vec2( 0.0, -P ) ) +
+                    texture( p_buffer, p_uv + lmod*vec2( 0.0, -P ) );
 
+/*
                     0.5*texture( p_buffer, p_uv + lmod*vec2( -P, -P ) ) +
                     0.5*texture( p_buffer, p_uv + lmod*vec2( P, P ) ) +
                     0.5*texture( p_buffer, p_uv + lmod*vec2( -P, -P ) ) +
-                    0.5*texture( p_buffer, p_uv + lmod*vec2( P, P ) );
+                    0.5*texture( p_buffer, p_uv + lmod*vec2( P, P ) );*/
 
-    return sampled/6;
+    return sampled/4;
 }
 
 void main(void) {

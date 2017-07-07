@@ -20,6 +20,14 @@ class Shrub(Object):
             sz = uniform(5.0,9.0)
             self.size = [ sz,sz ]
             self.tick_type = Object.TickTypes.TICK_FOREVER
+        def should_draw(self):
+            p = self.get_shader_params()['translation_world']
+            visRad = 40
+            if(p[0]<-visRad): return False
+            if(p[1]<-visRad): return False
+            if(p[0]>visRad): return False
+            if(p[1]>visRad): return False
+            return True
 
 class Fire(Object):
         def __init__(self,**kwargs):
@@ -80,7 +88,7 @@ class TreeTop(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 70
+            visRad = 40
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
@@ -114,7 +122,7 @@ class TreeRoots(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 100
+            visRad = 40
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
@@ -149,7 +157,7 @@ class TreeShadow(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 150
+            visRad = 60
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
