@@ -3,6 +3,9 @@
 // @description: composite the floor together
 
 uniform float tick;
+uniform float target_width;
+uniform float target_height;
+
 uniform vec2 camera_position;
 
 uniform sampler2D floor_buffer;
@@ -10,18 +13,13 @@ uniform sampler2D light_buffer;
 uniform sampler2D object_buffer;
 uniform sampler2D vision_buffer;
 uniform sampler2D photon_buffer;
-uniform sampler2D height_buffer;
-uniform sampler2D reflect_buffer;
 uniform sampler2D reflect_map;
+uniform sampler2D canopy_buffer;
 
 in vec2 uv;
 
 // Author @patriciogv - 2015
 // http://patriciogonzalezvivo.com
-
-#ifdef GL_ES
-precision mediump float;
-#endif
 
 //uniform vec2 u_resolution;
 //uniform vec2 u_mouse;
@@ -104,17 +102,7 @@ vec4 clouds(vec2 coord) {
 }
 
 
-//float rand(float n){return fract(sin(n) * 43758.5453123);}
-//
-//float noise(float p){
-//	float fl = floor(p);
-//  float fc = fract(p);
-//	return mix(rand(fl), rand(fl + 1.0), fc);
-//}
-
-
 vec4 cheap_blur( vec2 p_uv, sampler2D p_buffer, float p_size ) {
-
 
     float lmod = 1;
 
@@ -134,7 +122,23 @@ vec4 cheap_blur( vec2 p_uv, sampler2D p_buffer, float p_size ) {
     return sampled/4;
 }
 
+
+
 void main(void) {
+
+    vec2 FloorUV = uv;
+    vec4 FloorBase = texture( floor_buffer, FloorUV );
+    vec4 FloorLight = texture( light_buffer, FloorUV );
+
+    FloorLight = FloorLight * FloorLight;
+
+    vec4 FloorPhoton = texture( photon_buffer, FloorUV );
+
+    vec4 FloorMerged = (FloorBase + FloorPhoton) * FloorLight;
+    gl_FragColor = FloorMerged;
+}
+
+void oldmain(void) {
 
 
     vec2 UV = vec2(0.1,0.1)+(uv*0.8);
@@ -151,14 +155,8 @@ void main(void) {
     vec2 centered_UV = (UV+vec2(-0.5,-0.5))*2;
     centered_UV*= centered_UV;
 
-
-
-    vec4 height_texel = cheap_blur(UV, height_buffer, 1.0/120 );
-
-
     float from_c = (length(centered_UV * vec2(1.7,1.0)))*1.2;
-    
-    float parallax_ratio = 0.1+ (0.1 * height_texel.r )*from_c;
+    float parallax_ratio = 0.1*from_c;
 
     from_c = from_c*from_c;
 
@@ -171,15 +169,7 @@ void main(void) {
     vec4 floor_texel = texture(floor_buffer,parallaxed_UV);
     vec4 light_texel = cheap_blur( UV, light_buffer, (from_c)*1.0/60);
     vec4 object_texel = texture( object_buffer, inv_parallaxed_UV);
-    //vec4 object_texel = cheap_blur( inv_parallaxed_UV, object_buffer, 1.0/320.0 );
     vec4 vision_texel = cheap_blur( parallaxed_UV, vision_buffer, (from_c)*(1.0/32.0) );
-
-
-
-    //vec4 reflect_texel = texture(reflect_buffer, parallaxed_UV );
-    //vec4 reflect_map_texel = texture(reflect_map, (orient + par_mod) - (height_mod*2));
-    //vec2 base_reflect_parallaxed_UV = (orient + par_mod) - (height_mod*2);
-    //vec4 reflect_map_texel = cheap_blur( base_reflect_parallaxed_UV*0.25, reflect_map, 1.0/256 );
 
 
     float exposure = 1.2;
@@ -197,7 +187,7 @@ void main(void) {
     vec4 SeenFloor = (LitFloor * vision_texel) * mask;
 
     LitObject = LitObject * LitObject.a;
-
+    
     //vec4 combined_light = ((photon_texel + light_texel) * 1.3);
 
     gl_FragColor = (SeenFloor + LitObject) * vision_texel;

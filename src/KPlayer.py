@@ -25,6 +25,7 @@ class KPlayer(Player):
             "sword_swing_cooldown" : 60,
             "sword_released" : True,
             "filtered_speed" : 0.0,
+            "buftarget" : "popup"
         }
         overrides.update(kwargs)
         Player.__init__(self, **overrides)

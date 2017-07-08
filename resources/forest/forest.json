@@ -6,6 +6,7 @@
             { "name" : "treetop2", "filename" : "{package_path}/treetop2.png", "filtered" : true },
             { "name" : "treeroots", "filename" : "{package_path}/roots.png", "filtered" : true },
             { "name" : "portal", "filename" : "{package_path}/portal.png", "filtered" : true },
+            { "name" : "lightmap", "filename" : "{package_path}/lightmap.jpg", "filtered" : true },
             { "name" : "shrub0000", "filename" : "{package_path}/shrub0000.png", "filtered" : false },
             { "name" : "shrub0001", "filename" : "{package_path}/shrub0001.png", "filtered" : false },
             { "name" : "shrub0002", "filename" : "{package_path}/shrub0002.png", "filtered" : false },

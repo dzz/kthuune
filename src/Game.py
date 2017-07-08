@@ -2,7 +2,6 @@ from Beagle import API as BGL
 from Newfoundland.Camera import Camera
 from Newfoundland.Controllers import Controllers
 from Newfoundland.Player import Player
-from Newfoundland.Floor import Floor
 from Newfoundland.BaseGame import BaseGame
 
 from .DungeonFloor import DungeonFloor

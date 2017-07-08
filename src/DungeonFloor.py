@@ -1,10 +1,11 @@
 from Beagle import API as BGL
-from Newfoundland.Floor import Floor
+from Newfoundland.Floor import createFloorClass
 from Newfoundland.Tilemap import Tilemap
 from Newfoundland.Object import Object
 from random import choice
 from .Generators.ForestGraveyard import ForestGraveyard, TreeRoots,Fire
 from .Generators.BasicGenerator import BasicGenerator
+from .Renderers.DFRenderer import DFRenderer
 from random import uniform
 from math import sin,cos,hypot
 from .AimingBeam import AimingBeam
@@ -18,12 +19,15 @@ class Portal(Object):
                         'size': [ 13.0, 13.0] ,
                         'light_color' : [ 0.2,0.4,0.4,0.4],
                         'rad' : uniform(-3.14,3.14),
-                        'light_type' : Object.LightTypes.DYNAMIC_SHADOWCASTER
+                        'light_type' : Object.LightTypes.DYNAMIC_SHADOWCASTER,
+                        "buftarget" : "popup"
                     }
         overrides.update(kwargs)
         Object.__init__(self,**overrides)
 
-class DungeonFloor( Floor, BGL.auto_configurable):
+
+Floor = createFloorClass( DFRenderer )
+class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
@@ -39,8 +43,8 @@ class DungeonFloor( Floor, BGL.auto_configurable):
                 "photon_map_height" : 64,
                 "static_lightmap_width" : 512,
                 "static_lightmap_height" : 512,
-				"dynamic_lightmap_width" : 64,
-				"dynamic_lightmap_height" : 64,
+                "dynamic_lightmap_width" : 64,
+                "dynamic_lightmap_height" : 64,
                 "photon_mapper_config" : {
                     'stream' : False,
                     'photon_radius' : 80.0,
@@ -50,15 +54,6 @@ class DungeonFloor( Floor, BGL.auto_configurable):
                     'photon_max_bounces' : 5,
                     'num_photons' : 5,
                     'photon_observe_chance' : 0.8
-                },
-                "compositor_config" : {
-                    "photon_buffer_size" : "screen*0.25",
-                    "floor_buffer_size" : "screen",
-                    "light_buffer_size" : "screen*0.5",
-                    "object_buffer_size" : "screen*0.5",
-                    "height_buffer_size" : "screen*0.25",
-                    "reflect_buffer_size" : "screen*0.25",
-                    "vision_buffer_size" : "screen*0.25"
                 }
             }
         }, **kwargs )
@@ -76,6 +71,7 @@ class DungeonFloor( Floor, BGL.auto_configurable):
         )
 
 
+        self.reflection_map = BGL.assets.get("KT-forest/texture/lightmap.jpg")
         if self.area:
             pobjs = self.generate_portal_objects()
             self.generator.compile( self, pobjs  )
@@ -179,3 +175,4 @@ class DungeonFloor( Floor, BGL.auto_configurable):
 
     def get_photon_emitters(self):
         return self.photon_emitters
+

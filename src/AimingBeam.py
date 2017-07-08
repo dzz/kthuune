@@ -10,6 +10,7 @@ class AimingBeam(Object):
         self.size = [30.0,1.0]
         self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
         self.visible = False
+        self.buftarget = "popup"
 
 
     def tick(self):

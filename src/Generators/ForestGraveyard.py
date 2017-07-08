@@ -19,7 +19,8 @@ class Shrub(Object):
                     "radius" : 0.7,
                     "mass"   : 90000.0,
                     "friction" : 0.1
-                }
+                },
+                "buftarget" : "popup"
             }
             overrides.update(kwargs)
             Object.__init__(self,**overrides)
@@ -57,7 +58,8 @@ class Fire(Object):
                     'texture' : None,
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
                     'light_radius' : 30.0,
-                    'light_type' : Object.LightTypes.DYNAMIC_SHADOWCASTER
+                    'light_type' : Object.LightTypes.DYNAMIC_SHADOWCASTER,
+                    'buftarget' : None
                 }
             overrides.update(kwargs)
             Object.__init__(self,**overrides)
@@ -94,7 +96,8 @@ class TreeTop(Object):
                     'parallax' : 1.2,
                     'z_index' : 100,
                     'wind_speed' : uniform(0.01,0.2),
-                    'wind_mod' : uniform(1.1,1.2)
+                    'wind_mod' : uniform(1.1,1.2),
+                    'buftarget' : 'canopy'
                 }
             overrides.update(kwargs)
             Object.__init__(self,**overrides)
@@ -135,6 +138,7 @@ class TreeRoots(Object):
                     'size' : [ 5.0,5.0],
                     'rad' : uniform(-3.14,3.14),
                     'z_index' : -100,
+                    'buftarget' : 'floor'
                 }
             overrides.update(kwargs)
             Object.__init__(self,**overrides)
@@ -169,7 +173,8 @@ class TreeShadow(Object):
                     'size' : [ self.scale*tt.size[0],self.scale*tt.size[1]],
                     'rad' : tt.rad,
                     'z_index' : -100,
-                    'tt' : tt
+                    'tt' : tt,
+                    'buftarget' : 'floor'
                 }
             overrides.update(kwargs)
             Object.__init__(self,**overrides)
@@ -399,6 +404,7 @@ class ForestGraveyard():
 
     
     def evaluate_tile(self,rx,ry):
+        return 1
         win_d = 0
         win_range = None 
         second_range = None
