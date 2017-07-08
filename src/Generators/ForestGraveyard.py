@@ -14,12 +14,22 @@ class Shrub(Object):
             BGL.assets.get('KT-forest/texture/shrub0003'),
         ]
         def __init__(self,**kwargs):
-            Object.__init__(self,**kwargs)
+            overrides = {
+                "physics" : {
+                    "radius" : 0.7,
+                    "mass"   : 90000.0,
+                    "friction" : 0.1
+                }
+            }
+            overrides.update(kwargs)
+            Object.__init__(self,**overrides)
             self.texture = choice( Shrub.textures )
             self.z_index = 1
-            sz = uniform(5.0,9.0)
+            sz = uniform(8.0,14.0)
             self.size = [ sz,sz ]
             self.tick_type = Object.TickTypes.TICK_FOREVER
+            self.parallax = 1.0
+
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
             visRad = 40
@@ -28,6 +38,18 @@ class Shrub(Object):
             if(p[0]>visRad): return False
             if(p[1]>visRad): return False
             return True
+
+        def get_shader_params(self):
+            params = Object.get_shader_params(self)
+            tl = params["translation_local"]
+            tl[1] = tl[1] - 0.5
+            params["translation_local"] = tl
+
+            tw = params["translation_world"]
+            tw[0] = tw[0]*self.parallax
+            tw[1] = tw[1]*self.parallax
+            params["translation_world" ] = tw
+            return params
 
 class Fire(Object):
         def __init__(self,**kwargs):
@@ -212,7 +234,7 @@ class ForestGraveyard():
         self.generate_fires(dungeon_floor)
         self.generate_tiledata(  dungeon_floor )
 
-        for x in range(0,300):
+        for x in range(0,70):
             px = uniform( -dungeon_floor.width*0.4, dungeon_floor.width*0.4)
             py = uniform( -dungeon_floor.height*0.4, dungeon_floor.height*0.4)
             print("SHRUB",px,py)
@@ -377,7 +399,6 @@ class ForestGraveyard():
 
     
     def evaluate_tile(self,rx,ry):
-
         win_d = 0
         win_range = None 
         second_range = None
@@ -405,16 +426,16 @@ class ForestGraveyard():
         self.height = self.df.height
 
         for pt in self.tree_pts:
-            self.vpts.append( ( (1,10) , pt[0], pt[1] ) )
+            self.vpts.append( ( (1,1) , pt[0], pt[1] ) )
 
         #for x in range(0,50):
         #    self.vpts.append( ( (1,1) , uniform(-self.width, self.width), uniform(-self.height, self.height)) )
 
         for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
-            self.vpts.append( ( (11,19) , pobj.p[0], pobj.p[1] ) )
+            self.vpts.append( ( (5,5) , pobj.p[0], pobj.p[1] ) )
 
         for i in range(0,8):
-            self.vpts.append(((5,15) , uniform(-self.width, self.width), uniform(-self.height,self.height)))
+            self.vpts.append(((10,10) , uniform(-self.width, self.width), uniform(-self.height,self.height)))
 
 
 
