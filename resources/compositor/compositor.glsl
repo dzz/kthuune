@@ -126,15 +126,20 @@ vec4 cheap_blur( vec2 p_uv, sampler2D p_buffer, float p_size ) {
 
 void main(void) {
 
+    vec2 CUV = (uv-vec2(0.5,0.5))*2;
     vec2 FloorUV = uv;
+
     vec4 FloorBase = texture( floor_buffer, FloorUV );
     vec4 FloorLight = texture( light_buffer, FloorUV );
+    vec4 FloorPhoton = texture( photon_buffer, FloorUV ) * clouds(CUV);
 
-    FloorLight = FloorLight * FloorLight;
+    float FloorBaseExposure = 75;
+    FloorLight = FloorLight + (FloorLight * FloorPhoton) * FloorBaseExposure;
 
-    vec4 FloorPhoton = texture( photon_buffer, FloorUV );
+    float FloorMax = 1;
 
-    vec4 FloorMerged = (FloorBase + FloorPhoton) * FloorLight;
+    vec4 FloorMerged = smoothstep(0.0, FloorMax, ((FloorBase) * FloorLight));
+
     gl_FragColor = FloorMerged;
 }
 
@@ -195,3 +200,26 @@ void oldmain(void) {
 //gl_FragColor =light_texel;
 
 }
+
+
+
+///JULY 7th --- A VERSIon of thE FLOOr thaT WE LIKE A LOT
+
+///// void main(void) {
+///// 
+/////     vec2 CUV = (uv-vec2(0.5,0.5))*2;
+/////     vec2 FloorUV = uv;
+///// 
+/////     vec4 FloorBase = texture( floor_buffer, FloorUV );
+/////     vec4 FloorLight = texture( light_buffer, FloorUV );
+/////     vec4 FloorPhoton = texture( photon_buffer, FloorUV ) * clouds(CUV);
+///// 
+/////     float FloorBaseExposure = 75;
+/////     FloorLight = FloorLight + (FloorLight * FloorPhoton) * FloorBaseExposure;
+///// 
+/////     float FloorMax = 1;
+///// 
+/////     vec4 FloorMerged = smoothstep(0.0, FloorMax, ((FloorBase) * FloorLight));
+///// 
+/////     gl_FragColor = FloorMerged;
+///// }
