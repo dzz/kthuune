@@ -21,7 +21,31 @@
             { "name" : "knight0014", "filename" : "{package_path}/knight0014.png", "filtered" : false },
             { "name" : "knight0015", "filename" : "{package_path}/knight0015.png", "filtered" : false },
             { "name" : "knight0016", "filename" : "{package_path}/knight0016.png", "filtered" : false },
-            { "name" : "knight0017", "filename" : "{package_path}/knight0017.png", "filtered" : false }
+            { "name" : "knight0017", "filename" : "{package_path}/knight0017.png", "filtered" : false },
+            { "name" : "knight0018", "filename" : "{package_path}/knight0018.png", "filtered" : false },
+            { "name" : "knight0019", "filename" : "{package_path}/knight0019.png", "filtered" : false },
+            { "name" : "knight0020", "filename" : "{package_path}/knight0020.png", "filtered" : false },
+            { "name" : "knight0021", "filename" : "{package_path}/knight0021.png", "filtered" : false },
+            { "name" : "knight0022", "filename" : "{package_path}/knight0022.png", "filtered" : false },
+            { "name" : "knight0023", "filename" : "{package_path}/knight0023.png", "filtered" : false },
+            { "name" : "knight_sword0000", "filename" : "{package_path}/knight_sword0000.png", "filtered" : false },
+            { "name" : "knight_sword0001", "filename" : "{package_path}/knight_sword0001.png", "filtered" : false },
+            { "name" : "knight_sword0002", "filename" : "{package_path}/knight_sword0002.png", "filtered" : false },
+            { "name" : "knight_sword0003", "filename" : "{package_path}/knight_sword0003.png", "filtered" : false },
+            { "name" : "knight_sword0004", "filename" : "{package_path}/knight_sword0004.png", "filtered" : false },
+            { "name" : "knight_sword0005", "filename" : "{package_path}/knight_sword0005.png", "filtered" : false },
+            { "name" : "knight_sword0006", "filename" : "{package_path}/knight_sword0006.png", "filtered" : false },
+            { "name" : "knight_sword0007", "filename" : "{package_path}/knight_sword0007.png", "filtered" : false },
+            { "name" : "knight_sword0008", "filename" : "{package_path}/knight_sword0008.png", "filtered" : false },
+            { "name" : "knight_sword0009", "filename" : "{package_path}/knight_sword0009.png", "filtered" : false },
+            { "name" : "knight_sword0010", "filename" : "{package_path}/knight_sword0010.png", "filtered" : false },
+            { "name" : "knight_sword0011", "filename" : "{package_path}/knight_sword0011.png", "filtered" : false },
+            { "name" : "knight_sword0012", "filename" : "{package_path}/knight_sword0012.png", "filtered" : false },
+            { "name" : "knight_sword0013", "filename" : "{package_path}/knight_sword0013.png", "filtered" : false },
+            { "name" : "knight_sword0014", "filename" : "{package_path}/knight_sword0014.png", "filtered" : false },
+            { "name" : "knight_sword0015", "filename" : "{package_path}/knight_sword0015.png", "filtered" : false },
+            { "name" : "knight_sword0016", "filename" : "{package_path}/knight_sword0016.png", "filtered" : false },
+            { "name" : "knight_sword0017", "filename" : "{package_path}/knight_sword0017.png", "filtered" : false }
         ]
     }
 }

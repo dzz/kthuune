@@ -2,11 +2,18 @@ from Beagle import API as BGL
 from Newfoundland.Object import Object
 from Newfoundland.Player import Player
 from random import uniform
-from math import floor
+from math import floor,pi
+
+def rad_2_index(rad, segments):
+    segment_amt = ((2*pi)/segments)
+    rad -= (segment_amt*0.5) # center
+    rad += pi
+    segment = floor((rad/segment_amt)%segments)
+    return int(segment)
 
 class KPlayer(Player):
 
-
+ 
     def __init__(self, **kwargs):
         overrides =  {
             "light_type" : Object.LightTypes.DYNAMIC_SHADOWCASTER,
@@ -35,7 +42,13 @@ class KPlayer(Player):
             BGL.assets.get('KT-player/texture/knight0014'),
             BGL.assets.get('KT-player/texture/knight0015'),
             BGL.assets.get('KT-player/texture/knight0016'),
-            BGL.assets.get('KT-player/texture/knight0017')
+            BGL.assets.get('KT-player/texture/knight0017'),
+            BGL.assets.get('KT-player/texture/knight0018'),
+            BGL.assets.get('KT-player/texture/knight0019'),
+            BGL.assets.get('KT-player/texture/knight0020'),
+            BGL.assets.get('KT-player/texture/knight0021'),
+            BGL.assets.get('KT-player/texture/knight0022'),
+            BGL.assets.get('KT-player/texture/knight0023')
         ]
 
     def get_shader_params(self):
@@ -50,9 +63,17 @@ class KPlayer(Player):
         if(self.rad > 0):
             yidx = 3
 
+
+
+        print(self.rad)
+        print(rad_2_index(self.rad, 8))
+        
+
         xidx = int((abs(self.rad)/3.14)*3)
 
-        idx = (yidx+(2-xidx))*3
+        #idx = (yidx+(2-xidx))*3
+
+        idx = rad_2_index(self.rad,8)*3
 
         widx = (self.walk_tick//40) % 4
         woffs = [ 0,1,0,2 ]

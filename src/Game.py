@@ -25,6 +25,8 @@ class Game( BaseGame ):
         start_area.floor = DungeonFloor( width = 450, height = 450, camera = self.camera, player = self.player, objects=[], area=start_area );
         self.floor          = self.create_tickable( start_area.floor )
 
+        #self.floor = self.create_tickable( Floor() )
+
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
 
 
