@@ -168,13 +168,19 @@ vec4 alphablend( vec4 a, vec4 b) {
 
 void main(void) {
 
+
     vec2 UV = letterbox(uv, 0.3);
     vec2 CUV = (UV-vec2(0.5,0.5))*2;
 
-    vec4 Clouds1 = clouds( warpUV( UV, 0.8,1.3,0.8,1.3) );
-    vec4 Clouds2 = clouds( CUV*0.9 );
+    //haxx
+    float from_c = (length(CUV * vec2(1.7,1.0)))*1.2;
+    float parallax_ratio = 0.1*from_c;
+    vec2 PUV = ((UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * from_c ))) + vec2(0.5,0.5);
 
-    float Length = length(CUV);
+    vec4 Clouds1 = clouds( warpUV( PUV, 0.8,1.3,0.8,1.3) );
+    vec4 Clouds2 = clouds( warpUV( PUV, 0.8,1.5,0.8,1.5) );
+
+    float Length = length(CUV*0.5);
 
     Clouds1.a = Length;
     Clouds2.a = Length*0.5;
@@ -195,7 +201,7 @@ void main(void) {
     //vec4 LDebug = vec4(Length,Length,Length,1.0);
     vec4 FloorMerged;
     {
-        vec2 FloorUV = warpUV( UV, 0.8,1.2,0.8,1.2);
+        vec2 FloorUV = warpUV( PUV, 0.8,1.2,0.8,1.2);
 
         vec4 FloorBase = texture( floor_buffer, FloorUV );
         vec4 FloorLight = alphablend( texture( light_buffer, FloorUV ), Clouds1 );
