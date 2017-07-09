@@ -195,7 +195,7 @@ class Rock(Object):
                     'size' : [ 5.0,5.0],
                     'rad' : uniform(-3.14,3.14),
                     'z_index' : -90,
-                    'buftarget' : 'floor',
+                    'buftarget' : 'popup',
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
                     "physics" : {
                         "radius" : 2.0,

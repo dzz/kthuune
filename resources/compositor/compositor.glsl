@@ -221,8 +221,8 @@ void main(void) {
         vec2 LightUV = UV;
         PopupMerged = texture( object_buffer, PopupUV );
 
-        float PopupLightExposure = 14;
-        float PopupAmbientExposure = 0.01;
+        float PopupLightExposure = 4;
+        float PopupAmbientExposure = 0.03;
 
         vec4 PopupPhoton = texture(reflect_map, PopupUV ) * PopupAmbientExposure;
 
