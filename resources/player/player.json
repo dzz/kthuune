@@ -3,6 +3,7 @@
     "resources" : {
         "texture" : [
             { "name" : "player", "filename" : "{package_path}/player.png", "filtered" : true },
+            { "name" : "elder", "filename" : "{package_path}/elder0000.png", "filtered" : false },
             { "name" : "beam", "filename" : "{package_path}/beam.png", "filtered" : true },
             { "name" : "knight0000", "filename" : "{package_path}/knight0000.png", "filtered" : false },
             { "name" : "knight0001", "filename" : "{package_path}/knight0001.png", "filtered" : false },

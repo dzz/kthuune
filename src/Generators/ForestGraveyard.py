@@ -4,6 +4,7 @@ from Newfoundland.Object import Object
 from Beagle import API as BGL
 from math import sin,cos,pi
 from .txt_specs import *
+from math import atan2
 import random
 
 class Shrub(Object):
@@ -26,10 +27,11 @@ class Shrub(Object):
             Object.__init__(self,**overrides)
             self.texture = choice( Shrub.textures )
             self.z_index = 1
-            sz = uniform(8.0,14.0)
+            sz = uniform(15.0,25.0)
             self.size = [ sz,sz ]
             self.tick_type = Object.TickTypes.TICK_FOREVER
             self.parallax = 1.0
+            self.is_shrub = True
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
@@ -40,17 +42,34 @@ class Shrub(Object):
             if(p[1]>visRad): return False
             return True
 
-        def get_shader_params(self):
-            params = Object.get_shader_params(self)
-            tl = params["translation_local"]
-            tl[1] = tl[1] - 0.5
-            params["translation_local"] = tl
+        ##def get_shader_params(self):
+        ##    params = Object.get_shader_params(self)
+        ##    tl = params["translation_local"]
+        ##    tl[1] = tl[1]
+        ##    params["translation_local"] = tl
 
-            tw = params["translation_world"]
-            tw[0] = tw[0]*self.parallax
-            tw[1] = tw[1]*self.parallax
-            params["translation_world" ] = tw
-            return params
+        ##    tw = params["translation_world"]
+        ##    tw[0] = tw[0]*self.parallax
+        ##    tw[1] = tw[1]*self.parallax
+
+
+        ##    z = tw[1]
+
+        ##    minZ = -40.0
+        ##    maxZ = 49.0
+
+        ##    z = z + -minZ 
+        ##    if(z>maxZ): z = maxZ
+        ##    if(z<0.0): z = 0.0
+
+        ##    z = (z / maxZ) + 0.5
+        ##   
+        ##    s = params["scale_world"]
+        ##    s[0] *= z
+        ##    s[1] *= z 
+        ##    print(z)
+        ##    params["translation_world" ] = tw
+        ##    return params
 
 class Fire(Object):
         def __init__(self,**kwargs):
@@ -162,6 +181,49 @@ class TreeRoots(Object):
             params["filter_color"] = self.draw_color
             return params
 
+class Rock(Object):
+        textures = [
+            BGL.assets.get('KT-forest/texture/rock0000'),
+            BGL.assets.get('KT-forest/texture/rock0001'),
+            BGL.assets.get('KT-forest/texture/rock0002'),
+            BGL.assets.get('KT-forest/texture/rock0003'),
+        ]
+        def __init__(self,**kwargs):
+            overrides = {
+                    "num" : 0,
+                    "texture" : choice( Rock.textures ),
+                    'size' : [ 5.0,5.0],
+                    'rad' : uniform(-3.14,3.14),
+                    'z_index' : -90,
+                    'buftarget' : 'floor',
+                    'tick_type' : Object.TickTypes.TICK_FOREVER,
+                    "physics" : {
+                        "radius" : 2.0,
+                        "mass"   : 0.02,
+                        "friction" : 9000.0
+                    },
+                }
+            overrides.update(kwargs)
+            Object.__init__(self,**overrides)
+            self.physics["radius"] = self.size[0]*0.5
+            self.physics["mass"] = self.physics["mass"] * self.size[0]
+            print("ROCK!")
+
+        def tick(self):
+            self.v[0] = self.v[0]*0.985
+            self.v[1] = self.v[1]*0.985
+            if(self.should_draw()):
+                self.rad = self.rad*0.9+(atan2( self.v[0], self.v[1] )*0.1)
+
+        def should_draw(self):
+            p = self.get_shader_params()['translation_world']
+            visRad = 40
+            if(p[0]<-visRad): return False
+            if(p[1]<-visRad): return False
+            if(p[0]>visRad): return False
+            if(p[1]>visRad): return False
+            return True
+
 class TreeShadow(Object):
         def __init__(self,**kwargs):
             self.scale = 12
@@ -239,11 +301,22 @@ class ForestGraveyard():
         self.generate_fires(dungeon_floor)
         self.generate_tiledata(  dungeon_floor )
 
-        for x in range(0,70):
-            px = uniform( -dungeon_floor.width*0.4, dungeon_floor.width*0.4)
-            py = uniform( -dungeon_floor.height*0.4, dungeon_floor.height*0.4)
-            print("SHRUB",px,py)
-            self.objects.append( Shrub( p = [px,py] ) )
+        #self.objects.append( Shrub( p = [0.0,0.0] ) )
+        #self.objects.append( TreeRoots( p = [0.0,0.0], size=[5.0,5.0] ) )
+        
+        for x in range(0,40):
+                px = uniform( -dungeon_floor.width*0.4, dungeon_floor.width*0.4)
+                py = uniform( -dungeon_floor.height*0.4, dungeon_floor.height*0.4)
+                self.objects.append( Shrub( p = [px,py] ) )
+
+                #trs = uniform(15,20)
+                #self.objects.append( TreeRoots( p = [px,py], size=[trs,trs] ) )
+
+        for x in range(0,250):
+                px = uniform( -dungeon_floor.width*0.6, dungeon_floor.width*0.6)
+                py = uniform( -dungeon_floor.height*0.6, dungeon_floor.height*0.6)
+                rs = uniform(0.8,4.0)
+                self.objects.append( Rock( p = [px,py], size = [rs,rs] ) )
 
 
 
@@ -404,7 +477,6 @@ class ForestGraveyard():
 
     
     def evaluate_tile(self,rx,ry):
-        return 1
         win_d = 0
         win_range = None 
         second_range = None
@@ -432,18 +504,14 @@ class ForestGraveyard():
         self.height = self.df.height
 
         for pt in self.tree_pts:
-            self.vpts.append( ( (1,1) , pt[0], pt[1] ) )
+            self.vpts.append( ( (1,10) , pt[0], pt[1] ) )
 
-        #for x in range(0,50):
-        #    self.vpts.append( ( (1,1) , uniform(-self.width, self.width), uniform(-self.height, self.height)) )
 
         for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
-            self.vpts.append( ( (5,5) , pobj.p[0], pobj.p[1] ) )
+            self.vpts.append( ( (5,15) , pobj.p[0], pobj.p[1] ) )
 
-        for i in range(0,8):
-            self.vpts.append(((10,10) , uniform(-self.width, self.width), uniform(-self.height,self.height)))
-
-
+        for pobj in filter( lambda x: "is_shrub" in x.__dict__, self.objects):
+            self.vpts.append( ( (15,19) , pobj.p[0], pobj.p[1] ) )
 
 
     def generate_tiledata( self, df ):

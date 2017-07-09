@@ -124,6 +124,11 @@ vec4 cheap_blur( vec2 p_uv, sampler2D p_buffer, float p_size ) {
 
 
 
+vec2 scatter(vec2 UV, float len) {
+
+    return UV;
+}
+
 vec2 warpUV( vec2 UV, float minxw, float maxxw,float minyw, float maxyw ) {
 
     float offsx = ((maxxw-minxw)*UV.y)+minxw;
@@ -166,26 +171,29 @@ void main(void) {
     vec2 UV = letterbox(uv, 0.3);
     vec2 CUV = (UV-vec2(0.5,0.5))*2;
 
+    //float Length = length(CUV);
 
+    //vec4 LDebug = vec4(Length,Length,Length,1.0);
     vec4 FloorMerged;
     {
-        vec2 FloorUV = warpUV(UV, 0.8,1.3,0.8,1.5);
+        vec2 FloorUV = warpUV( UV, 0.8,1.2,0.8,1.2);
 
         vec4 FloorBase = texture( floor_buffer, FloorUV );
         vec4 FloorLight = texture( light_buffer, FloorUV );
         vec4 FloorPhoton = texture( photon_buffer, FloorUV ) * clouds(CUV);
+        vec4 VisionTexel = texture( vision_buffer, FloorUV );
 
         float FloorBaseExposure = 75;
         FloorLight = FloorLight + (FloorLight * FloorPhoton) * FloorBaseExposure;
 
         float FloorMax = 1;
-        FloorMerged = smoothstep(0.0, FloorMax, ((FloorBase) * FloorLight));
+        FloorMerged = smoothstep(0.0, FloorMax, ((FloorBase) * FloorLight)) * VisionTexel;
     }
 
     vec4 PopupMerged;
     {
-        vec2 PopupUV = warpUV(UV, 0.9,1.1,0.9,1.1); 
-        vec2 LightUV = warpUV(UV, 0.5,2.0,0.5,2.0);
+        vec2 PopupUV = UV;
+        vec2 LightUV = UV;
         PopupMerged = texture( object_buffer, PopupUV );
 
         float PopupLightExposure = 14;
@@ -200,6 +208,8 @@ void main(void) {
         vec3 lit = PopupMerged.rgb * PopupLight.rgb;
 
         PopupMerged.rgb = lit;
+        vec4 VisionTexel = texture( vision_buffer, PopupUV );
+        PopupMerged*= VisionTexel;
     }
 
 
