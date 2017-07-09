@@ -185,8 +185,21 @@ void main(void) {
     vec4 PopupMerged;
     {
         vec2 PopupUV = warpUV(UV, 0.9,1.1,0.9,1.1); 
+        vec2 LightUV = warpUV(UV, 0.5,2.0,0.5,2.0);
         PopupMerged = texture( object_buffer, PopupUV );
 
+        float PopupLightExposure = 14;
+        float PopupAmbientExposure = 0.01;
+
+        vec4 PopupPhoton = texture(reflect_map, PopupUV ) * PopupAmbientExposure;
+
+        PopupMerged.rgb += (PopupPhoton.rgb)*(PopupMerged.a);
+
+        vec4 PopupLight = texture(light_buffer, PopupUV) * PopupLightExposure;
+
+        vec3 lit = PopupMerged.rgb * PopupLight.rgb;
+
+        PopupMerged.rgb = lit;
     }
 
 
