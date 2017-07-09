@@ -20,10 +20,14 @@ class Portal(Object):
                         'light_color' : [ 0.2,0.4,0.4,0.4],
                         'rad' : uniform(-3.14,3.14),
                         'light_type' : Object.LightTypes.DYNAMIC_SHADOWCASTER,
-                        "buftarget" : "popup"
+                        'tick_type' : Object.TickTypes.TICK_FOREVER,
+                        "buftarget" : "floor"
                     }
         overrides.update(kwargs)
         Object.__init__(self,**overrides)
+
+    def tick(self):
+        self.rad = self.rad + 0.001
 
 
 Floor = createFloorClass( DFRenderer )
@@ -71,7 +75,7 @@ class DungeonFloor( Floor ):
         )
 
 
-        self.reflection_map = BGL.assets.get("KT-forest/texture/lightmap.jpg")
+        self.reflection_map = BGL.assets.get("KT-forest/texture/lightmap")
         if self.area:
             pobjs = self.generate_portal_objects()
             self.generator.compile( self, pobjs  )

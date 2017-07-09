@@ -9,10 +9,10 @@ class DFRenderer( FloorRenderer ):
 
     def create_compositing_buffers(self):
         self.photon_buffer = BGL.framebuffer.from_screen()
-        self.floor_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 4.0)
-        self.light_buffer = BGL.framebuffer.from_screen()
-        self.object_buffer = BGL.framebuffer.from_screen()
-        self.canopy_buffer = BGL.framebuffer.from_screen()
+        self.floor_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 2.0)
+        self.light_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.25)
+        self.object_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 2.0)
+        self.canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.5)
 
     def precompute_frame(self):
         """ Pre-render compositing """

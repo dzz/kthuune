@@ -124,23 +124,93 @@ vec4 cheap_blur( vec2 p_uv, sampler2D p_buffer, float p_size ) {
 
 
 
+vec2 warpUV( vec2 UV, float minxw, float maxxw,float minyw, float maxyw ) {
+
+    float offsx = ((maxxw-minxw)*UV.y)+minxw;
+    float offsy = ((maxyw-minyw)*UV.y)+minyw;
+    
+    vec2 warped =  vec2( ((UV.x-0.5)*offsx)+0.5, ((UV.y-0.5)*offsy)+0.5);
+
+    return warped;
+/*
+    vec2 doffs = UV - vec2(0.5,0.5);
+
+    float amt = length(doffs);
+
+    return (warped*amt + UV*(1.0-amt));*/
+}
+
+
+vec2 letterbox(vec2 c, float amt) {
+
+    vec2 o = c;
+    o *= (1.0-amt);
+    o += (vec2( amt, amt)*0.5);
+
+    return o;
+}
+
+vec4 alphablend( vec4 a, vec4 b) {
+
+    vec3 blended = (a*(1.0-b.a)).rgb+(b.rgb*b.a);
+    vec4 mixed;
+ 
+    mixed.rgb = blended;
+    mixed.a = 1.0;
+
+    return mixed;
+}
+
 void main(void) {
 
-    vec2 CUV = (uv-vec2(0.5,0.5))*2;
-    vec2 FloorUV = uv;
+    vec2 UV = letterbox(uv, 0.3);
+    vec2 CUV = (UV-vec2(0.5,0.5))*2;
 
-    vec4 FloorBase = texture( floor_buffer, FloorUV );
-    vec4 FloorLight = texture( light_buffer, FloorUV );
-    vec4 FloorPhoton = texture( photon_buffer, FloorUV ) * clouds(CUV);
 
-    float FloorBaseExposure = 75;
-    FloorLight = FloorLight + (FloorLight * FloorPhoton) * FloorBaseExposure;
+    vec4 FloorMerged;
+    {
+        vec2 FloorUV = warpUV(UV, 0.8,1.3,0.8,1.5);
 
-    float FloorMax = 1;
+        vec4 FloorBase = texture( floor_buffer, FloorUV );
+        vec4 FloorLight = texture( light_buffer, FloorUV );
+        vec4 FloorPhoton = texture( photon_buffer, FloorUV ) * clouds(CUV);
 
-    vec4 FloorMerged = smoothstep(0.0, FloorMax, ((FloorBase) * FloorLight));
+        float FloorBaseExposure = 75;
+        FloorLight = FloorLight + (FloorLight * FloorPhoton) * FloorBaseExposure;
 
-    gl_FragColor = FloorMerged;
+        float FloorMax = 1;
+        FloorMerged = smoothstep(0.0, FloorMax, ((FloorBase) * FloorLight));
+    }
+
+    vec4 PopupMerged;
+    {
+        vec2 PopupUV = warpUV(UV, 0.9,1.1,0.9,1.1); 
+        PopupMerged = texture( object_buffer, PopupUV );
+
+    }
+
+
+    vec4 FloorPopupMixed;
+    {
+        /*vec3 FloorPopupBlended = (FloorMerged*(1.0-PopupMerged.a)).rgb+(PopupMerged.rgb*PopupMerged.a);
+
+        FloorPopupMixed.rgb = FloorPopupBlended;
+        FloorPopupMixed.a = 1.0;*/
+        FloorPopupMixed = alphablend( FloorMerged, PopupMerged );
+    }
+
+    vec4 CanopyMerged;
+    {
+        vec2 CanopyUV = warpUV( UV, 0.7,1.5,0.7,1.5);
+        vec4 CanopyBase = texture(canopy_buffer, CanopyUV);
+        vec4 CanopyPhoton = texture(photon_buffer, CanopyUV );
+
+        float CanopyExposure = 6;
+        vec4 CanopyLit = CanopyBase * (CanopyPhoton*CanopyExposure);
+        CanopyMerged = alphablend( FloorPopupMixed, CanopyLit );
+    }
+
+    gl_FragColor = CanopyMerged;
 }
 
 void oldmain(void) {
