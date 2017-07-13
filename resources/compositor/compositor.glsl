@@ -111,15 +111,15 @@ vec4 cheap_blur( vec2 p_uv, sampler2D p_buffer, float p_size ) {
                     texture( p_buffer, p_uv + lmod*vec2( P, 0.0 ) ) +
                     texture( p_buffer, p_uv + lmod*vec2( -P, 0.0 ) ) +
                     texture( p_buffer, p_uv + lmod*vec2( 0.0, P ) ) +
-                    texture( p_buffer, p_uv + lmod*vec2( 0.0, -P ) );
+                    texture( p_buffer, p_uv + lmod*vec2( 0.0, -P ) ) +
 
-/*
+
                     0.5*texture( p_buffer, p_uv + lmod*vec2( -P, -P ) ) +
                     0.5*texture( p_buffer, p_uv + lmod*vec2( P, P ) ) +
                     0.5*texture( p_buffer, p_uv + lmod*vec2( -P, -P ) ) +
-                    0.5*texture( p_buffer, p_uv + lmod*vec2( P, P ) );*/
+                    0.5*texture( p_buffer, p_uv + lmod*vec2( P, P ) );
 
-    return sampled/4;
+    return sampled/6;
 }
 
 
@@ -198,12 +198,26 @@ void main(void) {
     }
 
 
+    vec4 BlurredObject;
+    {
+        vec2 BOUV1 = warpUV( PUV, 1.1,0.9,1.1,0.9 );
+        vec2 BOUV2 = warpUV( PUV, 0.9,1.1,0.9,1.1 );
+        BlurredObject = (cheap_blur( BOUV1, object_buffer, 1.0/512 ) + cheap_blur( BOUV2, object_buffer, 1.0/256))/2.0;
+
+        BlurredObject = vec4(1.0,1.0,1.0,2.0) - vec4( BlurredObject.a, BlurredObject.a, BlurredObject.a, 1.0);
+
+    }
     //vec4 LDebug = vec4(Length,Length,Length,1.0);
     vec4 FloorMerged;
     {
         vec2 FloorUV = warpUV( PUV, 0.8,1.2,0.8,1.2);
 
+        //BlurredObject = (cheap_blur( FloorUV, object_buffer, 1.0/512 ) + cheap_blur( FloorUV, object_buffer, 1.0/256))/2.0;
+
+        //BlurredObject = vec4(1.0,1.0,1.0,2.0) - vec4( BlurredObject.a, BlurredObject.a, BlurredObject.a, 1.0);
+
         vec4 FloorBase = texture( floor_buffer, FloorUV );
+        //FloorBase *= 1.0 - cheap_blur( FloorUV, object_buffer, 16 ).a;
         vec4 FloorLight = alphablend( texture( light_buffer, FloorUV ), Clouds1 );
         vec4 FloorPhoton = texture( photon_buffer, FloorUV ) * clouds(CUV);
         vec4 VisionTexel = texture( vision_buffer, FloorUV );
@@ -212,7 +226,7 @@ void main(void) {
         FloorLight = FloorLight + (FloorLight * FloorPhoton) * FloorBaseExposure;
 
         float FloorMax = 1;
-        FloorMerged = smoothstep(0.0, FloorMax, ((FloorBase) * FloorLight)) * VisionTexel;
+        FloorMerged = smoothstep(0.0, FloorMax, ((FloorBase) * FloorLight)) * VisionTexel * BlurredObject;
     }
 
     vec4 PopupMerged;
