@@ -41,22 +41,22 @@ class DungeonFloor( Floor ):
             #"generator" : BasicGenerator(),
             "area" : None,
             "renderer_config" : {
-                "vision_lightmap_width" : 64,
-                "vision_lightmap_height" : 64,
-                "photon_map_width" : 64,
-                "photon_map_height" : 64,
+                "vision_lightmap_width" : 512,
+                "vision_lightmap_height" : 512,
+                "photon_map_width" : 1024,
+                "photon_map_height" : 1024,
                 "static_lightmap_width" : 512,
                 "static_lightmap_height" : 512,
-                "dynamic_lightmap_width" : 64,
-                "dynamic_lightmap_height" : 64,
+                "dynamic_lightmap_width" : 512,
+                "dynamic_lightmap_height" : 512,
                 "photon_mapper_config" : {
                     'stream' : False,
-                    'photon_radius' : 80.0,
-                    'photon_emitter_power' : 0.010,
+                    'photon_radius' : 130.0,
+                    'photon_emitter_power' : 0.013,
                     'photon_decay' : 0.9,
                     'photon_decay_jitter' : 0.2,
-                    'photon_max_bounces' : 5,
-                    'num_photons' : 5,
+                    'photon_max_bounces' : 8,
+                    'num_photons' : 8,
                     'photon_observe_chance' : 0.8
                 }
             }
@@ -75,6 +75,10 @@ class DungeonFloor( Floor ):
         )
 
 
+        self.tilescale = 2
+        self.tilemap_width = int(self.width/self.tilescale)
+        self.tilemap_height = int(self.height/self.tilescale)
+
         self.reflection_map = BGL.assets.get("KT-forest/texture/lightmap")
         if self.area:
             pobjs = self.generate_portal_objects()
@@ -88,8 +92,8 @@ class DungeonFloor( Floor ):
                 "layers" : [
                     {
                         "data" : self.generator.get_tiledata(),
-                        "width": self.width,
-                        "height": self.height,
+                        "width": self.tilemap_width,
+                        "height": self.tilemap_height,
                         "name": "floor"
                     }
                 ]
@@ -98,7 +102,7 @@ class DungeonFloor( Floor ):
 
         floor_configuration = kwargs
         floor_configuration.update({
-            "tilemap" : Tilemap( beagle_tilemap = beagle_tilemap, channel_textures = {
+            "tilemap" : Tilemap( tilescale = self.tilescale, beagle_tilemap = beagle_tilemap, channel_textures = {
                 "height" : BGL.assets.get("KT-tiles/texture/plain_tiles"),
                 "reflection" : BGL.assets.get("KT-tiles/texture/plain_tiles")
             } ),

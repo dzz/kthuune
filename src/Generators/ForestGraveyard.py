@@ -7,6 +7,42 @@ from .txt_specs import *
 from math import atan2
 import random
 
+###class WarpedPositionObject():
+###
+###    def warp_shader_params(params,minx,maxx,miny,maxy):
+###
+###        screen_x = params["translation_world"][0] * params["scale_world"][0] * params["view"][0]
+###        screen_y = params["translation_world"][1] * params["scale_world"][1] * params["view"][1]*-1
+###
+###        #emulate dist parallax warp
+###        from_c = (hypot(screen_x*1.7,screen_y))*1.2
+###        parallax_ratio = 0.1 * from_c
+###
+###        #emulate letterbox
+###        screen_x = (screen_x * 0.7) + (0.15)
+###        screen_y = (screen_y * 0.7) + (0.15)
+###
+###        screen_x = screen_x * (1.0+(parallax_ratio*from_c))
+###        screen_y = screen_y * (1.0+(parallax_ratio*from_c))
+###
+###        scale_index = max(min(1.0,(screen_y*0.5)+0.5),0.0)
+###
+###        print(scale_index)
+###
+###        offsx = (scale_index * (maxx-minx))+minx 
+###        offsy = (scale_index * (maxy-miny))+miny
+### 
+###
+###        screen_x = screen_x*offsx
+###        screen_y = screen_y*offsx
+###
+###
+###        params["translation_world"][0] = (screen_x / params["view"][0]) / params["scale_world"][0]
+###        params["translation_world"][1] = ((screen_y*-1) / params["view"][1]) / params["scale_world"][1]
+###        #print(scale_index)
+###        #print(screen_x,screen_y)
+###        return params
+###
 class Shrub(Object):
         textures = [
             BGL.assets.get('KT-forest/texture/shrub0000'),
@@ -35,12 +71,16 @@ class Shrub(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 40
+            visRad = 140
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
             if(p[1]>visRad): return False
             return True
+
+
+        #def get_shader_params(self):
+        #    return WarpedPositionObject.warp_shader_params(Object.get_shader_params(self), 0.8,1.2,0.8,1.2)
 
         ##def get_shader_params(self):
         ##    params = Object.get_shader_params(self)
@@ -132,7 +172,7 @@ class TreeTop(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 40
+            visRad = 140
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
@@ -167,7 +207,7 @@ class TreeRoots(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 40
+            visRad = 140
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
@@ -217,7 +257,7 @@ class Rock(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 40
+            visRad = 140
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
@@ -246,7 +286,7 @@ class TreeShadow(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 60
+            visRad = 160
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
@@ -301,22 +341,22 @@ class ForestGraveyard():
         self.generate_fires(dungeon_floor)
         self.generate_tiledata(  dungeon_floor )
 
-        #self.objects.append( Shrub( p = [0.0,0.0] ) )
+        self.objects.append( Shrub( p = [0.0,0.0] ) )
         #self.objects.append( TreeRoots( p = [0.0,0.0], size=[5.0,5.0] ) )
         
-        for x in range(0,40):
-                px = uniform( -dungeon_floor.width*0.4, dungeon_floor.width*0.4)
-                py = uniform( -dungeon_floor.height*0.4, dungeon_floor.height*0.4)
-                self.objects.append( Shrub( p = [px,py] ) )
-
+#        for x in range(0,40):
+#                px = uniform( -dungeon_floor.width*0.4, dungeon_floor.width*0.4)
+#                py = uniform( -dungeon_floor.height*0.4, dungeon_floor.height*0.4)
+#                self.objects.append( Shrub( p = [px,py] ) )
+#
                 #trs = uniform(15,20)
                 #self.objects.append( TreeRoots( p = [px,py], size=[trs,trs] ) )
 
-        for x in range(0,250):
-                px = uniform( -dungeon_floor.width*0.6, dungeon_floor.width*0.6)
-                py = uniform( -dungeon_floor.height*0.6, dungeon_floor.height*0.6)
-                rs = uniform(0.8,4.0)
-                self.objects.append( Rock( p = [px,py], size = [rs,rs] ) )
+        ### for x in range(0,250):
+        ###         px = uniform( -dungeon_floor.width*0.6, dungeon_floor.width*0.6)
+        ###         py = uniform( -dungeon_floor.height*0.6, dungeon_floor.height*0.6)
+        ###         rs = uniform(0.8,4.0)
+        ###         self.objects.append( Rock( p = [px,py], size = [rs,rs] ) )
 
 
 
@@ -519,9 +559,9 @@ class ForestGraveyard():
         self.df = df #i give up
         self.generate_voroni_pts()
 
-        tile_data = [0]*(df.width*df.height)
-        for x in range(0, df.width):
-            for y in range(0, df.height):
+        tile_data = [0]*(df.tilemap_width*df.tilemap_height)
+        for x in range(0, df.tilemap_width):
+            for y in range(0, df.tilemap_height):
                 ####### closest_sigil_point = None
                 ####### score = None
                 ####### for sigil_point in self.sigil_points:
@@ -537,13 +577,13 @@ class ForestGraveyard():
                 #######         score = d
                 ####### tile_data[  (y * df.width) + x ]  = self.get_sigil_tiledata(closest_sigil_point["sigil"])
 
-                rx = float(x*2)-(df.width)
-                ry = float(y*2)-(df.height)
+                rx = float(x*2*df.tilescale)-(df.width)
+                ry = float(y*2*df.tilescale)-(df.height)
 
                 tval = self.evaluate_tile(rx,ry)
                 #tval = 1
 
-                tile_data[  (y * df.width) + x ]  = tval
+                tile_data[  (y * df.tilemap_width) + x ]  = tval
 
         self.tile_data = tile_data
 

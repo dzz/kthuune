@@ -217,7 +217,7 @@ void main(void) {
 
     vec4 PopupMerged;
     {
-        vec2 PopupUV = UV;
+        vec2 PopupUV = warpUV( UV, 0.95,1.05,0.95,1.05 );
         vec2 LightUV = UV;
         PopupMerged = texture( object_buffer, PopupUV );
 
@@ -257,6 +257,8 @@ void main(void) {
         vec4 CanopyLit = CanopyBase * (CanopyPhoton*CanopyExposure);
         CanopyMerged = alphablend( FloorPopupMixed, CanopyLit );
         CanopyMerged = alphablend( CanopyMerged, Clouds2 );
+        vec4 VisionTexel = texture( vision_buffer, CanopyUV );
+        CanopyMerged *= VisionTexel;
     }
 
     gl_FragColor = CanopyMerged;
