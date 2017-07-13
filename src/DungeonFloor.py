@@ -110,7 +110,9 @@ class DungeonFloor( Floor ):
             "renderer_config" : self.renderer_config
         })
 
-        floor_configuration["objects"].append( AimingBeam() )
+       
+        self.player.aiming_beam = AimingBeam() 
+        floor_configuration["objects"].append( self.player.aiming_beam )
 
         self.light_occluders = self.generator.get_light_occluders()
         self.photon_emitters = self.generator.get_photon_emitters()

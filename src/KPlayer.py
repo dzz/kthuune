@@ -138,6 +138,9 @@ class KPlayer(Player):
         if(self.sword_swing>0):
             calc_speed = self.speed * 0.28
 
+        if(self.aiming_beam.aiming):
+            calc_speed = calc_speed * 0.5
+
         self.filtered_speed = (self.filtered_speed*0.8) + (calc_speed*0.2)
         calc_speed = self.filtered_speed
 

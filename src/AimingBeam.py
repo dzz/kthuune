@@ -1,6 +1,35 @@
 from Newfoundland.Object import Object
 from Beagle import API as BGL
 from math import sin,cos
+from random import uniform as ur
+
+
+class RangedMagic(Object):
+    arrow_texture = BGL.assets.get("KT-player/texture/arrow")
+    def __init__(self,**kwargs):
+        Object.__init__(self,**kwargs)
+        self.texture = RangedMagic.arrow_texture
+        self.buftarget = "popup"
+        self.tick_type = Object.TickTypes.PURGING
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_radius = 5
+        self.lifespan = 120
+        self.light_color = [ 0.0,0.0,1.0,1.0 ]
+
+        self.vx = cos( self.rad )
+        self.vy = sin( self.rad )
+        
+    def tick(self):
+
+        self.light_color[1] = ur(0.4,0.8)
+        self.light_radius = ur(12,20)
+        self.p[0] = self.p[0] + self.vx 
+        self.p[1] = self.p[1] + self.vy 
+        self.lifespan = self.lifespan - 1
+        if(self.lifespan>0):
+            return True
+        self.floor.objects.remove(self)
+        return False
 
 class AimingBeam(Object):
     def __init__(self,**kwargs):
@@ -12,18 +41,18 @@ class AimingBeam(Object):
         self.visible = False
         self.buftarget = "popup"
         self.fired = False
-
+        self.aiming = False
 
     def fireRanged(self):
+        self.floor.create_object( RangedMagic( p = [ self.floor.player.p[0], self.floor.player.p[1] ], rad = self.floor.player.rad ) )
         print("KABOOM!")
-        pass
 
     def tick(self):
         offs = 30
 
         pad = self.floor.player.controllers.get_virtualized_pad(self.floor.player.num)
 
-        if(pad.triggers[0]+1.0<0.1) and self.fired:
+        if(pad.triggers[0]+1.0<0.05) and self.fired:
             self.fired = False
 
         if(pad.triggers[1]>0.7) and (pad.triggers[0]+1.0>0.1):
@@ -35,13 +64,16 @@ class AimingBeam(Object):
         self.size[1] = (pad.triggers[0]+1.0)*4.0;
 
         if(self.size[1] < 0.1):
+            self.aiming = False
             self.size[1] = 0.0
-
-        if(self.fired):
+        elif(self.fired):
+            self.aiming = False
             self.size[1] = 0.0
+        else:
+            self.aiming = True
 
-        print("fired?", self.fired)
-
+        #print("fired?", self.fired)
+        #print("aiming?", self.aiming)
         offsx = cos(self.floor.player.rad) * offs
         offsy = sin(self.floor.player.rad) * offs
 
