@@ -1,8 +1,8 @@
 from Newfoundland.Camera import Camera
-
+from math import cos,sin
 class DungeonCamera (Camera):
 
-    rate = 0.1
+    rate = 0.035
 
     def __init__(self, **kwargs):
         Camera.__init__(self,**kwargs)
@@ -14,14 +14,20 @@ class DungeonCamera (Camera):
 
     def tick(self):
 
+        aim_offset_x = 0.0
+        aim_offset_y = 0.0
         isAiming = 0.0
         if(self.player.aiming_beam.aiming):
             isAiming = 1.0
+
+            aim_offset_x = cos( self.player.rad ) * 10
+            aim_offset_y = sin( self.player.rad ) * 10
 
         calc_zoom = self.base_zoom + (self.zoom*(-0.33)*isAiming)
         self.zoom = (self.zoom*0.99) + (calc_zoom*0.01)
         rate = DungeonCamera.rate
 
-        self.p[0] = self.player.p[0]* rate + ((1.0-rate)*self.p[0])
-        self.p[1] = self.player.p[1]* rate + ((1.0-rate)*self.p[1])
+
+        self.p[0] = (self.player.p[0]+aim_offset_x)* rate + ((1.0-rate)*self.p[0])
+        self.p[1] = (self.player.p[1]+aim_offset_y)* rate + ((1.0-rate)*self.p[1])
         

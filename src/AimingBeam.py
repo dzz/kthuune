@@ -16,8 +16,8 @@ class RangedMagic(Object):
         self.lifespan = 120
         self.light_color = [ 0.0,0.0,1.0,1.0 ]
 
-        self.vx = cos( self.rad )
-        self.vy = sin( self.rad )
+        self.vx = cos( self.rad )*2
+        self.vy = sin( self.rad )*2
         
     def tick(self):
 

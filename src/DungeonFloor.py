@@ -81,7 +81,8 @@ class DungeonFloor( Floor ):
 
         self.reflection_map = BGL.assets.get("KT-forest/texture/lightmap")
         if self.area:
-            pobjs = self.generate_portal_objects()
+            #pobjs = self.generate_portal_objects()
+            pobjs = []
             self.generator.compile( self, pobjs  )
         else:
             self.generator.compile( self, []  )
