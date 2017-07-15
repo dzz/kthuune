@@ -369,7 +369,7 @@ class ForestGraveyard():
 
         self.tree_pts = []
         occluders = []
-        trees = 25
+        trees = 50
 
         for t in range(0,trees):
             print("MAKING TREE")

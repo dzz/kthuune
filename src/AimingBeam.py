@@ -22,7 +22,8 @@ class RangedMagic(Object):
     def tick(self):
 
         self.light_color[1] = ur(0.4,0.8)
-        self.light_radius = ur(12,20)
+        self.light_color[0] = ur(0.0,1.0)
+        self.light_radius = ur(15,40)
         self.p[0] = self.p[0] + self.vx 
         self.p[1] = self.p[1] + self.vy 
         self.lifespan = self.lifespan - 1
