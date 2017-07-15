@@ -5,6 +5,7 @@ from Beagle import API as BGL
 from math import sin,cos,pi
 from .txt_specs import *
 from math import atan2
+from .SVGLoader import get_edges
 import random
 
 ###class WarpedPositionObject():
@@ -266,7 +267,7 @@ class Rock(Object):
 
 class TreeShadow(Object):
         def __init__(self,**kwargs):
-            self.scale = 12
+            self.scale = 3
             tt = kwargs['TreeTop']
             overrides = {
                     "num" : 0,
@@ -282,7 +283,12 @@ class TreeShadow(Object):
             Object.__init__(self,**overrides)
             self.t = 0
             self.base_size = [ self.size[0], self.size[1] ]
-            self.draw_color = [0.8,uniform(0.0,1.0),0.8,uniform(0.3,0.4)]
+            self.draw_color = [0.8,uniform(0.0,1.0),0.8,uniform(0.01,0.1)]
+            self.wind_speed = tt.wind_speed
+            self.wind_mod = tt.wind_mod
+
+        def tick(self):
+            TreeTop.tick(self)
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
@@ -294,7 +300,6 @@ class TreeShadow(Object):
             return True
 
         def get_shader_params(self):
-
             params = Object.get_shader_params(self)
             tw = params["translation_world"]
             params["translation_world" ] = tw
@@ -331,17 +336,24 @@ class ForestGraveyard():
         #self.light_occluders = self.tree_occluders
         self.light_occluders = []
 
-        self.map_edges = self.gen_edges( dungeon_floor )
+
+        level_data = get_edges(BGL.assets.get("KT-forest/textfile/entrypoint"), dungeon_floor.width, dungeon_floor.height )
+
+        #self.map_edges = self.gen_edges( dungeon_floor )
+
+        self.map_edges = level_data["all_lines"]
+        dungeon_floor.player.p[0] = level_data["player_start"][0]
+        dungeon_floor.player.p[1] = level_data["player_start"][1]
         self.light_occluders = []
         self.light_occluders.extend( self.map_edges )
 
         self.generate_inner_trees(dungeon_floor)
         self.generate_edge_trees()
-        self.generate_static_lights(dungeon_floor)
-        self.generate_fires(dungeon_floor)
+        #self.generate_static_lights(dungeon_floor)
+        #self.generate_fires(dungeon_floor)
         self.generate_tiledata(  dungeon_floor )
 
-        self.objects.append( Shrub( p = [0.0,0.0] ) )
+        #self.objects.append( Shrub( p = [0.0,0.0] ) )
         #self.objects.append( TreeRoots( p = [0.0,0.0], size=[5.0,5.0] ) )
         
 #        for x in range(0,40):
@@ -369,7 +381,7 @@ class ForestGraveyard():
 
         self.tree_pts = []
         occluders = []
-        trees = 50
+        trees = 0
 
         for t in range(0,trees):
             print("MAKING TREE")
@@ -421,8 +433,8 @@ class ForestGraveyard():
 
     def generate_edge_trees(self):
         for edge in self.map_edges:
-            for x in range(0,choice(range(4,20))):
-                size = uniform(2.0,8.0)
+            for x in range(0,1):
+                size = uniform(1.0,4.0)
                 dx = edge[1][0] - edge[0][0]
                 dy = edge[1][1] - edge[0][1]
                 d = uniform(0.0,1.0)
@@ -431,7 +443,15 @@ class ForestGraveyard():
                 p = [x,y]
                 if(uniform(0.0,1.0)>0.7):
                     self.tree_pts.append(p)
-                self.objects.append( TreeTop( p=p, size=[size,size],parralax = uniform(1.1,1.8)) )
+
+                tt = TreeTop( p=p, size=[size,size],parralax = uniform(1.1,1.8)) 
+                self.objects.append( tt )
+                self.objects.append( TreeShadow(p=p, TreeTop=tt) )
+
+                #for tt in range(2,choice(range(2,5))):
+                #    size = uniform(10.0,40.0)
+                #    p = [px+uniform(-2.0,2.0),py+uniform(-2.0,2.0)]
+                #    self.objects.append( TreeRoots( p=p, size=[size,size]) )
 
 
 
@@ -517,6 +537,7 @@ class ForestGraveyard():
 
     
     def evaluate_tile(self,rx,ry):
+        return 1
         win_d = 0
         win_range = None 
         second_range = None

@@ -211,19 +211,13 @@ void main(void) {
     vec4 FloorMerged;
     {
         vec2 FloorUV = warpUV( PUV, 0.8,1.2,0.8,1.2);
-
-        //BlurredObject = (cheap_blur( FloorUV, object_buffer, 1.0/512 ) + cheap_blur( FloorUV, object_buffer, 1.0/256))/2.0;
-
-        //BlurredObject = vec4(1.0,1.0,1.0,2.0) - vec4( BlurredObject.a, BlurredObject.a, BlurredObject.a, 1.0);
-
         vec4 FloorBase = texture( floor_buffer, FloorUV );
-        //FloorBase *= 1.0 - cheap_blur( FloorUV, object_buffer, 16 ).a;
         vec4 FloorLight = alphablend( texture( light_buffer, FloorUV ), Clouds1 );
         vec4 FloorPhoton = texture( photon_buffer, FloorUV ) * clouds(CUV);
         vec4 VisionTexel = texture( vision_buffer, FloorUV );
 
         float FloorBaseExposure = 75;
-        FloorLight = FloorLight + (FloorLight * FloorPhoton) * FloorBaseExposure;
+        FloorLight = (FloorLight * FloorPhoton) * FloorBaseExposure;
 
         float FloorMax = 1;
         FloorMerged = smoothstep(0.0, FloorMax, ((FloorBase) * FloorLight)) * VisionTexel * BlurredObject;
@@ -267,7 +261,7 @@ void main(void) {
         vec4 CanopyBase = texture(canopy_buffer, CanopyUV);
         vec4 CanopyPhoton = texture(photon_buffer, CanopyUV );
 
-        float CanopyExposure = 6;
+        float CanopyExposure = 1;
         vec4 CanopyLit = CanopyBase * (CanopyPhoton*CanopyExposure);
         CanopyMerged = alphablend( FloorPopupMixed, CanopyLit );
         CanopyMerged = alphablend( CanopyMerged, Clouds2 );
@@ -276,6 +270,7 @@ void main(void) {
     }
 
     gl_FragColor = CanopyMerged;
+    //gl_FragColor = FloorMerged + PopupMerged;
 }
 
 void oldmain(void) {

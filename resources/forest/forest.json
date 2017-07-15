@@ -17,7 +17,9 @@
             { "name" : "rock0001", "filename" : "{package_path}/rocks0001.png", "filtered" : false },
             { "name" : "rock0002", "filename" : "{package_path}/rocks0002.png", "filtered" : false },
             { "name" : "rock0003", "filename" : "{package_path}/rocks0003.png", "filtered" : false }
-
+        ],
+        "textfile" : [
+            { "name" : "entrypoint", "filename" : "{package_path}/entrypoint.svg" }
         ]
     }
 }
