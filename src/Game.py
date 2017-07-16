@@ -17,11 +17,11 @@ class Game( BaseGame ):
 
         self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.23 ) )
         self.controllers    = self.create_tickable( Controllers() )
-        self.player         = self.create_tickable( KPlayer( sight_radius = 70.0, speed = 3.50, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) )
+        self.player         = self.create_tickable( KPlayer( sight_radius = 40.0, speed = 3.80, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) )
 
         areas = generate_qualified_areas()
         start_area = filter(lambda x: x.ring==0 and x.depth==0, areas).__next__()
-        start_area.floor = DungeonFloor( width = 200, height = 200, camera = self.camera, player = self.player, objects=[], area=start_area );
+        start_area.floor = DungeonFloor( width = 300, height = 300, camera = self.camera, player = self.player, objects=[], area=start_area );
         self.floor          = self.create_tickable( start_area.floor )
 
         #self.floor = self.create_tickable( Floor() )

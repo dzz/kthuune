@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 
-def get_edges(data, width, height ):
+def get_level_data(data, width, height ):
 
     def propkey(key):
         ns = "{http://www.librecad.org}"
@@ -11,6 +11,7 @@ def get_edges(data, width, height ):
     all_lines = []
     pstart = []
     estart = []
+    wormfields = []
     for layer in root.findall('./*'):
         layername = layer.attrib[propkey('layername')]
         print(layername)
@@ -19,8 +20,14 @@ def get_edges(data, width, height ):
             for circle in layer.findall('./*'):
                 pstart = [ float(circle.attrib['cx']), float(circle.attrib['cy']) ]
 
+        if(layername == "wormfields"):
+            print("PARSING WORM FIELDS")
+            for circle in layer.findall('./*'):
+                field_def = [ float(circle.attrib['cx']), float(circle.attrib['cy']), float(circle.attrib['r']) ]
+                wormfields.append(field_def)
+
         if(layername == "elder_start"):
-            print("PARSING PLAYER START")
+            print("FINDING ELDER")
             for circle in layer.findall('./*'):
                 estart = [ float(circle.attrib['cx']), float(circle.attrib['cy']) ]
 
@@ -55,4 +62,9 @@ def get_edges(data, width, height ):
     pstart[1] = (pstart[1] * nfact_y) - (height/2)
     estart[0] = (estart[0] * nfact_x) - (width/2)
     estart[1] = (estart[1] * nfact_y) - (height/2)
-    return { "all_lines" : all_lines, "player_start" : pstart, "elder_start" : estart }
+
+    for wf in wormfields:
+        wf[0] = (wf[0] * nfact_x) - (width/2)
+        wf[1] = (wf[1] * nfact_y) - (height/2)
+        wf[2] = wf[2] * (0.5*(nfact_x+nfact_y))
+    return { "all_lines" : all_lines, "player_start" : pstart, "elder_start" : estart, "wormfields" : wormfields }

@@ -5,45 +5,24 @@ from Beagle import API as BGL
 from math import sin,cos,pi
 from .txt_specs import *
 from math import atan2
-from .SVGLoader import get_edges
+from .SVGLoader import get_level_data
 import random
 
-###class WarpedPositionObject():
-###
-###    def warp_shader_params(params,minx,maxx,miny,maxy):
-###
-###        screen_x = params["translation_world"][0] * params["scale_world"][0] * params["view"][0]
-###        screen_y = params["translation_world"][1] * params["scale_world"][1] * params["view"][1]*-1
-###
-###        #emulate dist parallax warp
-###        from_c = (hypot(screen_x*1.7,screen_y))*1.2
-###        parallax_ratio = 0.1 * from_c
-###
-###        #emulate letterbox
-###        screen_x = (screen_x * 0.7) + (0.15)
-###        screen_y = (screen_y * 0.7) + (0.15)
-###
-###        screen_x = screen_x * (1.0+(parallax_ratio*from_c))
-###        screen_y = screen_y * (1.0+(parallax_ratio*from_c))
-###
-###        scale_index = max(min(1.0,(screen_y*0.5)+0.5),0.0)
-###
-###        print(scale_index)
-###
-###        offsx = (scale_index * (maxx-minx))+minx 
-###        offsy = (scale_index * (maxy-miny))+miny
-### 
-###
-###        screen_x = screen_x*offsx
-###        screen_y = screen_y*offsx
-###
-###
-###        params["translation_world"][0] = (screen_x / params["view"][0]) / params["scale_world"][0]
-###        params["translation_world"][1] = ((screen_y*-1) / params["view"][1]) / params["scale_world"][1]
-###        #print(scale_index)
-###        #print(screen_x,screen_y)
-###        return params
-###
+
+class vconf():
+    visRad = 40
+
+class WormField(Object):
+    def customize(self):
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.buftarget = "popup"
+
+        self.p[0] = self.wf_spec[0]
+        self.p[1] = self.wf_spec[1]
+        self.wf_radius = self.wf_spec[2]
+
+    def tick(self):
+        pass
 
 class Elder(Object):
     texture = BGL.assets.get('KT-player/texture/elder0000')
@@ -86,7 +65,7 @@ class Shrub(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 140
+            visRad = vconf.visRad
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
@@ -188,7 +167,7 @@ class TreeTop(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 140
+            visRad = vconf.visRad
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
@@ -223,7 +202,7 @@ class TreeRoots(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 140
+            visRad = vconf.visRad
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
@@ -273,7 +252,7 @@ class Rock(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 140
+            visRad = vconf.visRad
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
@@ -307,7 +286,7 @@ class TreeShadow(Object):
 
         def should_draw(self):
             p = self.get_shader_params()['translation_world']
-            visRad = 160
+            visRad = vconf.visRad
             if(p[0]<-visRad): return False
             if(p[1]<-visRad): return False
             if(p[0]>visRad): return False
@@ -352,7 +331,7 @@ class ForestGraveyard():
         self.light_occluders = []
 
 
-        level_data = get_edges(BGL.assets.get("KT-forest/textfile/entrypoint"), dungeon_floor.width, dungeon_floor.height )
+        level_data = get_level_data(BGL.assets.get("KT-forest/textfile/entrypoint"), dungeon_floor.width, dungeon_floor.height )
 
         #self.map_edges = self.gen_edges( dungeon_floor )
 
@@ -363,6 +342,9 @@ class ForestGraveyard():
         elder = Elder()
         elder.p = level_data["elder_start"]
 
+        for wormfield in level_data["wormfields"]:
+            self.objects.append( WormField( wf_spec=wormfield ) )
+
         self.objects.append( elder )
         self.light_occluders = []
         self.light_occluders.extend( self.map_edges )
@@ -372,6 +354,7 @@ class ForestGraveyard():
         #self.generate_static_lights(dungeon_floor)
         #self.generate_fires(dungeon_floor)
         self.generate_tiledata(  dungeon_floor )
+
 
         #self.objects.append( Shrub( p = [0.0,0.0] ) )
         #self.objects.append( TreeRoots( p = [0.0,0.0], size=[5.0,5.0] ) )
@@ -455,7 +438,11 @@ class ForestGraveyard():
 
     def generate_edge_trees(self):
         for edge in self.map_edges:
-            for x in range(0,1):
+            for x in range(0,3):
+
+                if uniform(0.0,1.0) < 0.7:
+                    continue
+                    
                 size = uniform(1.0,4.0)
                 dx = edge[1][0] - edge[0][0]
                 dy = edge[1][1] - edge[0][1]
@@ -789,3 +776,41 @@ class ForestGraveyard():
 
         map_txt_spec( df, txt_spec, 0.8, 2, 1.0, lambda char, p : sigil_points.append({ "sigil": char, "p": p } ) )
         self.sigil_points = sigil_points
+
+
+###class WarpedPositionObject():
+###
+###    def warp_shader_params(params,minx,maxx,miny,maxy):
+###
+###        screen_x = params["translation_world"][0] * params["scale_world"][0] * params["view"][0]
+###        screen_y = params["translation_world"][1] * params["scale_world"][1] * params["view"][1]*-1
+###
+###        #emulate dist parallax warp
+###        from_c = (hypot(screen_x*1.7,screen_y))*1.2
+###        parallax_ratio = 0.1 * from_c
+###
+###        #emulate letterbox
+###        screen_x = (screen_x * 0.7) + (0.15)
+###        screen_y = (screen_y * 0.7) + (0.15)
+###
+###        screen_x = screen_x * (1.0+(parallax_ratio*from_c))
+###        screen_y = screen_y * (1.0+(parallax_ratio*from_c))
+###
+###        scale_index = max(min(1.0,(screen_y*0.5)+0.5),0.0)
+###
+###        print(scale_index)
+###
+###        offsx = (scale_index * (maxx-minx))+minx 
+###        offsy = (scale_index * (maxy-miny))+miny
+### 
+###
+###        screen_x = screen_x*offsx
+###        screen_y = screen_y*offsx
+###
+###
+###        params["translation_world"][0] = (screen_x / params["view"][0]) / params["scale_world"][0]
+###        params["translation_world"][1] = ((screen_y*-1) / params["view"][1]) / params["scale_world"][1]
+###        #print(scale_index)
+###        #print(screen_x,screen_y)
+###        return params
+###

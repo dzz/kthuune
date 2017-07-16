@@ -41,8 +41,8 @@ class DungeonFloor( Floor ):
             #"generator" : BasicGenerator(),
             "area" : None,
             "renderer_config" : {
-                "vision_lightmap_width" : 320,
-                "vision_lightmap_height" : 240,
+                "vision_lightmap_width" : 16,
+                "vision_lightmap_height" : 16,
                 "photon_map_width" : 512,
                 "photon_map_height" : 512,
                 "static_lightmap_width" : 64,
