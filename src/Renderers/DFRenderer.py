@@ -17,7 +17,7 @@ class DFRenderer( FloorRenderer ):
         self.canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.5)
 
     def encode_player_lights( self ):
-        return list(map(lambda player: { "position": player.p, "color" : [0.07,0.07,0.07,1.0], "radius" : player.sight_radius },self.get_player_objects()))
+        return list(map(lambda player: { "position": player.p, "color" : [0.09,0.09,0.09,1.0], "radius" : player.sight_radius },self.get_player_objects()))
 
     def precompute_frame(self):
         """ Pre-render compositing """
@@ -84,7 +84,7 @@ class DFRenderer( FloorRenderer ):
             def clear(self):
                 with BGL.blendmode.alpha_over:
                     #BGL.context.clear(0.0,0.0,0.0,1.0)
-                    uniform_fade.apply_fadeout( 0.09 )
+                    uniform_fade.apply_fadeout( 0.13 )
 
         self.player_lights = []
         vision_lightmapper = FadingLightMapper( 

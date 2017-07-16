@@ -89,7 +89,17 @@ float fbm ( in vec2 _st) {
     return v;
 }
 
-vec4 clouds(vec2 coord) {
+vec4 clouds(vec2 _coord) {
+
+
+    vec4 tcol = texture(light_buffer,_coord);
+    vec2 coord = _coord;
+    coord.x -= 0.5;
+    coord.y -= 0.5;
+
+    float damt = length(coord)*3*length(tcol);
+
+    coord*=(1.0+(damt*2));
 
     float u_time = tick/65.0;
 
@@ -235,7 +245,7 @@ void main(void) {
         vec2 FloorUV = warpUV( PUV, 0.8,1.2,0.8,1.2);
         vec4 FloorBase = texture( floor_buffer, FloorUV );
         vec4 FloorLight = alphablend( texture( light_buffer, FloorUV ), Clouds1 );
-        vec4 FloorPhoton = texture( photon_buffer, FloorUV ) * clouds(CUV);
+        vec4 FloorPhoton = texture( photon_buffer, FloorUV ) * clouds(FloorUV);
         vec4 VisionTexel = texture( vision_buffer, twist(FloorUV, from_c) );
 
         float FloorBaseExposure = 75;
