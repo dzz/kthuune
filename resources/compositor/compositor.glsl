@@ -92,12 +92,13 @@ float fbm ( in vec2 _st) {
 vec4 clouds(vec2 _coord) {
 
 
+    float ti = tick*0.1;
     vec4 tcol = texture(light_buffer,_coord);
     vec2 coord = _coord;
     coord.x -= 0.5;
     coord.y -= 0.5;
 
-    float damt = length(coord)*3*length(tcol);
+    float damt = length(coord)*2.1*length(tcol);
 
     coord*=(1.0+(damt*2));
 
