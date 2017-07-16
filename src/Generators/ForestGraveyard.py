@@ -12,17 +12,42 @@ import random
 class vconf():
     visRad = 40
 
+class Worm(Object):
+   
+    textures = [
+        BGL.assets.get("KT-forest/texture/worm0000"),
+        BGL.assets.get("KT-forest/texture/worm0001"),
+        BGL.assets.get("KT-forest/texture/worm0002"),
+        BGL.assets.get("KT-forest/texture/worm0003"),
+    ] 
+    def customize(self):
+        self.tick_type = Object.TickTypes.PURGING
+        self.fridx = 0
+        
+    def tick(self):
+        self.fridx = self.fridx + 1
+        tidx = int(self.fridx/20)%4
+        self.texture = Worm.textures[tidx]
+        self.buftarget = "popup"
+        return True
+    
+        
 class WormField(Object):
     def customize(self):
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.buftarget = "popup"
+        self.visible = False
 
         self.p[0] = self.wf_spec[0]
         self.p[1] = self.wf_spec[1]
         self.wf_radius = self.wf_spec[2]
+        self.worms = []
 
     def tick(self):
-        pass
+        if(len(self.worms)<1):
+            worm = Worm( p = [self.p[0],self.p[1] ] )
+            self.worms.append(worm)
+            self.floor.create_object(worm)
 
 class Elder(Object):
     texture = BGL.assets.get('KT-player/texture/elder0000')

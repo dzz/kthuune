@@ -16,7 +16,11 @@
             { "name" : "rock0000", "filename" : "{package_path}/rocks0000.png", "filtered" : false },
             { "name" : "rock0001", "filename" : "{package_path}/rocks0001.png", "filtered" : false },
             { "name" : "rock0002", "filename" : "{package_path}/rocks0002.png", "filtered" : false },
-            { "name" : "rock0003", "filename" : "{package_path}/rocks0003.png", "filtered" : false }
+            { "name" : "rock0003", "filename" : "{package_path}/rocks0003.png", "filtered" : false },
+            { "name" : "worm0000", "filename" : "{package_path}/worm0000.png", "filtered" : false },
+            { "name" : "worm0001", "filename" : "{package_path}/worm0001.png", "filtered" : false },
+            { "name" : "worm0002", "filename" : "{package_path}/worm0002.png", "filtered" : false },
+            { "name" : "worm0003", "filename" : "{package_path}/worm0003.png", "filtered" : false }
         ],
         "textfile" : [
             { "name" : "entrypoint", "filename" : "{package_path}/entrypoint.svg" }
