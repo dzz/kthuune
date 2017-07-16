@@ -10,6 +10,7 @@ def get_edges(data, width, height ):
     root = ET.fromstring(data)
     all_lines = []
     pstart = []
+    estart = []
     for layer in root.findall('./*'):
         layername = layer.attrib[propkey('layername')]
         print(layername)
@@ -17,6 +18,11 @@ def get_edges(data, width, height ):
             print("PARSING PLAYER START")
             for circle in layer.findall('./*'):
                 pstart = [ float(circle.attrib['cx']), float(circle.attrib['cy']) ]
+
+        if(layername == "elder_start"):
+            print("PARSING PLAYER START")
+            for circle in layer.findall('./*'):
+                estart = [ float(circle.attrib['cx']), float(circle.attrib['cy']) ]
 
         if(layername == "full_occluders"):
             print("PARSING OCCLUDERS")
@@ -47,4 +53,6 @@ def get_edges(data, width, height ):
 
     pstart[0] = (pstart[0] * nfact_x) - (width/2)
     pstart[1] = (pstart[1] * nfact_y) - (height/2)
-    return { "all_lines" : all_lines, "player_start" : pstart }
+    estart[0] = (estart[0] * nfact_x) - (width/2)
+    estart[1] = (estart[1] * nfact_y) - (height/2)
+    return { "all_lines" : all_lines, "player_start" : pstart, "elder_start" : estart }

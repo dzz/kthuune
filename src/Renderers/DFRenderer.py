@@ -1,6 +1,8 @@
 from Beagle import API as BGL
 from Beagle import Platform
 from Newfoundland.Renderers.FloorRenderer import FloorRenderer
+from Newfoundland.Renderers.LightMapper import LightMapper
+from .uniform_fade import uniform_fade
 
 class DFRenderer( FloorRenderer ):
 
@@ -73,3 +75,21 @@ class DFRenderer( FloorRenderer ):
             "target_width" : Platform.video.get_screen_width(),
             "target_height" : Platform.video.get_screen_height() 
         })
+
+    def configure_vision_lightmapper(self):
+        class FadingLightMapper( LightMapper ):
+            def clear(self):
+                with BGL.blendmode.alpha_over:
+                    #BGL.context.clear(0.0,0.0,0.0,1.0)
+                    uniform_fade.apply_fadeout( 0.65 )
+
+        self.player_lights = []
+        vision_lightmapper = FadingLightMapper( 
+                lights = self.player_lights,
+                geometry = self.get_occluders(), 
+                camera = self.camera,
+                width = self.vision_lightmap_width,
+                height = self.vision_lightmap_height )
+
+        print("RETURNING CUSTOM VISION MAPPER")
+        return vision_lightmapper

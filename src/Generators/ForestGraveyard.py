@@ -44,6 +44,20 @@ import random
 ###        #print(screen_x,screen_y)
 ###        return params
 ###
+
+class Elder(Object):
+    texture = BGL.assets.get('KT-player/texture/elder0000')
+
+    def customize(self):
+        self.texture = Elder.texture
+        self.buftarget = "popup"
+
+        self.size =  [ 4.0, 4.0 ]
+        self.light_type = Object.LightTypes.STATIC_SHADOWCASTER
+        self.light_color =  [ 0.0,0.0,1.0,1.0]
+        self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
+        self.z_index = 1
+
 class Shrub(Object):
         textures = [
             BGL.assets.get('KT-forest/texture/shrub0000'),
@@ -167,8 +181,9 @@ class TreeTop(Object):
 
         def tick(self):
             self.t = self.t + 0.01
-            self.size[0] = self.base_size[0] * ( 4.0 + (1.5*(sin(self.t* self.wind_speed))))
-            self.size[1] = self.base_size[1] * ( 4.0 + (1.5*(cos(self.t* self.wind_speed*self.wind_mod))))
+            if(self.should_draw):
+                self.size[0] = self.base_size[0] * ( 4.0 + (1.5*(sin(self.t* self.wind_speed))))
+                self.size[1] = self.base_size[1] * ( 4.0 + (1.5*(cos(self.t* self.wind_speed*self.wind_mod))))
             return True
 
         def should_draw(self):
@@ -344,6 +359,11 @@ class ForestGraveyard():
         self.map_edges = level_data["all_lines"]
         dungeon_floor.player.p[0] = level_data["player_start"][0]
         dungeon_floor.player.p[1] = level_data["player_start"][1]
+
+        elder = Elder()
+        elder.p = level_data["elder_start"]
+
+        self.objects.append( elder )
         self.light_occluders = []
         self.light_occluders.extend( self.map_edges )
 
@@ -413,6 +433,8 @@ class ForestGraveyard():
                 self.objects.append( TreeShadow(p=p, TreeTop=tt) )
                 size = size * uniform(1.2,1.5)
                 plx = plx * uniform(1.1,1.3)
+                size = uniform(3.0,7.0)
+                self.objects.append( TreeRoots( p=p, size=[size,size]) )
 
             for tt in range(2,choice(range(2,5))):
                 size = uniform(10.0,40.0)
@@ -537,7 +559,7 @@ class ForestGraveyard():
 
     
     def evaluate_tile(self,rx,ry):
-        return 1
+        return choice(range(1,19))
         win_d = 0
         win_range = None 
         second_range = None
