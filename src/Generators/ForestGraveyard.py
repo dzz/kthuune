@@ -6,6 +6,7 @@ from math import sin,cos,pi
 from .txt_specs import *
 from math import atan2
 from .SVGLoader import get_level_data
+from math import floor
 import random
 
 
@@ -22,13 +23,57 @@ class Worm(Object):
     ] 
     def customize(self):
         self.tick_type = Object.TickTypes.PURGING
-        self.fridx = 0
+        self.fridx = choice(range(0,480))
+        self.worm_target = None
+        self.physics = { "radius" : 1.0, "mass"   : 0.0003, "friction" : 0.0 }
+        self.fworm_target = [0.0,0.0]
+        self.next_choice = 90
+        self.buftarget = "popup"
+        self.size = [1.2,1.2]
         
+    def pick_target(self):
+        rad = uniform(-3.14,3.14)
+        speed = uniform(0.2,1.3)
+        self.worm_target = [ cos(rad)*speed, sin(rad)*speed ]
+        self.next_choice = choice(range(100,300))
+
+    def should_draw(self):
+        p = self.get_shader_params()['translation_world']
+        visRad = vconf.visRad
+        if(p[0]<-visRad): return False
+        if(p[1]<-visRad): return False
+        if(p[0]>visRad): return False
+        if(p[1]>visRad): return False
+        return True
+
     def tick(self):
+        if not self.should_draw():
+            return True
+
+        self.rad = atan2( self.fworm_target[1], self.fworm_target[0] )
         self.fridx = self.fridx + 1
         tidx = int(self.fridx/20)%4
         self.texture = Worm.textures[tidx]
-        self.buftarget = "popup"
+
+        if(not self.worm_target):
+            self.pick_target()
+        elif (self.fridx%self.next_choice) == 0:
+            self.pick_target()
+
+        if(self.fridx%20)==0:
+            self.fworm_target[0] = (self.fworm_target[0]*0.8) + (self.worm_target[0]*0.2)
+            self.fworm_target[1] = (self.fworm_target[1]*0.8) + (self.worm_target[1]*0.2)
+
+        if(tidx>2):
+            self.size = [1.6,1.6]
+        elif(tidx==0):
+            self.size = [1.4,1.4]
+        elif(tidx==1):
+            self.size = [1.1,1.1]
+
+        self.v[0] = self.fworm_target[0] * (float((tidx)+0.1)*0.25)
+        self.v[1] = self.fworm_target[1] * (float((tidx)+0.1)*0.25)
+
         return True
     
         
@@ -44,7 +89,7 @@ class WormField(Object):
         self.worms = []
 
     def tick(self):
-        if(len(self.worms)<1):
+        if(len(self.worms)<20):
             worm = Worm( p = [self.p[0],self.p[1] ] )
             self.worms.append(worm)
             self.floor.create_object(worm)

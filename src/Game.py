@@ -21,7 +21,7 @@ class Game( BaseGame ):
 
         areas = generate_qualified_areas()
         start_area = filter(lambda x: x.ring==0 and x.depth==0, areas).__next__()
-        start_area.floor = DungeonFloor( width = 300, height = 300, camera = self.camera, player = self.player, objects=[], area=start_area );
+        start_area.floor = DungeonFloor( width = 250, height = 250, camera = self.camera, player = self.player, objects=[], area=start_area );
         self.floor          = self.create_tickable( start_area.floor )
 
         #self.floor = self.create_tickable( Floor() )
