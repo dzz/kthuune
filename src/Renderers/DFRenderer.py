@@ -36,13 +36,25 @@ class DFRenderer( FloorRenderer ):
             self.render_photon_map()
 
         with BGL.context.render_target( self.light_buffer ):
-            BGL.context.clear(0.0,0.0,0.0,1.0)
+            if(self.player.dash_flash):
+                with BGL.blendmode.alpha_over:
+                    uniform_fade.apply_fadeout( 1.0 / 16.0 )
+            else:
+                BGL.context.clear(0.0,0.0,0.0,0.0)
             with BGL.blendmode.add:
                 self.render_static_lightmap()
                 self.dynamic_lightmap.get_lightmap_framebuffer().render_processed( FloorRenderer.pixel_copy_shader )
 
         with BGL.context.render_target( self.object_buffer ):
-            BGL.context.clear(0.0,0.0,0.0,0.0)
+
+            if(self.player.dash_flash):
+                with BGL.blendmode.alpha_over:
+                    uniform_fade.apply_fadeout( 1.0 / 32.0 )
+            elif (self.player.hp < 0.0):
+                    with BGL.blendmode.alpha_over:
+                        uniform_fade.apply_fadeout( 1.0 / 16.0 )
+            else:
+                BGL.context.clear(0.0,0.0,0.0,0.0)
             with BGL.blendmode.alpha_over:
                 self.render_objects("popup")
 

@@ -184,7 +184,7 @@ class KPlayer(Player):
         self.dash_flash = False
         if(self.dash_amt > 0.3) and pad.button_down(BGL.gamepads.buttons.LEFT_STICK ):
             calc_speed = calc_speed + (11.0*self.dash_amt)
-            self.dash_amt = self.dash_amt * 0.95
+            self.dash_amt = self.dash_amt * 0.994
             self.dash_flash = True
         else:
             if not pad.button_down(BGL.gamepads.buttons.LEFT_STICK):
