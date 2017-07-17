@@ -25,12 +25,13 @@ class Worm(Object):
         self.tick_type = Object.TickTypes.PURGING
         self.fridx = choice(range(0,480))
         self.worm_target = None
-        self.physics = { "radius" : 1.0, "mass"   : 0.0003, "friction" : 0.0 }
+        self.physics = { "radius" : 0.25, "mass"   : 0.0001, "friction" : 0.1 }
         self.fworm_target = [0.0,0.0]
         self.next_choice = 90
         self.buftarget = "popup"
         self.size = [1.2,1.2]
         self.attacking = False
+        self.biting = False
         
     def pick_target(self):
         rad = None
@@ -58,6 +59,9 @@ class Worm(Object):
         return True
 
     def tick(self):
+        if(uniform(0.0,1.0)>0.6):
+            return True
+
         if not self.should_draw():
             return True
 
@@ -77,11 +81,16 @@ class Worm(Object):
             self.pick_target()
 
         freq = 20
+        self.biting = False
         if self.attacking:
             freq = 5
         if(self.fridx%freq)==0:
             self.fworm_target[0] = (self.fworm_target[0]*0.8) + (self.worm_target[0]*0.2)
             self.fworm_target[1] = (self.fworm_target[1]*0.8) + (self.worm_target[1]*0.2)
+
+            if self.attacking: 
+                if tidx == 3: 
+                    self.biting = True
 
         rsize = self.size
         if(tidx>2):
@@ -96,6 +105,16 @@ class Worm(Object):
         self.v[0] = self.fworm_target[0] * (float((tidx)+0.1)*0.25)
         self.v[1] = self.fworm_target[1] * (float((tidx)+0.1)*0.25)
 
+
+        self.color = [1.0,1.0,1.0,1.0]
+        self.light_type = Object.LightTypes.NONE
+        if self.attacking:
+            self.color = [uniform(0.5,1.0),uniform(0.0,1.0),0.0,1.0]
+        if self.biting:
+            self.color = [0.0,1.0,0.0,1.0]
+            self.light_color = [uniform(0.0,1.0),uniform(0.0,1.0),0.0,1.0]
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_radius = uniform(10.0,20.0)
         return True
     
         
