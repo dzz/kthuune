@@ -81,9 +81,11 @@ class KPlayer(Player):
 
         self.filtered_speed = self.speed
         self.attacked = False
+        self.dash_flash = False
 
     def customize(self):
         self.hp = 100
+        self.dash_amt = 1.0
 
     def get_shader_params(self):
         base_params = Player.get_shader_params(self)
@@ -93,6 +95,10 @@ class KPlayer(Player):
         
     def determine_texture(self):
 
+        modamt = 1
+        if self.dash_flash:
+            modamt = modamt*3
+
         if self.sword_swing == 0:
             tex = KPlayer.textures[4]
 
@@ -100,7 +106,7 @@ class KPlayer(Player):
             if(self.rad > 0):
                 yidx = 3
             idx = rad_2_index(self.rad,8)*3
-            widx = (self.walk_tick//40) % 4
+            widx = (self.walk_tick*modamt//40) % 4
             woffs = [ 0,1,0,2 ]
             tex = KPlayer.textures[idx+woffs[widx]]
             return tex
@@ -120,7 +126,6 @@ class KPlayer(Player):
 
     def tick(self):
 
-
         if(self.hp < 0 ):
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [ 1.0,0.0,0.0,1.0]
@@ -131,6 +136,9 @@ class KPlayer(Player):
             print (self.rad)
             return True
         pad = self.controllers.get_virtualized_pad( self.num )
+
+                 
+
 
         if(self.sword_swing>0):
             self.sword_swing = self.sword_swing - 1
@@ -165,6 +173,7 @@ class KPlayer(Player):
         if(self.aiming_beam.aiming):
             calc_speed = calc_speed * 0.5
 
+
         self.filtered_speed = (self.filtered_speed*0.8) + (calc_speed*0.2)
         calc_speed = self.filtered_speed
 
@@ -172,7 +181,22 @@ class KPlayer(Player):
 
         pad = self.controllers.get_virtualized_pad( self.num )
 
+        self.dash_flash = False
+        if(self.dash_amt > 0.3) and pad.button_down(BGL.gamepads.buttons.LEFT_STICK ):
+            calc_speed = calc_speed + (11.0*self.dash_amt)
+            self.dash_amt = self.dash_amt * 0.95
+            self.dash_flash = True
+        else:
+            if not pad.button_down(BGL.gamepads.buttons.LEFT_STICK):
+                if(self.dash_amt<1.0):
+                    self.dash_amt = self.dash_amt * 1.3
+
+        
+
         delta = [(pad.left_stick[0])*calc_speed,(pad.left_stick[1])*calc_speed]
+
+
+
 
         self.v[0] = self.v[0]*0.8+delta[0]*0.2
         self.v[1] = self.v[1]*0.8+delta[1]*0.2
@@ -192,9 +216,14 @@ class KPlayer(Player):
             self.attacked = False
         else:
             self.light_radius = 15.0
-            #self.light_color = self.base_light_color
+            self.light_color = self.base_light_color
             impulse = uniform(5.0,35.0)
             self.light_radius = (self.light_radius*0.96) + (impulse*0.04)
             self.texture = self.determine_texture()
+
+            if(self.dash_flash):
+                rc = uniform(0.0,1.0)
+                self.light_color= [rc,rc,rc,1.0]
+    
 
         ##########
