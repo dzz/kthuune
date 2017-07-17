@@ -30,12 +30,23 @@ class Worm(Object):
         self.next_choice = 90
         self.buftarget = "popup"
         self.size = [1.2,1.2]
+        self.attacking = False
         
     def pick_target(self):
-        rad = uniform(-3.14,3.14)
-        speed = uniform(0.2,1.3)
-        self.worm_target = [ cos(rad)*speed, sin(rad)*speed ]
-        self.next_choice = choice(range(100,300))
+        rad = None
+        speed = None
+        if hypot(self.p[0]-self.floor.player.p[0], self.p[1]-self.floor.player.p[1]) < 4.0:
+            x = self.floor.player.p[0] - self.p[0]
+            y = self.floor.player.p[1] - self.p[1]
+            rad = atan2(-1*y,x)
+            speed = uniform(2.0,7.0)
+            self.attacking = True
+        else:
+            rad = uniform(-3.14,3.14)
+            speed = uniform(0.2,1.3)
+            self.attacking = False
+        self.worm_target = [ cos(rad)*speed, -1*sin(rad)*speed ]
+        self.next_choice = 2
 
     def should_draw(self):
         p = self.get_shader_params()['translation_world']
@@ -52,7 +63,12 @@ class Worm(Object):
 
         self.rad = atan2( self.fworm_target[1], self.fworm_target[0] )
         self.fridx = self.fridx + 1
-        tidx = int(self.fridx/20)%4
+
+        if self.attacking:
+            tidx = int(self.fridx/15)%4
+        else:
+            tidx = int(self.fridx/24)%4
+
         self.texture = Worm.textures[tidx]
 
         if(not self.worm_target):
@@ -60,17 +76,23 @@ class Worm(Object):
         elif (self.fridx%self.next_choice) == 0:
             self.pick_target()
 
-        if(self.fridx%20)==0:
+        freq = 20
+        if self.attacking:
+            freq = 5
+        if(self.fridx%freq)==0:
             self.fworm_target[0] = (self.fworm_target[0]*0.8) + (self.worm_target[0]*0.2)
             self.fworm_target[1] = (self.fworm_target[1]*0.8) + (self.worm_target[1]*0.2)
 
+        rsize = self.size
         if(tidx>2):
-            self.size = [1.6,1.6]
+            rsize = [1.6,1.6]
         elif(tidx==0):
-            self.size = [1.4,1.4]
+            rsize = [1.4,1.4]
         elif(tidx==1):
-            self.size = [1.1,1.1]
+            rsize = [1.1,1.1]
 
+        self.size[0] = (self.size[0] *0.7) + (rsize[0]*0.3)
+        self.size[1] = (self.size[1] *0.7) + (rsize[1]*0.3)
         self.v[0] = self.fworm_target[0] * (float((tidx)+0.1)*0.25)
         self.v[1] = self.fworm_target[1] * (float((tidx)+0.1)*0.25)
 
@@ -89,7 +111,7 @@ class WormField(Object):
         self.worms = []
 
     def tick(self):
-        if(len(self.worms)<20):
+        if(len(self.worms)<15):
             worm = Worm( p = [self.p[0],self.p[1] ] )
             self.worms.append(worm)
             self.floor.create_object(worm)

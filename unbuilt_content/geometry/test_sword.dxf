@@ -91,7 +91,7 @@ STANDARD
   9
 $CLAYER
   8
-wormfields
+player_start
   9
 $CELTYPE
   6
@@ -1111,9 +1111,9 @@ AcDbViewportTableRecord
  21
 1
  12
-877.2235135632158
+253.6594085311646
  22
-723.8527358650718
+205.816174893614
  13
 0
  23
@@ -1139,7 +1139,7 @@ AcDbViewportTableRecord
  37
 0
  40
-2430.998495103291
+765.49173820081
  41
 1.689858490566038
  42
@@ -4875,28 +4875,6 @@ AA
 100
 AcDbEntity
   8
-player_start
-  6
-ByLayer
- 62
-  256
-370
-   -1
-100
-AcDbCircle
- 10
--210
- 20
--220
- 40
-14.14213562373095
-  0
-CIRCLE
-  5
-AB
-100
-AcDbEntity
-  8
 elder_start
   6
 ByLayer
@@ -4915,7 +4893,7 @@ AcDbCircle
   0
 CIRCLE
   5
-AC
+AB
 100
 AcDbEntity
   8
@@ -4937,7 +4915,7 @@ AcDbCircle
   0
 CIRCLE
   5
-AD
+AC
 100
 AcDbEntity
   8
@@ -4956,6 +4934,28 @@ AcDbCircle
 250
  40
 28.2842712474619
+  0
+CIRCLE
+  5
+AD
+100
+AcDbEntity
+  8
+player_start
+  6
+ByLayer
+ 62
+  256
+370
+   -1
+100
+AcDbCircle
+ 10
+-340
+ 20
+170
+ 40
+14.14213562373095
   0
 ENDSEC
   0

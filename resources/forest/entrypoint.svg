@@ -96,7 +96,7 @@
         <line x1="690" y1="950" x2="500" y2="960"/>
     </g>
     <g lc:layername="player_start" lc:is_locked="false" lc:is_construction="false" fill="none" stroke="black" stroke-width="1">
-        <circle cx="290" cy="720" r="14.14213562"/>
+        <circle cx="160" cy="330" r="14.14213562"/>
     </g>
     <g lc:layername="wormfields" lc:is_locked="false" lc:is_construction="false" fill="none" stroke="black" stroke-width="1">
         <circle cx="270" cy="100" r="36.05551275"/>
