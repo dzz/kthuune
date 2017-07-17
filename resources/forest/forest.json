@@ -20,7 +20,11 @@
             { "name" : "worm0000", "filename" : "{package_path}/worm0000.png", "filtered" : false },
             { "name" : "worm0001", "filename" : "{package_path}/worm0001.png", "filtered" : false },
             { "name" : "worm0002", "filename" : "{package_path}/worm0002.png", "filtered" : false },
-            { "name" : "worm0003", "filename" : "{package_path}/worm0003.png", "filtered" : false }
+            { "name" : "worm0003", "filename" : "{package_path}/worm0003.png", "filtered" : false },
+            { "name" : "splat0000", "filename" : "{package_path}/splat0000.png", "filtered" : false },
+            { "name" : "splat0001", "filename" : "{package_path}/splat0001.png", "filtered" : false },
+            { "name" : "splat0002", "filename" : "{package_path}/splat0002.png", "filtered" : false },
+            { "name" : "splat0003", "filename" : "{package_path}/splat0003.png", "filtered" : false }
         ],
         "textfile" : [
             { "name" : "entrypoint", "filename" : "{package_path}/entrypoint.svg" }

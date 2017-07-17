@@ -13,6 +13,33 @@ import random
 class vconf():
     visRad = 40
 
+class Splat(Object):
+    textures = [
+        BGL.assets.get('KT-forest/texture/splat0000'),
+        BGL.assets.get('KT-forest/texture/splat0001'),
+        BGL.assets.get('KT-forest/texture/splat0002'),
+        BGL.assets.get('KT-forest/texture/splat0003'),
+    ]
+    def customize(self):
+        self.tick_type = Object.TickTypes.PURGING
+        self.cooldown = 40
+        self.rad = uniform(-3.14,3.14)
+        self.buftarget = "popup"
+        self.size = [ uniform(0.5,0.7), uniform(0.5,0.7) ]
+        self.spin = uniform(-0.1,0.1)
+
+    def tick(self):
+        self.size[0] = self.size[0] * 1.1 
+        self.size[1] = self.size[1] * 1.1 
+        self.rad = self.rad + self.spin
+        self.cooldown = self.cooldown - uniform(2.0,4.0)
+        if(self.cooldown<=0):
+            self.floor.objects.remove(self)
+            return False
+        else:
+            self.texture = Splat.textures[int(floor((40-self.cooldown) / 40)) ]
+            return True
+
 class Worm(Object):
    
     textures = [
@@ -130,7 +157,8 @@ class Worm(Object):
         if (not self.biting):
             if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 3.0:
                 if(self.floor.player.sword_swing > 3.0):
-                    self.hp -= 3.0
+                    self.hp -= 0.7
+                    self.floor.create_object( Splat( p = self.p ) )
 
         if(self.hp<0.0):
             self.dead = True
