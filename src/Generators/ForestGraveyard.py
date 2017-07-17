@@ -25,7 +25,7 @@ class Worm(Object):
         self.tick_type = Object.TickTypes.PURGING
         self.fridx = choice(range(0,480))
         self.worm_target = None
-        self.physics = { "radius" : 0.25, "mass"   : 0.0001, "friction" : 0.1 }
+        self.physics = { "radius" : 0.2, "mass"   : 0.1, "friction" : 0.0 }
         self.fworm_target = [0.0,0.0]
         self.next_choice = 90
         self.buftarget = "popup"
@@ -115,6 +115,10 @@ class Worm(Object):
             self.light_color = [uniform(0.0,1.0),uniform(0.0,1.0),0.0,1.0]
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_radius = uniform(10.0,20.0)
+
+            if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 2.0:
+                self.floor.player.hp = self.floor.player.hp - 22
+
         return True
     
         

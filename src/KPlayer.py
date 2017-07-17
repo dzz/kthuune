@@ -79,9 +79,13 @@ class KPlayer(Player):
 
         self.filtered_speed = self.speed
 
+    def customize(self):
+        self.hp = 100
+
     def get_shader_params(self):
         base_params = Player.get_shader_params(self)
-        base_params["rotation_local"] = 0.0
+        if self.hp > 0:
+            base_params["rotation_local"] = 0.0
         return base_params
         
     def determine_texture(self):
@@ -109,6 +113,15 @@ class KPlayer(Player):
  
     def tick(self):
 
+        if(self.hp < 0 ):
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_color = [ 1.0,1.0,0.0,1.0]
+            self.light_radius = 100
+            self.texture = BGL.assets.get('KT-player/texture/skeleton')
+            self.size = [1.0,1.0]
+            self.rad = atan2(self.p[0]-self.snapshot['p'][0],self.p[1]-self.snapshot['p'][1])
+            print (self.rad)
+            return True
         pad = self.controllers.get_virtualized_pad( self.num )
 
         if(self.sword_swing>0):
