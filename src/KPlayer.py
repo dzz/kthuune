@@ -25,10 +25,12 @@ class KPlayer(Player):
             "sword_swing_cooldown" : 60,
             "sword_released" : True,
             "filtered_speed" : 0.0,
-            "buftarget" : "popup"
+            "buftarget" : "popup",
+            "snapshot_fields" : [ 'p','hp' ]
         }
         overrides.update(kwargs)
         Player.__init__(self, **overrides)
+        self.base_light_color = self.light_color
         KPlayer.swing_textures = [
             BGL.assets.get('KT-player/texture/knight_sword0000'),
             BGL.assets.get('KT-player/texture/knight_sword0001'),
@@ -78,6 +80,7 @@ class KPlayer(Player):
         ]
 
         self.filtered_speed = self.speed
+        self.attacked = False
 
     def customize(self):
         self.hp = 100
@@ -111,11 +114,16 @@ class KPlayer(Player):
             tex = KPlayer.swing_textures[idx]
             return tex
  
+    def enemy_attack(self,damage):
+        self.attacked = True
+        self.hp = self.hp - damage
+
     def tick(self):
+
 
         if(self.hp < 0 ):
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-            self.light_color = [ 1.0,1.0,0.0,1.0]
+            self.light_color = [ 1.0,0.0,0.0,1.0]
             self.light_radius = 100
             self.texture = BGL.assets.get('KT-player/texture/skeleton')
             self.size = [1.0,1.0]
@@ -126,8 +134,11 @@ class KPlayer(Player):
 
         if(self.sword_swing>0):
             self.sword_swing = self.sword_swing - 1
+            self.light_color = [0.2,0.3,1.0,1.0]
+            if uniform(0.0,1.0)<0.1:
+                self.light_color = [0.0,0.0,0.0,1.0]
         else:
-
+            self.light_color = self.base_light_color
             if self.sword_released:
                 if pad.button_down( BGL.gamepads.buttons.RIGHT_BUMPER ):
                     self.sword_swing = self.sword_swing_cooldown
@@ -169,7 +180,21 @@ class KPlayer(Player):
         self.dir = ( pad.right_stick[0], pad.right_stick[1] )
         self.rad = atan2( self.dir[1], self.dir[0] )
 
+        if(self.attacked):
+            self.light_color = [ 1.0,0.0,0.0,1.0 ]
+            self.light_radius = uniform(0.0,200.0)
+            self.v[0] = self.v[0]*-10
+            self.v[0] = self.v[1]*-10
+
+            if (abs(self.v[0])<0.01) or (abs(self.v[1])<0.01):
+                self.v[0] = uniform(-1.0,1.0)
+                self.v[1] = uniform(-1.0,1.0)
+            self.attacked = False
+        else:
+            self.light_radius = 15.0
+            #self.light_color = self.base_light_color
+            impulse = uniform(5.0,35.0)
+            self.light_radius = (self.light_radius*0.96) + (impulse*0.04)
+            self.texture = self.determine_texture()
+
         ##########
-        impulse = uniform(5.0,35.0)
-        self.light_radius = (self.light_radius*0.96) + (impulse*0.04)
-        self.texture = self.determine_texture()

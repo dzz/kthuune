@@ -22,10 +22,12 @@ class Worm(Object):
         BGL.assets.get("KT-forest/texture/worm0003"),
     ] 
     def customize(self):
+        self.hp = 30
+        self.dead = False
         self.tick_type = Object.TickTypes.PURGING
         self.fridx = choice(range(0,480))
         self.worm_target = None
-        self.physics = { "radius" : 0.2, "mass"   : 0.1, "friction" : 0.0 }
+        self.physics = { "radius" : 0.5, "mass"   : 0.0003, "friction" : 0.0 }
         self.fworm_target = [0.0,0.0]
         self.next_choice = 90
         self.buftarget = "popup"
@@ -59,6 +61,12 @@ class Worm(Object):
         return True
 
     def tick(self):
+
+        if(self.dead):
+            self.color = [0.0,0.0,0.0,1.0]
+            self.buf_target="floor"
+            return True
+
         if(uniform(0.0,1.0)>0.6):
             return True
 
@@ -117,7 +125,15 @@ class Worm(Object):
             self.light_radius = uniform(10.0,20.0)
 
             if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 2.0:
-                self.floor.player.hp = self.floor.player.hp - 22
+                self.floor.player.enemy_attack(3)
+
+        if (not self.biting):
+            if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 3.0:
+                if(self.floor.player.sword_swing > 3.0):
+                    self.hp -= 3.0
+
+        if(self.hp<0.0):
+            self.dead = True
 
         return True
     
