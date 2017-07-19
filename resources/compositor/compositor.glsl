@@ -262,8 +262,8 @@ void main(void) {
         vec2 LightUV = UV;
         PopupMerged = texture( object_buffer, PopupUV );
 
-        float PopupLightExposure = 4;
-        float PopupAmbientExposure = 0.03;
+        float PopupLightExposure = 1.2;
+        float PopupAmbientExposure = 0.004;
 
         vec4 PopupPhoton = texture(reflect_map, PopupUV ) * PopupAmbientExposure;
 
@@ -302,7 +302,7 @@ void main(void) {
         CanopyMerged *= VisionTexel;
     }
 
-    gl_FragColor = CanopyMerged;
+    gl_FragColor = CanopyMerged*6;
     //gl_FragColor = FloorMerged + PopupMerged;
 }
 

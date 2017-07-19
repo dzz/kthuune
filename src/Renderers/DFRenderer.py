@@ -38,7 +38,7 @@ class DFRenderer( FloorRenderer ):
         with BGL.context.render_target( self.light_buffer ):
             if(self.player.dash_flash):
                 with BGL.blendmode.alpha_over:
-                    uniform_fade.apply_fadeout( 1.0 / 16.0 )
+                    uniform_fade.apply_fadeout( 1.0 / 24.0 )
             else:
                 BGL.context.clear(0.0,0.0,0.0,0.0)
             with BGL.blendmode.add:
@@ -54,7 +54,8 @@ class DFRenderer( FloorRenderer ):
                     with BGL.blendmode.alpha_over:
                         uniform_fade.apply_fadeout( 1.0 / 16.0 )
             else:
-                BGL.context.clear(0.0,0.0,0.0,0.0)
+                with BGL.blendmode.alpha_over:
+                    uniform_fade.apply_fadeout( 0.7 )
             with BGL.blendmode.alpha_over:
                 self.render_objects("popup")
 
@@ -96,7 +97,7 @@ class DFRenderer( FloorRenderer ):
             def clear(self):
                 with BGL.blendmode.alpha_over:
                     #BGL.context.clear(0.0,0.0,0.0,1.0)
-                    uniform_fade.apply_fadeout( 0.3 )
+                    uniform_fade.apply_fadeout( 0.4 )
 
         self.player_lights = []
         vision_lightmapper = FadingLightMapper( 

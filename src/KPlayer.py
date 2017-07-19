@@ -2,7 +2,7 @@ from Beagle import API as BGL
 from Newfoundland.Object import Object
 from Newfoundland.Player import Player
 from random import uniform
-from math import floor,pi,atan2
+from math import floor,pi,atan2,sin
 
 def rad_2_index(rad, segments):
     segment_amt = ((2*pi)/segments)
@@ -11,9 +11,89 @@ def rad_2_index(rad, segments):
     segment = floor((rad/segment_amt)%segments)
     return int(segment)
 
-class KPlayer(Player):
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Sword(Object):
+    def __init__(self,**kwargs):
+        Object.__init__(self,**kwargs)
+
+    def customize(self):
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.texture = BGL.assets.get('KT-player/texture/sword')
+        self.buftarget = "popup"
+        self.z_index = 2
+        self.bob_index = 0.0
+
+    def tick(self):
+        self.bob_index = self.bob_index + 0.04
+        self.p[0] = self.player.p[0]
+        self.p[1] = self.player.p[1]
+
+        if(self.player.sword_swing>0.0):
+
+            self.size = [1.1,1.1]
+            ramt = self.player.sword_swing / self.player.sword_swing_cooldown
+
+            ramt = 1.0 - ramt
+            ramt = ramt*ramt*ramt*ramt
+            ramt = 1.0 - ramt
+            self.rad = self.player.rad-(2.8)+(1.8*2*ramt)
+
+            self.size[0] = self.size[0] + (ramt*0.3)
+        else:
+            self.size = [1.0,1.0]
+            bob = sin(self.bob_index)
+            if(self.player.rad > 0.0): self.rad = (-2.9-3.14) + (self.player.rad*0.1*bob)
+            if(self.player.rad < 0.0): self.rad = (2.7) - (self.player.rad*0.1*bob)
+
+        if(self.player.rad > 0.0): self.z_index = 2
+        if(self.player.rad < 0.0): self.z_index = 0
+
+    def get_shader_params(self):
+        bp = Object.get_shader_params(self)
+        bp['translation_local'][0] = 1.1
+        bp['translation_local'][1] = 0.1
+        return bp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class KPlayer(Player):
     def __init__(self, **kwargs):
         overrides =  {
             "light_type" : Object.LightTypes.DYNAMIC_SHADOWCASTER,
@@ -22,7 +102,7 @@ class KPlayer(Player):
             "walk_tick" : 0,
             "z_index" : 1,
             "sword_swing" : 0,
-            "sword_swing_cooldown" : 60,
+            "sword_swing_cooldown" : 25,
             "sword_released" : True,
             "filtered_speed" : 0.0,
             "buftarget" : "popup",
@@ -86,6 +166,10 @@ class KPlayer(Player):
     def customize(self):
         self.hp = 100
         self.dash_amt = 1.0
+        self.sword = Sword(player=self)
+    
+    def link_floor(self):
+        self.floor.create_object( self.sword )
 
     def get_shader_params(self):
         base_params = Player.get_shader_params(self)
@@ -184,7 +268,7 @@ class KPlayer(Player):
         self.dash_flash = False
         if(self.dash_amt > 0.3) and pad.button_down(BGL.gamepads.buttons.LEFT_STICK ):
             calc_speed = calc_speed + (11.0*self.dash_amt)
-            self.dash_amt = self.dash_amt * 0.994
+            self.dash_amt = self.dash_amt * 0.954
             self.dash_flash = True
         else:
             if not pad.button_down(BGL.gamepads.buttons.LEFT_STICK):
