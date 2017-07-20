@@ -2,7 +2,7 @@ from Beagle import API as BGL
 from Newfoundland.Object import Object
 from Newfoundland.Player import Player
 from random import uniform
-from math import floor,pi,atan2,sin
+from math import floor,pi,atan2,sin, hypot
 
 def rad_2_index(rad, segments):
     segment_amt = ((2*pi)/segments)
@@ -42,8 +42,15 @@ class Sword(Object):
         self.buftarget = "popup"
         self.z_index = 2
         self.bob_index = 0.0
+        self.collected = False
 
     def tick(self):
+
+        if not self.collected:
+            if hypot( self.p[0]-self.player.p[0],self.p[1]-self.player.p[1]) < 1.5:
+                self.collected = True
+            return
+
         self.bob_index = self.bob_index + 0.04
         self.p[0] = self.player.p[0]
         self.p[1] = self.player.p[1]

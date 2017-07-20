@@ -41,14 +41,14 @@ class DungeonFloor( Floor ):
             #"generator" : BasicGenerator(),
             "area" : None,
             "renderer_config" : {
-                "vision_lightmap_width" : 256,
-                "vision_lightmap_height" : 256,
+                "vision_lightmap_width" : 128,
+                "vision_lightmap_height" : 128,
                 "photon_map_width" : 512,
                 "photon_map_height" : 512,
-                "static_lightmap_width" : 64,
-                "static_lightmap_height" : 64,
-                "dynamic_lightmap_width" : 512,
-                "dynamic_lightmap_height" : 512,
+                "static_lightmap_width" : 1024,
+                "static_lightmap_height" : 1024,
+                "dynamic_lightmap_width" : 64,
+                "dynamic_lightmap_height" : 64,
                 "photon_mapper_config" : {
                     'stream' : False,
                     'photon_radius' : 130.0,
@@ -58,6 +58,11 @@ class DungeonFloor( Floor ):
                     'photon_max_bounces' : 8,
                     'num_photons' : 8,
                     'photon_observe_chance' : 0.8
+                },
+                "physics" : {
+                    "timestep_divisions" : 5.0,
+                    "solver_iterations" : 5.0,
+                    "wall_friction" : 0.2
                 }
             }
         }, **kwargs )

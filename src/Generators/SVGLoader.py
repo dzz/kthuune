@@ -11,6 +11,7 @@ def get_level_data(data, width, height ):
     all_lines = []
     pstart = []
     estart = []
+    sstart = []
     wormfields = []
     for layer in root.findall('./*'):
         layername = layer.attrib[propkey('layername')]
@@ -30,6 +31,11 @@ def get_level_data(data, width, height ):
             print("FINDING ELDER")
             for circle in layer.findall('./*'):
                 estart = [ float(circle.attrib['cx']), float(circle.attrib['cy']) ]
+
+        if(layername == "sword_start"):
+            print("FINDING ELDER")
+            for circle in layer.findall('./*'):
+                sstart = [ float(circle.attrib['cx']), float(circle.attrib['cy']) ]
 
         if(layername == "full_occluders"):
             print("PARSING OCCLUDERS")
@@ -62,9 +68,11 @@ def get_level_data(data, width, height ):
     pstart[1] = (pstart[1] * nfact_y) - (height/2)
     estart[0] = (estart[0] * nfact_x) - (width/2)
     estart[1] = (estart[1] * nfact_y) - (height/2)
+    sstart[0] = (sstart[0] * nfact_x) - (width/2)
+    sstart[1] = (sstart[1] * nfact_y) - (height/2)
 
     for wf in wormfields:
         wf[0] = (wf[0] * nfact_x) - (width/2)
         wf[1] = (wf[1] * nfact_y) - (height/2)
         wf[2] = wf[2] * (0.5*(nfact_x+nfact_y))
-    return { "all_lines" : all_lines, "player_start" : pstart, "elder_start" : estart, "wormfields" : wormfields }
+    return { "all_lines" : all_lines, "player_start" : pstart, "elder_start" : estart, "sword_start" : sstart, "wormfields" : wormfields }

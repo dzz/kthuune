@@ -11,7 +11,7 @@ import random
 
 
 class vconf():
-    visRad = 40
+    visRad = 30
 
 class Splat(Object):
     textures = [
@@ -49,7 +49,7 @@ class Worm(Object):
         BGL.assets.get("KT-forest/texture/worm0003"),
     ] 
     def customize(self):
-        self.hp = 30
+        self.hp = 10 + choice(range(0,3))
         self.dead = False
         self.tick_type = Object.TickTypes.PURGING
         self.fridx = choice(range(0,480))
@@ -178,7 +178,7 @@ class WormField(Object):
         self.worms = []
 
     def tick(self):
-        if(len(self.worms)<15):
+        if(len(self.worms)<8):
             worm = Worm( p = [self.p[0],self.p[1] ] )
             self.worms.append(worm)
             self.floor.create_object(worm)
@@ -498,6 +498,9 @@ class ForestGraveyard():
         dungeon_floor.player.p[0] = level_data["player_start"][0]
         dungeon_floor.player.p[1] = level_data["player_start"][1]
 
+        dungeon_floor.player.sword.p[0] = level_data["sword_start"][0]
+        dungeon_floor.player.sword.p[1] = level_data["sword_start"][1]
+        
         elder = Elder()
         elder.p = level_data["elder_start"]
 
@@ -597,7 +600,11 @@ class ForestGraveyard():
 
     def generate_edge_trees(self):
         for edge in self.map_edges:
-            for x in range(0,3):
+
+            u_l = hypot( edge[1][0]-edge[0][0], edge[1][1]-edge[1][1])
+            print(u_l)
+
+            for x in range(0,int(u_l+uniform(0.0,1.0))):
 
                 if uniform(0.0,1.0) < 0.7:
                     continue
