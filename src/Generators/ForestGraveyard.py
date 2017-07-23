@@ -319,7 +319,7 @@ class TreeTop(Object):
 
         def tick(self):
             self.t = self.t + 0.01
-            if(self.should_draw):
+            if(self.should_draw()):
                 self.size[0] = self.base_size[0] * ( 4.0 + (1.5*(sin(self.t* self.wind_speed))))
                 self.size[1] = self.base_size[1] * ( 4.0 + (1.5*(cos(self.t* self.wind_speed*self.wind_mod))))
             return True

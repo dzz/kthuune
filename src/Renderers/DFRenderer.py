@@ -3,10 +3,12 @@ from Beagle import Platform
 from Newfoundland.Renderers.FloorRenderer import FloorRenderer
 from Newfoundland.Renderers.LightMapper import LightMapper
 from .uniform_fade import uniform_fade
+from Newfoundland.Object import GuppyRenderer
 
 class DFRenderer( FloorRenderer ):
 
     def __init__(self,**kwargs):
+        self.guppyRenderer = GuppyRenderer()
         FloorRenderer.__init__(self,**kwargs)
 
     def create_compositing_buffers(self):
@@ -70,11 +72,14 @@ class DFRenderer( FloorRenderer ):
         objects.extend( self.objects )
         objects.extend( self.get_player_objects() )
 
-        renderable_objects = list(filter(lambda x: x.visible and x.buftarget == buftarget, objects))
-        renderable_objects.sort( key = lambda x: x.p[1] )
-        renderable_objects.sort( key = lambda x: x.z_index )
-        for obj in renderable_objects:
-            obj.render()
+        renderable_objects = list(filter(lambda x: x.should_draw() and x.visible and x.buftarget == buftarget, objects))
+        #renderable_objects.sort( key = lambda x: x.texture._tex )
+        #renderable_objects.sort( key = lambda x: x.p[1] )
+        #renderable_objects.sort( key = lambda x: x.z_index )
+
+        self.guppyRenderer.renderObjects( renderable_objects )
+        #for obj in renderable_objects:
+        #    obj.render()
 
     def render_composite(self):
         shader  = self.compositor_shader
