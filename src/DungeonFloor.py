@@ -80,7 +80,7 @@ class DungeonFloor( Floor ):
         )
 
 
-        self.tilescale = 3
+        self.tilescale = 2
         self.tilemap_width = int(self.width/self.tilescale)
         self.tilemap_height = int(self.height/self.tilescale)
 

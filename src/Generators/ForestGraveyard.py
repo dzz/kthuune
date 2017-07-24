@@ -71,11 +71,11 @@ class Worm(Object):
     def pick_target(self):
         rad = None
         speed = None
-        if hypot(self.p[0]-self.floor.player.p[0], self.p[1]-self.floor.player.p[1]) < 4.0:
+        if hypot(self.p[0]-self.floor.player.p[0], self.p[1]-self.floor.player.p[1]) < 10.0:
             x = self.floor.player.p[0] - self.p[0]
             y = self.floor.player.p[1] - self.p[1]
             rad = atan2(-1*y,x)
-            speed = uniform(2.0,7.0)
+            speed = uniform(4.0,10.0)
             self.attacking = True
         else:
             rad = uniform(-3.14,3.14)
@@ -166,14 +166,14 @@ class Worm(Object):
             if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 3.0:
                 if(self.floor.player.sword_swing > 3.0):
                     self.hp -= 1.5
-                    self.floor.player.pump_dashcombo()
+                    self.floor.player.next_dashcombo()
                     self.v[0] = self.v[0]*-8
                     self.v[1] = self.v[1]*-8
                     self.floor.create_object( Splat( p = self.p ) )
 
         if(self.hp<0.0):
+            self.floor.player.pump_dashcombo()
             self.dead = True
-            self.floor.player.next_dashcombo()
 
         return True
     
@@ -190,7 +190,7 @@ class WormField(Object):
         self.worms = []
 
     def tick(self):
-        if(len(self.worms)<15):
+        if(len(self.worms)<20):
             worm = Worm( p = [self.p[0],self.p[1] ] )
             self.worms.append(worm)
             self.floor.create_object(worm)

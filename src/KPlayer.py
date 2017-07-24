@@ -155,6 +155,9 @@ class KPlayer(Player):
         self.dash_amt = 1.0
         self.sword = Sword(player=self)
         self.pumped_dashcombo = False
+        self.can_backstep = True
+        self.backstep_cooldown = -5
+        self.backstepping = False
     
     def link_floor(self):
         self.floor.create_object( self.sword )
@@ -213,6 +216,7 @@ class KPlayer(Player):
                 self.dash_combo = True
 
     def tick(self):
+
         self.pumped_dashcombo = False
         if(self.hp < 0 ):
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
@@ -226,6 +230,21 @@ class KPlayer(Player):
         pad = self.controllers.get_virtualized_pad( self.num )
 
                  
+
+
+        self.backstep_cooldown = self.backstep_cooldown - 1
+        if(pad.button_down( BGL.gamepads.buttons.B)) and self.can_backstep:
+            self.can_backstep = False
+            self.backstepping = True
+            self.backstep_cooldown = 20.0
+            self.dash_amt = self.dash_amt*1.4
+
+        if(self.backstepping):
+            if(self.backstep_cooldown<0.0):
+                self.backstepping = False 
+
+        if( not self.backstepping and not pad.button_down( BGL.gamepads.buttons.B)):
+            self.can_backstep = True
 
 
         if(self.sword_swing>0):
@@ -277,6 +296,7 @@ class KPlayer(Player):
 
         if(self.dash_amt > dashcheck) and self.is_dashing():
             calc_speed = calc_speed + (11.0*self.dash_amt)
+
             self.dash_amt = self.dash_amt * 0.954
             self.dash_flash = True
         else:
@@ -285,10 +305,13 @@ class KPlayer(Player):
                 if(self.dash_amt<1.0):
                     self.dash_amt = self.dash_amt * 1.3
 
+        calc_speed = min(calc_speed,7.0)
         
 
-        delta = [(pad.left_stick[0])*calc_speed,(pad.left_stick[1])*calc_speed]
 
+        if(self.backstepping):
+            calc_speed = calc_speed * - (1.3+(self.backstep_cooldown/20.0)*0.3)
+        delta = [(pad.left_stick[0])*calc_speed,(pad.left_stick[1])*calc_speed]
 
 
 
@@ -298,7 +321,8 @@ class KPlayer(Player):
         #ndir = ( pad.right_stick[0], pad.right_stick[1] )
         #self.dir = [ (self.dir[0]*0.9) +(ndir[0]*0.1), (self.dir[1]*0.9) + (ndir[1]*0.1) ]
 
-        self.rad = atan2( self.v[1], self.v[0] )
+        if(self.backstep_cooldown < -5.0 ):
+            self.rad = atan2( self.v[1], self.v[0] )
 
         if(self.attacked):
             self.light_color = [ 1.0,0.0,0.0,1.0 ]

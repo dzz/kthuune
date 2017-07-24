@@ -53,7 +53,7 @@
         <line x1="3100" y1="600" x2="3060" y2="150"/>
     </g>
     <g lc:layername="player_start" lc:is_locked="false" lc:is_construction="false" fill="none" stroke="black" stroke-width="1">
-        <circle cx="3100" cy="1300" r="21.21320344"/>
+        <circle cx="400" cy="1100" r="21.21320344"/>
     </g>
     <g lc:layername="sword_start" lc:is_locked="false" lc:is_construction="false" fill="none" stroke="black" stroke-width="1">
         <circle cx="300" cy="400" r="100"/>
