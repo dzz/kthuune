@@ -11,27 +11,6 @@ def rad_2_index(rad, segments):
     segment = floor((rad/segment_amt)%segments)
     return int(segment)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class Sword(Object):
     def __init__(self,**kwargs):
         Object.__init__(self,**kwargs)
@@ -60,10 +39,9 @@ class Sword(Object):
             self.size = [1.1,1.1]
             ramt = self.player.sword_swing / self.player.sword_swing_cooldown
 
+            ramt = ramt*ramt
             ramt = 1.0 - ramt
-            ramt = ramt*ramt*ramt*ramt
-            ramt = 1.0 - ramt
-            self.rad = self.player.rad-(2.8)+(1.8*2*ramt)
+            self.rad = self.player.rad-(2.8)+(1.8*-4*ramt)
 
             self.size[0] = self.size[0] + (ramt*0.3)
         else:

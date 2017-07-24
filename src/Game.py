@@ -15,7 +15,7 @@ class Game( BaseGame ):
     def initialize(self):
 
 
-        self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.23 ) )
+        self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.15 ) )
         self.controllers    = self.create_tickable( Controllers() )
         self.player         = self.create_tickable( KPlayer( sight_radius = 40.0, speed = 3.80, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) )
 

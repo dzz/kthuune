@@ -2,9 +2,9 @@
     "preload": true,
     "resources" : {
         "texture" : [
-            { "name" : "treetop", "filename" : "{package_path}/treetop.png", "filtered" : true },
-            { "name" : "treetop2", "filename" : "{package_path}/treetop2.png", "filtered" : true },
-            { "name" : "treeroots", "filename" : "{package_path}/roots.png", "filtered" : true },
+            { "name" : "treetop", "filename" : "{package_path}/treetop.png", "filtered" : false },
+            { "name" : "treetop2", "filename" : "{package_path}/treetop2.png", "filtered" : false },
+            { "name" : "treeroots", "filename" : "{package_path}/roots.png", "filtered" : false },
             { "name" : "portal", "filename" : "{package_path}/portal.png", "filtered" : true },
             { "name" : "lightmap", "filename" : "{package_path}/lightmap.jpg", "filtered" : true },
             { "name" : "shrub0000", "filename" : "{package_path}/shrubs0000.png", "filtered" : false },
@@ -27,7 +27,8 @@
             { "name" : "splat0003", "filename" : "{package_path}/splat0003.png", "filtered" : false }
         ],
         "textfile" : [
-            { "name" : "entrypoint", "filename" : "{package_path}/entrypoint.svg" }
+            { "name" : "entrypoint", "filename" : "{package_path}/entrypoint.svg" },
+            { "name" : "chamber1", "filename" : "{package_path}/chamber1.svg" }
         ]
     }
 }

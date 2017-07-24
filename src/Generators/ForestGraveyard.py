@@ -60,6 +60,7 @@ class Worm(Object):
         self.buftarget = "popup"
         self.size = [1.2,1.2]
         self.attacking = False
+        self.z_index = 5
         self.biting = False
         
     def pick_target(self):
@@ -146,6 +147,8 @@ class Worm(Object):
         if self.attacking:
             self.color = [uniform(0.5,1.0),uniform(0.0,1.0),0.0,1.0]
         if self.biting:
+            self.v[0] = self.v[0]*4
+            self.v[1] = self.v[1]*4
             self.color = [0.0,1.0,0.0,1.0]
             self.light_color = [uniform(0.0,1.0),uniform(0.0,1.0),0.0,1.0]
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
@@ -158,6 +161,8 @@ class Worm(Object):
             if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 3.0:
                 if(self.floor.player.sword_swing > 3.0):
                     self.hp -= 0.7
+                    self.v[0] = self.v[0]*-8
+                    self.v[1] = self.v[1]*-8
                     self.floor.create_object( Splat( p = self.p ) )
 
         if(self.hp<0.0):
@@ -178,7 +183,7 @@ class WormField(Object):
         self.worms = []
 
     def tick(self):
-        if(len(self.worms)<8):
+        if(len(self.worms)<15):
             worm = Worm( p = [self.p[0],self.p[1] ] )
             self.worms.append(worm)
             self.floor.create_object(worm)
@@ -311,11 +316,15 @@ class TreeTop(Object):
                     'wind_mod' : uniform(1.1,1.2),
                     'buftarget' : 'canopy'
                 }
+
+
             overrides.update(kwargs)
             Object.__init__(self,**overrides)
             self.t = 0
             self.base_size = [ self.size[0], self.size[1] ]
             self.draw_color = [0.8,uniform(0.0,1.0),0.8,uniform(0.8,1.0)]
+            if(self.texture == BGL.assets.get("KT-forest/texture/treetop2")):
+                self.z_index = self.z_index + 1
 
         def tick(self):
             self.t = self.t + 0.01
@@ -350,7 +359,7 @@ class TreeRoots(Object):
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
                     'size' : [ 5.0,5.0],
                     'rad' : uniform(-3.14,3.14),
-                    'z_index' : -100,
+                    'z_index' : -121,
                     'buftarget' : 'floor'
                 }
             overrides.update(kwargs)
@@ -428,7 +437,7 @@ class TreeShadow(Object):
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
                     'size' : [ self.scale*tt.size[0],self.scale*tt.size[1]],
                     'rad' : tt.rad,
-                    'z_index' : -100,
+                    'z_index' : -120,
                     'tt' : tt,
                     'buftarget' : 'floor'
                 }
@@ -484,19 +493,22 @@ class ForestGraveyard():
 
         self.generate_sigil_points( dungeon_floor )
         #self.generate_trees( dungeon_floor )
-        self.generate_photon_emitters(dungeon_floor)
+        #self.generate_photon_emitters(dungeon_floor)
 
         #self.light_occluders = self.tree_occluders
         self.light_occluders = []
 
 
-        level_data = get_level_data(BGL.assets.get("KT-forest/textfile/entrypoint"), dungeon_floor.width, dungeon_floor.height )
+        level_data = get_level_data(BGL.assets.get("KT-forest/textfile/chamber1"), dungeon_floor.width, dungeon_floor.height )
 
         #self.map_edges = self.gen_edges( dungeon_floor )
 
+        self.guiders = level_data["all_guiders"]
+        self.make_guider_photons(dungeon_floor)
         self.map_edges = level_data["all_lines"]
         dungeon_floor.player.p[0] = level_data["player_start"][0]
         dungeon_floor.player.p[1] = level_data["player_start"][1]
+        self.df = dungeon_floor
 
         dungeon_floor.player.sword.p[0] = level_data["sword_start"][0]
         dungeon_floor.player.sword.p[1] = level_data["sword_start"][1]
@@ -604,12 +616,12 @@ class ForestGraveyard():
             u_l = hypot( edge[1][0]-edge[0][0], edge[1][1]-edge[1][1])
             print(u_l)
 
-            for x in range(0,int(u_l+uniform(0.0,1.0))):
+            for x in range(0,int(u_l+uniform(0.0,5.0))):
 
-                if uniform(0.0,1.0) < 0.7:
+                if uniform(0.0,1.0) < 0.4:
                     continue
                     
-                size = uniform(1.0,4.0)
+                size = uniform(0.2,2.0)
                 dx = edge[1][0] - edge[0][0]
                 dy = edge[1][1] - edge[0][1]
                 d = uniform(0.0,1.0)
@@ -621,7 +633,8 @@ class ForestGraveyard():
 
                 tt = TreeTop( p=p, size=[size,size],parralax = uniform(1.1,1.8)) 
                 self.objects.append( tt )
-                self.objects.append( TreeShadow(p=p, TreeTop=tt) )
+                if(uniform(0.0,1.0)>0.8):
+                    self.objects.append( TreeShadow(p=p, TreeTop=tt) )
 
                 #for tt in range(2,choice(range(2,5))):
                 #    size = uniform(10.0,40.0)
@@ -712,7 +725,15 @@ class ForestGraveyard():
 
     
     def evaluate_tile(self,rx,ry):
-        return choice(range(1,19))
+
+
+        d  = hypot(rx - self.df.player.p[0], ry-self.df.player.p[1])
+
+        if( d<10):
+            return 1
+        else:
+            return 15
+
         win_d = 0
         win_range = None 
         second_range = None
@@ -773,8 +794,8 @@ class ForestGraveyard():
                 #######         score = d
                 ####### tile_data[  (y * df.width) + x ]  = self.get_sigil_tiledata(closest_sigil_point["sigil"])
 
-                rx = float(x*2*df.tilescale)-(df.width)
-                ry = float(y*2*df.tilescale)-(df.height)
+                rx = float((x-(df.tilemap_width/2)*df.tilescale))
+                ry = float((y-(df.tilemap_height/2)*df.tilescale))
 
                 tval = self.evaluate_tile(rx,ry)
                 #tval = 1
@@ -814,6 +835,44 @@ class ForestGraveyard():
         #map_txt_spec( df, txt_spec, 1.0, 2, 25.0, lambda char, p : static_lights.extend(generate_light(char, p)))
         self.objects.extend( static_lights )
 
+
+    def make_guider_photons(self,df):
+        photon_emitters = []
+        for guider in self.guiders:
+
+            res = 8.
+            dx = (guider[1][0]-guider[0][0])/res
+            dy = (guider[1][1]-guider[0][1])/res
+
+            for i in range(0,int(res)):
+                idx = float(i) / res
+                x = guider[0][0] + (dx*float(i))
+                y = guider[0][1] + (dy*float(i))
+
+                color_a = [0.1,0.2,0.3,1.0]
+                color_b = [1.0,1.0,0.0,1.0]
+
+                for i in range(0,3):
+                    color_a[i] = color_a[i] + uniform(-0.1,0.1)
+                    color_b[i] = color_b[i] + uniform(-0.1,0.1)
+
+                color = [ 
+                    (idx*color_a[0]) + ((1.0-idx)*color_b[0]),
+                    (idx*color_a[1]) + ((1.0-idx)*color_b[1]),
+                    (idx*color_a[2]) + ((1.0-idx)*color_b[2]),
+                    1.0 ]
+                emitter_def = [ x,y, 1.0,1.0, color ]
+                photon_emitters.append(emitter_def)
+    
+            #p = guider[0] 
+            #emitter_def = [ p[0],p[1], 15.0,15.0, [1.0,0.0,0.0,1.0] ]
+            #photon_emitters.append(emitter_def)
+            #p = guider[1] 
+            #emitter_def = [ p[0],p[1], 15.0,15.0, [0.0,0.0,1.0,1.0] ]
+            #photon_emitters.append(emitter_def)
+        
+        self.photon_emitters = photon_emitters
+    
 
     def generate_photon_emitters(self, df):
         photon_emitters = []

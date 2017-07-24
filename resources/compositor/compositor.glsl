@@ -199,7 +199,28 @@ vec4 alphablend( vec4 a, vec4 b) {
     return mixed;
 }
 
+
 void main(void) {
+
+    vec2 UV = letterbox(uv, 0.3);
+    vec2 CUV = (UV-vec2(0.5,0.5))*2;
+    float Length = length(CUV*0.5);
+
+    vec4 FloorBase = texture( floor_buffer, UV );
+    vec4 PhotonBase = texture( photon_buffer, UV );
+    vec4 LightBase = texture( light_buffer, UV );
+    vec4 ObjectBase = texture( object_buffer, UV );
+    vec4 CanopyBase = texture( canopy_buffer, warpUV( UV, 0.8,1.2,0.8,1.2) );
+    vec4 VisionBase = texture( vision_buffer, UV ); 
+
+    vec4 LitFloor = FloorBase * ( PhotonBase + LightBase ) * VisionBase;
+    vec4 PopupMerged = alphablend( LitFloor, ObjectBase ) * VisionBase;
+    vec4 CanopyMerged = alphablend( PopupMerged, CanopyBase );
+
+    gl_FragColor = CanopyMerged;
+}
+
+void xxxmain(void) {
 
 
     vec2 UV = letterbox(uv, 0.3);
@@ -245,15 +266,18 @@ void main(void) {
     {
         vec2 FloorUV = warpUV( PUV, 0.8,1.2,0.8,1.2);
         vec4 FloorBase = texture( floor_buffer, FloorUV );
+
         vec4 FloorLight = alphablend( texture( light_buffer, FloorUV ), Clouds1 );
-        vec4 FloorPhoton = texture( photon_buffer, FloorUV ) * clouds(FloorUV);
+        vec4 FloorPhoton = texture( photon_buffer, FloorUV );
         vec4 VisionTexel = texture( vision_buffer, twist(FloorUV, from_c) );
+
+        FloorMerged = FloorPhoton;
 
         float FloorBaseExposure = 75;
         FloorLight = (FloorLight * FloorPhoton) * FloorBaseExposure;
 
         float FloorMax = 1;
-        FloorMerged = smoothstep(0.0, FloorMax, ((FloorBase) * FloorLight)) * VisionTexel * BlurredObject;
+        //FloorMerged = smoothstep(0.0, FloorMax, ((FloorBase) * FloorLight)) * VisionTexel * BlurredObject;
     }
 
     vec4 PopupMerged;
@@ -274,7 +298,7 @@ void main(void) {
         vec3 lit = PopupMerged.rgb * PopupLight.rgb;
 
         PopupMerged.rgb = lit;
-        vec4 VisionTexel = texture( vision_buffer, twist( PopupUV, from_c ) );
+        vec4 VisionTexel = texture( vision_buffer, UV );
         PopupMerged*= VisionTexel;
     }
 
@@ -302,8 +326,8 @@ void main(void) {
         CanopyMerged *= VisionTexel;
     }
 
-    //gl_FragColor = alphablend( vec4(1.0,1.0,1.0,1.0), texture( object_buffer, UV ));
-    gl_FragColor = CanopyMerged*6;
+    gl_FragColor = CanopyMerged;
+    //gl_FragColor = CanopyMerged*6;
     //////////////gl_FragColor = FloorMerged + PopupMerged;
 }
 

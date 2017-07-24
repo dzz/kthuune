@@ -41,23 +41,23 @@ class DungeonFloor( Floor ):
             #"generator" : BasicGenerator(),
             "area" : None,
             "renderer_config" : {
-                "vision_lightmap_width" : 128,
-                "vision_lightmap_height" : 128,
+                "vision_lightmap_width" : 960,
+                "vision_lightmap_height" : 540,
                 "photon_map_width" : 512,
                 "photon_map_height" : 512,
                 "static_lightmap_width" : 1024,
                 "static_lightmap_height" : 1024,
-                "dynamic_lightmap_width" : 64,
-                "dynamic_lightmap_height" : 64,
+                "dynamic_lightmap_width" : 128,
+                "dynamic_lightmap_height" : 128,
                 "photon_mapper_config" : {
                     'stream' : False,
-                    'photon_radius' : 130.0,
-                    'photon_emitter_power' : 0.013,
+                    'photon_radius' :15.0,
+                    'photon_emitter_power' : 0.02,
                     'photon_decay' : 0.9,
-                    'photon_decay_jitter' : 0.2,
-                    'photon_max_bounces' : 8,
-                    'num_photons' : 8,
-                    'photon_observe_chance' : 0.8
+                    'photon_decay_jitter' : 0.4,
+                    'photon_max_bounces' : 9,
+                    'num_photons' : 12,
+                    'photon_observe_chance' : 0.9
                 },
                 "physics" : {
                     "timestep_divisions" : 5.0,
@@ -80,7 +80,7 @@ class DungeonFloor( Floor ):
         )
 
 
-        self.tilescale = 2
+        self.tilescale = 1
         self.tilemap_width = int(self.width/self.tilescale)
         self.tilemap_height = int(self.height/self.tilescale)
 

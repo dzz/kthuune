@@ -9,6 +9,7 @@ def get_level_data(data, width, height ):
 
     root = ET.fromstring(data)
     all_lines = []
+    all_guiders = []
     pstart = []
     estart = []
     sstart = []
@@ -45,6 +46,13 @@ def get_level_data(data, width, height ):
                                     [ float(line.attrib['x2']), float(line.attrib['y2']) ],
                                 ])
 
+        if(layername == "guiders"):
+            for line in layer.findall('./*'):
+                all_guiders.append( [ 
+                                    [ float(line.attrib['x1']), float(line.attrib['y1']) ],
+                                    [ float(line.attrib['x2']), float(line.attrib['y2']) ],
+                                ])
+
     max_x = 0.0
     max_y = 0.0
 
@@ -64,6 +72,12 @@ def get_level_data(data, width, height ):
         line[1][0] = (line[1][0]*nfact_x) - (width/2)
         line[1][1] = (line[1][1]*nfact_y) - (height/2)
 
+    for line in all_guiders:
+        line[0][0] = (line[0][0]*nfact_x) - (width/2)
+        line[0][1] = (line[0][1]*nfact_y) - (height/2)
+        line[1][0] = (line[1][0]*nfact_x) - (width/2)
+        line[1][1] = (line[1][1]*nfact_y) - (height/2)
+
     pstart[0] = (pstart[0] * nfact_x) - (width/2)
     pstart[1] = (pstart[1] * nfact_y) - (height/2)
     estart[0] = (estart[0] * nfact_x) - (width/2)
@@ -75,4 +89,4 @@ def get_level_data(data, width, height ):
         wf[0] = (wf[0] * nfact_x) - (width/2)
         wf[1] = (wf[1] * nfact_y) - (height/2)
         wf[2] = wf[2] * (0.5*(nfact_x+nfact_y))
-    return { "all_lines" : all_lines, "player_start" : pstart, "elder_start" : estart, "sword_start" : sstart, "wormfields" : wormfields }
+    return { "all_guiders" : all_guiders, "all_lines" : all_lines, "player_start" : pstart, "elder_start" : estart, "sword_start" : sstart, "wormfields" : wormfields }
