@@ -43,14 +43,14 @@ class DungeonFloor( Floor ):
             "renderer_config" : {
                 "vision_lightmap_width" : 960,
                 "vision_lightmap_height" : 540,
-                "photon_map_width" : 512,
-                "photon_map_height" : 512,
+                "photon_map_width" : 1024,
+                "photon_map_height" : 1024,
                 "static_lightmap_width" : 1024,
                 "static_lightmap_height" : 1024,
-                "dynamic_lightmap_width" : 128,
-                "dynamic_lightmap_height" : 128,
+                "dynamic_lightmap_width" : 512,
+                "dynamic_lightmap_height" : 512,
                 "photon_mapper_config" : {
-                    'stream' : False,
+                    'stream' : True,
                     'photon_radius' :15.0,
                     'photon_emitter_power' : 0.02,
                     'photon_decay' : 0.9,
@@ -80,7 +80,7 @@ class DungeonFloor( Floor ):
         )
 
 
-        self.tilescale = 2
+        self.tilescale = 1
         self.tilemap_width = int(self.width/self.tilescale)
         self.tilemap_height = int(self.height/self.tilescale)
 

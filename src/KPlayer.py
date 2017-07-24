@@ -369,18 +369,18 @@ class KPlayer(Player):
         target = None
 
         self.target_cooldown = self.target_cooldown - 1
-        if((not self.target_consumed) or self.target_cooldown >0.0) and (pad.button_down(BGL.gamepads.buttons.LEFT_STICK)):
+        if((not self.target_consumed) or self.target_cooldown >0.0) and (pad.button_down(BGL.gamepads.buttons.A)):
 
             if(not self.target_consumed):
                 self.target_consumed = True
                 self.target_cooldown = 40.0
-            self.dash_amt = self.dash_amt * 1.3
+            #self.dash_amt = self.dash_amt * 1.3
             local_enemies = list(filter(lambda x: x.should_draw() and x.__class__.__name__ == 'Worm' and x.hp > 0.0, self.floor.objects))
             local_enemies.sort(key = lambda x: hypot(self.p[0]-x.p[0],self.p[1]-x.p[1]))
             if(len(local_enemies)>0):
                 target = local_enemies[0]
 
-        if not(pad.button_down(BGL.gamepads.buttons.LEFT_STICK)):
+        if not(pad.button_down(BGL.gamepads.buttons.A)):
             self.target_consumed = False
 
 
@@ -388,14 +388,17 @@ class KPlayer(Player):
             self.v[0] = self.v[0]*0.8+delta[0]*0.2
             self.v[1] = self.v[1]*0.8+delta[1]*0.2
         else:
-            self.v[0] = target.p[0] - self.p[0]
-            self.v[1] = target.p[1] - self.p[1]
+            dx = target.p[0] - self.p[0]
+            dy = target.p[1] - self.p[1]
+            #self.v[0] = target.p[0] - self.p[0]
+            #self.v[1] = target.p[1] - self.p[1]
             tscl = 15.0
             if(self.backstepping):
                 tscl *= -1
-            l = hypot(self.v[0],self.v[1])
-            self.v[0] = (self.v[0] / l)*tscl
-            self.v[1] = (self.v[1] / l)*tscl
+            l = hypot(dx,dy)
+            if(l<17):
+                self.v[0] = (dx / l)*tscl
+                self.v[1] = (dy / l)*tscl
 
 
         #ndir = ( pad.right_stick[0], pad.right_stick[1] )

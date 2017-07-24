@@ -72,7 +72,7 @@ float noise (in vec2 _st) {
             (d - b) * u.x * u.y;
 }
 
-#define NUM_OCTAVES 4
+#define NUM_OCTAVES 8
 
 float fbm ( in vec2 _st) {
     float v = 0.0;
@@ -100,7 +100,7 @@ vec4 clouds(vec2 _coord) {
 
     float damt = length(coord)*2.1*length(tcol);
 
-    coord*=(1.0+(damt*2));
+    //coord*=(1.0+(damt*2));
 
     float u_time = tick/65.0;
 
@@ -135,7 +135,7 @@ vec4 clouds(vec2 _coord) {
 }
 
 
-vec4 cheap_blur( vec2 p_uv, sampler2D p_buffer, float p_size ) {
+vec4 cheap_blur( sampler2D p_buffer, vec2 p_uv, float p_size ) {
 
     float lmod = 1;
 
@@ -200,136 +200,168 @@ vec4 alphablend( vec4 a, vec4 b) {
 }
 
 
+///vec2 Bubble(vec2 buv, float a, float b) {
+///
+///    vec2 UV = letterbox(buv, b);
+///    vec2 UV2 = letterbox(buv,a);
+///}
+
 void main(void) {
 
-    vec2 UV = letterbox(uv, 0.3);
-    vec2 CUV = (UV-vec2(0.5,0.5))*2;
-    float Length = length(CUV*0.5);
+    vec2 UV = letterbox(uv, 0.2);
+    vec2 UV2 = letterbox(uv,0.23);
 
-    vec4 FloorBase = texture( floor_buffer, UV );
-    vec4 PhotonBase = texture( photon_buffer, UV );
-    vec4 LightBase = texture( light_buffer, UV );
+
+    vec2 CUV = (uv-vec2(0.5,0.5));
+    float LengthA = length(CUV*0.5)*0.2;
+    float LengthB = length(CUV*0.5)*0.3;
+
+    vec2 BubbledUVa= (UV*(1.0-LengthA))+(UV2*LengthA);
+    vec2 BubbledUVb= (UV2*(1.0-LengthB))+(UV*LengthA);
+    vec2 BubbledUVc= (UV*(1.0-LengthA))+(UV2*LengthB);
+    vec2 BubbledUVd= (UV2*(1.0-LengthB))+(UV*LengthB);
+
+    vec4 FloorBase = texture( floor_buffer, BubbledUVa );
+
+    vec4 PhotonBase = texture( photon_buffer, BubbledUVa );
+    vec4 LightBase = texture( light_buffer, BubbledUVa );
     vec4 ObjectBase = texture( object_buffer, UV );
-    vec4 CanopyBase = texture( canopy_buffer, warpUV( UV, 0.8,1.2,0.8,1.2) );
-    vec4 VisionBase = texture( vision_buffer, UV ); 
+    //vec4 CanopyBase = texture( canopy_buffer, BubbledUVb );
+    vec4 CanopyBase = cheap_blur( canopy_buffer, BubbledUVb, 1.0/512. );
 
-    vec4 LitFloor = FloorBase * ( PhotonBase + LightBase ) * VisionBase;
+    //vec4 VisionBase = texture( vision_buffer, UV ); 
+    vec4 VisionBase = cheap_blur( vision_buffer, UV, 0.05 ); 
+
+    vec4 FogLit = clouds(BubbledUVd) * LightBase * PhotonBase;
+    FogLit.a = 0.2;
+
+    vec4 LitFloor = alphablend( FloorBase * ( PhotonBase + LightBase ) * VisionBase, FogLit );
     vec4 PopupMerged = alphablend( LitFloor, ObjectBase ) * VisionBase;
-    vec4 CanopyMerged = alphablend( PopupMerged, CanopyBase );
 
-    gl_FragColor = CanopyMerged;
+    vec4 CanopyLit = CanopyBase * PhotonBase * VisionBase;
+    vec4 CanopyMerged = alphablend( PopupMerged, CanopyLit );
+
+    vec4 CloudLit = clouds(BubbledUVc) * PhotonBase;
+    CloudLit.a = 1.0 - min((VisionBase.r*VisionBase.r)*20.0,1.0);
+
+    gl_FragColor = alphablend( CanopyMerged, CloudLit );
+
+    //gl_FragColor = vec4( Length, Length, Length, 1.0 );
 }
 
-void xxxmain(void) {
 
 
-    vec2 UV = letterbox(uv, 0.3);
-    vec2 CUV = (UV-vec2(0.5,0.5))*2;
 
-    //haxx
-    float from_c = (length(CUV * vec2(1.7,1.0)))*1.2;
-    float parallax_ratio = 0.1*from_c;
-    vec2 PUV = ((UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * from_c ))) + vec2(0.5,0.5);
-
-    vec4 Clouds1 = clouds( warpUV( PUV, 0.8,1.3,0.8,1.3) );
-    vec4 Clouds2 = clouds( warpUV( PUV, 0.8,1.5,0.8,1.5) );
-
-    float Length = length(CUV*0.5);
-
-    Clouds1.a = Length;
-    Clouds2.a = Length*0.5;
-
-    {
-        vec4 VisionTexel = texture( vision_buffer, twist(UV, from_c) );
-        float c1Exposure = 3.0;
-        float c2Exposure = 2.0;
-        vec4 CloudPhoton = (texture( photon_buffer, UV )*c1Exposure);
-        CloudPhoton.a = 1.0;
-        Clouds1 = Clouds1 * CloudPhoton * VisionTexel;
-        vec4 CloudLight =  (texture( light_buffer, UV )*c2Exposure);
-        CloudLight.a = 1.0;
-        Clouds2 = Clouds2 * CloudLight * VisionTexel;
-    }
-
-
-    vec4 BlurredObject;
-    {
-        vec2 BOUV1 = warpUV( PUV, 1.1,0.9,1.1,0.9 );
-        vec2 BOUV2 = warpUV( PUV, 0.9,1.1,0.9,1.1 );
-        BlurredObject = (cheap_blur( BOUV1, object_buffer, 1.0/512 ) + cheap_blur( BOUV2, object_buffer, 1.0/256))/2.0;
-
-        BlurredObject = vec4(1.0,1.0,1.0,2.0) - vec4( BlurredObject.a, BlurredObject.a, BlurredObject.a, 1.0);
-
-    }
-    //vec4 LDebug = vec4(Length,Length,Length,1.0);
-    vec4 FloorMerged;
-    {
-        vec2 FloorUV = warpUV( PUV, 0.8,1.2,0.8,1.2);
-        vec4 FloorBase = texture( floor_buffer, FloorUV );
-
-        vec4 FloorLight = alphablend( texture( light_buffer, FloorUV ), Clouds1 );
-        vec4 FloorPhoton = texture( photon_buffer, FloorUV );
-        vec4 VisionTexel = texture( vision_buffer, twist(FloorUV, from_c) );
-
-        FloorMerged = FloorPhoton;
-
-        float FloorBaseExposure = 75;
-        FloorLight = (FloorLight * FloorPhoton) * FloorBaseExposure;
-
-        float FloorMax = 1;
-        //FloorMerged = smoothstep(0.0, FloorMax, ((FloorBase) * FloorLight)) * VisionTexel * BlurredObject;
-    }
-
-    vec4 PopupMerged;
-    {
-        vec2 PopupUV = warpUV( UV, 0.95,1.05,0.95,1.05 );
-        vec2 LightUV = UV;
-        PopupMerged = texture( object_buffer, PopupUV );
-
-        float PopupLightExposure = 1.2;
-        float PopupAmbientExposure = 0.004;
-
-        vec4 PopupPhoton = texture(reflect_map, PopupUV ) * PopupAmbientExposure;
-
-        PopupMerged.rgb += (PopupPhoton.rgb)*(PopupMerged.a);
-
-        vec4 PopupLight = texture(light_buffer, PopupUV) * PopupLightExposure;
-
-        vec3 lit = PopupMerged.rgb * PopupLight.rgb;
-
-        PopupMerged.rgb = lit;
-        vec4 VisionTexel = texture( vision_buffer, UV );
-        PopupMerged*= VisionTexel;
-    }
-
-
-    vec4 FloorPopupMixed;
-    {
-        /*vec3 FloorPopupBlended = (FloorMerged*(1.0-PopupMerged.a)).rgb+(PopupMerged.rgb*PopupMerged.a);
-
-        FloorPopupMixed.rgb = FloorPopupBlended;
-        FloorPopupMixed.a = 1.0;*/
-        FloorPopupMixed = alphablend( FloorMerged, PopupMerged );
-    }
-
-    vec4 CanopyMerged;
-    {
-        vec2 CanopyUV = warpUV( UV, 0.7,1.5,0.7,1.5);
-        vec4 CanopyBase = texture(canopy_buffer, CanopyUV);
-        vec4 CanopyPhoton = texture(photon_buffer, CanopyUV );
-
-        float CanopyExposure = 1;
-        vec4 CanopyLit = CanopyBase * (CanopyPhoton*CanopyExposure);
-        CanopyMerged = alphablend( FloorPopupMixed, CanopyLit );
-        CanopyMerged = alphablend( CanopyMerged, Clouds2 );
-        vec4 VisionTexel = texture( vision_buffer, CanopyUV );
-        CanopyMerged *= VisionTexel;
-    }
-
-    gl_FragColor = CanopyMerged;
-    //gl_FragColor = CanopyMerged*6;
-    //////////////gl_FragColor = FloorMerged + PopupMerged;
-}
+///////////////void xxxmain(void) {
+///////////////
+///////////////
+///////////////    vec2 UV = letterbox(uv, 0.3);
+///////////////    vec2 CUV = (UV-vec2(0.5,0.5))*2;
+///////////////
+///////////////    //haxx
+///////////////    float from_c = (length(CUV * vec2(1.7,1.0)))*1.2;
+///////////////    float parallax_ratio = 0.1*from_c;
+///////////////    vec2 PUV = ((UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * from_c ))) + vec2(0.5,0.5);
+///////////////
+///////////////    vec4 Clouds1 = clouds( warpUV( PUV, 0.8,1.3,0.8,1.3) );
+///////////////    vec4 Clouds2 = clouds( warpUV( PUV, 0.8,1.5,0.8,1.5) );
+///////////////
+///////////////    float Length = length(CUV*0.5);
+///////////////
+///////////////    Clouds1.a = Length;
+///////////////    Clouds2.a = Length*0.5;
+///////////////
+///////////////    {
+///////////////        vec4 VisionTexel = texture( vision_buffer, twist(UV, from_c) );
+///////////////        float c1Exposure = 3.0;
+///////////////        float c2Exposure = 2.0;
+///////////////        vec4 CloudPhoton = (texture( photon_buffer, UV )*c1Exposure);
+///////////////        CloudPhoton.a = 1.0;
+///////////////        Clouds1 = Clouds1 * CloudPhoton * VisionTexel;
+///////////////        vec4 CloudLight =  (texture( light_buffer, UV )*c2Exposure);
+///////////////        CloudLight.a = 1.0;
+///////////////        Clouds2 = Clouds2 * CloudLight * VisionTexel;
+///////////////    }
+///////////////
+///////////////
+///////////////    vec4 BlurredObject;
+///////////////    {
+///////////////        vec2 BOUV1 = warpUV( PUV, 1.1,0.9,1.1,0.9 );
+///////////////        vec2 BOUV2 = warpUV( PUV, 0.9,1.1,0.9,1.1 );
+///////////////        BlurredObject = (cheap_blur( BOUV1, object_buffer, 1.0/512 ) + cheap_blur( BOUV2, object_buffer, 1.0/256))/2.0;
+///////////////
+///////////////        BlurredObject = vec4(1.0,1.0,1.0,2.0) - vec4( BlurredObject.a, BlurredObject.a, BlurredObject.a, 1.0);
+///////////////
+///////////////    }
+///////////////    //vec4 LDebug = vec4(Length,Length,Length,1.0);
+///////////////    vec4 FloorMerged;
+///////////////    {
+///////////////        vec2 FloorUV = warpUV( PUV, 0.8,1.2,0.8,1.2);
+///////////////        vec4 FloorBase = texture( floor_buffer, FloorUV );
+///////////////
+///////////////        vec4 FloorLight = alphablend( texture( light_buffer, FloorUV ), Clouds1 );
+///////////////        vec4 FloorPhoton = texture( photon_buffer, FloorUV );
+///////////////        vec4 VisionTexel = texture( vision_buffer, twist(FloorUV, from_c) );
+///////////////
+///////////////        FloorMerged = FloorPhoton;
+///////////////
+///////////////        float FloorBaseExposure = 75;
+///////////////        FloorLight = (FloorLight * FloorPhoton) * FloorBaseExposure;
+///////////////
+///////////////        float FloorMax = 1;
+///////////////        //FloorMerged = smoothstep(0.0, FloorMax, ((FloorBase) * FloorLight)) * VisionTexel * BlurredObject;
+///////////////    }
+///////////////
+///////////////    vec4 PopupMerged;
+///////////////    {
+///////////////        vec2 PopupUV = warpUV( UV, 0.95,1.05,0.95,1.05 );
+///////////////        vec2 LightUV = UV;
+///////////////        PopupMerged = texture( object_buffer, PopupUV );
+///////////////
+///////////////        float PopupLightExposure = 1.2;
+///////////////        float PopupAmbientExposure = 0.004;
+///////////////
+///////////////        vec4 PopupPhoton = texture(reflect_map, PopupUV ) * PopupAmbientExposure;
+///////////////
+///////////////        PopupMerged.rgb += (PopupPhoton.rgb)*(PopupMerged.a);
+///////////////
+///////////////        vec4 PopupLight = texture(light_buffer, PopupUV) * PopupLightExposure;
+///////////////
+///////////////        vec3 lit = PopupMerged.rgb * PopupLight.rgb;
+///////////////
+///////////////        PopupMerged.rgb = lit;
+///////////////        vec4 VisionTexel = texture( vision_buffer, UV );
+///////////////        PopupMerged*= VisionTexel;
+///////////////    }
+///////////////
+///////////////
+///////////////    vec4 FloorPopupMixed;
+///////////////    {
+///////////////        /*vec3 FloorPopupBlended = (FloorMerged*(1.0-PopupMerged.a)).rgb+(PopupMerged.rgb*PopupMerged.a);
+///////////////
+///////////////        FloorPopupMixed.rgb = FloorPopupBlended;
+///////////////        FloorPopupMixed.a = 1.0;*/
+///////////////        FloorPopupMixed = alphablend( FloorMerged, PopupMerged );
+///////////////    }
+///////////////
+///////////////    vec4 CanopyMerged;
+///////////////    {
+///////////////        vec2 CanopyUV = warpUV( UV, 0.7,1.5,0.7,1.5);
+///////////////        vec4 CanopyBase = texture(canopy_buffer, CanopyUV);
+///////////////        vec4 CanopyPhoton = texture(photon_buffer, CanopyUV );
+///////////////
+///////////////        float CanopyExposure = 1;
+///////////////        vec4 CanopyLit = CanopyBase * (CanopyPhoton*CanopyExposure);
+///////////////        CanopyMerged = alphablend( FloorPopupMixed, CanopyLit );
+///////////////        CanopyMerged = alphablend( CanopyMerged, Clouds2 );
+///////////////        vec4 VisionTexel = texture( vision_buffer, CanopyUV );
+///////////////        CanopyMerged *= VisionTexel;
+///////////////    }
+///////////////
+///////////////    gl_FragColor = CanopyMerged;
+///////////////    //gl_FragColor = CanopyMerged*6;
+///////////////    //////////////gl_FragColor = FloorMerged + PopupMerged;
+///////////////}
 
 /////////  void oldmain(void) {
 /////////  

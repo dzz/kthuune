@@ -171,7 +171,7 @@ class Worm(Object):
                 self.floor.player.enemy_attack(3)
 
         if (not self.biting):
-            if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 3.0:
+            if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 7.0:
                 if(self.floor.player.sword_swing > 3.0):
                     self.hp -= 1.5
                     self.floor.player.notify_succesful_attack()
