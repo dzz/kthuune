@@ -91,7 +91,8 @@ class KPlayer(Player):
             "sword_released" : True,
             "filtered_speed" : 0.0,
             "buftarget" : "popup",
-            "snapshot_fields" : [ 'p','hp' ]
+            "snapshot_fields" : [ 'p','hp' ],
+            "dir" : [0.0,0.0],
         }
         overrides.update(kwargs)
         Player.__init__(self, **overrides)
@@ -147,11 +148,13 @@ class KPlayer(Player):
         self.filtered_speed = self.speed
         self.attacked = False
         self.dash_flash = False
+        self.dash_combo = False
 
     def customize(self):
         self.hp = 100
         self.dash_amt = 1.0
         self.sword = Sword(player=self)
+        self.pumped_dashcombo = False
     
     def link_floor(self):
         self.floor.create_object( self.sword )
@@ -162,6 +165,7 @@ class KPlayer(Player):
             base_params["rotation_local"] = 0.0
         return base_params
         
+
     def determine_texture(self):
 
         modamt = 1
@@ -193,8 +197,23 @@ class KPlayer(Player):
         self.attacked = True
         self.hp = self.hp - damage
 
-    def tick(self):
+    def is_dashing(self):
+        return self.dash_combo
 
+    def next_dashcombo(self):
+        self.dash_combo = True
+        self.dash_amt = self.dash_amt * 1.1
+        self.pumped_dashcombo = True
+
+    def pump_dashcombo(self):
+        if(self.dash_combo):
+            if not self.pumped_dashcombo:
+                self.dash_amt = self.dash_amt*1.09
+                self.pumped_dashcombo = True
+                self.dash_combo = True
+
+    def tick(self):
+        self.pumped_dashcombo = False
         if(self.hp < 0 ):
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [ 1.0,0.0,0.0,1.0]
@@ -217,11 +236,11 @@ class KPlayer(Player):
         else:
             self.light_color = self.base_light_color
             if self.sword_released:
-                if pad.button_down( BGL.gamepads.buttons.RIGHT_BUMPER ):
+                if pad.button_down( BGL.gamepads.buttons.A ):
                     self.sword_swing = self.sword_swing_cooldown
                     self.sword_released = False
             else:
-                if not pad.button_down(BGL.gamepads.buttons.RIGHT_BUMPER):
+                if not pad.button_down(BGL.gamepads.buttons.A):
                     self.sword_released = True
                     
 
@@ -251,12 +270,18 @@ class KPlayer(Player):
         pad = self.controllers.get_virtualized_pad( self.num )
 
         self.dash_flash = False
-        if(self.dash_amt > 0.3) and pad.button_down(BGL.gamepads.buttons.LEFT_STICK ):
+
+        dashcheck = 0.3
+        if(pad.button_down(BGL.gamepads.buttons.A)):
+            dashcheck = 0.18
+
+        if(self.dash_amt > dashcheck) and self.is_dashing():
             calc_speed = calc_speed + (11.0*self.dash_amt)
             self.dash_amt = self.dash_amt * 0.954
             self.dash_flash = True
         else:
-            if not pad.button_down(BGL.gamepads.buttons.LEFT_STICK):
+            self.dash_combo = False
+            if not pad.button_down(BGL.gamepads.buttons.Y):
                 if(self.dash_amt<1.0):
                     self.dash_amt = self.dash_amt * 1.3
 
@@ -270,8 +295,10 @@ class KPlayer(Player):
         self.v[0] = self.v[0]*0.8+delta[0]*0.2
         self.v[1] = self.v[1]*0.8+delta[1]*0.2
 
-        self.dir = ( pad.right_stick[0], pad.right_stick[1] )
-        self.rad = atan2( self.dir[1], self.dir[0] )
+        #ndir = ( pad.right_stick[0], pad.right_stick[1] )
+        #self.dir = [ (self.dir[0]*0.9) +(ndir[0]*0.1), (self.dir[1]*0.9) + (ndir[1]*0.1) ]
+
+        self.rad = atan2( self.v[1], self.v[0] )
 
         if(self.attacked):
             self.light_color = [ 1.0,0.0,0.0,1.0 ]

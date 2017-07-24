@@ -50,6 +50,16 @@ class AimingBeam(Object):
 
     def tick(self):
         offs = 30
+        self.size[1] = 30 + ur(-1.0,1.0)
+        offsx = cos(self.floor.player.rad) * offs
+        offsy = sin(self.floor.player.rad) * offs
+
+        self.p[0] = self.floor.player.p[0] + offsx
+        self.p[1] = self.floor.player.p[1] + offsy
+        self.rad = self.floor.player.rad
+
+    def _tick(self):
+        offs = 30
 
         pad = self.floor.player.controllers.get_virtualized_pad(self.floor.player.num)
 

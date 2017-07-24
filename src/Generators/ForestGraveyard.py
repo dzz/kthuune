@@ -11,7 +11,7 @@ import random
 
 
 class vconf():
-    visRad = 30
+    visRad = 60
 
 class Splat(Object):
     textures = [
@@ -24,15 +24,20 @@ class Splat(Object):
         self.tick_type = Object.TickTypes.PURGING
         self.cooldown = 40
         self.rad = uniform(-3.14,3.14)
-        self.buftarget = "popup"
-        self.size = [ uniform(0.5,0.7), uniform(0.5,0.7) ]
+        self.buftarget = "floor"
+        self.size = [ uniform(0.3,0.7), uniform(0.3,0.7) ]
         self.spin = uniform(-0.1,0.1)
 
+    def get_shader_params(self):
+        sp = Object.get_shader_params(self)
+        sp["filter_color"] = [1.0,1.0,1.0,float(self.cooldown)/40.]
+        return sp
+
     def tick(self):
-        self.size[0] = self.size[0] * 1.1 
-        self.size[1] = self.size[1] * 1.1 
+        self.size[0] = self.size[0] * 1.2 
+        self.size[1] = self.size[1] * 1.2 
         self.rad = self.rad + self.spin
-        self.cooldown = self.cooldown - uniform(2.0,4.0)
+        self.cooldown = self.cooldown - 2.0
         if(self.cooldown<=0):
             self.floor.objects.remove(self)
             return False
@@ -160,13 +165,15 @@ class Worm(Object):
         if (not self.biting):
             if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 3.0:
                 if(self.floor.player.sword_swing > 3.0):
-                    self.hp -= 0.7
+                    self.hp -= 1.5
+                    self.floor.player.pump_dashcombo()
                     self.v[0] = self.v[0]*-8
                     self.v[1] = self.v[1]*-8
                     self.floor.create_object( Splat( p = self.p ) )
 
         if(self.hp<0.0):
             self.dead = True
+            self.floor.player.next_dashcombo()
 
         return True
     
@@ -437,7 +444,7 @@ class TreeShadow(Object):
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
                     'size' : [ self.scale*tt.size[0],self.scale*tt.size[1]],
                     'rad' : tt.rad,
-                    'z_index' : -120,
+                    'z_index' : 0,
                     'tt' : tt,
                     'buftarget' : 'floor'
                 }
@@ -503,6 +510,7 @@ class ForestGraveyard():
 
         #self.map_edges = self.gen_edges( dungeon_floor )
 
+        self.guider_pts = []
         self.guiders = level_data["all_guiders"]
         self.make_guider_photons(dungeon_floor)
         self.map_edges = level_data["all_lines"]
@@ -628,7 +636,7 @@ class ForestGraveyard():
                 px,py = d*dx,d*dy
                 x,y = edge[0][0]+px,edge[0][1]+py
                 p = [x,y]
-                if(uniform(0.0,1.0)>0.7):
+                if(uniform(0.0,1.0)>0.5):
                     self.tree_pts.append(p)
 
                 tt = TreeTop( p=p, size=[size,size],parralax = uniform(1.1,1.8)) 
@@ -727,30 +735,33 @@ class ForestGraveyard():
     def evaluate_tile(self,rx,ry):
 
 
-        d  = hypot(rx - self.df.player.p[0], ry-self.df.player.p[1])
+        #d  = hypot(rx - self.df.player.p[0], ry-self.df.player.p[1])
 
-        if( d<10):
-            return 1
-        else:
-            return 15
+        #if( d<10):
+        #    return 1
+        #else:
+        #    return 15
 
-        win_d = 0
-        win_range = None 
-        second_range = None
-        for pt in self.vpts:
-            d = hypot(rx-pt[1], ry-pt[2])
-            if win_range is None:
-                win_d = d
-                win_range = pt[0]
-                second_range = win_range
-            else:
-                if( d< win_d):
-                    win_d = d
-                    second_range = win_range
-                    win_range = pt[0]
+        self.vpts.sort( key = lambda x: hypot(rx-x[1],ry-x[2]) )
+        #win_d = 0
+        #win_range = None 
+        #second_range = None
+        #for pt in self.vpts:
+        #    d = hypot(rx-pt[1], ry-pt[2])
+        #    if win_range is None:
+        #        win_d = d
+        #        win_range = pt[0]
+        #        second_range = win_range
+        #    else:
+        #        if( d< win_d):
+        #            win_d = d
+        #            second_range = win_range
+        #            win_range = pt[0]
 
-        
-        return choice( choice([win_range, second_range]) )
+        #
+
+        win_range = self.vpts[0][0]
+        return choice( win_range )
                  
 
     
@@ -761,14 +772,17 @@ class ForestGraveyard():
         self.height = self.df.height
 
         for pt in self.tree_pts:
+            self.vpts.append( ( (1,19) , pt[0], pt[1] ) )
+
+        for pt in self.guider_pts:
             self.vpts.append( ( (1,10) , pt[0], pt[1] ) )
 
 
-        for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
-            self.vpts.append( ( (5,15) , pobj.p[0], pobj.p[1] ) )
+        #for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
+        #    self.vpts.append( ( (5,15) , pobj.p[0], pobj.p[1] ) )
 
-        for pobj in filter( lambda x: "is_shrub" in x.__dict__, self.objects):
-            self.vpts.append( ( (15,19) , pobj.p[0], pobj.p[1] ) )
+        #for pobj in filter( lambda x: "is_shrub" in x.__dict__, self.objects):
+        #    self.vpts.append( ( (15,19) , pobj.p[0], pobj.p[1] ) )
 
 
     def generate_tiledata( self, df ):
@@ -794,8 +808,10 @@ class ForestGraveyard():
                 #######         score = d
                 ####### tile_data[  (y * df.width) + x ]  = self.get_sigil_tiledata(closest_sigil_point["sigil"])
 
-                rx = float((x-(df.tilemap_width/2)*df.tilescale))
-                ry = float((y-(df.tilemap_height/2)*df.tilescale))
+
+                
+                rx = float(((x*df.tilescale)-((df.tilemap_width*df.tilescale)/2)))
+                ry = float(((y*df.tilescale)-((df.tilemap_height*df.tilescale)/2)))
 
                 tval = self.evaluate_tile(rx,ry)
                 #tval = 1
@@ -845,12 +861,15 @@ class ForestGraveyard():
             dy = (guider[1][1]-guider[0][1])/res
 
             for i in range(0,int(res)):
+                if(uniform(0.0,1.0) < 0.3):
+                    continue
                 idx = float(i) / res
                 x = guider[0][0] + (dx*float(i))
                 y = guider[0][1] + (dy*float(i))
 
+                self.guider_pts.append([x,y])
                 color_a = [0.1,0.2,0.3,1.0]
-                color_b = [1.0,1.0,0.0,1.0]
+                color_b = [1.0,0.5,1.0,1.0]
 
                 for i in range(0,3):
                     color_a[i] = color_a[i] + uniform(-0.1,0.1)
