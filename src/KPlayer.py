@@ -42,7 +42,7 @@ class Sword(Object):
         self.buftarget = "popup"
         self.z_index = 2
         self.bob_index = 0.0
-        self.collected = False
+        self.collected = True
 
     def tick(self):
 

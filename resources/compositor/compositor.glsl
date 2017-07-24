@@ -302,8 +302,9 @@ void main(void) {
         CanopyMerged *= VisionTexel;
     }
 
+    //gl_FragColor = alphablend( vec4(1.0,1.0,1.0,1.0), texture( object_buffer, UV ));
     gl_FragColor = CanopyMerged*6;
-    //gl_FragColor = FloorMerged + PopupMerged;
+    //////////////gl_FragColor = FloorMerged + PopupMerged;
 }
 
 /////////  void oldmain(void) {
