@@ -186,6 +186,9 @@ class DungeonFloor( Floor ):
  
         return objs
 
+    def tick(self):
+        Floor.tick(self)
+        self.player.kill_success = False
     def get_occluders(self):
         return self.light_occluders
 

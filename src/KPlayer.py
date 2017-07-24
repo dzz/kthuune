@@ -1,7 +1,7 @@
 from Beagle import API as BGL
 from Newfoundland.Object import Object
 from Newfoundland.Player import Player
-from random import uniform
+from random import uniform,choice
 from math import floor,pi,atan2,sin, hypot
 
 def rad_2_index(rad, segments):
@@ -57,6 +57,8 @@ class Sword(Object):
         bp = Object.get_shader_params(self)
         bp['translation_local'][0] = 1.1
         bp['translation_local'][1] = 0.1
+
+
         return bp
 
 
@@ -87,7 +89,7 @@ class KPlayer(Player):
             "walk_tick" : 0,
             "z_index" : 1,
             "sword_swing" : 0,
-            "sword_swing_cooldown" : 25,
+            "sword_swing_cooldown" : 20,
             "sword_released" : True,
             "filtered_speed" : 0.0,
             "buftarget" : "popup",
@@ -149,6 +151,26 @@ class KPlayer(Player):
         self.attacked = False
         self.dash_flash = False
         self.dash_combo = False
+        self.hud_buffer = BGL.framebuffer.from_dims(320,240)
+        self.combo_count = 0
+        self.can_combo = False
+        self.kill_success = False
+        self.target_consumed = False
+        self.target_cooldown = 0.0
+
+
+    def render_hud(self):
+        with BGL.context.render_target( self.hud_buffer ):
+            BGL.context.clear(0.0,0.0,0.0,0.0)
+            with BGL.blendmode.alpha_over:
+                BGL.lotext.render_text_pixels("HP:{0}".format(self.hp-1), 130,220,[1.0,0.0,0.0] )
+                if(self.combo_count>1):
+                    offsx = choice(range(-3,3))
+                    offsy = choice(range(-2,2))
+                    BGL.lotext.render_text_pixels("COMBO:{0}".format(self.combo_count-1), 130+offsx,90+offsy, [1.0,uniform(0.0,1.0),1.0] )
+
+        with BGL.blendmode.alpha_over:
+            self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
 
     def customize(self):
         self.hp = 100
@@ -166,6 +188,12 @@ class KPlayer(Player):
         base_params = Player.get_shader_params(self)
         if self.hp > 0:
             base_params["rotation_local"] = 0.0
+            if(self.combo_count>3):
+                sl = base_params['scale_local']
+                base_params['scale_local'] = [ sl[0] + uniform(0.1,0.3), sl[1] + uniform(0.1,0.3) ]
+                base_params['scale_local'] = sl
+                base_params['filter_color'] = [ uniform(0.5,1.0),uniform(0.5,1.0),uniform(0.5,1.0),1.0]
+
         return base_params
         
 
@@ -197,23 +225,45 @@ class KPlayer(Player):
             return tex
  
     def enemy_attack(self,damage):
-        self.attacked = True
-        self.hp = self.hp - damage
+        if(self.combo_count <= 2):
+            if(self.sword_swing<5):
+                self.attacked = True
+                self.hp = self.hp - damage
 
     def is_dashing(self):
         return self.dash_combo
 
+    def notify_succesful_attack(self):
+        pass
+
     def next_dashcombo(self):
         self.dash_combo = True
-        self.dash_amt = self.dash_amt * 1.1
+
+        if(self.combo_count<20):
+            self.dash_amt = self.dash_amt * 1.2
         self.pumped_dashcombo = True
+
+        if(self.can_combo):
+            self.combo_count = self.combo_count + 1
+            self.can_combo = False
 
     def pump_dashcombo(self):
         if(self.dash_combo):
+            if(self.can_combo):
+                self.combo_count = self.combo_count + 1
+                self.can_combo = False
             if not self.pumped_dashcombo:
-                self.dash_amt = self.dash_amt*1.09
+                if(self.combo_count<20):
+                    self.dash_amt = self.dash_amt * 1.2
+                else:
+                    self.dash_amt = self.dash_amt*1.05
                 self.pumped_dashcombo = True
                 self.dash_combo = True
+
+
+    def notify_enemy_killed(self):
+        self.kill_success = True
+        pass
 
     def tick(self):
 
@@ -229,14 +279,14 @@ class KPlayer(Player):
             return True
         pad = self.controllers.get_virtualized_pad( self.num )
 
-                 
-
+        
 
         self.backstep_cooldown = self.backstep_cooldown - 1
         if(pad.button_down( BGL.gamepads.buttons.B)) and self.can_backstep:
+            self.can_combo = True
             self.can_backstep = False
             self.backstepping = True
-            self.backstep_cooldown = 20.0
+            self.backstep_cooldown = 40.0
             self.dash_amt = self.dash_amt*1.4
 
         if(self.backstepping):
@@ -258,10 +308,16 @@ class KPlayer(Player):
                 if pad.button_down( BGL.gamepads.buttons.A ):
                     self.sword_swing = self.sword_swing_cooldown
                     self.sword_released = False
+                    self.can_combo = True
             else:
+                if(self.sword_swing_cooldown>5.0):
+                    if pad.button_down( BGL.gamepads.buttons.A ):
+                        self.can_combo = False
+                        self.dash_combo = False
                 if not pad.button_down(BGL.gamepads.buttons.A):
                     self.sword_released = True
                     
+
 
         if(abs(pad.left_stick[0])>0.003) or (abs(pad.left_stick[1])>0.003):
             self.walk_tick = self.walk_tick+1
@@ -301,22 +357,46 @@ class KPlayer(Player):
             self.dash_flash = True
         else:
             self.dash_combo = False
-            if not pad.button_down(BGL.gamepads.buttons.Y):
-                if(self.dash_amt<1.0):
-                    self.dash_amt = self.dash_amt * 1.3
+            if(self.dash_amt<1.0):
+                self.dash_amt = self.dash_amt * 1.3
 
-        calc_speed = min(calc_speed,7.0)
+        calc_speed = min(calc_speed,12.0)
         
-
-
         if(self.backstepping):
-            calc_speed = calc_speed * - (1.3+(self.backstep_cooldown/20.0)*0.3)
+            calc_speed = calc_speed * - (1.2+(self.backstep_cooldown/40.0)*0.2)
         delta = [(pad.left_stick[0])*calc_speed,(pad.left_stick[1])*calc_speed]
 
+        target = None
+
+        self.target_cooldown = self.target_cooldown - 1
+        if((not self.target_consumed) or self.target_cooldown >0.0) and (pad.button_down(BGL.gamepads.buttons.LEFT_STICK)):
+
+            if(not self.target_consumed):
+                self.target_consumed = True
+                self.target_cooldown = 40.0
+            self.dash_amt = self.dash_amt * 1.3
+            local_enemies = list(filter(lambda x: x.should_draw() and x.__class__.__name__ == 'Worm' and x.hp > 0.0, self.floor.objects))
+            local_enemies.sort(key = lambda x: hypot(self.p[0]-x.p[0],self.p[1]-x.p[1]))
+            if(len(local_enemies)>0):
+                target = local_enemies[0]
+
+        if not(pad.button_down(BGL.gamepads.buttons.LEFT_STICK)):
+            self.target_consumed = False
 
 
-        self.v[0] = self.v[0]*0.8+delta[0]*0.2
-        self.v[1] = self.v[1]*0.8+delta[1]*0.2
+        if not target:
+            self.v[0] = self.v[0]*0.8+delta[0]*0.2
+            self.v[1] = self.v[1]*0.8+delta[1]*0.2
+        else:
+            self.v[0] = target.p[0] - self.p[0]
+            self.v[1] = target.p[1] - self.p[1]
+            tscl = 15.0
+            if(self.backstepping):
+                tscl *= -1
+            l = hypot(self.v[0],self.v[1])
+            self.v[0] = (self.v[0] / l)*tscl
+            self.v[1] = (self.v[1] / l)*tscl
+
 
         #ndir = ( pad.right_stick[0], pad.right_stick[1] )
         #self.dir = [ (self.dir[0]*0.9) +(ndir[0]*0.1), (self.dir[1]*0.9) + (ndir[1]*0.1) ]
@@ -346,4 +426,6 @@ class KPlayer(Player):
                 self.light_color= [rc,rc,rc,1.0]
     
 
+        if not self.dash_combo:
+            self.combo_count = 0
         ##########

@@ -81,7 +81,12 @@ class Worm(Object):
             rad = uniform(-3.14,3.14)
             speed = uniform(0.2,1.3)
             self.attacking = False
-        self.worm_target = [ cos(rad)*speed, -1*sin(rad)*speed ]
+
+        if(uniform(0.0,1.0)>0.06):
+            self.worm_target = [ cos(rad)*speed, -1*sin(rad)*speed ]
+        else:
+            self.worm_target = [ cos(-1*rad)*speed, -1*sin(-1*rad)*speed ]
+
         self.next_choice = 2
 
     def should_draw(self):
@@ -94,6 +99,9 @@ class Worm(Object):
         return True
 
     def tick(self):
+
+        if(self.floor.player.kill_success):
+            return True
 
         if(self.dead):
             self.color = [0.0,0.0,0.0,1.0]
@@ -166,6 +174,7 @@ class Worm(Object):
             if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 3.0:
                 if(self.floor.player.sword_swing > 3.0):
                     self.hp -= 1.5
+                    self.floor.player.notify_succesful_attack()
                     self.floor.player.next_dashcombo()
                     self.v[0] = self.v[0]*-8
                     self.v[1] = self.v[1]*-8
@@ -173,6 +182,7 @@ class Worm(Object):
 
         if(self.hp<0.0):
             self.floor.player.pump_dashcombo()
+            self.floor.player.notify_enemy_killed()
             self.dead = True
 
         return True
@@ -190,7 +200,7 @@ class WormField(Object):
         self.worms = []
 
     def tick(self):
-        if(len(self.worms)<20):
+        if(len(self.worms)<13):
             worm = Worm( p = [self.p[0],self.p[1] ] )
             self.worms.append(worm)
             self.floor.create_object(worm)
@@ -452,7 +462,7 @@ class TreeShadow(Object):
             Object.__init__(self,**overrides)
             self.t = 0
             self.base_size = [ self.size[0], self.size[1] ]
-            self.draw_color = [0.8,uniform(0.0,1.0),0.8,uniform(0.01,0.1)]
+            self.draw_color = [0.8,uniform(0.0,1.0),0.8,0.3]
             self.wind_speed = tt.wind_speed
             self.wind_mod = tt.wind_mod
 
@@ -856,7 +866,7 @@ class ForestGraveyard():
         photon_emitters = []
         for guider in self.guiders:
 
-            res = 8.
+            res = 12.
             dx = (guider[1][0]-guider[0][0])/res
             dy = (guider[1][1]-guider[0][1])/res
 
@@ -868,13 +878,14 @@ class ForestGraveyard():
                 y = guider[0][1] + (dy*float(i))
 
                 self.guider_pts.append([x,y])
-                color_a = [0.1,0.2,0.3,1.0]
-                color_b = [1.0,0.5,1.0,1.0]
+                color_a = [1.0,1.0,0.0,0.3]
+                color_b = [0.0,0.0,1.0,1.0]
 
                 for i in range(0,3):
                     color_a[i] = color_a[i] + uniform(-0.1,0.1)
                     color_b[i] = color_b[i] + uniform(-0.1,0.1)
 
+                idx = idx + uniform(-0.1,0.1)
                 color = [ 
                     (idx*color_a[0]) + ((1.0-idx)*color_b[0]),
                     (idx*color_a[1]) + ((1.0-idx)*color_b[1]),

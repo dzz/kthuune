@@ -33,6 +33,7 @@ class Game( BaseGame ):
 
     def render(self):
         self.floor.render()
+        self.player.render_hud()
 
     def tick(self):
         BaseGame.tick(self)
