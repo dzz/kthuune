@@ -9,6 +9,12 @@ from .SVGLoader import get_level_data
 from math import floor
 import random
 
+class Sword(Object):
+    STATE_IDLE = 0
+    STATE_CHARGING = 1
+    STATE_ATTACK_PENDING = 2
+    STATE_DISCHARGING = 3
+    STATE_AWAITING_RELEASE = 4
 
 class vconf():
     visRad = 60
@@ -65,7 +71,7 @@ class Worm(Object):
         self.buftarget = "popup"
         self.size = [1.2,1.2]
         self.attacking = False
-        self.z_index = 5
+        self.z_index = 1
         self.biting = False
         
     def pick_target(self):
@@ -172,7 +178,7 @@ class Worm(Object):
 
         if (not self.biting):
             if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 7.0:
-                if(self.floor.player.sword_swing > 3.0):
+                if(self.floor.player.sword.state == Sword.STATE_DISCHARGING):
                     self.hp -= 1.5
                     self.floor.player.notify_succesful_attack()
                     self.floor.player.next_dashcombo()

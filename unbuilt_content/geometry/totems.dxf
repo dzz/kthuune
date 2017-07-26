@@ -91,7 +91,7 @@ STANDARD
   9
 $CLAYER
   8
-sword_start
+wormfields
   9
 $CELTYPE
   6
@@ -1115,9 +1115,9 @@ AcDbViewportTableRecord
  21
 1
  12
-1132.920633594043
+1199.563023805459
  22
-536.0366169178978
+528.7928788514402
  13
 0
  23
@@ -1143,7 +1143,7 @@ AcDbViewportTableRecord
  37
 0
  40
-2430.998495103331
+2430.998495103333
  41
 1.703218116805721
  42
@@ -4382,6 +4382,94 @@ AcDbCircle
 -500
  40
 100
+  0
+CIRCLE
+  5
+96
+100
+AcDbEntity
+  8
+wormfields
+  6
+ByLayer
+ 62
+  256
+370
+   -1
+100
+AcDbCircle
+ 10
+-400
+ 20
+400
+ 40
+141.4213562373095
+  0
+CIRCLE
+  5
+97
+100
+AcDbEntity
+  8
+wormfields
+  6
+ByLayer
+ 62
+  256
+370
+   -1
+100
+AcDbCircle
+ 10
+400
+ 20
+400
+ 40
+141.4213562373095
+  0
+CIRCLE
+  5
+98
+100
+AcDbEntity
+  8
+wormfields
+  6
+ByLayer
+ 62
+  256
+370
+   -1
+100
+AcDbCircle
+ 10
+-550
+ 20
+-200
+ 40
+89.44271909999159
+  0
+CIRCLE
+  5
+99
+100
+AcDbEntity
+  8
+wormfields
+  6
+ByLayer
+ 62
+  256
+370
+   -1
+100
+AcDbCircle
+ 10
+550
+ 20
+-200
+ 40
+86.02325267042627
   0
 ENDSEC
   0

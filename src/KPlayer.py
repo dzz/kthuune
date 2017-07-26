@@ -12,6 +12,16 @@ def rad_2_index(rad, segments):
     return int(segment)
 
 class Sword(Object):
+    STATE_IDLE = 0
+    STATE_CHARGING = 1
+    STATE_ATTACK_PENDING = 2
+    STATE_DISCHARGING = 3
+    STATE_AWAITING_RELEASE = 4
+
+    max_charge = 40
+    max_pending = 60
+    max_discharge = 10
+
     def __init__(self,**kwargs):
         Object.__init__(self,**kwargs)
 
@@ -19,11 +29,52 @@ class Sword(Object):
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.texture = BGL.assets.get('KT-player/texture/sword')
         self.buftarget = "popup"
-        self.z_index = 2
+        self.z_index = 1
         self.bob_index = 0.0
         self.collected = True
+        self.state = Sword.STATE_IDLE
+        self.stimer = 0.0
+        self.discharge_mod = 1.0
+
+
 
     def tick(self):
+
+        pad = self.player.controllers.get_virtualized_pad( self.player.num )
+        btns = BGL.gamepads.buttons
+
+        self.stimer = self.stimer + 1
+        if self.state == Sword.STATE_IDLE:
+            self.stimer = 0
+            if pad.button_down( btns.A ):
+                self.state = Sword.STATE_CHARGING
+                self.stimer = 0
+
+        if self.state == Sword.STATE_CHARGING:
+            self.discharge_mod = self.discharge_mod * 1.02
+            if not pad.button_down( btns.A ):
+                self.state = Sword.STATE_DISCHARGING
+                self.stimer = 0
+            if self.stimer >= Sword.max_charge:
+                self.state = Sword.STATE_ATTACK_PENDING
+                self.stimer = 0
+
+        if self.state == Sword.STATE_ATTACK_PENDING:
+            if self.stimer >= Sword.max_pending or (not pad.button_down(btns.A)):
+                self.stimer = 0
+                self.state = Sword.STATE_DISCHARGING
+
+        if self.state == Sword.STATE_DISCHARGING:
+            if self.stimer >= (Sword.max_discharge * self.discharge_mod):
+                self.stimer = 0
+                self.state = Sword.STATE_AWAITING_RELEASE
+
+        if self.state == Sword.STATE_AWAITING_RELEASE:
+            self.discharge_mod = 1.0
+            if not pad.button_down( btns.A):
+                self.state = Sword.STATE_IDLE
+            
+        print(self.state, self.stimer)
 
         if not self.collected:
             if hypot( self.p[0]-self.player.p[0],self.p[1]-self.player.p[1]) < 1.5:
@@ -32,26 +83,29 @@ class Sword(Object):
 
         self.bob_index = self.bob_index + 0.04
         self.p[0] = self.player.p[0]
-        self.p[1] = self.player.p[1]
+        self.p[1] = self.player.p[1]+0.001
 
-        if(self.player.sword_swing>0.0):
+        self.size = [1.0,1.0]
 
-            self.size = [1.1,1.1]
-            ramt = self.player.sword_swing / self.player.sword_swing_cooldown
-
-            ramt = ramt*ramt
-            ramt = 1.0 - ramt
-            self.rad = self.player.rad-(2.8)+(1.8*-4*ramt)
-
-            self.size[0] = self.size[0] + (ramt*0.3)
-        else:
-            self.size = [1.0,1.0]
+        if self.state == Sword.STATE_IDLE or self.state == Sword.STATE_AWAITING_RELEASE:
             bob = sin(self.bob_index)
-            if(self.player.rad > 0.0): self.rad = (-2.9-3.14) + (self.player.rad*0.1*bob)
-            if(self.player.rad < 0.0): self.rad = (2.7) - (self.player.rad*0.1*bob)
+            if(self.player.rad >= 0.0): self.rad = (-2.9-3.14) + (0.1*bob)
+            if(self.player.rad < 0.0): self.rad = (2.7) - (0.1*bob)
+            if(self.player.rad > 0.0): self.z_index = 1
+            if(self.player.rad < 0.0): self.z_index = 0
 
-        if(self.player.rad > 0.0): self.z_index = 2
-        if(self.player.rad < 0.0): self.z_index = 0
+        if self.state == Sword.STATE_CHARGING:
+            nchrg = self.stimer / self.max_charge
+            self.rad = -(4.2)+(4.2*(nchrg*nchrg*nchrg))
+
+        if self.state == Sword.STATE_ATTACK_PENDING:
+            self.rad = 3.14+1.07 + uniform(-0.2,0.2)
+            self.z_index = 2
+            self.size = [1.5,1.5]
+
+        if self.state == Sword.STATE_DISCHARGING:
+            self.rad = self.player.rad
+            self.size = [1.7,1.0]
 
     def get_shader_params(self):
         bp = Object.get_shader_params(self)
@@ -316,8 +370,11 @@ class KPlayer(Player):
                         self.dash_combo = False
                 if not pad.button_down(BGL.gamepads.buttons.A):
                     self.sword_released = True
-                    
+        
+        ### new sword charge mode            
 
+
+        ###
 
         if(abs(pad.left_stick[0])>0.003) or (abs(pad.left_stick[1])>0.003):
             self.walk_tick = self.walk_tick+1
@@ -330,8 +387,17 @@ class KPlayer(Player):
 
         calc_speed = self.speed
 
-        if(self.sword_swing>0):
-            calc_speed = self.speed * 0.28
+        self.dash_flash = False
+        if(self.sword.state == Sword.STATE_CHARGING):
+            calc_speed = self.speed * 0.1
+
+        if(self.sword.state == Sword.STATE_DISCHARGING):
+            self.dash_flash = True
+            calc_speed = self.speed * 9.0
+
+        if(self.sword.state == Sword.STATE_ATTACK_PENDING):
+            self.dash_flash = True
+            calc_speed = self.speed * 0.001
 
         if(self.aiming_beam.aiming):
             calc_speed = calc_speed * 0.5
@@ -344,44 +410,44 @@ class KPlayer(Player):
 
         pad = self.controllers.get_virtualized_pad( self.num )
 
-        self.dash_flash = False
+        #self.dash_flash = False
 
-        dashcheck = 0.3
-        if(pad.button_down(BGL.gamepads.buttons.A)):
-            dashcheck = 0.18
+        #dashcheck = 0.3
+        #if(pad.button_down(BGL.gamepads.buttons.A)):
+        #    dashcheck = 0.18
 
-        if(self.dash_amt > dashcheck) and self.is_dashing():
-            calc_speed = calc_speed + (11.0*self.dash_amt)
+        #if(self.dash_amt > dashcheck) and self.is_dashing():
+        #    calc_speed = calc_speed + (11.0*self.dash_amt)
 
-            self.dash_amt = self.dash_amt * 0.954
-            self.dash_flash = True
-        else:
-            self.dash_combo = False
-            if(self.dash_amt<1.0):
-                self.dash_amt = self.dash_amt * 1.3
+        #    self.dash_amt = self.dash_amt * 0.954
+        #    self.dash_flash = True
+        #else:
+        #    self.dash_combo = False
+        #    if(self.dash_amt<1.0):
+        #        self.dash_amt = self.dash_amt * 1.3
 
-        calc_speed = min(calc_speed,12.0)
-        
+        #calc_speed = min(calc_speed,12.0)
+        #
         if(self.backstepping):
             calc_speed = calc_speed * - (1.2+(self.backstep_cooldown/40.0)*0.2)
         delta = [(pad.left_stick[0])*calc_speed,(pad.left_stick[1])*calc_speed]
 
         target = None
 
-        self.target_cooldown = self.target_cooldown - 1
-        if((not self.target_consumed) or self.target_cooldown >0.0) and (pad.button_down(BGL.gamepads.buttons.A)):
+        ##### self.target_cooldown = self.target_cooldown - 1
+        ##### if((not self.target_consumed) or self.target_cooldown >0.0) and (pad.button_down(BGL.gamepads.buttons.A)):
 
-            if(not self.target_consumed):
-                self.target_consumed = True
-                self.target_cooldown = 40.0
-            #self.dash_amt = self.dash_amt * 1.3
-            local_enemies = list(filter(lambda x: x.should_draw() and x.__class__.__name__ == 'Worm' and x.hp > 0.0, self.floor.objects))
-            local_enemies.sort(key = lambda x: hypot(self.p[0]-x.p[0],self.p[1]-x.p[1]))
-            if(len(local_enemies)>0):
-                target = local_enemies[0]
+        #####     if(not self.target_consumed):
+        #####         self.target_consumed = True
+        #####         self.target_cooldown = 40.0
+        #####     #self.dash_amt = self.dash_amt * 1.3
+        #####     local_enemies = list(filter(lambda x: x.should_draw() and x.__class__.__name__ == 'Worm' and x.hp > 0.0, self.floor.objects))
+        #####     local_enemies.sort(key = lambda x: hypot(self.p[0]-x.p[0],self.p[1]-x.p[1]))
+        #####     if(len(local_enemies)>0):
+        #####         target = local_enemies[0]
 
-        if not(pad.button_down(BGL.gamepads.buttons.A)):
-            self.target_consumed = False
+        ##### if not(pad.button_down(BGL.gamepads.buttons.A)):
+        #####     self.target_consumed = False
 
 
         if not target:
@@ -407,6 +473,8 @@ class KPlayer(Player):
         if(self.backstep_cooldown < -5.0 ):
             self.rad = atan2( self.v[1], self.v[0] )
 
+
+
         if(self.attacked):
             self.light_color = [ 1.0,0.0,0.0,1.0 ]
             self.light_radius = uniform(0.0,200.0)
@@ -428,6 +496,17 @@ class KPlayer(Player):
                 rc = uniform(0.0,1.0)
                 self.light_color= [rc,rc,rc,1.0]
     
+        if(self.sword.state == Sword.STATE_CHARGING):
+            self.light_color = [ 1.0,1.0,1.0,1.0 ]
+            self.light_radius = uniform(0.0,100.0)
+
+        if(self.sword.state == Sword.STATE_ATTACK_PENDING):
+            self.light_color = [ uniform(0.0,1.0),uniform(0.0,1.0),0.0,1.0 ]
+            self.light_radius = uniform(1.0,250.0)
+
+        if(self.sword.state == Sword.STATE_DISCHARGING):
+            self.light_color = [ 0.0,uniform(0.0,1.0),uniform(0.0,1.0),1.0]
+            self.light_radius = uniform(40.0,50.0)
 
         if not self.dash_combo:
             self.combo_count = 0
