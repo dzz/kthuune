@@ -218,6 +218,19 @@ class Elder(Object):
         self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
         self.z_index = 1
 
+class Totem(Object):
+    texture = BGL.assets.get('KT-forest/texture/totem')
+
+    def customize(self):
+        self.texture = Totem.texture
+        self.buftarget = "popup"
+
+        self.size =  [ 4.0, 4.0 ]
+        self.light_type = Object.LightTypes.STATIC_SHADOWCASTER
+        self.light_color =  [ 1.0,0.0,1.0,1.0]
+        self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
+        self.z_index = 1
+
 class Shrub(Object):
         textures = [
             BGL.assets.get('KT-forest/texture/shrub0000'),
@@ -516,7 +529,8 @@ class ForestGraveyard():
         self.light_occluders = []
 
 
-        level_data = get_level_data(BGL.assets.get("KT-forest/textfile/chamber1"), dungeon_floor.width, dungeon_floor.height )
+        level_data = get_level_data(BGL.assets.get("KT-forest/textfile/totems"), dungeon_floor.width, dungeon_floor.height )
+
 
         #self.map_edges = self.gen_edges( dungeon_floor )
 
@@ -536,6 +550,9 @@ class ForestGraveyard():
 
         for wormfield in level_data["wormfields"]:
             self.objects.append( WormField( wf_spec=wormfield ) )
+
+        for totem in level_data["totems"]:
+            self.objects.append( Totem( p = totem ) )
 
         self.objects.append( elder )
         self.light_occluders = []
