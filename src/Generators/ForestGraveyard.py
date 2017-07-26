@@ -15,6 +15,7 @@ class Sword(Object):
     STATE_ATTACK_PENDING = 2
     STATE_DISCHARGING = 3
     STATE_AWAITING_RELEASE = 4
+    STATE_SPIN_ATTACK = 5
 
 class vconf():
     visRad = 60
@@ -178,7 +179,7 @@ class Worm(Object):
 
         if (not self.biting):
             if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 7.0:
-                if(self.floor.player.sword.state == Sword.STATE_DISCHARGING):
+                if(self.floor.player.sword.state == Sword.STATE_DISCHARGING) or (self.floor.player.sword.state == Sword.STATE_SPIN_ATTACK):
                     self.hp -= 1.5
                     self.floor.player.notify_succesful_attack()
                     self.floor.player.next_dashcombo()
@@ -190,6 +191,7 @@ class Worm(Object):
             self.floor.player.pump_dashcombo()
             self.floor.player.notify_enemy_killed()
             self.dead = True
+            self.floor.objects.remove(self)
 
         return True
     

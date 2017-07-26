@@ -17,10 +17,13 @@ class Sword(Object):
     STATE_ATTACK_PENDING = 2
     STATE_DISCHARGING = 3
     STATE_AWAITING_RELEASE = 4
+    STATE_SPIN_ATTACK = 5
 
     max_charge = 40
     max_pending = 60
     max_discharge = 10
+    spin_attack_threshold = 15
+    max_spin_attack = 15
 
     def __init__(self,**kwargs):
         Object.__init__(self,**kwargs)
@@ -53,8 +56,12 @@ class Sword(Object):
         if self.state == Sword.STATE_CHARGING:
             self.discharge_mod = self.discharge_mod * 1.02
             if not pad.button_down( btns.A ):
-                self.state = Sword.STATE_DISCHARGING
-                self.stimer = 0
+                if(self.stimer > Sword.spin_attack_threshold):
+                    self.state = Sword.STATE_DISCHARGING
+                    self.stimer = 0
+                else:
+                    self.state = Sword.STATE_SPIN_ATTACK
+                    self.stimer = 0
             if self.stimer >= Sword.max_charge:
                 self.state = Sword.STATE_ATTACK_PENDING
                 self.stimer = 0
@@ -73,6 +80,10 @@ class Sword(Object):
             self.discharge_mod = 1.0
             if not pad.button_down( btns.A):
                 self.state = Sword.STATE_IDLE
+
+        if self.state == Sword.STATE_SPIN_ATTACK:
+            if(self.stimer > Sword.max_spin_attack):
+                self.state = Sword.STATE_AWAITING_RELEASE
             
         print(self.state, self.stimer)
 
@@ -93,6 +104,10 @@ class Sword(Object):
             if(self.player.rad < 0.0): self.rad = (2.7) - (0.1*bob)
             if(self.player.rad > 0.0): self.z_index = 1
             if(self.player.rad < 0.0): self.z_index = 0
+
+        if self.state == Sword.STATE_SPIN_ATTACK:
+            nchrg = self.stimer / self.max_spin_attack
+            self.rad = (-4.2) + (6.28*nchrg)
 
         if self.state == Sword.STATE_CHARGING:
             nchrg = self.stimer / self.max_charge
