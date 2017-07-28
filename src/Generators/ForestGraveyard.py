@@ -20,6 +20,58 @@ class Sword(Object):
 class vconf():
     visRad = 60
 
+class Skeline(Object):
+    textures = [
+        BGL.assets.get("KT-forest/texture/skeline0000"),
+        BGL.assets.get("KT-forest/texture/skeline0001"),
+        BGL.assets.get("KT-forest/texture/skeline0002"),
+        BGL.assets.get("KT-forest/texture/skeline0003"),
+    ] 
+    def customize(self):
+        self.tick_type = Object.TickTypes.PURGING
+        self.visible = True
+        self.z_index = 1
+        self.buftarget = "popup"
+        self.texture = Skeline.textures[0]
+        self.widx = int(uniform(0.0,40.0))
+        self.size = [ 2.5, 2.5 ]
+
+    def tick(self):
+        self.widx = (self.widx + 1) % 40
+        self.wfr = floor(self.widx/20)
+        self.texture = Skeline.textures[self.wfr]
+        return True
+    
+class Flare(Object):
+    texture = BGL.assets.get('NL-lights/texture/flare')
+    def customize(self):
+        self.tick_type = Object.TickTypes.PURGING
+        self.texture = Flare.texture
+        self.size = [0.1,0.1]
+        self.ttl = 90
+        self.rp = uniform(-0.1,0.1)
+        self.xp = uniform(1.01,1.08)
+        self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
+        self.visible = False
+        self.buftarget = "floor"
+        self.z_index = 100
+
+    def tick(self):
+        #self.light_color[3] = self.light_color[3] * uniform(0.7,0.9)
+        #self.color[3] = self.color[3] * uniform(0.7,0.9)
+        self.rad = self.rad + self.rp
+        self.light_radius = uniform(10.0,80.0)
+
+        self.size[0] = self.size[0]*self.xp
+        self.size[1] = self.size[1]*self.xp
+        self.ttl = self.ttl - 1
+        if(self.ttl<0):
+            self.floor.objects.remove(self)
+            return False
+
+        return True
+
+
 class Splat(Object):
     textures = [
         BGL.assets.get('KT-forest/texture/splat0000'),
@@ -61,7 +113,7 @@ class Worm(Object):
         BGL.assets.get("KT-forest/texture/worm0003"),
     ] 
     def customize(self):
-        self.hp = 10 + choice(range(0,3))
+        self.hp = 20 + choice(range(0,3))
         self.dead = False
         self.tick_type = Object.TickTypes.PURGING
         self.fridx = choice(range(0,480))
@@ -192,6 +244,9 @@ class Worm(Object):
             self.floor.player.notify_enemy_killed()
             self.dead = True
             self.floor.objects.remove(self)
+
+            for fi in range(0,3):
+                self.floor.create_object( Flare( p = [ self.p[0], self.p[1] ] ) )
 
         return True
     
@@ -561,6 +616,9 @@ class ForestGraveyard():
 
         for totem in level_data["totems"]:
             self.objects.append( Totem( p = totem ) )
+
+        for skeline in level_data["skelines"]:
+            self.objects.append( Skeline( p = skeline ) )
 
         self.objects.append( elder )
         self.light_occluders = []

@@ -15,6 +15,8 @@ def get_level_data(data, width, height ):
     sstart = []
     wormfields = []
     totems = []
+    skelines = []
+        
     for layer in root.findall('./*'):
         layername = layer.attrib[propkey('layername')]
         print(layername)
@@ -44,6 +46,12 @@ def get_level_data(data, width, height ):
             for circle in layer.findall('./*'):
                 tpos = [ float(circle.attrib['cx']), float(circle.attrib['cy']) ]
                 totems.append(tpos)
+
+        if(layername == "skelines"):
+            print("FINDING SKELINE")
+            for circle in layer.findall('./*'):
+                tpos = [ float(circle.attrib['cx']), float(circle.attrib['cy']) ]
+                skelines.append(tpos)
 
         if(layername == "full_occluders"):
             print("PARSING OCCLUDERS")
@@ -96,9 +104,12 @@ def get_level_data(data, width, height ):
         totem[0] = (totem[0] * nfact_x) - (width/2)
         totem[1] = (totem[1] * nfact_y) - (height/2)
 
+    for skeline in skelines:
+        skeline[0] = (skeline[0] * nfact_x) - (width/2)
+        skeline[1] = (skeline[1] * nfact_y) - (height/2)
 
     for wf in wormfields:
         wf[0] = (wf[0] * nfact_x) - (width/2)
         wf[1] = (wf[1] * nfact_y) - (height/2)
         wf[2] = wf[2] * (0.5*(nfact_x+nfact_y))
-    return { "totems" : totems, "all_guiders" : all_guiders, "all_lines" : all_lines, "player_start" : pstart, "elder_start" : estart, "sword_start" : sstart, "wormfields" : wormfields }
+    return { "skelines" : skelines, "totems" : totems, "all_guiders" : all_guiders, "all_lines" : all_lines, "player_start" : pstart, "elder_start" : estart, "sword_start" : sstart, "wormfields" : wormfields }

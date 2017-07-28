@@ -49,7 +49,8 @@
             { "name" : "knight_sword0015", "filename" : "{package_path}/knight_sword0015.png", "filtered" : false },
             { "name" : "knight_sword0016", "filename" : "{package_path}/knight_sword0016.png", "filtered" : false },
             { "name" : "knight_sword0017", "filename" : "{package_path}/knight_sword0017.png", "filtered" : false },
-            { "name" : "sword", "filename" : "{package_path}/sword.png", "filtered" : false }
+            { "name" : "sword", "filename" : "{package_path}/sword.png", "filtered" : false },
+            { "name" : "flare", "filename" : "{package_path}/flare0000.png", "filtered" : false }
         ]
     }
 }

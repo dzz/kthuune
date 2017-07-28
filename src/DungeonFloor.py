@@ -51,8 +51,8 @@ class DungeonFloor( Floor ):
                 "dynamic_lightmap_height" : 512,
                 "photon_mapper_config" : {
                     'stream' : True,
-                    'photon_radius' :15.0,
-                    'photon_emitter_power' : 0.02,
+                    'photon_radius' :25.0,
+                    'photon_emitter_power' : 0.005,
                     'photon_decay' : 0.9,
                     'photon_decay_jitter' : 0.4,
                     'photon_max_bounces' : 9,

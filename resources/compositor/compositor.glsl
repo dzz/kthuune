@@ -224,8 +224,12 @@ void main(void) {
     vec4 FloorBase = texture( floor_buffer, BubbledUVa );
 
     vec4 PhotonBase = texture( photon_buffer, BubbledUVa );
+    PhotonBase = PhotonBase*PhotonBase;
+
     vec4 LightBase = texture( light_buffer, BubbledUVa );
-    vec4 ObjectBase = texture( object_buffer, UV );
+    //LightBase = LightBase * LightBase;
+
+    vec4 ObjectBase = texture( object_buffer, UV ) * ( (LightBase*0.5) + PhotonBase );
     //vec4 CanopyBase = texture( canopy_buffer, BubbledUVb );
     vec4 CanopyBase = cheap_blur( canopy_buffer, BubbledUVb, 1.0/512. );
 
