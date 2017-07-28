@@ -21,6 +21,12 @@ class vconf():
     visRad = 60
 
 class Skeline(Object):
+
+    STATE_SEEKING_RANDOM = 0
+    STATE_SEEKING_PLAYER = 1
+    STATE_CHARGING_SHOT = 2
+    STATE_FIRING_SHOT = 3
+
     textures = [
         BGL.assets.get("KT-forest/texture/skeline0000"),
         BGL.assets.get("KT-forest/texture/skeline0001"),
@@ -35,12 +41,79 @@ class Skeline(Object):
         self.texture = Skeline.textures[0]
         self.widx = int(uniform(0.0,40.0))
         self.size = [ 2.5, 2.5 ]
+        self.physics = { "radius" : 0.35, "mass"   : 0.0005, "friction" : 0.0 }
+        #self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
+        self.state = Skeline.STATE_SEEKING_PLAYER
+        self.stimer = 0
+        self.rvx = None
+        self.speed = 3.0
+        self.invert_seek = False
+        self.flip_pxy = False
 
     def tick(self):
         self.widx = (self.widx + 1) % 40
         self.wfr = floor(self.widx/20)
         self.texture = Skeline.textures[self.wfr]
+        self.light_type = Object.LightTypes.NONE
+        self.stimer = self.stimer + 1
+
+        if self.invert_seek:
+            calc_speed = self.speed * -0.4
+        else:
+            calc_speed = self.speed * 1.2
+
+        if self.state == Skeline.STATE_SEEKING_PLAYER:
+            self.rvx = None
+            if self.flip_pxy:
+                y = self.floor.player.p[0] - self.p[0]
+                x = self.floor.player.p[1] - self.p[1]
+            else:
+                x = self.floor.player.p[0] - self.p[0]
+                y = self.floor.player.p[1] - self.p[1]
+    
+            rad = atan2(y,x)
+            vx = cos(rad) * calc_speed
+            vy = sin(rad) * calc_speed
+            self.v = [ vx,vy]
+
+            if(self.stimer > 40 ):
+                self.stimer = 0
+                self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
+                self.invert_seek = choice( [ True, False ] )
+                if( self.state == Skeline.STATE_SEEKING_RANDOM ):
+                    self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_CHARGING_SHOT ] )
+                    self.flip_pxy = choice( [ True, False ] )
+        if self.state == Skeline.STATE_SEEKING_RANDOM:
+            if not self.rvx:
+                self.rvx = [ uniform(-1.0,1.0), uniform(-1.0,1.0) ]
+                self.flip_pxy = choice( [ True, False ] )
+            self.v = [ self.rvx[0] * calc_speed, self.rvx[1] * calc_speed ]
+            if(self.stimer > 20 ):
+                self.stimer = 0
+                self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER, Skeline.STATE_CHARGING_SHOT ] )
+                self.invert_seek = choice( [ True, False ] )
+        if self.state == Skeline.STATE_CHARGING_SHOT:
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_color = [9.0,0.4,0.1,1.0]
+            self.light_radius = uniform(30.0,50.0)
+            self.v = [0.0,0.0]
+            self.texture = Skeline.textures[2]
+            self.floor.create_object( Flare( p = [ self.p[0], self.p[1] ] ) )
+            if( self.stimer > 40 ):
+                self.stimer = 0
+                self.state = Skeline.STATE_FIRING_SHOT
+        if self.state == Skeline.STATE_FIRING_SHOT:
+            self.texture = Skeline.textures[3]
+            if( self.stimer > 40 ):
+                self.state = Skeline.STATE_SEEKING_PLAYER
+
         return True
+
+    def get_shader_params(self):
+        bp = Object.get_shader_params(self)
+        bp['translation_local'][0] = 0.1
+        bp['translation_local'][1] = -0.4
+        return bp
     
 class Flare(Object):
     texture = BGL.assets.get('NL-lights/texture/flare')

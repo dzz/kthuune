@@ -245,7 +245,7 @@ void main(void) {
     vec4 CanopyLit = CanopyBase * PhotonBase * VisionBase;
     vec4 CanopyMerged = alphablend( PopupMerged, CanopyLit );
 
-    vec4 CloudLit = clouds(BubbledUVc) * PhotonBase;
+    vec4 CloudLit = clouds(BubbledUVc) * (PhotonBase + (LightBase*LightBase));
     CloudLit.a = 1.0 - min((VisionBase.r*VisionBase.r)*20.0,1.0);
 
     gl_FragColor = alphablend( CanopyMerged, CloudLit );

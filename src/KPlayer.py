@@ -126,8 +126,6 @@ class Sword(Object):
         bp = Object.get_shader_params(self)
         bp['translation_local'][0] = 1.1
         bp['translation_local'][1] = 0.1
-
-
         return bp
 
 
