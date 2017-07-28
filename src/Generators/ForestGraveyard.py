@@ -20,6 +20,34 @@ class Sword(Object):
 class vconf():
     visRad = 60
 
+class ERangedMagic(Object):
+    arrow_texture = BGL.assets.get("KT-player/texture/arrow")
+    def __init__(self,**kwargs):
+        Object.__init__(self,**kwargs)
+        self.texture = ERangedMagic.arrow_texture
+        self.buftarget = "popup"
+        self.tick_type = Object.TickTypes.PURGING
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_radius = 5
+        self.lifespan = 120
+        self.light_color = [ 0.0,0.0,1.0,1.0 ]
+
+        self.vx = cos( self.rad )*2
+        self.vy = sin( self.rad )*2
+        
+    def tick(self):
+
+        self.light_color[1] = uniform(0.4,0.8)
+        self.light_color[0] = uniform(0.0,1.0)
+        self.light_radius = uniform(15,40)
+        self.p[0] = self.p[0] + self.vx 
+        self.p[1] = self.p[1] + self.vy 
+        self.lifespan = self.lifespan - 1
+        if(self.lifespan>0):
+            return True
+        self.floor.objects.remove(self)
+        return False
+
 class Skeline(Object):
 
     STATE_SEEKING_RANDOM = 0
@@ -106,8 +134,15 @@ class Skeline(Object):
             self.texture = Skeline.textures[3]
             if( self.stimer > 40 ):
                 self.state = Skeline.STATE_SEEKING_PLAYER
+                self.fireRanged()
 
         return True
+
+    def fireRanged(self):
+        x = self.floor.player.p[0] - self.p[0]
+        y = self.floor.player.p[1] - self.p[1]
+        rad = atan2(y,x)
+        self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = rad ) )
 
     def get_shader_params(self):
         bp = Object.get_shader_params(self)
