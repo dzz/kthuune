@@ -700,7 +700,7 @@ class ForestGraveyard():
         self.light_occluders = []
 
 
-        level_data = get_level_data(BGL.assets.get("KT-forest/textfile/totems"), dungeon_floor.width, dungeon_floor.height )
+        level_data = get_level_data(BGL.assets.get("KT-forest/textfile/spiral"), dungeon_floor.width, dungeon_floor.height )
 
 
         #self.map_edges = self.gen_edges( dungeon_floor )

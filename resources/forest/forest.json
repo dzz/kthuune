@@ -34,7 +34,8 @@
         "textfile" : [
             { "name" : "entrypoint", "filename" : "{package_path}/entrypoint.svg" },
             { "name" : "chamber1", "filename" : "{package_path}/chamber1.svg" },
-            { "name" : "totems", "filename" : "{package_path}/totems.svg" }
+            { "name" : "totems", "filename" : "{package_path}/totems.svg" },
+            { "name" : "spiral", "filename" : "{package_path}/spiral.svg" }
         ]
     }
 }
