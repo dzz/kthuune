@@ -60,7 +60,7 @@ class SwordCard(Card):
     def get_shader_params(self):
 
         return {
-            "statusamt" : [ 1.0 ],
+            "statusamt" : [ self.player.sword.stamina ],
             "statuscolor" : [ 0.0,1.0,0.0,1.0 ],
             "tick" : [self.player.cardtick+10.0],
             "texBuffer"            : SwordCard.textures[int(self.fridx/90)],
@@ -102,9 +102,6 @@ class WandCard(Card):
             "filter_color"         : [1.0,1.0,1.0,1.0],
             "uv_translate"         : [ 0,0 ] }
 
-    
-
-
 
 def rad_2_index(rad, segments):
     segment_amt = ((2*pi)/segments)
@@ -124,7 +121,7 @@ class Sword(Object):
     max_charge = 40
     max_pending = 60
     max_discharge = 10
-    spin_attack_threshold = 15
+    spin_attack_threshold = 0
     max_spin_attack = 15
 
     def __init__(self,**kwargs):
@@ -140,24 +137,38 @@ class Sword(Object):
         self.state = Sword.STATE_IDLE
         self.stimer = 0.0
         self.discharge_mod = 1.0
+        self.stamina = 1.0
 
 
 
     def tick(self):
+
+        if(self.player.state == KPlayer.STATE_STUNNED ):
+            self.state = Sword.STATE_IDLE
+            self.visible = False
+            return True
+        else:
+            self.visible = True
 
         pad = self.player.controllers.get_virtualized_pad( self.player.num )
         btns = BGL.gamepads.buttons
 
         self.stimer = self.stimer + 1
         if self.state == Sword.STATE_IDLE:
+            self.stamina = min(self.stamina * 1.008,1.0)
             self.stimer = 0
             if pad.button_down( btns.A ):
-                self.state = Sword.STATE_CHARGING
-                self.stimer = 0
+                if self.stamina > 0.04:
+                    self.stamina = self.stamina * 0.83
+                    self.state = Sword.STATE_CHARGING
+                    self.stimer = 0
+                else:
+                    self.player.set_state(KPlayer.STATE_STUNNED)
 
         if self.state == Sword.STATE_CHARGING:
+            self.stamina = self.stamina * 0.995
             self.discharge_mod = self.discharge_mod * 1.02
-            if not pad.button_down( btns.A ):
+            if not pad.button_down( btns.A ) or self.stamina < 0.02:
                 if(self.stimer > Sword.spin_attack_threshold):
                     self.state = Sword.STATE_DISCHARGING
                     self.stimer = 0
@@ -169,6 +180,10 @@ class Sword(Object):
                 self.stimer = 0
 
         if self.state == Sword.STATE_ATTACK_PENDING:
+            self.stamina = self.stamina *0.992
+            if self.stamina < 0.02:
+                self.player.set_state(KPlayer.STATE_STUNNED)
+
             if self.stimer >= Sword.max_pending or (not pad.button_down(btns.A)):
                 self.stimer = 0
                 self.state = Sword.STATE_DISCHARGING
@@ -229,27 +244,19 @@ class Sword(Object):
         bp['translation_local'][1] = 0.1
         return bp
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class KPlayer(Player):
+
+    STATE_DEFAULT = 0
+    STATE_STUNNED = 1
+    STATE_DODGING = 2
+    
+    def set_state(self,state):
+        self.stimer = 0
+        self.state = state
+
     def __init__(self, **kwargs):
+        self.stimer = 0
+        self.state = KPlayer.STATE_DEFAULT
         overrides =  {
             "light_type" : Object.LightTypes.DYNAMIC_SHADOWCASTER,
             "light_radius" : 15.0,
@@ -345,9 +352,6 @@ class KPlayer(Player):
         self.wandcard.render()
 
 
-    STATE_NORMAL = 0
-    STATE_DODGING = 1
-
     def customize(self):
         self.heartcard = HeartCard(self)
         self.swordcard = SwordCard(self)
@@ -368,11 +372,10 @@ class KPlayer(Player):
         base_params = Player.get_shader_params(self)
         if self.hp > 0:
             base_params["rotation_local"] = 0.0
-            if(self.combo_count>3):
-                sl = base_params['scale_local']
-                base_params['scale_local'] = [ sl[0] + uniform(0.1,0.3), sl[1] + uniform(0.1,0.3) ]
-                base_params['scale_local'] = sl
-                base_params['filter_color'] = [ uniform(0.5,1.0),uniform(0.5,1.0),uniform(0.5,1.0),1.0]
+
+        if self.state == KPlayer.STATE_STUNNED:
+            base_params["rotation_local"] = self.cardtick*13.1
+
 
         return base_params
         
@@ -405,10 +408,17 @@ class KPlayer(Player):
             return tex
  
     def enemy_attack(self,damage):
+
+        if self.sword.state == Sword.STATE_CHARGING:
+            return
+        if self.sword.state == Sword.STATE_ATTACK_PENDING:
+            return
+
         if(self.combo_count <= 2):
             if(self.sword_swing<5):
                 self.attacked = True
                 self.hp = self.hp - damage
+                self.set_state( KPlayer.STATE_STUNNED )
 
     def is_dashing(self):
         return self.dash_combo
@@ -446,7 +456,7 @@ class KPlayer(Player):
         pass
 
     def tick(self):
-        #player
+        self.stimer = self.stimer + 1
         self.cardtick = self.cardtick + 0.01
         self.heartcard.tick()
         self.swordcard.tick()
@@ -465,47 +475,8 @@ class KPlayer(Player):
 
         
 
-        self.backstep_cooldown = self.backstep_cooldown - 1
-        if(pad.button_down( BGL.gamepads.buttons.B)) and self.can_backstep:
-            self.can_combo = True
-            self.can_backstep = False
-            self.backstepping = True
-            self.backstep_cooldown = 40.0
-            self.dash_amt = self.dash_amt*1.4
-
-        if(self.backstepping):
-            if(self.backstep_cooldown<0.0):
-                self.backstepping = False 
-
-        if( not self.backstepping and not pad.button_down( BGL.gamepads.buttons.B)):
-            self.can_backstep = True
-
-
-        if(self.sword_swing>0):
-            self.sword_swing = self.sword_swing - 1
-            self.light_color = [0.2,0.3,1.0,1.0]
-            if uniform(0.0,1.0)<0.1:
-                self.light_color = [0.0,0.0,0.0,1.0]
-        else:
-            self.light_color = self.base_light_color
-            if self.sword_released:
-                if pad.button_down( BGL.gamepads.buttons.A ):
-                    self.sword_swing = self.sword_swing_cooldown
-                    self.sword_released = False
-                    self.can_combo = True
-            else:
-                if(self.sword_swing_cooldown>5.0):
-                    if pad.button_down( BGL.gamepads.buttons.A ):
-                        self.can_combo = False
-                        self.dash_combo = False
-                if not pad.button_down(BGL.gamepads.buttons.A):
-                    self.sword_released = True
+        self.light_color = self.base_light_color
         
-        ### new sword charge mode            
-
-
-        ###
-
         if(abs(pad.left_stick[0])>0.003) or (abs(pad.left_stick[1])>0.003):
             self.walk_tick = self.walk_tick+1
             if(self.walk_tick>400):
@@ -513,109 +484,59 @@ class KPlayer(Player):
         else:
             self.walk_tick = 0
  
-        ###Player.tick(self)
+        if(self.state == KPlayer.STATE_STUNNED ):
+            self.v[0] = self.v[0] * 0.2
+            self.v[1] = self.v[1] * 0.2
+            if self.stimer > 15:
+                self.set_state( KPlayer.STATE_DEFAULT )
 
-        calc_speed = self.speed
+        if(self.state == KPlayer.STATE_DODGING ):
+            self.v[0] = self.dv[0] * 7
+            self.v[1] = self.dv[1] * 7
+            Object.tick(self)
 
-        self.dash_flash = False
-        if(self.sword.state == Sword.STATE_CHARGING):
-            calc_speed = self.speed * 0.1
+            if(self.sword.state is not Sword.STATE_IDLE):
+                self.set_state(KPlayer.STATE_DEFAULT)
+            if(self.stimer > 25 ):
+                self.set_state(KPlayer.STATE_DEFAULT)
 
-        if(self.sword.state == Sword.STATE_DISCHARGING):
-            self.dash_flash = True
-            calc_speed = self.speed * 9.0
+        if(self.state == KPlayer.STATE_DEFAULT ):
+            if not pad.button_down( BGL.gamepads.buttons.B ):
+                self.can_backstep = True
 
-        if(self.sword.state == Sword.STATE_ATTACK_PENDING):
-            self.dash_flash = True
-            calc_speed = self.speed * 0.001
+            if(pad.button_down( BGL.gamepads.buttons.B ) and self.can_backstep and self.sword.state == Sword.STATE_IDLE):
+                if(self.stimer > 30 ):
+                    delta = [ pad.left_stick[0] , pad.left_stick[1]  ]
+                    self.dv = [ delta[0] * self.speed, delta[1] * self.speed ]
+                    self.can_backstep = False
+                    self.set_state(KPlayer.STATE_DODGING)
 
-        if(self.aiming_beam.aiming):
-            calc_speed = calc_speed * 0.5
+            calc_speed = self.speed
+            self.dash_flash = False
+            if(self.sword.state == Sword.STATE_CHARGING):
+                calc_speed = self.speed * 0.1
 
+            if(self.sword.state == Sword.STATE_DISCHARGING):
+                self.dash_flash = True
+                calc_speed = self.speed * 9.0
 
-        self.filtered_speed = (self.filtered_speed*0.8) + (calc_speed*0.2)
-        calc_speed = self.filtered_speed
+            if(self.sword.state == Sword.STATE_ATTACK_PENDING):
+                self.dash_flash = True
+                calc_speed = self.speed * 0.001
 
-        Object.tick(self)
+            if(self.aiming_beam.aiming):
+                calc_speed = calc_speed * 0.5
 
-        pad = self.controllers.get_virtualized_pad( self.num )
+            self.filtered_speed = (self.filtered_speed*0.8) + (calc_speed*0.2)
+            calc_speed = self.filtered_speed
+            Object.tick(self)
+            pad = self.controllers.get_virtualized_pad( self.num )
 
-        #self.dash_flash = False
-
-        #dashcheck = 0.3
-        #if(pad.button_down(BGL.gamepads.buttons.A)):
-        #    dashcheck = 0.18
-
-        #if(self.dash_amt > dashcheck) and self.is_dashing():
-        #    calc_speed = calc_speed + (11.0*self.dash_amt)
-
-        #    self.dash_amt = self.dash_amt * 0.954
-        #    self.dash_flash = True
-        #else:
-        #    self.dash_combo = False
-        #    if(self.dash_amt<1.0):
-        #        self.dash_amt = self.dash_amt * 1.3
-
-        #calc_speed = min(calc_speed,12.0)
-        #
-        if(self.backstepping):
-            calc_speed = calc_speed * - (1.2+(self.backstep_cooldown/40.0)*0.2)
-        delta = [(pad.left_stick[0])*calc_speed,(pad.left_stick[1])*calc_speed]
-
-        target = None
-
-        ##### self.target_cooldown = self.target_cooldown - 1
-        ##### if((not self.target_consumed) or self.target_cooldown >0.0) and (pad.button_down(BGL.gamepads.buttons.A)):
-
-        #####     if(not self.target_consumed):
-        #####         self.target_consumed = True
-        #####         self.target_cooldown = 40.0
-        #####     #self.dash_amt = self.dash_amt * 1.3
-        #####     local_enemies = list(filter(lambda x: x.should_draw() and x.__class__.__name__ == 'Worm' and x.hp > 0.0, self.floor.objects))
-        #####     local_enemies.sort(key = lambda x: hypot(self.p[0]-x.p[0],self.p[1]-x.p[1]))
-        #####     if(len(local_enemies)>0):
-        #####         target = local_enemies[0]
-
-        ##### if not(pad.button_down(BGL.gamepads.buttons.A)):
-        #####     self.target_consumed = False
-
-
-        if not target:
+            delta = [ pad.left_stick[0] * calc_speed, pad.left_stick[1] * calc_speed ]
             self.v[0] = self.v[0]*0.8+delta[0]*0.2
             self.v[1] = self.v[1]*0.8+delta[1]*0.2
-        else:
-            dx = target.p[0] - self.p[0]
-            dy = target.p[1] - self.p[1]
-            #self.v[0] = target.p[0] - self.p[0]
-            #self.v[1] = target.p[1] - self.p[1]
-            tscl = 15.0
-            if(self.backstepping):
-                tscl *= -1
-            l = hypot(dx,dy)
-            if(l<17):
-                self.v[0] = (dx / l)*tscl
-                self.v[1] = (dy / l)*tscl
 
-
-        #ndir = ( pad.right_stick[0], pad.right_stick[1] )
-        #self.dir = [ (self.dir[0]*0.9) +(ndir[0]*0.1), (self.dir[1]*0.9) + (ndir[1]*0.1) ]
-
-        if(self.backstep_cooldown < -5.0 ):
             self.rad = atan2( self.v[1], self.v[0] )
-
-
-
-        if(self.attacked):
-            self.light_color = [ 1.0,0.0,0.0,1.0 ]
-            self.light_radius = uniform(0.0,200.0)
-            self.v[0] = self.v[0]*-10
-            self.v[0] = self.v[1]*-10
-
-            if (abs(self.v[0])<0.01) or (abs(self.v[1])<0.01):
-                self.v[0] = uniform(-1.0,1.0)
-                self.v[1] = uniform(-1.0,1.0)
-            self.attacked = False
-        else:
             self.light_radius = 15.0
             self.light_color = self.base_light_color
             impulse = uniform(5.0,35.0)
@@ -626,18 +547,13 @@ class KPlayer(Player):
                 rc = uniform(0.0,1.0)
                 self.light_color= [rc,rc,rc,1.0]
     
-        if(self.sword.state == Sword.STATE_CHARGING):
-            self.light_color = [ 1.0,1.0,1.0,1.0 ]
-            self.light_radius = uniform(0.0,100.0)
+            if(self.sword.state == Sword.STATE_CHARGING):
+                self.light_color = [ 1.0,1.0,1.0,1.0 ]
+                self.light_radius = uniform(0.0,100.0)
+            if(self.sword.state == Sword.STATE_ATTACK_PENDING):
+                self.light_color = [ uniform(0.0,1.0),uniform(0.0,1.0),0.0,1.0 ]
+                self.light_radius = uniform(1.0,250.0)
+            if(self.sword.state == Sword.STATE_DISCHARGING):
+                self.light_color = [ 0.0,uniform(0.0,1.0),uniform(0.0,1.0),1.0]
+                self.light_radius = uniform(40.0,50.0)
 
-        if(self.sword.state == Sword.STATE_ATTACK_PENDING):
-            self.light_color = [ uniform(0.0,1.0),uniform(0.0,1.0),0.0,1.0 ]
-            self.light_radius = uniform(1.0,250.0)
-
-        if(self.sword.state == Sword.STATE_DISCHARGING):
-            self.light_color = [ 0.0,uniform(0.0,1.0),uniform(0.0,1.0),1.0]
-            self.light_radius = uniform(40.0,50.0)
-
-        if not self.dash_combo:
-            self.combo_count = 0
-        ##########
