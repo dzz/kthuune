@@ -4,6 +4,108 @@ from Newfoundland.Player import Player
 from random import uniform,choice
 from math import floor,pi,atan2,sin, hypot
 
+
+class Hud():
+    view = BGL.view.widescreen_16_9
+
+class Card():
+    shader = BGL.assets.get("KT-player/shader/card")
+    primitive = BGL.primitive.unit_uv_square
+
+    def render(self):
+        Card.primitive.render_shaded( Card.shader, self.get_shader_params() )
+
+class HeartCard(Card):
+    textures = [
+            BGL.assets.get('KT-player/texture/heartcard0000'),
+            BGL.assets.get('KT-player/texture/heartcard0001')
+        ]
+    #primitive = BGL.primitive.unit_uv_square
+    def __init__(self, player):
+        self.fridx = choice( range(0,180) )
+        self.player = player
+
+    def tick(self):
+        self.fridx = (self.fridx + 1) %180
+
+    def get_shader_params(self):
+
+        return {
+            "statusamt" : [ self.player.hp / 100.0 ],
+            "statuscolor" : [ 1.0,0.0,0.0,1.0 ],
+            "tick" : [ self.player.cardtick ],
+            "texBuffer"            : HeartCard.textures[int(self.fridx/90)],
+            "translation_local"    : [ 0, 0 ],
+            "scale_local"          : [ 1.0*0.4,1.5*0.4],
+            "translation_world"    : [ 7.5,-3.75],
+            "scale_world"          : [1.0,1.0],
+            "view"                 : Hud.view,
+            "rotation_local"       : 0.0,
+            "filter_color"         : [1.0,1.0,1.0,1.0],
+            "uv_translate"         : [ 0,0 ] }
+
+class SwordCard(Card):
+    textures = [
+            BGL.assets.get('KT-player/texture/swordcard0000'),
+            BGL.assets.get('KT-player/texture/swordcard0001')
+        ]
+    #primitive = BGL.primitive.unit_uv_square
+    def __init__(self, player):
+        self.fridx = choice( range(0,180) )
+        self.player = player
+
+    def tick(self):
+        self.fridx = (self.fridx + 1) %180
+
+    def get_shader_params(self):
+
+        return {
+            "statusamt" : [ 1.0 ],
+            "statuscolor" : [ 0.0,1.0,0.0,1.0 ],
+            "tick" : [self.player.cardtick+10.0],
+            "texBuffer"            : SwordCard.textures[int(self.fridx/90)],
+            "translation_local"    : [ 0, 0 ],
+            "scale_local"          : [ 1.0*0.4,1.5*0.4],
+            "translation_world"    : [ 7.5,-2.5],
+            "scale_world"          : [1.0,1.0],
+            "view"                 : Hud.view,
+            "rotation_local"       : 0.0,
+            "filter_color"         : [1.0,1.0,1.0,1.0],
+            "uv_translate"         : [ 0,0 ] }
+
+class WandCard(Card):
+    textures = [
+            BGL.assets.get('KT-player/texture/wandcard0000'),
+            BGL.assets.get('KT-player/texture/wandcard0001')
+        ]
+    #primitive = BGL.primitive.unit_uv_square
+    def __init__(self, player):
+        self.fridx = choice( range(0,180) )
+        self.player = player
+
+    def tick(self):
+        self.fridx = (self.fridx + 1) %180
+
+    def get_shader_params(self):
+
+        return {
+            "statusamt" : [ 1.0 ],
+            "statuscolor" : [ 0.0,0.0,1.0,1.0 ],
+            "tick" : [self.player.cardtick+40.0],
+            "texBuffer"            : WandCard.textures[int(self.fridx/90)],
+            "translation_local"    : [ 0, 0 ],
+            "scale_local"          : [ 1.0*0.4,1.5*0.4],
+            "translation_world"    : [ 7.5,-1.25],
+            "scale_world"          : [1.0,1.0],
+            "view"                 : Hud.view,
+            "rotation_local"       : 0.0,
+            "filter_color"         : [1.0,1.0,1.0,1.0],
+            "uv_translate"         : [ 0,0 ] }
+
+    
+
+
+
 def rad_2_index(rad, segments):
     segment_amt = ((2*pi)/segments)
     rad -= (segment_amt*0.5) # center
@@ -85,7 +187,6 @@ class Sword(Object):
             if(self.stimer > Sword.max_spin_attack):
                 self.state = Sword.STATE_AWAITING_RELEASE
             
-        print(self.state, self.stimer)
 
         if not self.collected:
             if hypot( self.p[0]-self.player.p[0],self.p[1]-self.player.p[1]) < 1.5:
@@ -230,7 +331,7 @@ class KPlayer(Player):
         with BGL.context.render_target( self.hud_buffer ):
             BGL.context.clear(0.0,0.0,0.0,0.0)
             with BGL.blendmode.alpha_over:
-                BGL.lotext.render_text_pixels("HP:{0}".format(self.hp-1), 130,220,[1.0,0.0,0.0] )
+                #BGL.lotext.render_text_pixels("HP:{0}".format(self.hp-1), 130,220,[1.0,0.0,0.0] )
                 if(self.combo_count>1):
                     offsx = choice(range(-3,3))
                     offsy = choice(range(-2,2))
@@ -239,7 +340,18 @@ class KPlayer(Player):
         with BGL.blendmode.alpha_over:
             self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
 
+        self.heartcard.render()
+        self.swordcard.render()
+        self.wandcard.render()
+
+
+    STATE_NORMAL = 0
+    STATE_DODGING = 1
+
     def customize(self):
+        self.heartcard = HeartCard(self)
+        self.swordcard = SwordCard(self)
+        self.wandcard = WandCard(self)
         self.hp = 100
         self.dash_amt = 1.0
         self.sword = Sword(player=self)
@@ -247,6 +359,7 @@ class KPlayer(Player):
         self.can_backstep = True
         self.backstep_cooldown = -5
         self.backstepping = False
+        self.cardtick = 0.0
     
     def link_floor(self):
         self.floor.create_object( self.sword )
@@ -333,6 +446,11 @@ class KPlayer(Player):
         pass
 
     def tick(self):
+        #player
+        self.cardtick = self.cardtick + 0.01
+        self.heartcard.tick()
+        self.swordcard.tick()
+        self.wandcard.tick()
 
         self.pumped_dashcombo = False
         if(self.hp < 0 ):
@@ -342,7 +460,6 @@ class KPlayer(Player):
             self.texture = BGL.assets.get('KT-player/texture/skeleton')
             self.size = [1.0,1.0]
             self.rad = atan2(self.p[0]-self.snapshot['p'][0],self.p[1]-self.snapshot['p'][1])
-            print (self.rad)
             return True
         pad = self.controllers.get_virtualized_pad( self.num )
 

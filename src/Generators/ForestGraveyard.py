@@ -130,6 +130,7 @@ class Skeline(Object):
             if( self.stimer > 40 ):
                 self.stimer = 0
                 self.state = Skeline.STATE_FIRING_SHOT
+                self.pickTarget()
         if self.state == Skeline.STATE_FIRING_SHOT:
             self.texture = Skeline.textures[3]
             if( self.stimer > 40 ):
@@ -138,11 +139,17 @@ class Skeline(Object):
 
         return True
 
-    def fireRanged(self):
+    def pickTarget(self):
         x = self.floor.player.p[0] - self.p[0]
         y = self.floor.player.p[1] - self.p[1]
         rad = atan2(y,x)
-        self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = rad ) )
+        self.target_rad = rad
+        
+    def fireRanged(self):
+        #x = self.floor.player.p[0] - self.p[0]
+        #y = self.floor.player.p[1] - self.p[1]
+        #rad = atan2(y,x)
+        self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = self.target_rad ) )
 
     def get_shader_params(self):
         bp = Object.get_shader_params(self)
@@ -700,7 +707,7 @@ class ForestGraveyard():
         self.light_occluders = []
 
 
-        level_data = get_level_data(BGL.assets.get("KT-forest/textfile/spiral"), dungeon_floor.width, dungeon_floor.height )
+        level_data = get_level_data(BGL.assets.get("KT-forest/textfile/totems"), dungeon_floor.width, dungeon_floor.height )
 
 
         #self.map_edges = self.gen_edges( dungeon_floor )

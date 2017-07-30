@@ -50,7 +50,16 @@
             { "name" : "knight_sword0016", "filename" : "{package_path}/knight_sword0016.png", "filtered" : false },
             { "name" : "knight_sword0017", "filename" : "{package_path}/knight_sword0017.png", "filtered" : false },
             { "name" : "sword", "filename" : "{package_path}/sword.png", "filtered" : false },
-            { "name" : "flare", "filename" : "{package_path}/flare0000.png", "filtered" : false }
+            { "name" : "flare", "filename" : "{package_path}/flare0000.png", "filtered" : false },
+            { "name" : "heartcard0000", "filename" : "{package_path}/heartcard0000.png", "filtered" : false },
+            { "name" : "heartcard0001", "filename" : "{package_path}/heartcard0001.png", "filtered" : false },
+            { "name" : "swordcard0000", "filename" : "{package_path}/swordcard0000.png", "filtered" : false },
+            { "name" : "swordcard0001", "filename" : "{package_path}/swordcard0001.png", "filtered" : false },
+            { "name" : "wandcard0000", "filename" : "{package_path}/wandcard0000.png", "filtered" : false },
+            { "name" : "wandcard0001", "filename" : "{package_path}/wandcard0001.png", "filtered" : false }
+        ],
+        "shader" :  [
+            { "name" : "card", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/cardp" }
         ]
     }
 }
