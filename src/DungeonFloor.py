@@ -9,6 +9,8 @@ from .Renderers.DFRenderer import DFRenderer
 from random import uniform
 from math import sin,cos,hypot
 from .AimingBeam import AimingBeam
+from .KTState import KTState
+import client.system.keyboard as keyboard
 
 
 class Portal(Object):
@@ -187,8 +189,12 @@ class DungeonFloor( Floor ):
         return objs
 
     def tick(self):
-        Floor.tick(self)
-        self.player.kill_success = False
+        if not KTState.paused:
+            Floor.tick(self)
+            self.player.kill_success = False
+        else:
+            pass
+
     def get_occluders(self):
         return self.light_occluders
 

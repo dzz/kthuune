@@ -21,7 +21,7 @@ class vconf():
     visRad = 60
 
 class ERangedMagic(Object):
-    arrow_texture = BGL.assets.get("KT-player/texture/arrow")
+    arrow_texture = BGL.assets.get("KT-player/texture/flare")
     def __init__(self,**kwargs):
         Object.__init__(self,**kwargs)
         self.texture = ERangedMagic.arrow_texture
@@ -384,17 +384,30 @@ class WormField(Object):
             self.floor.create_object(worm)
 
 class Elder(Object):
-    texture = BGL.assets.get('KT-player/texture/elder0000')
+    #texture = BGL.assets.get('KT-player/texture/elder0000')
+    texture = BGL.assets.get('KT-forest/texture/cave_entrance')
 
     def customize(self):
         self.texture = Elder.texture
-        self.buftarget = "popup"
-
-        self.size =  [ 4.0, 4.0 ]
+        #self.buftarget = "popup"
+        self.buftarget = "floor"
+        self.size =  [ 20.0, 20.0 ]
         self.light_type = Object.LightTypes.STATIC_SHADOWCASTER
         self.light_color =  [ 0.0,0.0,1.0,1.0]
-        self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
+        #self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
+        self.tick_type = Object.TickTypes.TICK_FOREVER
         self.z_index = 1
+
+    def tick(self):
+        dx = self.p[0] - self.floor.player.p[0]
+        dy = self.p[1] - self.floor.player.p[1]
+
+        dst = (dx*dx+dy*dy)
+
+        if(dst<30):
+            self.floor.player.set_hud_message("{x} => talk")
+            if self.floor.player.get_pad().button_down( BGL.gamepads.buttons.X ):
+                pass
 
 class Totem(Object):
     texture = BGL.assets.get('KT-forest/texture/totem')

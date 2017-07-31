@@ -7,11 +7,13 @@ from Newfoundland.BaseGame import BaseGame
 from .DungeonFloor import DungeonFloor
 from .DungeonCamera import DungeonCamera
 from .KPlayer import KPlayer
+from .KTState import KTState
 
 from .superstructure import generate_qualified_areas
 
 class Game( BaseGame ):
 
+    paused = False
     def initialize(self):
 
 
@@ -27,8 +29,6 @@ class Game( BaseGame ):
         #self.floor = self.create_tickable( Floor() )
 
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
-
-
         self.camera.set_player(self.player)
 
     def render(self):
@@ -36,4 +36,11 @@ class Game( BaseGame ):
         self.player.render_hud()
 
     def tick(self):
+        KTState.pad = self.player.get_pad()
+        KTState.start_pressed[1] = KTState.start_pressed[0]
+        KTState.start_pressed[0] = KTState.pad.button_down(BGL.gamepads.buttons.START)
+        
+        if(KTState.start_pressed[0]==False) and (KTState.start_pressed[1]==True):
+            KTState.paused = not KTState.paused
+                
         BaseGame.tick(self)

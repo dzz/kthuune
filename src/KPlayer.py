@@ -5,6 +5,9 @@ from random import uniform,choice
 from math import floor,pi,atan2,sin, hypot
 
 
+def ur1():
+    return uniform(0.0,1.0)
+
 class Hud():
     view = BGL.view.widescreen_16_9
 
@@ -142,7 +145,6 @@ class Sword(Object):
 
 
     def tick(self):
-
         if(self.player.state == KPlayer.STATE_STUNNED ):
             self.state = Sword.STATE_IDLE
             self.visible = False
@@ -332,7 +334,17 @@ class KPlayer(Player):
         self.kill_success = False
         self.target_consumed = False
         self.target_cooldown = 0.0
+        self.hud_message_timeout = 0.0
+        self.hud_message = ""
 
+
+    def get_pad(self):
+        pad = self.controllers.get_virtualized_pad( self.num )
+        return pad
+
+    def set_hud_message(self, msg):
+        self.hud_message_timeout = 60
+        self.hud_message = msg
 
     def render_hud(self):
         with BGL.context.render_target( self.hud_buffer ):
@@ -344,12 +356,22 @@ class KPlayer(Player):
                     offsy = choice(range(-2,2))
                     BGL.lotext.render_text_pixels("COMBO:{0}".format(self.combo_count-1), 130+offsx,90+offsy, [1.0,uniform(0.0,1.0),1.0] )
 
+                if(self.hud_message_timeout>0):
+                    mx = 160 - floor(len(self.hud_message)*4)
+
+                    urc = [ ur1(),ur1(),ur1(),1.0 ]
+                    urc1 = [ ur1(),ur1(),ur1(),1.0 ]
+                    BGL.lotext.render_text_pixels(self.hud_message, mx-1, 240-9, urc )
+                    BGL.lotext.render_text_pixels(self.hud_message, mx, 240-8, urc1 )
+
         with BGL.blendmode.alpha_over:
             self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
+
 
         self.heartcard.render()
         self.swordcard.render()
         self.wandcard.render()
+
 
 
     def customize(self):
@@ -456,6 +478,9 @@ class KPlayer(Player):
         pass
 
     def tick(self):
+        #playertick
+
+        self.hud_message_timeout = self.hud_message_timeout - 1
         self.stimer = self.stimer + 1
         self.cardtick = self.cardtick + 0.01
         self.heartcard.tick()
