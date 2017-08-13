@@ -706,75 +706,84 @@ class ForestGraveyard():
     def __init__(self):
         pass
 
+    def process_area_def( self, df, ad ):
+        exit()
+        pass
+
     def compile(self, dungeon_floor, base_objects ):
-        self.objects = []
-        if(base_objects):
-            self.objects.extend(base_objects)
 
+        if dungeon_floor.area_def:
+            self.process_area_def( dungeon_floor, dungeon_floor.area_def )
 
-        self.generate_sigil_points( dungeon_floor )
-        #self.generate_trees( dungeon_floor )
-        #self.generate_photon_emitters(dungeon_floor)
-
-        #self.light_occluders = self.tree_occluders
-        self.light_occluders = []
-
-
-        level_data = get_level_data(BGL.assets.get("KT-forest/textfile/totems"), dungeon_floor.width, dungeon_floor.height )
-
-
-        #self.map_edges = self.gen_edges( dungeon_floor )
-
-        self.guider_pts = []
-        self.guiders = level_data["all_guiders"]
-        self.make_guider_photons(dungeon_floor)
-        self.map_edges = level_data["all_lines"]
-        dungeon_floor.player.p[0] = level_data["player_start"][0]
-        dungeon_floor.player.p[1] = level_data["player_start"][1]
-        self.df = dungeon_floor
-
-        dungeon_floor.player.sword.p[0] = level_data["sword_start"][0]
-        dungeon_floor.player.sword.p[1] = level_data["sword_start"][1]
-        
-        elder = Elder()
-        elder.p = level_data["elder_start"]
-
-        for wormfield in level_data["wormfields"]:
-            self.objects.append( WormField( wf_spec=wormfield ) )
-
-        for totem in level_data["totems"]:
-            self.objects.append( Totem( p = totem ) )
-
-        for skeline in level_data["skelines"]:
-            self.objects.append( Skeline( p = skeline ) )
-
-        self.objects.append( elder )
-        self.light_occluders = []
-        self.light_occluders.extend( self.map_edges )
-
-        self.generate_inner_trees(dungeon_floor)
-        self.generate_edge_trees()
-        #self.generate_static_lights(dungeon_floor)
-        #self.generate_fires(dungeon_floor)
-        self.generate_tiledata(  dungeon_floor )
-
-
-        #self.objects.append( Shrub( p = [0.0,0.0] ) )
-        #self.objects.append( TreeRoots( p = [0.0,0.0], size=[5.0,5.0] ) )
-        
-#        for x in range(0,40):
-#                px = uniform( -dungeon_floor.width*0.4, dungeon_floor.width*0.4)
-#                py = uniform( -dungeon_floor.height*0.4, dungeon_floor.height*0.4)
-#                self.objects.append( Shrub( p = [px,py] ) )
-#
-                #trs = uniform(15,20)
-                #self.objects.append( TreeRoots( p = [px,py], size=[trs,trs] ) )
-
-        ### for x in range(0,250):
-        ###         px = uniform( -dungeon_floor.width*0.6, dungeon_floor.width*0.6)
-        ###         py = uniform( -dungeon_floor.height*0.6, dungeon_floor.height*0.6)
-        ###         rs = uniform(0.8,4.0)
-        ###         self.objects.append( Rock( p = [px,py], size = [rs,rs] ) )
+        if dungeon_floor.area_def is None:
+            self.objects = []
+            if(base_objects):
+                self.objects.extend(base_objects)
+    
+    
+            self.generate_sigil_points( dungeon_floor )
+            #self.generate_trees( dungeon_floor )
+            #self.generate_photon_emitters(dungeon_floor)
+    
+            #self.light_occluders = self.tree_occluders
+            self.light_occluders = []
+    
+    
+            level_data = get_level_data(BGL.assets.get("KT-forest/textfile/totems"), dungeon_floor.width, dungeon_floor.height )
+    
+    
+            #self.map_edges = self.gen_edges( dungeon_floor )
+    
+            self.guider_pts = []
+            self.guiders = level_data["all_guiders"]
+            self.make_guider_photons(dungeon_floor)
+            self.map_edges = level_data["all_lines"]
+            dungeon_floor.player.p[0] = level_data["player_start"][0]
+            dungeon_floor.player.p[1] = level_data["player_start"][1]
+            self.df = dungeon_floor
+    
+            dungeon_floor.player.sword.p[0] = level_data["sword_start"][0]
+            dungeon_floor.player.sword.p[1] = level_data["sword_start"][1]
+            
+            elder = Elder()
+            elder.p = level_data["elder_start"]
+    
+            for wormfield in level_data["wormfields"]:
+                self.objects.append( WormField( wf_spec=wormfield ) )
+    
+            for totem in level_data["totems"]:
+                self.objects.append( Totem( p = totem ) )
+    
+            for skeline in level_data["skelines"]:
+                self.objects.append( Skeline( p = skeline ) )
+    
+            self.objects.append( elder )
+            self.light_occluders = []
+            self.light_occluders.extend( self.map_edges )
+    
+            self.generate_inner_trees(dungeon_floor)
+            self.generate_edge_trees()
+            #self.generate_static_lights(dungeon_floor)
+            #self.generate_fires(dungeon_floor)
+            self.generate_tiledata(  dungeon_floor )
+    
+    
+            #self.objects.append( Shrub( p = [0.0,0.0] ) )
+            #self.objects.append( TreeRoots( p = [0.0,0.0], size=[5.0,5.0] ) )
+            
+    #        for x in range(0,40):
+    #                px = uniform( -dungeon_floor.width*0.4, dungeon_floor.width*0.4)
+    #                py = uniform( -dungeon_floor.height*0.4, dungeon_floor.height*0.4)
+    #                self.objects.append( Shrub( p = [px,py] ) )
+    #
+                    #trs = uniform(15,20)
+                    #self.objects.append( TreeRoots( p = [px,py], size=[trs,trs] ) )
+    
+            ### for x in range(0,250):
+            ###         px = uniform( -dungeon_floor.width*0.6, dungeon_floor.width*0.6)
+            ###         py = uniform( -dungeon_floor.height*0.6, dungeon_floor.height*0.6)
+            ###         rs = uniform(0.8,4.0)
+            ###         self.objects.append( Rock( p = [px,py], size = [rs,rs] ) )
 
 
 

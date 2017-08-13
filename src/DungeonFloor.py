@@ -37,6 +37,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "area_def" : None,
             "width" : 32,
             "height" : 32,
             "generator" : ForestGraveyard(),

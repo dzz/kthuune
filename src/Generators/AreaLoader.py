@@ -100,8 +100,6 @@ def get_area_data(data):
         row = row + 1
     return parsed
 
-data = open('c:\\tmp\\test.area').read()
-
-
-print(get_area_data(data))
+#data = open('c:\\tmp\\test.area').read()
+#print(get_area_data(data))
 
