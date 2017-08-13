@@ -23,7 +23,7 @@ class Game( BaseGame ):
         area_raw = BGL.assets.get("KT-forest/textfile/testarea")
         area_def = get_area_data( area_raw )
 
-        floor = DungeonFloor( width = area_def["width"], height = area_def["height"], camera = self.camera, player = self.player, objects = [], area_def = area_def )
+        floor = DungeonFloor( tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         return floor
 
     ###############

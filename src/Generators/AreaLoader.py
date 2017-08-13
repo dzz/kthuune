@@ -19,7 +19,6 @@ def get_area_data(data):
 
     mode = ""
     for txt in data:
-        print(txt)
         if txt=="MODEL":
             mode = txt
             row = 0
@@ -98,6 +97,7 @@ def get_area_data(data):
                 p["r"] = float(txt)
                     
         row = row + 1
+
     return parsed
 
 #data = open('c:\\tmp\\test.area').read()

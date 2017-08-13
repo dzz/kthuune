@@ -80,6 +80,7 @@ class DFRenderer( FloorRenderer ):
         #for obj in renderable_objects:
         #    obj.render()
 
+
         self.guppyRenderer.renderObjects( renderable_objects )
 
     def render_composite(self):

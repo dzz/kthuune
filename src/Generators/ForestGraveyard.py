@@ -525,9 +525,7 @@ class TreeTop(Object):
         def __init__(self,**kwargs):
             overrides = {
                     "num" : 0,
-                    "texture" : choice( [
-                            BGL.assets.get("KT-forest/texture/treetop"),
-                            BGL.assets.get("KT-forest/texture/treetop2") ] ),
+                    "texture" : BGL.assets.get("KT-forest/texture/treetop2"),
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
                     'size' : [ 5.0,5.0],
                     'rad' : uniform(-3.14,3.14),
@@ -543,9 +541,9 @@ class TreeTop(Object):
             Object.__init__(self,**overrides)
             self.t = 0
             self.base_size = [ self.size[0], self.size[1] ]
-            self.draw_color = [0.8,uniform(0.0,1.0),0.8,uniform(0.8,1.0)]
-            if(self.texture == BGL.assets.get("KT-forest/texture/treetop2")):
-                self.z_index = self.z_index + 1
+            self.draw_color = [1.0,1.0,1.0,1.0]
+            #if(self.texture == BGL.assets.get("KT-forest/texture/treetop2")):
+            #    self.z_index = self.z_index + 1
 
         def tick(self):
             self.t = self.t + 0.01
@@ -555,13 +553,14 @@ class TreeTop(Object):
             return True
 
         def should_draw(self):
-            p = self.get_shader_params()['translation_world']
-            visRad = vconf.visRad
-            if(p[0]<-visRad): return False
-            if(p[1]<-visRad): return False
-            if(p[0]>visRad): return False
-            if(p[1]>visRad): return False
             return True
+            #p = self.get_shader_params()['translation_world']
+            #visRad = vconf.visRad
+            #if(p[0]<-visRad): return False
+            #if(p[1]<-visRad): return False
+            #if(p[0]>visRad): return False
+            #if(p[1]>visRad): return False
+            #return True
 
         def get_shader_params(self):
             params = Object.get_shader_params(self)
@@ -706,6 +705,9 @@ class ForestGraveyard():
     def __init__(self):
         pass
 
+    def get_physics_occluders(self):
+        return self.physics_occluders
+
     def process_area_def( self, df, ad ):
 
         self.tree_pts = [ [-10,-10] ]
@@ -720,17 +722,24 @@ class ForestGraveyard():
 
         self.objects = []
 
+        #self.light_occluders = []
         self.light_occluders = ad["light_occluders"]
+        self.physics_occluders = ad["physics_occluders"]
+        self.decorators = ad["decorators"]
         self.photon_emitters = []
+
+        self.generate_edge_trees( self.decorators )
+
         self.generate_tiledata(df)
 
 
     def compile(self, dungeon_floor, base_objects ):
 
         if dungeon_floor.area_def:
+            print("Compiling .AREA format")
             self.process_area_def( dungeon_floor, dungeon_floor.area_def )
 
-        if dungeon_floor.area_def is None:
+        elif dungeon_floor.area_def is None:
             self.objects = []
             if(base_objects):
                 self.objects.extend(base_objects)
@@ -863,15 +872,18 @@ class ForestGraveyard():
         self.light_occluders.extend(occluders)
 
 
-    def generate_edge_trees(self):
-        for edge in self.map_edges:
+    def generate_edge_trees(self, edges = None):
+        if not edges:
+            edges = self.map_edges 
+
+        for edge in edges:
 
             u_l = hypot( edge[1][0]-edge[0][0], edge[1][1]-edge[1][1])
             print(u_l)
 
             for x in range(0,int(u_l+uniform(0.0,5.0))):
 
-                if uniform(0.0,1.0) < 0.4:
+                if uniform(0.0,1.0) < 0.7:
                     continue
                     
                 size = uniform(0.2,2.0)
@@ -881,7 +893,7 @@ class ForestGraveyard():
                 px,py = d*dx,d*dy
                 x,y = edge[0][0]+px,edge[0][1]+py
                 p = [x,y]
-                if(uniform(0.0,1.0)>0.5):
+                if(uniform(0.0,1.0)>0.2):
                     self.tree_pts.append(p)
 
                 tt = TreeTop( p=p, size=[size,size],parralax = uniform(1.1,1.8)) 
@@ -953,6 +965,7 @@ class ForestGraveyard():
         return lines
 
     def get_light_occluders(self):
+
         return self.light_occluders
 
     def get_tiledata(self):

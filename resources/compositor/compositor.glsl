@@ -243,6 +243,7 @@ void main(void) {
     vec4 PopupMerged = alphablend( LitFloor, ObjectBase ) * VisionBase;
 
     vec4 CanopyLit = CanopyBase * PhotonBase * VisionBase;
+    CanopyLit.a = CanopyBase.a;
     vec4 CanopyMerged = alphablend( PopupMerged, CanopyLit );
 
     vec4 CloudLit = clouds(BubbledUVc) * (PhotonBase + (LightBase*LightBase));

@@ -37,6 +37,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "tilescale" : 3,
             "area_def" : None,
             "width" : 32,
             "height" : 32,
@@ -83,7 +84,7 @@ class DungeonFloor( Floor ):
         )
 
 
-        self.tilescale = 3
+        #self.tilescale = 3
         self.tilemap_width = int(self.width/self.tilescale)
         self.tilemap_height = int(self.height/self.tilescale)
 
@@ -116,18 +117,25 @@ class DungeonFloor( Floor ):
                 "reflection" : BGL.assets.get("KT-tiles/texture/plain_tiles")
             } ),
             "objects" : self.generator.get_objects(),
-            "renderer_config" : self.renderer_config
+            "renderer_config" : self.renderer_config,
+            "light_occluders" : self.generator.get_light_occluders(),
+            "physics_occluders" : self.generator.get_physics_occluders(),
+            "photon_emitters" :  self.generator.get_photon_emitters()
         })
 
        
         self.player.aiming_beam = AimingBeam() 
         floor_configuration["objects"].append( self.player.aiming_beam )
 
-        self.light_occluders = self.generator.get_light_occluders()
-        self.photon_emitters = self.generator.get_photon_emitters()
+        #self.light_occluders = self.generator.get_light_occluders()
+        #self.physics_occluders = self.generator.get_physics_occluders()
+
+        #self.photon_emitters = self.generator.get_photon_emitters()
 
         #self.light_occluders = []#self.generator.get_light_occluders()
         #self.photon_emitters = []#self.generator.get_photon_emitters()
+
+
 
         Floor.__init__(self,**floor_configuration)
 
@@ -201,4 +209,10 @@ class DungeonFloor( Floor ):
 
     def get_photon_emitters(self):
         return self.photon_emitters
+
+    def get_physics_occluders(self):
+        return self.physics_occluders
+
+    def get_light_occluders(self):
+        return self.light_occluders
 
