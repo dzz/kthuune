@@ -707,8 +707,23 @@ class ForestGraveyard():
         pass
 
     def process_area_def( self, df, ad ):
-        exit()
-        pass
+
+        self.tree_pts = [ [-10,-10] ]
+        self.guider_pts = [ [10,10] ]
+        ######################################
+        self.df = df
+
+        player_start = list(filter(lambda x: x["key"] == 'player_start', ad["object_defs"]))[0]
+        df.player.p[0] = player_start['x']
+        df.player.p[1] = player_start['y']
+
+
+        self.objects = []
+
+        self.light_occluders = ad["light_occluders"]
+        self.photon_emitters = []
+        self.generate_tiledata(df)
+
 
     def compile(self, dungeon_floor, base_objects ):
 
