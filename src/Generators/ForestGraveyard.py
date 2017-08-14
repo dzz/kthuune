@@ -9,6 +9,20 @@ from .SVGLoader import get_level_data
 from math import floor
 import random
 
+class Prop(Object):
+    def parse(pd):
+
+        p = Prop( texture = BGL.assets.get("KT-props/texture/" + pd["image"]))
+        p.p[0] = pd["x"]
+        p.p[1] = pd["y"]
+        p.size[0] = pd["w"]
+        p.size[1] = pd["h"]
+        p.r = pd["r"]
+
+        p.buftarget="floor"
+        return p
+
+
 class Sword(Object):
     STATE_IDLE = 0
     STATE_CHARGING = 1
@@ -731,6 +745,16 @@ class ForestGraveyard():
         self.generate_edge_trees( self.decorators )
 
         self.generate_tiledata(df)
+
+        for pd in ad["prop_defs"]:
+            self.objects.append( Prop.parse(pd) )
+
+        for od in ad["object_defs"]:
+            if od["key"] == "gate_photon":
+                for i in range(0,8):
+                    emitter_def = [ od["x"]-5.0,od["y"]-5.0, 10.0,10.0, [ 0.8,0.4,1.0,1.0] ]    
+                    self.photon_emitters.append(emitter_def)
+
 
 
     def compile(self, dungeon_floor, base_objects ):

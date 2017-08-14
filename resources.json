@@ -7,6 +7,7 @@
         "KT-player" : "resources/player/player.json",
         "KT-compositor" : "resources/compositor/compositor.json",
         "KT-tiles"      : "resources/tiles/tiles.json",
-        "KT-forest"     : "resources/forest/forest.json"
+        "KT-forest"     : "resources/forest/forest.json",
+        "KT-props"      : "resources/props/props.json"
     }
 }

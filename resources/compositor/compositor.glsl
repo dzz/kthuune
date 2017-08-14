@@ -234,12 +234,22 @@ void main(void) {
     vec4 CanopyBase = cheap_blur( canopy_buffer, BubbledUVb, 1.0/512. );
 
     //vec4 VisionBase = texture( vision_buffer, UV ); 
-    vec4 VisionBase = cheap_blur( vision_buffer, UV, 0.05 ); 
+
+    vec4 fuzzer = clouds(BubbledUVd);
+
+    vec2 uvfuzzed;
+    uvfuzzed.xy = UV.xy;
+
+    uvfuzzed *= 0.98+(fuzzer.r*0.02);
+    
+    vec4 VisionBase = cheap_blur( vision_buffer, uvfuzzed, 0.01 ); 
+
+    //vec4 VisionBase = vec4(1.0,1.0,1.0,1.0);
 
     vec4 FogLit = clouds(BubbledUVd) * LightBase * PhotonBase;
     FogLit.a = 0.2;
 
-    vec4 LitFloor = alphablend( FloorBase * ( PhotonBase + LightBase ) * VisionBase, FogLit );
+    vec4 LitFloor = alphablend( FloorBase * ( PhotonBase + LightBase ) * VisionBase, FogLit ) * 1.5;
     vec4 PopupMerged = alphablend( LitFloor, ObjectBase ) * VisionBase;
 
     vec4 CanopyLit = CanopyBase * PhotonBase * VisionBase;
@@ -248,6 +258,9 @@ void main(void) {
 
     vec4 CloudLit = clouds(BubbledUVc) * (PhotonBase + (LightBase*LightBase));
     CloudLit.a = 1.0 - min((VisionBase.r*VisionBase.r)*20.0,1.0);
+    CloudLit.r = 0.6 * (1.0-uv.y) * LengthA;
+    CloudLit.g = 0.6 * (1.0-uv.y) * LengthA;
+    CloudLit.b = 0.6 * (1.0-uv.y) * LengthA;
 
     gl_FragColor = alphablend( CanopyMerged, CloudLit );
 

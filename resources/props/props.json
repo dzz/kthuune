@@ -1,0 +1,10 @@
+{
+    "preload": true,
+    "resources" : {
+        "texture" : [
+            { "name" : "staircase_proc", "filename" : "{package_path}/staircase_proc.png", "filtered" : false },
+            { "name" : "staircase", "filename" : "{package_path}/staircase.png", "filtered" : false },
+            { "name" : "entryfloor", "filename" : "{package_path}/entryfloor.png", "filtered" : false }
+        ]
+    }
+}

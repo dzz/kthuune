@@ -29,7 +29,7 @@ class DFRenderer( FloorRenderer ):
         self.compute_dynamic_lightmap()
 
         with BGL.context.render_target( self.floor_buffer ):
-            self.render_tiles()
+            #self.render_tiles()
             with BGL.blendmode.alpha_over:
                 self.render_objects("floor")
 
