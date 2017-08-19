@@ -1,3 +1,4 @@
+import json 
 def get_area_data(data):
 
     def defunge_line(line):
@@ -77,8 +78,11 @@ def get_area_data(data):
                 o["y"] = float(txt)
             if row == 3:
                 try:
+                    print("PARSING META")
+                    print(txt)
                     o["meta"] = json.loads(txt)
-                except:
+                    print(o["meta"])
+                except Exception as e:
                     o["meta"] = {}
 
         if mode == "PROP":
@@ -97,6 +101,7 @@ def get_area_data(data):
                 p["r"] = float(txt)
                     
         row = row + 1
+
 
     return parsed
 

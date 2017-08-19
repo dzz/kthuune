@@ -24,6 +24,7 @@ class Game( BaseGame ):
         area_def = get_area_data( area_raw )
 
         floor = DungeonFloor( tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
+        floor.game = self
         return floor
 
     ###############
@@ -32,11 +33,15 @@ class Game( BaseGame ):
         if key == "area_test":
             return self.build_area_test()
 
+    def next_area( self, area_name, target_switch ):
+        exit()
+        pass    
+
     def initialize(self):
 
         self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.22 ) )
         self.controllers    = self.create_tickable( Controllers() )
-        self.player         = self.create_tickable( KPlayer( sight_radius = 40.0, speed = 3.80, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) )
+        self.player         = self.create_tickable( KPlayer( sight_radius = 40.0, speed = 5.80, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) )
 
         #areas = generate_qualified_areas()
         #areas = []

@@ -9,9 +9,28 @@ from .SVGLoader import get_level_data
 from math import floor
 import random
 
+class AreaSwitch(Object):
+    def customize(self):
+        self.visible = False
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.active = False
+        self.rad2 = 15
+
+    def tick(self):
+        dx = self.floor.player.p[0] - self.p[0]
+        dy = self.floor.player.p[1] - self.p[1]
+        d2 = (dx*dx)+(dy*dy)
+
+        if d2 > self.rad2:
+            self.active = True
+        if d2 < self.rad2:
+            self.trigger()
+
+    def trigger(self):
+        self.floor.game.next_area( self.target_area, self.target_switch )
+
 class Prop(Object):
     def parse(pd):
-
         p = Prop( texture = BGL.assets.get("KT-props/texture/" + pd["image"]))
         p.p[0] = pd["x"]
         p.p[1] = pd["y"]
@@ -750,6 +769,13 @@ class ForestGraveyard():
             self.objects.append( Prop.parse(pd) )
 
         for od in ad["object_defs"]:
+            if od["key"] == "area_switch":
+                p = [ od["x"], od["y"] ]
+                target_area = od["meta"]["target_area"]
+                target_switch = od["meta"]["target_switch"]
+                switch_name = od["meta"]["name"]
+                self.objects.append(AreaSwitch( switch_name = switch_name, p = p, target_area = target_area, target_switch = target_switch))
+                
             if od["key"] == "gate_photon":
                 for i in range(0,8):
                     emitter_def = [ od["x"]-5.0,od["y"]-5.0, 10.0,10.0, [ 0.8,0.4,1.0,1.0] ]    
