@@ -16,7 +16,7 @@ from .Generators.ForestGraveyard import ForestGraveyard
 class Game( BaseGame ):
 
     paused = False
-
+    floor_cache = {}
     ###############
     def build_area_test(self):
         #start_area.floor = DungeonFloor( width = 90, height = 90, camera = self.camera, player = self.player, objects=[], area=start_area );
@@ -34,14 +34,31 @@ class Game( BaseGame ):
             return self.build_area_test()
 
     def next_area( self, area_name, target_switch ):
-        exit()
-        pass    
+        self.tickables = []
+        self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.22 ) )
+        self.controllers    = self.create_tickable( Controllers() )
+        self.player         = self.create_tickable( self.create_player() )
+        self.floor = self.create_tickable( self.load_floor(area_name) )
+        self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
+
+        for switch in self.floor.area_switches:
+            if switch.switch_name == target_switch:
+                self.player.p[0] = switch.p[0]
+                self.player.p[1] = switch.p[1]
+                switch.trigger_active = False
+
+        self.camera.set_player(self.player)
+        
+
+
+    def create_player(self):
+        return KPlayer( sight_radius = 40.0, speed = 5.80, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) 
 
     def initialize(self):
 
         self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.22 ) )
         self.controllers    = self.create_tickable( Controllers() )
-        self.player         = self.create_tickable( KPlayer( sight_radius = 40.0, speed = 5.80, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) )
+        self.player         = self.create_tickable( self.create_player() )
 
         #areas = generate_qualified_areas()
         #areas = []

@@ -1,6 +1,11 @@
 import json 
-def get_area_data(data):
 
+area_cache = {}
+def get_area_data(data):
+    global area_cache
+    key = "".join(data)
+    if key in area_cache:
+        return area_cache[key]
     def defunge_line(line):
         return [[line['x1'],line['y1']],[line['x2'],line['y2']]]
 
@@ -103,6 +108,7 @@ def get_area_data(data):
         row = row + 1
 
 
+    area_cache[key] = parsed
     return parsed
 
 #data = open('c:\\tmp\\test.area').read()

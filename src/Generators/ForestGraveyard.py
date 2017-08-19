@@ -13,7 +13,7 @@ class AreaSwitch(Object):
     def customize(self):
         self.visible = False
         self.tick_type = Object.TickTypes.TICK_FOREVER
-        self.active = False
+        self.trigger_active = True
         self.rad2 = 15
 
     def tick(self):
@@ -21,10 +21,11 @@ class AreaSwitch(Object):
         dy = self.floor.player.p[1] - self.p[1]
         d2 = (dx*dx)+(dy*dy)
 
-        if d2 > self.rad2:
-            self.active = True
-        if d2 < self.rad2:
-            self.trigger()
+        if d2 > (self.rad2*1.1):
+            self.trigger_active = True
+        if self.trigger_active:
+            if d2 < self.rad2:
+                self.trigger()
 
     def trigger(self):
         self.floor.game.next_area( self.target_area, self.target_switch )
@@ -764,7 +765,7 @@ class ForestGraveyard():
         self.generate_edge_trees( self.decorators )
 
         self.generate_tiledata(df)
-
+        df.area_switches = []
         for pd in ad["prop_defs"]:
             self.objects.append( Prop.parse(pd) )
 
@@ -774,7 +775,9 @@ class ForestGraveyard():
                 target_area = od["meta"]["target_area"]
                 target_switch = od["meta"]["target_switch"]
                 switch_name = od["meta"]["name"]
-                self.objects.append(AreaSwitch( switch_name = switch_name, p = p, target_area = target_area, target_switch = target_switch))
+                area_switch = AreaSwitch( switch_name = switch_name, p = p, target_area = target_area, target_switch = target_switch)
+                df.area_switches.append(area_switch)
+                self.objects.append(area_switch)
                 
             if od["key"] == "gate_photon":
                 for i in range(0,8):
@@ -803,7 +806,7 @@ class ForestGraveyard():
             self.light_occluders = []
     
     
-            level_data = get_level_data(BGL.assets.get("KT-forest/textfile/totems"), dungeon_floor.width, dungeon_floor.height )
+            #level_data = get_level_data(BGL.assets.get("KT-forest/textfile/totems"), dungeon_floor.width, dungeon_floor.height )
     
     
             #self.map_edges = self.gen_edges( dungeon_floor )
@@ -1041,7 +1044,7 @@ class ForestGraveyard():
 
     
     def evaluate_tile(self,rx,ry):
-
+        return 1
 
         #d  = hypot(rx - self.df.player.p[0], ry-self.df.player.p[1])
 

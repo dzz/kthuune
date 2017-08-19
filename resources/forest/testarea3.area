@@ -108,9 +108,9 @@ OBJECT
 area_switch
 -24.5
 -17.5
-{ "name" : "nw","target_area" : "testarea", "target_switch":"se" }
+{ "name" : "nw","target_area" : "area_test", "target_switch":"se" }
 OBJECT
 area_switch
 20.75
 12.75
-{ "name" : "se","target_area" : "testarea", "target_switch":"nw" }
+{ "name" : "se","target_area" : "area_test", "target_switch":"nw" }
