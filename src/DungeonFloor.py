@@ -37,6 +37,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "using_tilemap" : True,
             "tilescale" : 3,
             "area_def" : None,
             "width" : 32,
@@ -55,13 +56,13 @@ class DungeonFloor( Floor ):
                 "dynamic_lightmap_height" : 512,
                 "photon_mapper_config" : {
                     'stream' : True,
-                    'photon_radius' :25.0,
-                    'photon_emitter_power' : 0.005,
+                    'photon_radius' :300.0,
+                    'photon_emitter_power' : 0.001,
                     'photon_decay' : 0.9,
                     'photon_decay_jitter' : 0.4,
                     'photon_max_bounces' : 9,
-                    'num_photons' : 12,
-                    'photon_observe_chance' : 0.9
+                    'num_photons' : 24,
+                    'photon_observe_chance' : 0.8
                 },
                 "physics" : {
                     "timestep_divisions" : 5.0,
@@ -126,6 +127,7 @@ class DungeonFloor( Floor ):
        
         self.player.aiming_beam = AimingBeam() 
         floor_configuration["objects"].append( self.player.aiming_beam )
+        self.aiming_beam = self.player.aiming_beam
 
         #self.light_occluders = self.generator.get_light_occluders()
         #self.physics_occluders = self.generator.get_physics_occluders()
@@ -139,6 +141,8 @@ class DungeonFloor( Floor ):
 
         Floor.__init__(self,**floor_configuration)
 
+    def reattach_player(self):
+        self.player.aiming_beam = self.aiming_beam
 
     def generate_portal_objects(self):
         #objs = []

@@ -206,6 +206,31 @@ vec4 alphablend( vec4 a, vec4 b) {
 ///    vec2 UV2 = letterbox(buv,a);
 ///}
 
+
+vec4 water() {
+
+    vec2 UV = letterbox(uv, 0.2)*1.5;
+    vec2 CUV = (uv-vec2(0.5,0.5))*1.5;
+
+    vec4 dcloud = clouds( CUV*0.001);
+    float idx = length(CUV);
+
+    float wt = (tick*0.01)+(0.1*sin(tick*0.01));
+
+    float cd = sin( (idx*20) - wt ); //'sinc esque'
+
+    float vd = cos( ((CUV.y*10)+cd) - wt );
+
+    float hd = cos( ((CUV.x*10)+cd+vd) - wt );
+
+
+    
+    vec4 water_reflect = texture( reflect_map, vec2( vd*cd,hd*cd) + (camera_position*0.01) );
+    vec4 cloud = clouds( vec2(vd ,hd ) );
+    vec4 l = texture(floor_buffer, vec2( vd*cd, hd*cd ));
+    return water_reflect * cloud * l;
+}
+
 void main(void) {
 
     vec2 UV = letterbox(uv, 0.2);
@@ -250,6 +275,7 @@ void main(void) {
     FogLit.a = 0.2;
 
     vec4 LitFloor = alphablend( FloorBase * ( PhotonBase + LightBase ) * VisionBase, FogLit ) * 1.5;
+    //LitFloor = FloorBase;
     vec4 PopupMerged = alphablend( LitFloor, ObjectBase ) * VisionBase;
 
     vec4 CanopyLit = CanopyBase * PhotonBase * VisionBase;
@@ -262,7 +288,11 @@ void main(void) {
     CloudLit.g = 0.6 * (1.0-uv.y) * LengthA;
     CloudLit.b = 0.6 * (1.0-uv.y) * LengthA;
 
-    gl_FragColor = alphablend( CanopyMerged, CloudLit );
+    if(( FloorBase.a < 0.05) && ObjectBase.a < 0.05) {
+        gl_FragColor = water();
+    } else {
+        gl_FragColor = alphablend( CanopyMerged, CloudLit );
+    }
 
     //gl_FragColor = vec4( Length, Length, Length, 1.0 );
 }

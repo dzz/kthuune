@@ -17,29 +17,51 @@ class Game( BaseGame ):
 
     paused = False
     floor_cache = {}
+    area_name = None
     ###############
     def build_area_test(self):
-        #start_area.floor = DungeonFloor( width = 90, height = 90, camera = self.camera, player = self.player, objects=[], area=start_area );
-        area_raw = BGL.assets.get("KT-forest/textfile/testarea")
+        area_raw = BGL.assets.get("KT-forest/textfile/area_test")
         area_def = get_area_data( area_raw )
 
         floor = DungeonFloor( tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         floor.game = self
         return floor
 
+    def build_area_docks(self):
+        area_raw = BGL.assets.get("KT-forest/textfile/docks")
+        area_def = get_area_data( area_raw )
+
+        floor = DungeonFloor( tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
+        floor.using_tilemap = False
+        floor.game = self
+        return floor
+
     ###############
 
     def load_floor( self, key ):
-        if key == "area_test":
-            return self.build_area_test()
+        cache_hit = False
+        self.area_name = key
+        if not key in Game.floor_cache:
+            if key == "area_test":
+                Game.floor_cache[key] = self.build_area_test()
+            if key == "docks":
+                Game.floor_cache[key] = self.build_area_docks()
+        else:
+            cache_hit = True
+
+        Game.floor_cache[key].reattach_player()
+
+        if cache_hit:
+            Game.floor_cache[key].reinitialize_physics()
+        return Game.floor_cache[key]            
 
     def next_area( self, area_name, target_switch ):
-        self.tickables = []
-        self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.22 ) )
-        self.controllers    = self.create_tickable( Controllers() )
-        self.player         = self.create_tickable( self.create_player() )
-        self.floor = self.create_tickable( self.load_floor(area_name) )
-        self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
+        if self.area_name is not area_name:
+            self.tickables.remove( self.floor )
+            self.floor = self.create_tickable( self.load_floor(area_name) )
+            self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
+
+        self.player.set_hud_message( "{0} - {1}".format(area_name, target_switch))
 
         for switch in self.floor.area_switches:
             if switch.switch_name == target_switch:
@@ -69,7 +91,7 @@ class Game( BaseGame ):
         #self.floor = self.create_tickable( Floor() )
 
 
-        self.floor = self.create_tickable(self.load_floor("area_test"))
+        self.floor = self.create_tickable(self.load_floor("docks"))
 
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
         self.camera.set_player(self.player)

@@ -37,7 +37,8 @@
             { "name" : "chamber1", "filename" : "{package_path}/chamber1.svg" },
             { "name" : "totems", "filename" : "{package_path}/totems.svg" },
             { "name" : "spiral", "filename" : "{package_path}/spiral.svg" },
-            { "name" : "testarea", "filename" : "{package_path}/testarea3.area" }
+            { "name" : "area_test", "filename" : "{package_path}/testarea3.area" },
+            { "name" : "docks", "filename" : "{package_path}/docks.area" }
         ]
     }
 }

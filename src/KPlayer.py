@@ -343,8 +343,8 @@ class KPlayer(Player):
         return pad
 
     def set_hud_message(self, msg):
-        self.hud_message_timeout = 60
-        self.hud_message = msg
+        self.hud_message_timeout = 400
+        self.hud_message = msg.upper()
 
     def render_hud(self):
         with BGL.context.render_target( self.hud_buffer ):
@@ -359,10 +359,14 @@ class KPlayer(Player):
                 if(self.hud_message_timeout>0):
                     mx = 160 - floor(len(self.hud_message)*4)
 
-                    urc = [ ur1(),ur1(),ur1(),1.0 ]
-                    urc1 = [ ur1(),ur1(),ur1(),1.0 ]
-                    BGL.lotext.render_text_pixels(self.hud_message, mx-1, 240-9, urc )
-                    BGL.lotext.render_text_pixels(self.hud_message, mx, 240-8, urc1 )
+                    f = 1.0
+                    if(self.hud_message_timeout<100):
+                        f = self.hud_message_timeout / 100.0;
+                        
+                    urc = [ ur1()*f,ur1()*f,ur1()*f,1.0 ]
+                    urc1 = [ ur1()*0.5*f,ur1()*0.5,ur1()*0.5*f,1.0 ]
+                    BGL.lotext.render_text_pixels(self.hud_message, mx-1, 240-11, urc )
+                    BGL.lotext.render_text_pixels(self.hud_message, mx, 240-10, urc1 )
 
         with BGL.blendmode.alpha_over:
             self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )

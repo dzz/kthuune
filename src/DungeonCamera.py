@@ -13,6 +13,8 @@ class DungeonCamera (Camera):
 
     def set_player(self, player):
         self.player = player
+        self.p[0] = self.player.p[0]
+        self.p[1] = self.player.p[1]
 
     def tick(self):
         if not KTState.paused:
@@ -25,8 +27,18 @@ class DungeonCamera (Camera):
                 aim_offset_x = cos( self.player.rad ) * 10
                 aim_offset_y = sin( self.player.rad ) * 10
 
-            calc_zoom = self.base_zoom + (self.zoom*(-0.33)*isAiming)
-            self.zoom = (self.zoom*0.99) + (calc_zoom*0.01)
+
+            sx = self.player.v[0]
+            sy = self.player.v[1]
+            sc = 0.4 / (1.0 + ((sx*sx)+(sy*sy)))
+
+            calc_zoom = (self.base_zoom + (self.zoom*(-0.33)*isAiming) + sc)*0.6
+
+            if(self.zoom < calc_zoom):
+                self.zoom = (self.zoom*0.999) + (calc_zoom*0.001)
+            else:
+                self.zoom = (self.zoom*0.99) + (calc_zoom*0.01)
+
             rate = DungeonCamera.rate
 
 

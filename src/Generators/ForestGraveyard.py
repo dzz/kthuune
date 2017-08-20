@@ -21,9 +21,11 @@ class AreaSwitch(Object):
         dy = self.floor.player.p[1] - self.p[1]
         d2 = (dx*dx)+(dy*dy)
 
-        if d2 > (self.rad2*1.1):
+        if d2 > (self.rad2*15):
             self.trigger_active = True
         if self.trigger_active:
+            if d2 < (self.rad2*10):
+                self.floor.player.set_hud_message("go to {0} - {1}".format(self.target_area, self.target_switch))
             if d2 < self.rad2:
                 self.trigger()
 
@@ -559,7 +561,7 @@ class TreeTop(Object):
         def __init__(self,**kwargs):
             overrides = {
                     "num" : 0,
-                    "texture" : BGL.assets.get("KT-forest/texture/treetop2"),
+                    "texture" : choice( [ BGL.assets.get("KT-forest/texture/treetop2"), BGL.assets.get('KT-forest/texture/treetop') ] ),
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
                     'size' : [ 5.0,5.0],
                     'rad' : uniform(-3.14,3.14),
@@ -782,6 +784,21 @@ class ForestGraveyard():
             if od["key"] == "gate_photon":
                 for i in range(0,8):
                     emitter_def = [ od["x"]-5.0,od["y"]-5.0, 10.0,10.0, [ 0.8,0.4,1.0,1.0] ]    
+                    self.photon_emitters.append(emitter_def)
+
+            if od["key"] == "friend_photon":
+                for i in range(0,8):
+                    emitter_def = [ od["x"]-5.0,od["y"]-5.0, 10.0,10.0, [ 0.3,0.5,1.0,1.0] ]    
+                    self.photon_emitters.append(emitter_def)
+
+            if od["key"] == "orange_photon":
+                for i in range(0,8):
+                    emitter_def = [ od["x"]-5.0,od["y"]-5.0, 10.0,10.0, [ 1.0,0.9,0.3,1.0] ]    
+                    self.photon_emitters.append(emitter_def)
+
+            if od["key"] == "next_forest_photon":
+                for i in range(0,8):
+                    emitter_def = [ od["x"]-5.0,od["y"]-5.0, 10.0,10.0, [ 0.3,1.0,0.5,1.0] ]    
                     self.photon_emitters.append(emitter_def)
 
 
