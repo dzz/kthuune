@@ -82,13 +82,21 @@ def get_area_data(data):
             if row == 2:
                 o["y"] = float(txt)
             if row == 3:
-                try:
-                    print("PARSING META")
-                    print(txt)
-                    o["meta"] = json.loads(txt)
-                    print(o["meta"])
-                except Exception as e:
+                if o["key"] == "area_switch" and "=>" in txt:
+                    txt = txt.replace("\r","").replace("\n","")
+                    s = txt.split("=>")
                     o["meta"] = {}
+                    o["meta"]["name"] = s[0]
+                    o["meta"]["target_switch"] = s[1]
+                    o["meta"]["target_area"]="self"
+                else:
+                    try:
+                        print("PARSING META")
+                        print(txt)
+                        o["meta"] = json.loads(txt)
+                        print(o["meta"])
+                    except Exception as e:
+                        o["meta"] = {}
 
         if mode == "PROP":
             p = parsed["prop_defs"][-1]
