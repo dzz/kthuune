@@ -503,7 +503,7 @@ class KPlayer(Player):
         self.X_STATE[0] = self.X_STATE[1]
         self.X_STATE[1] = pad.button_down( BGL.gamepads.buttons.X )
     
-        if self.X_STATE[1] is False and self.X_STATE[0] is True:
+        if self.X_STATE[1] is True and self.X_STATE[0] is False:
             self.X_PRESSED = True
         else:
             self.X_PRESSED = False
@@ -533,6 +533,7 @@ class KPlayer(Player):
         self.deal_with_buttons(pad)
 
         if self.X_PRESSED:
+            print("HELLO WORLD")
             self.attempt_snap_attack()
 
         self.light_color = self.base_light_color

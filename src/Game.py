@@ -55,6 +55,7 @@ class Game( BaseGame ):
     ###############
 
     def load_floor( self, key ):
+        Game.floor_cache = {}
         cache_hit = False
         self.area_name = key
         if not key in Game.floor_cache:
@@ -114,9 +115,10 @@ class Game( BaseGame ):
 
 
         #prime the cache
-        ###self.load_floor("area_test")
-        ###self.load_floor("docks")
-        ###self.load_floor("tower")
+        self.load_floor("area_test")
+        self.load_floor("tower")
+        self.load_floor("arena")
+        self.load_floor("docks")
 
         self.floor = self.create_tickable(self.load_floor("docks"))
 
