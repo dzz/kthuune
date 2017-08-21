@@ -89,6 +89,14 @@ LINE
 True
 True
 False
+LINE
+20
+12
+20
+12
+True
+True
+False
 OBJECT
 gate_photon
 -24.25
@@ -113,4 +121,4 @@ OBJECT
 area_switch
 20.75
 12.75
-{ "name" : "se","target_area" : "area_test", "target_switch":"nw" }
+{ "name" : "se","target_area" : "arena", "target_switch":"playerstart" }

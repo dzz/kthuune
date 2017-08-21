@@ -1616,3 +1616,8 @@ gate_photon
 75
 55
 {}
+OBJECT
+area_switch
+-92
+80
+{ "name" : "playerstart","target_area" : "docks", "target_switch":"ne" }

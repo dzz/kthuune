@@ -256,26 +256,37 @@ class KPlayer(Player):
         def se_priority(se):
             dx = se.p[0] - self.p[0]
             dy = se.p[1] - self.p[1]
-            return (dx*dx)+(dy*dy)
+            se.last_priority_score = (dx*dx)+(dy*dy)
+            return se.last_priority_score
             
         sorted_snap_enemies = sorted( self.floor.snap_enemies, key=lambda x:se_priority(x))
-        for se in sorted_snap_enemies:
+        filtered_snap_enemies = list(filter( lambda x: x.last_priority_score < 140, sorted_snap_enemies))
+
+        hit = False
+        for se in filtered_snap_enemies:
             dx = se.p[0] - self.p[0]
             dy = se.p[1] - self.p[1]
             rad = atan2(dy,dx)
             
             delta = abs( rad - self.rad )
-            if(delta < 0.8):
+            if(delta < 0.55):
                 se.receive_attack()
                 self.p[0] = se.p[0]
                 self.p[1] = se.p[1]
                 self.sword.state = Sword.STATE_DISCHARGING
                 self.sword.stimer = 0
                 self.snap_cooldown = 30
+                hit = True
                 break
             else:
-                print(delta)
+                pass
 
+        if hit:
+            self.combo_count = self.combo_count + 1
+        else:
+            self.combo_count = 0
+
+        
     def set_state(self,state):
         self.stimer = 0
         self.state = state
@@ -382,8 +393,8 @@ class KPlayer(Player):
             with BGL.blendmode.alpha_over:
                 #BGL.lotext.render_text_pixels("HP:{0}".format(self.hp-1), 130,220,[1.0,0.0,0.0] )
                 if(self.combo_count>1):
-                    offsx = choice(range(-3,3))
-                    offsy = choice(range(-2,2))
+                    offsx = choice(range(-1,1))
+                    offsy = choice(range(-1,1))
                     BGL.lotext.render_text_pixels("COMBO:{0}".format(self.combo_count-1), 130+offsx,90+offsy, [1.0,uniform(0.0,1.0),1.0] )
 
                 if(self.hud_message_timeout>0):
@@ -470,11 +481,6 @@ class KPlayer(Player):
         if self.sword.state == Sword.STATE_ATTACK_PENDING:
             return
 
-        if(self.combo_count <= 2):
-            if(self.sword_swing<5):
-                self.attacked = True
-                self.hp = self.hp - damage
-                self.set_state( KPlayer.STATE_STUNNED )
 
     def is_dashing(self):
         return self.dash_combo
@@ -483,28 +489,10 @@ class KPlayer(Player):
         pass
 
     def next_dashcombo(self):
-        self.dash_combo = True
-
-        if(self.combo_count<20):
-            self.dash_amt = self.dash_amt * 1.2
-        self.pumped_dashcombo = True
-
-        if(self.can_combo):
-            self.combo_count = self.combo_count + 1
-            self.can_combo = False
+        pass
 
     def pump_dashcombo(self):
-        if(self.dash_combo):
-            if(self.can_combo):
-                self.combo_count = self.combo_count + 1
-                self.can_combo = False
-            if not self.pumped_dashcombo:
-                if(self.combo_count<20):
-                    self.dash_amt = self.dash_amt * 1.2
-                else:
-                    self.dash_amt = self.dash_amt*1.05
-                self.pumped_dashcombo = True
-                self.dash_combo = True
+        pass
 
 
     def notify_enemy_killed(self):

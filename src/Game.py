@@ -35,6 +35,14 @@ class Game( BaseGame ):
         floor.game = self
         return floor
 
+    def build_area_arena(self):
+        area_raw = BGL.assets.get("KT-forest/textfile/arena")
+        area_def = get_area_data( area_raw )
+
+        floor = DungeonFloor( tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
+        floor.game = self
+        return floor
+
     def build_area_docks(self):
         area_raw = BGL.assets.get("KT-forest/textfile/docks")
         area_def = get_area_data( area_raw )
@@ -56,6 +64,8 @@ class Game( BaseGame ):
                 Game.floor_cache[key] = self.build_area_docks()
             if key == "tower":
                 Game.floor_cache[key] = self.build_area_tower()
+            if key == "arena":
+                Game.floor_cache[key] = self.build_area_arena()
         else:
             cache_hit = True
 
@@ -108,7 +118,7 @@ class Game( BaseGame ):
         ###self.load_floor("docks")
         ###self.load_floor("tower")
 
-        self.floor = self.create_tickable(self.load_floor("tower"))
+        self.floor = self.create_tickable(self.load_floor("docks"))
 
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
         self.camera.set_player(self.player)
