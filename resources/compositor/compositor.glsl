@@ -288,11 +288,11 @@ void main(void) {
     CloudLit.g = 0.6 * (1.0-uv.y) * LengthA;
     CloudLit.b = 0.6 * (1.0-uv.y) * LengthA;
 
-    if(( FloorBase.a < 0.05) && ObjectBase.a < 0.05) {
-        gl_FragColor = water();
-    } else {
+    //if(( FloorBase.a < 0.05) && ObjectBase.a < 0.05) {
+    //    gl_FragColor = water();
+    //} else {
         gl_FragColor = alphablend( CanopyMerged, CloudLit );
-    }
+    //}
 
     //gl_FragColor = vec4( Length, Length, Length, 1.0 );
 }

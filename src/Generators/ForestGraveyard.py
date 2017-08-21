@@ -1,3 +1,12 @@
+#### MACHINE GIRL 
+#### BATMAN 
+#### ZELDA
+#### STIMULANTS
+#### PAGANISM
+#### BREAKCORE TEMPOS
+#### SIEZURES
+#### DARK SOULS
+
 from random import uniform, choice
 from math import hypot
 from Newfoundland.Object import Object
@@ -9,19 +18,54 @@ from .SVGLoader import get_level_data
 from math import floor
 import random
 
+class SnapEnemy(Object):
+    def parse(od,df):
+        o = SnapEnemy( p = [ od["x"],od["y"] ] )
+        df.snap_enemies.append(o)
+        return o
+
+    def receive_attack(self):
+        for i in range(1,10):
+            self.floor.create_object( Splat( p = self.p ) )
+        
+    def tick(self):
+        self.light_radius = uniform(8.0,12.0)
+        return True
+
+    def customize(self):
+        self.tick_type = Object.TickTypes.PURGING
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+
+        self.light_radius = 10.0
+        self.light_color = [ 1.0, 0.8, 0.0, 1.0 ]
+        self.visible = True
+        self.z_index = 1
+        self.buftarget = "popup"
+        self.texture = Skeline.textures[2]
+        self.size = [ 2.5, 2.5 ]
+
 class AreaSwitch(Object):
     def customize(self):
         self.visible = False
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.trigger_active = True
         self.rad2 = 15
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_color =  [ 2.8,2.7,2.0,1.0]
+        self.light_radius = 5.0
 
     def tick(self):
         dx = self.floor.player.p[0] - self.p[0]
         dy = self.floor.player.p[1] - self.p[1]
         d2 = (dx*dx)+(dy*dy)
 
-        if d2 > (self.rad2*15):
+        if not self.trigger_active:
+            self.light_radius = 0.1
+        else:
+            if self.light_radius < 5.0:
+                self.light_radius = self.light_radius*1.2
+        if d2 > (self.rad2*5):
+
             self.trigger_active = True
         if self.trigger_active:
             if d2 < (self.rad2*10):
@@ -85,6 +129,13 @@ class ERangedMagic(Object):
         return False
 
 class Skeline(Object):
+    def receive_attack(self):
+        SnapEnemy.receive_attack(self)
+
+    def parse(od,df):
+        o = Skeline( p = [ od["x"],od["y"] ] )
+        df.snap_enemies.append(o)
+        return o
 
     STATE_SEEKING_RANDOM = 0
     STATE_SEEKING_PLAYER = 1
@@ -115,6 +166,7 @@ class Skeline(Object):
         self.flip_pxy = False
 
     def tick(self):
+        SnapEnemy.tick(self)
         self.widx = (self.widx + 1) % 40
         self.wfr = floor(self.widx/20)
         self.texture = Skeline.textures[self.wfr]
@@ -232,27 +284,28 @@ class Splat(Object):
     ]
     def customize(self):
         self.tick_type = Object.TickTypes.PURGING
-        self.cooldown = 40
+        self.cooldown = 80
         self.rad = uniform(-3.14,3.14)
-        self.buftarget = "floor"
-        self.size = [ uniform(0.3,0.7), uniform(0.3,0.7) ]
+        self.buftarget = "popup"
+        self.zindex = 100
+        self.size = [ uniform(1.3,2.7), uniform(1.3,2.7) ]
         self.spin = uniform(-0.1,0.1)
 
     def get_shader_params(self):
         sp = Object.get_shader_params(self)
-        sp["filter_color"] = [1.0,1.0,1.0,float(self.cooldown)/40.]
+        sp["filter_color"] = [1.0,1.0,1.0,float(self.cooldown)/80.]
         return sp
 
     def tick(self):
-        self.size[0] = self.size[0] * 1.2 
-        self.size[1] = self.size[1] * 1.2 
+        self.size[0] = self.size[0] * 1.6 
+        self.size[1] = self.size[1] * 1.6 
         self.rad = self.rad + self.spin
         self.cooldown = self.cooldown - 2.0
         if(self.cooldown<=0):
             self.floor.objects.remove(self)
             return False
         else:
-            self.texture = Splat.textures[int(floor((40-self.cooldown) / 40)) ]
+            self.texture = Splat.textures[int(floor((80-self.cooldown) / 80)) ]
             return True
 
 class Worm(Object):
@@ -781,6 +834,7 @@ class ForestGraveyard():
                 df.area_switches.append(area_switch)
                 self.objects.append(area_switch)
                 
+
             if od["key"] == "gate_photon":
                 for i in range(0,8):
                     emitter_def = [ od["x"]-5.0,od["y"]-5.0, 10.0,10.0, [ 0.8,0.4,1.0,1.0] ]    
@@ -800,6 +854,9 @@ class ForestGraveyard():
                 for i in range(0,8):
                     emitter_def = [ od["x"]-5.0,od["y"]-5.0, 10.0,10.0, [ 0.3,1.0,0.5,1.0] ]    
                     self.photon_emitters.append(emitter_def)
+
+            if od["key"] == "snap_enemy":
+                self.objects.append(Skeline.parse(od,df ))
 
 
 
@@ -1061,7 +1118,6 @@ class ForestGraveyard():
 
     
     def evaluate_tile(self,rx,ry):
-        return 1
 
         #d  = hypot(rx - self.df.player.p[0], ry-self.df.player.p[1])
 

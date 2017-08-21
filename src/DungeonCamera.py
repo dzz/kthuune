@@ -4,7 +4,7 @@ from .KTState import KTState
 
 class DungeonCamera (Camera):
 
-    rate = 0.035
+    rate = 0.2
 
     def __init__(self, **kwargs):
         Camera.__init__(self,**kwargs)

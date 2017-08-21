@@ -159,7 +159,7 @@ class Sword(Object):
         if self.state == Sword.STATE_IDLE:
             self.stamina = min(self.stamina * 1.008,1.0)
             self.stimer = 0
-            if pad.button_down( btns.A ):
+            if pad.button_down( btns.RIGHT_BUMPER ):
                 if self.stamina > 0.04:
                     self.stamina = self.stamina * 0.83
                     self.state = Sword.STATE_CHARGING
@@ -170,7 +170,7 @@ class Sword(Object):
         if self.state == Sword.STATE_CHARGING:
             self.stamina = self.stamina * 0.995
             self.discharge_mod = self.discharge_mod * 1.02
-            if not pad.button_down( btns.A ) or self.stamina < 0.02:
+            if not pad.button_down( btns.RIGHT_BUMPER ) or self.stamina < 0.02:
                 if(self.stimer > Sword.spin_attack_threshold):
                     self.state = Sword.STATE_DISCHARGING
                     self.stimer = 0
@@ -186,7 +186,7 @@ class Sword(Object):
             if self.stamina < 0.02:
                 self.player.set_state(KPlayer.STATE_STUNNED)
 
-            if self.stimer >= Sword.max_pending or (not pad.button_down(btns.A)):
+            if self.stimer >= Sword.max_pending or (not pad.button_down(btns.RIGHT_BUMPER)):
                 self.stimer = 0
                 self.state = Sword.STATE_DISCHARGING
 
@@ -197,7 +197,7 @@ class Sword(Object):
 
         if self.state == Sword.STATE_AWAITING_RELEASE:
             self.discharge_mod = 1.0
-            if not pad.button_down( btns.A):
+            if not pad.button_down( btns.RIGHT_BUMPER):
                 self.state = Sword.STATE_IDLE
 
         if self.state == Sword.STATE_SPIN_ATTACK:
@@ -252,11 +252,41 @@ class KPlayer(Player):
     STATE_STUNNED = 1
     STATE_DODGING = 2
     
+    def attempt_snap_attack(self):
+        def se_priority(se):
+            dx = se.p[0] - self.p[0]
+            dy = se.p[1] - self.p[1]
+            return (dx*dx)+(dy*dy)
+            
+        sorted_snap_enemies = sorted( self.floor.snap_enemies, key=lambda x:se_priority(x))
+        for se in sorted_snap_enemies:
+            dx = se.p[0] - self.p[0]
+            dy = se.p[1] - self.p[1]
+            rad = atan2(dy,dx)
+            
+            delta = abs( rad - self.rad )
+            if(delta < 0.8):
+                se.receive_attack()
+                self.p[0] = se.p[0]
+                self.p[1] = se.p[1]
+                self.sword.state = Sword.STATE_DISCHARGING
+                self.sword.stimer = 0
+                self.snap_cooldown = 30
+                break
+            else:
+                print(delta)
+
     def set_state(self,state):
         self.stimer = 0
         self.state = state
 
     def __init__(self, **kwargs):
+        #playerinit
+
+        self.snap_cooldown = 0
+        self.X_PRESSED = False
+        self.X_STATE = [ False, False ]
+
         self.stimer = 0
         self.state = KPlayer.STATE_DEFAULT
         overrides =  {
@@ -481,9 +511,20 @@ class KPlayer(Player):
         self.kill_success = True
         pass
 
+    def deal_with_buttons(self,pad):
+        self.X_STATE[0] = self.X_STATE[1]
+        self.X_STATE[1] = pad.button_down( BGL.gamepads.buttons.X )
+    
+        if self.X_STATE[1] is False and self.X_STATE[0] is True:
+            self.X_PRESSED = True
+        else:
+            self.X_PRESSED = False
+
     def tick(self):
         #playertick
 
+
+        self.snap_cooldown = self.snap_cooldown - 1
         self.hud_message_timeout = self.hud_message_timeout - 1
         self.stimer = self.stimer + 1
         self.cardtick = self.cardtick + 0.01
@@ -501,8 +542,10 @@ class KPlayer(Player):
             self.rad = atan2(self.p[0]-self.snapshot['p'][0],self.p[1]-self.snapshot['p'][1])
             return True
         pad = self.controllers.get_virtualized_pad( self.num )
+        self.deal_with_buttons(pad)
 
-        
+        if self.X_PRESSED:
+            self.attempt_snap_attack()
 
         self.light_color = self.base_light_color
         
@@ -520,9 +563,8 @@ class KPlayer(Player):
                 self.set_state( KPlayer.STATE_DEFAULT )
 
         if(self.state == KPlayer.STATE_DODGING ):
-            self.v[0] = self.dv[0] * 7
-            self.v[1] = self.dv[1] * 7
-            Object.tick(self)
+            self.v[0] = self.dv[0] * 3
+            self.v[1] = self.dv[1] * 3
 
             if(self.sword.state is not Sword.STATE_IDLE):
                 self.set_state(KPlayer.STATE_DEFAULT)
@@ -540,14 +582,16 @@ class KPlayer(Player):
                     self.can_backstep = False
                     self.set_state(KPlayer.STATE_DODGING)
 
+
             calc_speed = self.speed
+
             self.dash_flash = False
             if(self.sword.state == Sword.STATE_CHARGING):
-                calc_speed = self.speed * 0.1
+                calc_speed = self.speed * 0.5
 
             if(self.sword.state == Sword.STATE_DISCHARGING):
                 self.dash_flash = True
-                calc_speed = self.speed * 9.0
+                calc_speed = self.speed * 4.0
 
             if(self.sword.state == Sword.STATE_ATTACK_PENDING):
                 self.dash_flash = True
@@ -585,4 +629,11 @@ class KPlayer(Player):
             if(self.sword.state == Sword.STATE_DISCHARGING):
                 self.light_color = [ 0.0,uniform(0.0,1.0),uniform(0.0,1.0),1.0]
                 self.light_radius = uniform(40.0,50.0)
+
+
+            if(self.snap_cooldown>0):
+                self.v[0] = 0
+                self.v[1] = 0
+            
+            Object.tick(self)
 

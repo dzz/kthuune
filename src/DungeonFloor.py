@@ -37,6 +37,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "snap_enemies" : [],
             "using_tilemap" : True,
             "tilescale" : 3,
             "area_def" : None,
@@ -55,13 +56,13 @@ class DungeonFloor( Floor ):
                 "dynamic_lightmap_width" : 512,
                 "dynamic_lightmap_height" : 512,
                 "photon_mapper_config" : {
-                    'stream' : True,
-                    'photon_radius' :300.0,
-                    'photon_emitter_power' : 0.001,
+                    'stream' : False,
+                    'photon_radius' :70.0,
+                    'photon_emitter_power' : 0.01,
                     'photon_decay' : 0.9,
                     'photon_decay_jitter' : 0.4,
                     'photon_max_bounces' : 9,
-                    'num_photons' : 24,
+                    'num_photons' : 8,
                     'photon_observe_chance' : 0.8
                 },
                 "physics" : {

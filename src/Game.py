@@ -86,11 +86,11 @@ class Game( BaseGame ):
 
 
     def create_player(self):
-        return KPlayer( sight_radius = 40.0, speed = 5.80, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) 
+        return KPlayer( sight_radius = 40.0, speed = 10.80, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) 
 
     def initialize(self):
 
-        self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.22 ) )
+        self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.35 ) )
         self.controllers    = self.create_tickable( Controllers() )
         self.player         = self.create_tickable( self.create_player() )
 
@@ -104,9 +104,9 @@ class Game( BaseGame ):
 
 
         #prime the cache
-        self.load_floor("area_test")
-        self.load_floor("docks")
-        self.load_floor("tower")
+        ###self.load_floor("area_test")
+        ###self.load_floor("docks")
+        ###self.load_floor("tower")
 
         self.floor = self.create_tickable(self.load_floor("tower"))
 

@@ -39,7 +39,7 @@
             { "name" : "spiral", "filename" : "{package_path}/spiral.svg" },
             { "name" : "area_test", "filename" : "{package_path}/testarea3.area" },
             { "name" : "docks", "filename" : "{package_path}/docks.area" },
-            { "name" : "tower", "filename" : "{package_path}/tower.area" }
+            { "name" : "tower", "filename" : "{package_path}/arena.area" }
         ]
     }
 }
