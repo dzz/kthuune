@@ -8,6 +8,45 @@ from math import floor,pi,atan2,sin, hypot
 def ur1():
     return uniform(0.0,1.0)
 
+class PlayerPhantom(Object):
+    def customize(self):
+        self.texture = self.player.texture
+        self.animation_target = ( self.target.p[0], self.target.p[1] )
+
+        self.p[0] = self.player.p[0]
+        self.p[1] = self.player.p[1]
+
+        dx = self.animation_target[0] - self.p[0]
+        dy = self.animation_target[1] - self.p[1]
+
+        self.p[0] = self.p[0] - (dx*0.5)
+        self.p[1] = self.p[1] - (dy*0.5)
+
+        self.visible = False
+        self.buftarget = "floor"
+        self.z_index = 900
+        self.tick_type = Object.TickTypes.PURGING
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_radius = 8.0
+        self.light_color = [ 0.0,0.0,1.0,1.0 ]
+        self.animation_counter = 0
+        self.size = [ 3.0,3.0]
+    
+    def tick(self):
+        self.animation_counter = self.animation_counter + 1
+        print(self.animation_counter)
+        if(self.animation_counter-self.animation_threshold > 12 ):
+            self.floor.objects.remove(self)
+            return False
+        if(self.animation_counter > self.animation_threshold):
+            self.visible = True
+            dx = (self.animation_target[0] - self.p[0]) / 4
+            dy = (self.animation_target[1] - self.p[1]) / 4
+            self.p[0] = self.p[0] + dx
+            self.p[1] = self.p[1] + dy
+        return True
+        
+
 class Hud():
     view = BGL.view.widescreen_16_9
 
@@ -260,9 +299,10 @@ class KPlayer(Player):
             return se.last_priority_score
             
         sorted_snap_enemies = sorted( self.floor.snap_enemies, key=lambda x:se_priority(x))
-        filtered_snap_enemies = list(filter( lambda x: x.last_priority_score < 140, sorted_snap_enemies))
+        filtered_snap_enemies = list(filter( lambda x: x.last_priority_score < 400, sorted_snap_enemies))
 
         hit = False
+        target = None
         for se in filtered_snap_enemies:
             dx = se.p[0] - self.p[0]
             dy = se.p[1] - self.p[1]
@@ -271,12 +311,15 @@ class KPlayer(Player):
             delta = abs( rad - self.rad )
             if(delta < 0.55):
                 se.receive_attack()
+                for x in range(0,15):
+                    self.floor.create_object( PlayerPhantom( player = self, animation_threshold = 2*x, target = se ) )
                 self.p[0] = se.p[0]
                 self.p[1] = se.p[1]
                 self.sword.state = Sword.STATE_DISCHARGING
                 self.sword.stimer = 0
                 self.snap_cooldown = 30
                 hit = True
+                target = se
                 break
             else:
                 pass
@@ -533,7 +576,6 @@ class KPlayer(Player):
         self.deal_with_buttons(pad)
 
         if self.X_PRESSED:
-            print("HELLO WORLD")
             self.attempt_snap_attack()
 
         self.light_color = self.base_light_color
