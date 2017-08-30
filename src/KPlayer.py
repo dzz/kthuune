@@ -340,6 +340,7 @@ class KPlayer(Player):
         self.snap_cooldown = 0
         self.X_PRESSED = False
         self.X_STATE = [ False, False ]
+        self.B_STATE = [ False, False ]
 
         self.stimer = 0
         self.state = KPlayer.STATE_DEFAULT
@@ -550,6 +551,15 @@ class KPlayer(Player):
             self.X_PRESSED = True
         else:
             self.X_PRESSED = False
+
+        self.B_STATE[0] = self.B_STATE[1]
+        self.B_STATE[1] = pad.button_down( BGL.gamepads.buttons.B )
+    
+        if self.B_STATE[1] is True and self.B_STATE[0] is False:
+            self.B_PRESSED = True
+        else:
+            self.B_PRESSED = False
+
 
     def tick(self):
         #playertick

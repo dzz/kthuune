@@ -6,6 +6,8 @@
 #### BREAKCORE TEMPOS
 #### SIEZURES
 #### DARK SOULS
+#### QUAKE I.
+#### HERETIC
 
 from random import uniform, choice
 from math import hypot
