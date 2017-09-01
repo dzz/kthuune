@@ -37,6 +37,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "doors" : [],
             "snap_enemies" : [],
             "using_tilemap" : True,
             "tilescale" : 3,
@@ -202,7 +203,20 @@ class DungeonFloor( Floor ):
  
         return objs
 
+    def get_dynamic_light_occluders(self):
+        occs = []
+        for door in self.doors:
+            occs.extend(door.get_light_occluders())
+        return occs
+
     def tick(self):
+        #dungeon floor
+
+        geometry = self.get_light_occluders()[:]
+        geometry.extend( self.get_dynamic_light_occluders())
+
+        self.vision_lightmap.update( geometry )
+        self.dynamic_lightmap.update( geometry )
         if not KTState.paused:
             Floor.tick(self)
             self.player.kill_success = False

@@ -82,7 +82,11 @@ def get_area_data(data):
             if row == 2:
                 o["y"] = float(txt)
             if row == 3:
-                if o["key"] == "area_switch" and "=>" in txt:
+
+                if o["key"] in [ "door_pin", "door_end", "door_sensor" ]:
+                    o["meta"] = {}
+                    o["meta"]["door"] = txt.replace("\r","").replace("\n","")
+                elif o["key"] == "area_switch" and "=>" in txt:
                     txt = txt.replace("\r","").replace("\n","")
                     s = txt.split("=>")
                     o["meta"] = {}

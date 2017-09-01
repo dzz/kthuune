@@ -18,6 +18,48 @@ from .SVGLoader import get_level_data
 from math import floor
 import random
 
+class Door(Object):
+    def customize(self):
+        self.visible = False
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.parsed_pin = [ self.door_pin['x'], self.door_pin['y'] ]
+        self.parsed_end = [ self.door_end['x'], self.door_end['y'] ]
+        self.parsed_sensors = []
+        for sensor in self.sensors:
+            print(sensor)
+            self.parsed_sensors.append([sensor['x'],sensor['y']])
+        self.opening = False
+        self.closed_ratio = 1.0
+        self.sensrad2 = 30
+        self.open_speed = 0.05
+        self.close_speed = self.open_speed
+    
+    def tick(self):
+        self.opening = False
+        for sensor in self.parsed_sensors:
+            dx = self.floor.player.p[0] - sensor[0]
+            dy = self.floor.player.p[1] - sensor[1]
+            md = (dx*dx) + (dy*dy)
+            if( md < self.sensrad2 ):
+                self.opening = True
+                break
+        if self.opening:
+            if self.closed_ratio > 0.0:
+                self.closed_ratio = self.closed_ratio - self.open_speed                
+        else:
+            if self.closed_ratio < 1.0:
+                self.closed_ratio = self.closed_ratio + self.close_speed
+
+    def get_light_occluders(self):
+        dx = (self.parsed_end[0] - self.parsed_pin[0]) * self.closed_ratio
+        dy = (self.parsed_end[1] - self.parsed_pin[1]) * self.closed_ratio
+       
+        ex = dx + self.parsed_pin[0] 
+        ey = dy + self.parsed_pin[1] 
+
+        return [ [ self.parsed_pin, [ex,ey] ] ]
+        
+
 class SnapEnemy(Object):
     def parse(od,df):
         o = SnapEnemy( p = [ od["x"],od["y"] ] )
@@ -809,6 +851,10 @@ class ForestGraveyard():
         df.player.p[1] = player_start['y']
 
 
+        self.door_pins = {}
+        self.door_ends = {}
+        self.door_sensors = {}
+
         self.objects = []
 
         #self.light_occluders = []
@@ -825,6 +871,15 @@ class ForestGraveyard():
             self.objects.append( Prop.parse(pd) )
 
         for od in ad["object_defs"]:
+            if od["key"] == "door_pin":
+                self.door_pins[od["meta"]["door"]] = od
+            if od["key"] == "door_end":
+                self.door_ends[od["meta"]["door"]] = od
+            if od["key"] == "door_sensor":
+                if not od["meta"]["door"] in self.door_sensors:
+                    self.door_sensors[od["meta"]["door"]] = []
+                self.door_sensors[od["meta"]["door"]].append(od)
+
             if od["key"] == "area_switch":
                 p = [ od["x"], od["y"] ]
                 target_area = od["meta"]["target_area"]
@@ -860,11 +915,17 @@ class ForestGraveyard():
 
 
 
+    def link_doors(self):
+        for key in self.door_sensors:
+            self.objects.append( Door( door_pin = self.door_pins[key], door_end = self.door_ends[key], sensors = self.door_sensors[key] ) )            
+            self.df.doors.append( self.objects[-1] )
+
     def compile(self, dungeon_floor, base_objects ):
 
         if dungeon_floor.area_def:
             print("Compiling .AREA format")
             self.process_area_def( dungeon_floor, dungeon_floor.area_def )
+            self.link_doors()
 
         elif dungeon_floor.area_def is None:
             self.objects = []
