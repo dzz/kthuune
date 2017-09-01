@@ -204,12 +204,12 @@ OBJECT
 light
 -22
 -24
-{}
+{ "class" : "red_test" }
 OBJECT
 light
 -22
 2
-{}
+{ "class" : "blue_test" }
 OBJECT
 player_start
 -22

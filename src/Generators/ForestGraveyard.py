@@ -18,6 +18,18 @@ from .SVGLoader import get_level_data
 from math import floor
 import random
 
+class FactoryLight(Object):
+    def customize(self):
+        self.visible = False
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_radius = 100
+        self.p = [ self.factory_def['x'], self.factory_def['y'] ]
+        if self.factory_def["meta"]["class"] == "red_test":
+            self.light_color = [ 1.0, 0.2,0.2,1.0 ]
+        if self.factory_def["meta"]["class"] == "blue_test":
+            self.light_color = [ 0.2, 0.2,1.0,1.0 ]
+
 class Door(Object):
     def customize(self):
         self.visible = False
@@ -30,11 +42,13 @@ class Door(Object):
             self.parsed_sensors.append([sensor['x'],sensor['y']])
         self.opening = False
         self.closed_ratio = 1.0
+        self.effective_closed_ratio = 1.0
         self.sensrad2 = 30
-        self.open_speed = 0.05
-        self.close_speed = self.open_speed
+        self.open_speed = 0.1
+        self.close_speed = 0.2
     
     def tick(self):
+        self.effective_closed_ratio = (self.effective_closed_ratio * 0.8) + (self.closed_ratio*0.2)
         self.opening = False
         for sensor in self.parsed_sensors:
             dx = self.floor.player.p[0] - sensor[0]
@@ -51,8 +65,8 @@ class Door(Object):
                 self.closed_ratio = self.closed_ratio + self.close_speed
 
     def get_light_occluders(self):
-        dx = (self.parsed_end[0] - self.parsed_pin[0]) * self.closed_ratio
-        dy = (self.parsed_end[1] - self.parsed_pin[1]) * self.closed_ratio
+        dx = (self.parsed_end[0] - self.parsed_pin[0]) * self.effective_closed_ratio
+        dy = (self.parsed_end[1] - self.parsed_pin[1]) * self.effective_closed_ratio
        
         ex = dx + self.parsed_pin[0] 
         ey = dy + self.parsed_pin[1] 
@@ -871,6 +885,8 @@ class ForestGraveyard():
             self.objects.append( Prop.parse(pd) )
 
         for od in ad["object_defs"]:
+            if od["key"] == "light":
+                self.objects.append(FactoryLight( factory_def = od ))
             if od["key"] == "door_pin":
                 self.door_pins[od["meta"]["door"]] = od
             if od["key"] == "door_end":
