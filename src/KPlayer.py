@@ -336,7 +336,10 @@ class KPlayer(Player):
             if(delta < 0.55):
                 self.floor.freeze_frames = 2
                 self.floor.freeze_delay = 3
-                se.receive_snap_attack()
+
+                ##ENEMY snaptype
+                if(se.snap_type == 1):
+                    se.receive_snap_attack()
                 for x in range(0,15):
                     self.floor.create_object( PlayerPhantom( player = self, animation_threshold = 2*x, target = se ) )
                 self.p[0] = se.p[0]
@@ -352,7 +355,8 @@ class KPlayer(Player):
 
         if hit:
             self.combo_reset_cooldown = 60*4
-            self.combo_count = self.combo_count + 1
+            if( se.snap_type == 0 ):
+                self.combo_count = self.combo_count + 1
         else:
             self.combo_count = 0
 

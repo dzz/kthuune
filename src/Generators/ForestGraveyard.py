@@ -76,6 +76,8 @@ class Door(Object):
         
 
 class SnapEnemy(Object):
+    TOTEM = 0
+    ENEMY = 1
     def parse(od,df):
         o = SnapEnemy( p = [ od["x"],od["y"] ] )
         df.snap_enemies.append(o)
@@ -116,6 +118,7 @@ class SnapEnemy(Object):
         return True
 
     def customize(self):
+        self.snap_type = SnapEnemy.ENEMY
         self.snap_effect_emit = 0
         self.tick_type = Object.TickTypes.PURGING
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
@@ -269,6 +272,7 @@ class Skeline(SnapEnemy):
     ] 
     def customize(self):
         self.tick_type = Object.TickTypes.PURGING
+        self.snap_type = SnapEnemy.ENEMY
         self.visible = True
         self.z_index = 1
         self.buftarget = "popup"
@@ -632,13 +636,14 @@ class Totem(Object):
     texture = BGL.assets.get('KT-forest/texture/totem')
 
     def customize(self):
+        self.snap_type = SnapEnemy.TOTEM
         self.texture = Totem.texture
         self.buftarget = "popup"
-
         self.size =  [ 4.0, 4.0 ]
         self.light_type = Object.LightTypes.STATIC_SHADOWCASTER
         self.light_color =  [ 1.0,0.0,1.0,1.0]
-        self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
+        #self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
+        self.physics = None
         self.z_index = 1
 
 class SkullDeath(Object):
@@ -1001,6 +1006,9 @@ class ForestGraveyard():
             self.objects.append( Prop.parse(pd) )
 
         for od in ad["object_defs"]:
+            if od["key"] == "totem":
+                self.objects.append(Totem( p = [ od['x'],od['y'] ]))
+                df.snap_enemies.append(self.objects[-1])
             if od["key"] == "light":
                 self.objects.append(FactoryLight( factory_def = od ))
             if od["key"] == "door_pin":
