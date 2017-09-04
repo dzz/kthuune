@@ -18,6 +18,7 @@ from .SVGLoader import get_level_data
 from math import floor
 from .magic_lines import vscan_line, fill_scanline
 import random
+from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 
 class FactoryLight(Object):
     def customize(self):
@@ -203,14 +204,44 @@ class ERangedMagic(Object):
         self.vx = cos( self.rad )*0.8
         self.vy = sin( self.rad )*0.8
         
+        self.attack_str = 10
+        
     def tick(self):
+
+
 
         self.light_color[1] = uniform(0.4,0.8)
         self.light_color[0] = uniform(0.0,1.0)
+        self.light_color[3] = uniform(0.0,1.0)
         self.light_radius = uniform(15,40)
         self.p[0] = self.p[0] + self.vx 
         self.p[1] = self.p[1] + self.vy 
         self.lifespan = self.lifespan - 1
+
+        segment = [
+                    [self.snapshot['p'][0], self.snapshot['p'][1]],
+                    [self.p[0], self.p[1] ]
+                  ]
+
+        for blocker in self.floor.get_light_occluders():
+            if segments_intersect( segment, blocker):
+                self.lifespan = 0
+                break                
+
+        dx = self.p[0] - self.floor.player.p[0]
+        dy = self.p[1] - self.floor.player.p[1]
+    
+        dx = dx * dx
+        dy = dy * dy
+
+        md = dx+dy
+
+        if md < 5:
+            self.floor.player.receive_ranged_attack(self)
+            self.floor.create_object( Splat( p = self.p, color=[1.0,0.0,0.0,1.0] ) )
+            self.floor.objects.remove(self)
+            return False
+
         if(self.lifespan>0):
             return True
         self.floor.objects.remove(self)

@@ -4,6 +4,8 @@ from Newfoundland.Player import Player
 from random import uniform,choice
 from math import floor,pi,atan2,sin, hypot
 
+from client.beagle.Newfoundland.GeometryUtils import segments_intersect
+
 
 def ur1():
     return uniform(0.0,1.0)
@@ -299,6 +301,12 @@ class KPlayer(Player):
         else:
             return 1.0
 
+    def receive_ranged_attack(self, attack):
+        self.hp = self.hp - attack.attack_str
+        self.state = KPlayer.STATE_STUNNED
+        self.stimer = 0
+        self.attack_object = attack
+ 
     def attempt_snap_attack(self):
         def se_priority(se):
             dx = se.p[0] - self.p[0]
@@ -306,8 +314,16 @@ class KPlayer(Player):
             se.last_priority_score = (dx*dx)+(dy*dy)
             return se.last_priority_score
             
+
+        def can_reach(player, se):
+            path = [[ player.p[0], player.p[1] ], [ se.p[0], se.p[1] ]]
+            for segment in player.floor.get_light_occluders():
+                if(segments_intersect( segment, path)):
+                    return False
+            return True
+            
         sorted_snap_enemies = sorted( self.floor.snap_enemies, key=lambda x:se_priority(x))
-        filtered_snap_enemies = list(filter( lambda x: x.last_priority_score < 400, sorted_snap_enemies))
+        filtered_snap_enemies = list(filter( lambda x: (x.last_priority_score < 400) and (can_reach(self,x)), sorted_snap_enemies))
 
         hit = False
         target = None
@@ -441,6 +457,7 @@ class KPlayer(Player):
         self.attack_str = 40
         self.crit_chance = 1.0/5.0
         self.attack_bonus = 0.2
+        self.defense = 5
 
     def get_pad(self):
         pad = self.controllers.get_virtualized_pad( self.num )
@@ -505,6 +522,7 @@ class KPlayer(Player):
         self.backstep_cooldown = -5
         self.backstepping = False
         self.cardtick = 0.0
+        self.attack_object = None
     
     def link_floor(self):
         self.floor.create_object( self.sword )
@@ -514,8 +532,8 @@ class KPlayer(Player):
         if self.hp > 0:
             base_params["rotation_local"] = 0.0
 
-        if self.state == KPlayer.STATE_STUNNED:
-            base_params["rotation_local"] = self.cardtick*13.1
+        #if self.state == KPlayer.STATE_STUNNED:
+        #    base_params["rotation_local"] = sin(self.cardtick)*0.2
 
 
         return base_params
@@ -605,7 +623,7 @@ class KPlayer(Player):
             self.light_color = [ 1.0,0.0,0.0,1.0]
             self.light_radius = 100
             self.texture = BGL.assets.get('KT-player/texture/skeleton')
-            self.size = [1.0,1.0]
+            self.size = [2.0,2.0]
             self.rad = atan2(self.p[0]-self.snapshot['p'][0],self.p[1]-self.snapshot['p'][1])
             return True
         pad = self.controllers.get_virtualized_pad( self.num )
@@ -626,7 +644,13 @@ class KPlayer(Player):
         if(self.state == KPlayer.STATE_STUNNED ):
             self.v[0] = self.v[0] * 0.2
             self.v[1] = self.v[1] * 0.2
+
+            if(self.attack_object):
+                self.v[0] = self.v[0] + (self.attack_object.v[0]*4)
+                self.v[1] = self.v[1] + (self.attack_object.v[1]*4)
+
             if self.stimer > 15:
+                self.attack_object = None
                 self.set_state( KPlayer.STATE_DEFAULT )
 
         if(self.state == KPlayer.STATE_DODGING ):
