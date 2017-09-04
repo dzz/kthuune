@@ -7,6 +7,7 @@ def get_area_data(data):
     if key in area_cache:
         return area_cache[key]
     def defunge_line(line):
+        print(line)
         return [[line['x1'],line['y1']],[line['x2'],line['y2']]]
 
     parsed = {
@@ -16,7 +17,8 @@ def get_area_data(data):
         "physics_occluders" : [],
         "decorators" : [],
         "object_defs" : [],
-        "prop_defs" : []
+        "prop_defs" : [],
+        "magic_lines" : []
     }
 
     data = data.replace("\r","").split("\n")
@@ -30,6 +32,11 @@ def get_area_data(data):
             row = 0
             continue
         if txt=="LINE":
+            mode = txt
+            row = 0
+            lines.append({})
+            continue
+        if txt=="MAGIC_LINE":
             mode = txt
             row = 0
             lines.append({})
@@ -52,7 +59,7 @@ def get_area_data(data):
             if row == 1:
                 parsed["height"] = float(txt)
 
-        if mode == "LINE":
+        if mode in [ "LINE", "MAGIC_LINE" ]:
             l = lines[-1]
             if row == 0:
                 lines[-1]["x1"] = float(txt)
@@ -63,15 +70,19 @@ def get_area_data(data):
             if row == 3:
                 lines[-1]["y2"] = float(txt)
 
-            if row == 4:
-                if txt=="True":
-                    parsed["light_occluders"].append(defunge_line(l))
-            if row == 5:
-                if txt=="True":
-                    parsed["physics_occluders"].append(defunge_line(l))
-            if row == 6:
-                if txt=="True":
-                    parsed["decorators"].append(defunge_line(l))
+            if mode == "LINE":
+                if row == 4:
+                    if txt=="True":
+                        parsed["light_occluders"].append(defunge_line(l))
+                if row == 5:
+                    if txt=="True":
+                        parsed["physics_occluders"].append(defunge_line(l))
+                if row == 6:
+                    if txt=="True":
+                        parsed["decorators"].append(defunge_line(l))
+            if mode == "MAGIC_LINE":
+                if row == 4:
+                    parsed["magic_lines"].append( { "line" : l, "magic_number" : int(txt) })
 
         if mode == "OBJECT":
             o = parsed["object_defs"][-1]

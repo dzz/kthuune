@@ -16,6 +16,7 @@ from .txt_specs import *
 from math import atan2
 from .SVGLoader import get_level_data
 from math import floor
+from .magic_lines import vscan_line, fill_scanline
 import random
 
 class FactoryLight(Object):
@@ -879,6 +880,7 @@ class ForestGraveyard():
 
         self.generate_edge_trees( self.decorators )
 
+        self.magic_lines = ad["magic_lines"]
         self.generate_tiledata(df)
         df.area_switches = []
         for pd in ad["prop_defs"]:
@@ -1249,9 +1251,43 @@ class ForestGraveyard():
     def generate_tiledata( self, df ):
 
         self.df = df #i give up
-        self.generate_voroni_pts()
+        #self.generate_voroni_pts()
 
         tile_data = [0]*(df.tilemap_width*df.tilemap_height)
+
+        tile_rows = []
+        for row in range(0, df.tilemap_height):
+            tile_rows.append( [None] * df.tilemap_height )
+        for mline in self.magic_lines:
+            line = mline['line']
+            line['x1'] = int(((line['x1'] / (df.width)) * df.tilemap_width) + (df.tilemap_width/2))
+            line['y1'] = int(((line['y1'] / (df.height)) * df.tilemap_height) + (df.tilemap_height/2))
+            line['x2'] = int(((line['x2'] / (df.width)) * df.tilemap_width) + (df.tilemap_width/2))
+            line['y2'] = int(((line['y2'] / (df.height)) * df.tilemap_height) + (df.tilemap_height/2))
+
+            print(line)
+            pts = vscan_line((line['x1'],line['y1']), (line['x2'],line['y2']))
+            for pt in pts:
+                print(pt[0],pt[1])
+                tile_rows[pt[1]][pt[0]] = mline['magic_number']
+
+        
+        for row_num, row in enumerate(tile_rows):
+
+            print("ROW", row)
+            converted = fill_scanline( row )
+            print("SCANNED", converted)
+            for x, cell in enumerate(converted):
+                addr = (row_num * df.tilemap_width) + x
+                tile_data[addr] = cell
+            
+
+        #exit()
+        self.tile_data = tile_data;
+            
+                
+        return;
+
         for x in range(0, df.tilemap_width):
             for y in range(0, df.tilemap_height):
                 ####### closest_sigil_point = None
