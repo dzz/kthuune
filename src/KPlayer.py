@@ -291,10 +291,14 @@ class KPlayer(Player):
     STATE_DODGING = 2
     
     def get_crit_mod(self):
+
+        if self.combo_count > 8:
+            return 1.8
         if self.sword.state == Sword.STATE_DISCHARGING:
             return 1.5
         else:
             return 1.0
+
     def attempt_snap_attack(self):
         def se_priority(se):
             dx = se.p[0] - self.p[0]
@@ -331,6 +335,7 @@ class KPlayer(Player):
                 pass
 
         if hit:
+            self.combo_reset_cooldown = 60*4
             self.combo_count = self.combo_count + 1
         else:
             self.combo_count = 0
@@ -344,6 +349,7 @@ class KPlayer(Player):
         #playerinit
 
         self.snap_cooldown = 0
+        self.combo_reset_cooldown = 0
         self.X_PRESSED = False
         self.X_STATE = [ False, False ]
 
@@ -451,7 +457,6 @@ class KPlayer(Player):
 
     def render_hud(self):
 
-
         with BGL.context.render_target( self.hud_buffer ):
             BGL.context.clear(0.0,0.0,0.0,0.0)
             if(self.critical_hit_display_counter>0) and (self.critical_hit_display_counter<55):
@@ -479,6 +484,7 @@ class KPlayer(Player):
 
         with BGL.blendmode.alpha_over:
             self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
+            self.floor.render_objects("hud")
 
 
         self.heartcard.render()
@@ -578,6 +584,11 @@ class KPlayer(Player):
 
     def tick(self):
         #playertick
+
+        if(self.combo_reset_cooldown>0):
+            self.combo_reset_cooldown = self.combo_reset_cooldown - 1
+        else:
+            self.combo_count = 0
 
         self.critical_hit_display_counter = self.critical_hit_display_counter - 1
         self.snap_cooldown = self.snap_cooldown - 1

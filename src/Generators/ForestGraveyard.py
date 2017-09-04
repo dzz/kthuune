@@ -101,6 +101,7 @@ class SnapEnemy(Object):
 
         attack_amt += uniform(0, self.floor.player.attack_bonus) * self.floor.player.attack_str
 
+        attack_amt = floor(attack_amt)
         print("ATTACK -> {0}".format(attack_amt))
         self.hp = self.hp - attack_amt
 
@@ -196,10 +197,11 @@ class ERangedMagic(Object):
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
         self.light_radius = 5
         self.lifespan = 120
-        self.light_color = [ 0.0,0.0,1.0,1.0 ]
+        self.light_color = [ 1.0,0.3,0.0,0.4 ]
 
-        self.vx = cos( self.rad )*2
-        self.vy = sin( self.rad )*2
+        self.snapshot_fields = [ 'p' ]
+        self.vx = cos( self.rad )*0.8
+        self.vy = sin( self.rad )*0.8
         
     def tick(self):
 
@@ -318,6 +320,8 @@ class Skeline(SnapEnemy):
 
         if(self.hp < 0):
             self.floor.objects.remove(self)
+            self.floor.snap_enemies.remove(self)
+            self.floor.create_object( SkullDeath( p = [ self.p[0], self.p[1] ] ) )
             return False
 
         return True
@@ -392,8 +396,8 @@ class Splat(Object):
         return sp
 
     def tick(self):
-        self.size[0] = self.size[0] * 1.6 
-        self.size[1] = self.size[1] * 1.6 
+        self.size[0] = self.size[0] * 1.2 
+        self.size[1] = self.size[1] * 1.2 
         self.rad = self.rad + self.spin
         self.cooldown = self.cooldown - 2.0
         if(self.cooldown<=0):
@@ -605,6 +609,47 @@ class Totem(Object):
         self.light_color =  [ 1.0,0.0,1.0,1.0]
         self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
         self.z_index = 1
+
+class SkullDeath(Object):
+    texture = BGL.assets.get('KT-forest/texture/skull0000')
+
+    def customize(self):
+        self.texture = SkullDeath.texture
+        self.buftarget = "hud"
+
+        self.size =  [ 5.0, 5.0 ]
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_color =  [ 1.0,0.0,1.0,1.0]
+        self.color = [ 1.0,1.0,1.0,0.5]
+        self.light_radius = 50.0
+        self.physics = None
+        self.z_index = 9000
+        self.tick_type = Object.TickTypes.PURGING
+        self.delta_vy = -0.1
+        self.lifetime = 0
+        self.delay = 0
+        self.visible = False
+        self.anim_tick = 0.2
+
+    def tick(self):
+
+        if(self.delay> 15):
+            self.visible = True
+            self.lifetime = self.lifetime + 1
+            self.p[1] = self.p[1] + self.delta_vy
+            self.delta_vy *= 1.1
+
+            self.anim_tick = self.anim_tick + 0.2
+            self.size[0] = sin( self.anim_tick ) * 5.0
+            if(self.lifetime > 100):
+                self.floor.objects.remove(self)
+                return False
+            return True
+        else:
+            self.delay = self.delay + 1
+            return True
+        
+        
 
 class Shrub(Object):
         textures = [

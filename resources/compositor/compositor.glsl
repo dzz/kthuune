@@ -231,7 +231,7 @@ vec4 water() {
     return water_reflect * cloud * l;
 }
 
-void boofer_main(void) {
+void main(void) {
 
     vec2 UV = letterbox(uv, 0.2);
     vec2 UV2 = letterbox(uv,0.23);
@@ -276,7 +276,7 @@ void boofer_main(void) {
 
     vec4 LitFloor = alphablend( FloorBase * ( PhotonBase + LightBase ) * VisionBase, FogLit ) * 1.5;
     //LitFloor = FloorBase;
-    vec4 PopupMerged = alphablend( LitFloor, ObjectBase ) * VisionBase;
+    vec4 PopupMerged = alphablend( LitFloor, ObjectBase );
 
     vec4 CanopyLit = CanopyBase * PhotonBase * VisionBase;
     CanopyLit.a = CanopyBase.a;
@@ -411,63 +411,63 @@ void boofer_main(void) {
 ///////////////    //////////////gl_FragColor = FloorMerged + PopupMerged;
 ///////////////}
 
-void main(void) {
-
-
-    vec2 UV = vec2(0.1,0.1)+(uv*0.8);
-
-    vec2 inv_UV = UV;
-    float x_scale = 0.8+(0.6*(UV.y*UV.y));
-    UV.x -= 0.5;
-    UV.x *= x_scale;
-    UV.x += 0.5;
-    inv_UV.x -= 0.5;
-    inv_UV.x *= 2.0-x_scale;
-    inv_UV.x += 0.5;
-
-    vec2 centered_UV = (UV+vec2(-0.5,-0.5))*2;
-    centered_UV*= centered_UV;
-
-    float from_c = (length(centered_UV * vec2(1.7,1.0)))*1.2;
-    float parallax_ratio = 0.1*from_c;
-
-    from_c = from_c*from_c;
-
-    vec2 parallaxed_UV = ((UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * from_c ))) + vec2(0.5,0.5);
-    vec2 inv_parallaxed_UV = ((inv_UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * (2.0-from_c) ))) + vec2(0.5,0.5);
-
-
-
-    vec4 photon_texel =  texture(photon_buffer, UV);
-    vec4 floor_texel = texture(floor_buffer,parallaxed_UV);
-    vec4 light_texel = texture( light_buffer, UV);
-    vec4 object_texel = texture( object_buffer, inv_parallaxed_UV);
-    vec4 vision_texel = texture( vision_buffer, parallaxed_UV);
-
-
-    float exposure = 1.2;
-    float ambiance = 0.5;
-
-    vec4 LitObject = object_texel * (light_texel * exposure);
-    ///
-    //vec4 LitFloor = ( (photon_texel * floor_texel * light_texel) * exposure) + (ambiance*(photon_texel+((clouds(inv_parallaxed_UV)+(light_texel*light_texel))*vision_texel)));
-    ///
-
-    
-    vec4 LitFloor = ((light_texel+clouds(parallaxed_UV))*(4*photon_texel))+((light_texel*3)*clouds(inv_parallaxed_UV))*floor_texel;
-
-    float mask = 1.0 - LitObject.a;
-    vec4 SeenFloor = (LitFloor * vision_texel) * mask;
-
-    LitObject = LitObject * LitObject.a;
-    
-    //vec4 combined_light = ((photon_texel + light_texel) * 1.3);
-
-    gl_FragColor = (SeenFloor + LitObject) * vision_texel;
-    //gl_FragColor = (clouds(parallaxed_UV)*(4*photon_texel))+(light_texel*clouds(inv_parallaxed_UV))*floor_texel;
-//gl_FragColor =light_texel;
-
-}
+/////void main(void) {
+/////
+/////
+/////    vec2 UV = vec2(0.1,0.1)+(uv*0.8);
+/////
+/////    vec2 inv_UV = UV;
+/////    float x_scale = 0.8+(0.6*(UV.y*UV.y));
+/////    UV.x -= 0.5;
+/////    UV.x *= x_scale;
+/////    UV.x += 0.5;
+/////    inv_UV.x -= 0.5;
+/////    inv_UV.x *= 2.0-x_scale;
+/////    inv_UV.x += 0.5;
+/////
+/////    vec2 centered_UV = (UV+vec2(-0.5,-0.5))*2;
+/////    centered_UV*= centered_UV;
+/////
+/////    float from_c = (length(centered_UV * vec2(1.7,1.0)))*1.2;
+/////    float parallax_ratio = 0.1*from_c;
+/////
+/////    from_c = from_c*from_c;
+/////
+/////    vec2 parallaxed_UV = ((UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * from_c ))) + vec2(0.5,0.5);
+/////    vec2 inv_parallaxed_UV = ((inv_UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * (2.0-from_c) ))) + vec2(0.5,0.5);
+/////
+/////
+/////
+/////    vec4 photon_texel =  texture(photon_buffer, UV);
+/////    vec4 floor_texel = texture(floor_buffer,parallaxed_UV);
+/////    vec4 light_texel = texture( light_buffer, UV);
+/////    vec4 object_texel = texture( object_buffer, inv_parallaxed_UV);
+/////    vec4 vision_texel = texture( vision_buffer, parallaxed_UV);
+/////
+/////
+/////    float exposure = 1.2;
+/////    float ambiance = 0.5;
+/////
+/////    vec4 LitObject = object_texel * (light_texel * exposure);
+/////    ///
+/////    //vec4 LitFloor = ( (photon_texel * floor_texel * light_texel) * exposure) + (ambiance*(photon_texel+((clouds(inv_parallaxed_UV)+(light_texel*light_texel))*vision_texel)));
+/////    ///
+/////
+/////    
+/////    vec4 LitFloor = ((light_texel+clouds(parallaxed_UV))*(4*photon_texel))+((light_texel*3)*clouds(inv_parallaxed_UV))*floor_texel;
+/////
+/////    float mask = 1.0 - LitObject.a;
+/////    vec4 SeenFloor = (LitFloor * vision_texel) * mask;
+/////
+/////    LitObject = LitObject * LitObject.a;
+/////    
+/////    //vec4 combined_light = ((photon_texel + light_texel) * 1.3);
+/////
+/////    gl_FragColor = (SeenFloor + LitObject) * vision_texel;
+/////    //gl_FragColor = (clouds(parallaxed_UV)*(4*photon_texel))+(light_texel*clouds(inv_parallaxed_UV))*floor_texel;
+///////gl_FragColor =light_texel;
+/////
+/////}
 
 
 

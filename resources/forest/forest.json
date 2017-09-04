@@ -29,6 +29,7 @@
             { "name" : "splat0001", "filename" : "{package_path}/splat0001.png", "filtered" : false },
             { "name" : "splat0002", "filename" : "{package_path}/splat0002.png", "filtered" : false },
             { "name" : "splat0003", "filename" : "{package_path}/splat0003.png", "filtered" : false },
+            { "name" : "skull0000", "filename" : "{package_path}/skull0000.png", "filtered" : false },
             { "name" : "totem", "filename" : "{package_path}/totem0000.png", "filtered" : false },
             { "name" : "cave_entrance", "filename" : "{package_path}/cave_entrance.png", "filtered" : false }
         ],
