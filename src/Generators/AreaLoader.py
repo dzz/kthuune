@@ -7,7 +7,7 @@ def get_area_data(data):
     if key in area_cache:
         return area_cache[key]
     def defunge_line(line):
-        print(line)
+        #print(line)
         return [[line['x1'],line['y1']],[line['x2'],line['y2']]]
 
     parsed = {
@@ -18,7 +18,8 @@ def get_area_data(data):
         "decorators" : [],
         "object_defs" : [],
         "prop_defs" : [],
-        "magic_lines" : []
+        "magic_lines" : [],
+        "tile_defs" : []
     }
 
     data = data.replace("\r","").split("\n")
@@ -27,6 +28,7 @@ def get_area_data(data):
 
     mode = ""
     for txt in data:
+        ########### read atom
         if txt=="MODEL":
             mode = txt
             row = 0
@@ -51,8 +53,13 @@ def get_area_data(data):
             row = 0
             parsed["prop_defs"].append({})
             continue
+        if txt=="TILE":
+            mode = txt
+            parsed["tile_defs"].append({})
+            row = 0
+            continue
 
-
+        ##################### parse atom
         if mode == "MODEL":
             if row == 0:
                 parsed["width"] = float(txt)
@@ -113,6 +120,15 @@ def get_area_data(data):
                     except Exception as e:
                         o["meta"] = {}
 
+        if mode == "TILE":
+            t = parsed["tile_defs"][-1]
+            if row ==0:
+                t["x"] = int(txt)
+            if row ==1:
+                t["y"] = int(txt) 
+            if row ==2:
+                t["idx"] = int(txt)
+
         if mode == "PROP":
             p = parsed["prop_defs"][-1]
             if row == 0:
@@ -130,6 +146,11 @@ def get_area_data(data):
                     
         row = row + 1
 
+
+    for tile_def in parsed["tile_defs"]:
+        print(tile_def)
+        tile_def["x"] = tile_def["x"] + int(parsed["width"]/2)
+        tile_def["y"] = tile_def["y"] + int(parsed["width"]/2)
 
     area_cache[key] = parsed
     return parsed

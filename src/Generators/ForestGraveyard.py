@@ -881,6 +881,7 @@ class ForestGraveyard():
         self.generate_edge_trees( self.decorators )
 
         self.magic_lines = ad["magic_lines"]
+        self.ad = ad
         self.generate_tiledata(df)
         df.area_switches = []
         for pd in ad["prop_defs"]:
@@ -928,7 +929,7 @@ class ForestGraveyard():
                     emitter_def = [ od["x"]-5.0,od["y"]-5.0, 10.0,10.0, [ 0.3,1.0,0.5,1.0] ]    
                     self.photon_emitters.append(emitter_def)
 
-            if od["key"] == "snap_enemy":
+            if od["key"] in [ "snap_enemy", "skeline"]:
                 self.objects.append(Skeline.parse(od,df ))
 
 
@@ -1254,35 +1255,40 @@ class ForestGraveyard():
         #self.generate_voroni_pts()
 
         tile_data = [0]*(df.tilemap_width*df.tilemap_height)
-
-        tile_rows = []
-        for row in range(0, df.tilemap_height):
-            tile_rows.append( [None] * df.tilemap_height )
-        for mline in self.magic_lines:
-            line = mline['line']
-            line['x1'] = int(((line['x1'] / (df.width)) * df.tilemap_width) + (df.tilemap_width/2))
-            line['y1'] = int(((line['y1'] / (df.height)) * df.tilemap_height) + (df.tilemap_height/2))
-            line['x2'] = int(((line['x2'] / (df.width)) * df.tilemap_width) + (df.tilemap_width/2))
-            line['y2'] = int(((line['y2'] / (df.height)) * df.tilemap_height) + (df.tilemap_height/2))
-
-            print(line)
-            pts = vscan_line((line['x1'],line['y1']), (line['x2'],line['y2']))
-            for pt in pts:
-                print(pt[0],pt[1])
-                tile_rows[pt[1]][pt[0]] = mline['magic_number']
-
-        
-        for row_num, row in enumerate(tile_rows):
-
-            print("ROW", row)
-            converted = fill_scanline( row )
-            print("SCANNED", converted)
-            for x, cell in enumerate(converted):
-                addr = (row_num * df.tilemap_width) + x
-                tile_data[addr] = cell
+        for tile_def in self.ad["tile_defs"]:
+            addr = tile_def["x"] + (tile_def["y"]*df.tilemap_width)
+            tile_data[addr] = tile_def["idx"] + 1
             
 
-        #exit()
+
+        ##### tile_rows = []
+        ##### for row in range(0, df.tilemap_height):
+        #####     tile_rows.append( [None] * df.tilemap_height )
+        ##### for mline in self.magic_lines:
+        #####     line = mline['line']
+        #####     line['x1'] = int(((line['x1'] / (df.width)) * df.tilemap_width) + (df.tilemap_width/2))
+        #####     line['y1'] = int(((line['y1'] / (df.height)) * df.tilemap_height) + (df.tilemap_height/2))
+        #####     line['x2'] = int(((line['x2'] / (df.width)) * df.tilemap_width) + (df.tilemap_width/2))
+        #####     line['y2'] = int(((line['y2'] / (df.height)) * df.tilemap_height) + (df.tilemap_height/2))
+
+        #####     print(line)
+        #####     pts = vscan_line((line['x1'],line['y1']), (line['x2'],line['y2']))
+        #####     for pt in pts:
+        #####         print(pt[0],pt[1])
+        #####         tile_rows[pt[1]][pt[0]] = mline['magic_number']
+
+        ##### 
+        ##### for row_num, row in enumerate(tile_rows):
+
+        #####     print("ROW", row)
+        #####     converted = fill_scanline( row )
+        #####     print("SCANNED", converted)
+        #####     for x, cell in enumerate(converted):
+        #####         addr = (row_num * df.tilemap_width) + x
+        #####         tile_data[addr] = cell
+        #####     
+
+        ##### #exit()
         self.tile_data = tile_data;
             
                 

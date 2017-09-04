@@ -3,7 +3,8 @@
     "resources" : {
         "texture" : [
             { "name" : "plain_tiles", "filename" : "{package_path}/plain_tiles.png", "filtered" : true },
-            { "name" : "dungeon_tiles", "filename" : "{package_path}/dungeon_tiles.png", "filtered" : true }
+            { "name" : "dungeon_tiles", "filename" : "{package_path}/dungeon_tiles.png", "filtered" : true },
+            { "name" : "floor_tiles", "filename" : "{package_path}/floor_tiles.png", "filtered" : true }
         ]
     }
 }

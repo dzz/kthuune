@@ -74,13 +74,13 @@ class DungeonFloor( Floor ):
             }
         }, **kwargs )
         beagle_tileset = BGL.tileset(
-            texture = BGL.assets.get("KT-tiles/texture/dungeon_tiles"),
+            texture = BGL.assets.get("KT-tiles/texture/floor_tiles"),
             configuration = {
                 "firstgid" : 1,
                 "margin" : 0,
                 "name" : None,
                 "spacing" : 0,
-                "tilecount" : 20,
+                "tilecount" : 70,
                 "tileheight" : 32,
                 "tilewidth" : 32
             },
