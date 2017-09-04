@@ -34,7 +34,6 @@ class PlayerPhantom(Object):
     
     def tick(self):
         self.animation_counter = self.animation_counter + 1
-        print(self.animation_counter)
         if(self.animation_counter-self.animation_threshold > 12 ):
             self.floor.objects.remove(self)
             return False
@@ -291,6 +290,11 @@ class KPlayer(Player):
     STATE_STUNNED = 1
     STATE_DODGING = 2
     
+    def get_crit_mod(self):
+        if self.sword.state == Sword.STATE_DISCHARGING:
+            return 1.5
+        else:
+            return 1.0
     def attempt_snap_attack(self):
         def se_priority(se):
             dx = se.p[0] - self.p[0]
@@ -310,7 +314,9 @@ class KPlayer(Player):
             
             delta = abs( rad - self.rad )
             if(delta < 0.55):
-                se.receive_attack()
+                self.floor.freeze_frames = 2
+                self.floor.freeze_delay = 3
+                se.receive_snap_attack()
                 for x in range(0,15):
                     self.floor.create_object( PlayerPhantom( player = self, animation_threshold = 2*x, target = se ) )
                 self.p[0] = se.p[0]
@@ -357,6 +363,7 @@ class KPlayer(Player):
             "snapshot_fields" : [ 'p','hp' ],
             "dir" : [0.0,0.0],
         }
+        self.set_combat_vars()
         overrides.update(kwargs)
         Player.__init__(self, **overrides)
         self.base_light_color = self.light_color
@@ -412,7 +419,7 @@ class KPlayer(Player):
         self.attacked = False
         self.dash_flash = False
         self.dash_combo = False
-        self.hud_buffer = BGL.framebuffer.from_dims(320,240)
+        self.hud_buffer = BGL.framebuffer.from_dims(300,200)
         self.combo_count = 0
         self.can_combo = False
         self.kill_success = False
@@ -420,7 +427,14 @@ class KPlayer(Player):
         self.target_cooldown = 0.0
         self.hud_message_timeout = 0.0
         self.hud_message = ""
+        self.critical_hit_display_counter = 0
 
+
+    def set_combat_vars(self):
+        self.hp = 100
+        self.attack_str = 40
+        self.crit_chance = 1.0/5.0
+        self.attack_bonus = 0.2
 
     def get_pad(self):
         pad = self.controllers.get_virtualized_pad( self.num )
@@ -430,9 +444,20 @@ class KPlayer(Player):
         self.hud_message_timeout = 400
         self.hud_message = msg.upper()
 
+    def notify_crit(self):
+        self.critical_hit_display_counter = 60
+        self.floor.freeze_frames = 10
+        self.floor.freeze_delay = 4
+
     def render_hud(self):
+
+
         with BGL.context.render_target( self.hud_buffer ):
             BGL.context.clear(0.0,0.0,0.0,0.0)
+            if(self.critical_hit_display_counter>0) and (self.critical_hit_display_counter<55):
+                offsx = choice(range(-1,1))
+                offsy = choice(range(-1,1))
+                BGL.lotext.render_text_pixels("CRITICAL", 130-20+offsx,90-20+offsy, [ 1.0,0.0,0.0 ] )
             with BGL.blendmode.alpha_over:
                 #BGL.lotext.render_text_pixels("HP:{0}".format(self.hp-1), 130,220,[1.0,0.0,0.0] )
                 if(self.combo_count>1):
@@ -466,7 +491,7 @@ class KPlayer(Player):
         self.heartcard = HeartCard(self)
         self.swordcard = SwordCard(self)
         self.wandcard = WandCard(self)
-        self.hp = 100
+        #self.hp = 100
         self.dash_amt = 1.0
         self.sword = Sword(player=self)
         self.pumped_dashcombo = False
@@ -554,7 +579,7 @@ class KPlayer(Player):
     def tick(self):
         #playertick
 
-
+        self.critical_hit_display_counter = self.critical_hit_display_counter - 1
         self.snap_cooldown = self.snap_cooldown - 1
         self.hud_message_timeout = self.hud_message_timeout - 1
         self.stimer = self.stimer + 1

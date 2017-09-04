@@ -140,6 +140,14 @@ class Game( BaseGame ):
         self.player.render_hud()
 
     def tick(self):
+
+        if(self.floor.freeze_delay < 0):
+            if(self.floor.freeze_frames > 0):
+                self.floor.freeze_frames = self.floor.freeze_frames - 1
+                return
+        else:
+            self.floor.freeze_delay = self.floor.freeze_delay - 1
+
         KTState.pad = self.player.get_pad()
         KTState.start_pressed[1] = KTState.start_pressed[0]
         KTState.start_pressed[0] = KTState.pad.button_down(BGL.gamepads.buttons.START)

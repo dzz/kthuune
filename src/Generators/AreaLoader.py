@@ -113,10 +113,7 @@ def get_area_data(data):
                     o["meta"]["target_area"]="self"
                 else:
                     try:
-                        print("PARSING META")
-                        print(txt)
                         o["meta"] = json.loads(txt)
-                        print(o["meta"])
                     except Exception as e:
                         o["meta"] = {}
 
@@ -148,7 +145,6 @@ def get_area_data(data):
 
 
     for tile_def in parsed["tile_defs"]:
-        print(tile_def)
         tile_def["x"] = tile_def["x"] + int(parsed["width"]/2)
         tile_def["y"] = tile_def["y"] + int(parsed["width"]/2)
 

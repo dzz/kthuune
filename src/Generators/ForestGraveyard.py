@@ -39,7 +39,6 @@ class Door(Object):
         self.parsed_end = [ self.door_end['x'], self.door_end['y'] ]
         self.parsed_sensors = []
         for sensor in self.sensors:
-            print(sensor)
             self.parsed_sensors.append([sensor['x'],sensor['y']])
         self.opening = False
         self.closed_ratio = 1.0
@@ -81,18 +80,43 @@ class SnapEnemy(Object):
         df.snap_enemies.append(o)
         return o
 
-    def receive_attack(self):
-        for i in range(1,10):
-            self.floor.create_object( Splat( p = self.p ) )
-        
+    def raise_critical_attack(self):
+        self.snap_effect_emit = 20
+        self.floor.player.notify_crit()
+
+    def receive_snap_attack(self):
+        self.snap_effect_emit = 10
+
+        crit = 1
+
+        if(uniform(0.0,1.0)< (self.floor.player.crit_chance*self.floor.player.get_crit_mod())):
+            crit = 2
+            print("CRITICAL")
+            self.raise_critical_attack()
+
+        attack_amt = (self.floor.player.attack_str*crit) - self.defense
+
+        if(attack_amt<=0):
+            attack_amt = 1
+
+        attack_amt += uniform(0, self.floor.player.attack_bonus) * self.floor.player.attack_str
+
+        print("ATTACK -> {0}".format(attack_amt))
+        self.hp = self.hp - attack_amt
+
     def tick(self):
-        self.light_radius = uniform(8.0,12.0)
+
+        if(self.snap_effect_emit>0):
+            self.snap_effect_emit = self.snap_effect_emit - 1
+            self.floor.create_object( Splat( p = self.p ) )
+
+        self.light_radius = uniform(2.0,12.0)
         return True
 
     def customize(self):
+        self.snap_effect_emit = 0
         self.tick_type = Object.TickTypes.PURGING
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-
         self.light_radius = 10.0
         self.light_color = [ 1.0, 0.8, 0.0, 1.0 ]
         self.visible = True
@@ -100,6 +124,11 @@ class SnapEnemy(Object):
         self.buftarget = "popup"
         self.texture = Skeline.textures[2]
         self.size = [ 2.5, 2.5 ]
+        self.set_combat_vars(self)
+
+    def set_combat_vars(self):
+        self.hp = 100
+        self.defense = 10
 
 class AreaSwitch(Object):
     def customize(self):
@@ -185,9 +214,9 @@ class ERangedMagic(Object):
         self.floor.objects.remove(self)
         return False
 
-class Skeline(Object):
-    def receive_attack(self):
-        SnapEnemy.receive_attack(self)
+class Skeline(SnapEnemy):
+    def receive_snap_attack(self):
+        SnapEnemy.receive_snap_attack(self)
 
     def parse(od,df):
         o = Skeline( p = [ od["x"],od["y"] ] )
@@ -221,6 +250,10 @@ class Skeline(Object):
         self.speed = 3.0
         self.invert_seek = False
         self.flip_pxy = False
+
+        self.snap_effect_emit = 0
+        SnapEnemy.set_combat_vars(self)
+        
 
     def tick(self):
         SnapEnemy.tick(self)
@@ -281,6 +314,11 @@ class Skeline(Object):
             if( self.stimer > 40 ):
                 self.state = Skeline.STATE_SEEKING_PLAYER
                 self.fireRanged()
+
+
+        if(self.hp < 0):
+            self.floor.objects.remove(self)
+            return False
 
         return True
 
@@ -776,7 +814,6 @@ class Rock(Object):
             Object.__init__(self,**overrides)
             self.physics["radius"] = self.size[0]*0.5
             self.physics["mass"] = self.physics["mass"] * self.size[0]
-            print("ROCK!")
 
         def tick(self):
             self.v[0] = self.v[0]*0.985
@@ -942,7 +979,6 @@ class ForestGraveyard():
     def compile(self, dungeon_floor, base_objects ):
 
         if dungeon_floor.area_def:
-            print("Compiling .AREA format")
             self.process_area_def( dungeon_floor, dungeon_floor.area_def )
             self.link_doors()
 
@@ -1030,7 +1066,6 @@ class ForestGraveyard():
         trees = 0
 
         for t in range(0,trees):
-            print("MAKING TREE")
             px,py = uniform(-df.width,df.width),uniform(-df.height,df.height)
             px*=0.4
             py*=0.4
@@ -1086,7 +1121,6 @@ class ForestGraveyard():
         for edge in edges:
 
             u_l = hypot( edge[1][0]-edge[0][0], edge[1][1]-edge[1][1])
-            print(u_l)
 
             for x in range(0,int(u_l+uniform(0.0,5.0))):
 

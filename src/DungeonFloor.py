@@ -37,6 +37,8 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "freeze_frames" : 0,
+            "freeze_delay" : 0,
             "doors" : [],
             "snap_enemies" : [],
             "using_tilemap" : True,
