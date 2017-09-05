@@ -353,6 +353,7 @@ class KPlayer(Player):
                 pass
 
         if hit:
+            self.snap_attack_frozen = True
             self.combo_reset_cooldown = 60*4
             if( se.snap_type == 1 ):
                 self.combo_count = self.combo_count + 1
@@ -367,6 +368,7 @@ class KPlayer(Player):
     def __init__(self, **kwargs):
         #playerinit
 
+        self.snap_attack_frozen = False
         self.attack_physics_timer = 0
         self.snap_cooldown = 0
         self.combo_reset_cooldown = 0
@@ -596,6 +598,7 @@ class KPlayer(Player):
         pass
 
     def deal_with_buttons(self,pad):
+
         self.X_STATE[0] = self.X_STATE[1]
         self.X_STATE[1] = pad.button_down( BGL.gamepads.buttons.X )
     
@@ -603,6 +606,9 @@ class KPlayer(Player):
             self.X_PRESSED = True
         else:
             self.X_PRESSED = False
+
+        if self.X_STATE[1] is False:
+            self.snap_attack_frozen = False
 
     def tick(self):
         #playertick
@@ -730,6 +736,11 @@ class KPlayer(Player):
                 self.v[0] = 0
                 self.v[1] = 0
             
+
+            if(self.snap_attack_frozen):
+                self.v[0] = 0
+                self.v[1] = 0 
+
             if(self.attack_physics_timer>0):
 
                 print("TRYING TO APPLY ATTACK REBOUND")
