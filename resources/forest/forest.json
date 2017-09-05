@@ -29,6 +29,7 @@
             { "name" : "splat0001", "filename" : "{package_path}/splat0001.png", "filtered" : false },
             { "name" : "splat0002", "filename" : "{package_path}/splat0002.png", "filtered" : false },
             { "name" : "splat0003", "filename" : "{package_path}/splat0003.png", "filtered" : false },
+            { "name" : "skull0000", "filename" : "{package_path}/skull0000.png", "filtered" : false },
             { "name" : "totem", "filename" : "{package_path}/totem0000.png", "filtered" : false },
             { "name" : "cave_entrance", "filename" : "{package_path}/cave_entrance.png", "filtered" : false }
         ],
@@ -40,7 +41,8 @@
             { "name" : "area_test", "filename" : "{package_path}/testarea3.area" },
             { "name" : "docks", "filename" : "{package_path}/docks.area" },
             { "name" : "tower", "filename" : "{package_path}/tower.area" },
-            { "name" : "arena", "filename" : "{package_path}/arena.area" }
+            { "name" : "arena", "filename" : "{package_path}/arena.area" },
+            { "name" : "doortest", "filename" : "{package_path}/tiletest.area" }
         ]
     }
 }

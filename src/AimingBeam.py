@@ -38,6 +38,7 @@ class AimingBeam(Object):
         self.texture = BGL.assets.get("KT-player/texture/beam")
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.size = [30.0,1.0]
+        self.light_color = [ 0.5,0.5,0.5,0.5]
         self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
         self.visible = False
         self.buftarget = "popup"

@@ -16,26 +16,146 @@ from .txt_specs import *
 from math import atan2
 from .SVGLoader import get_level_data
 from math import floor
+from .magic_lines import vscan_line, fill_scanline
 import random
+from client.beagle.Newfoundland.GeometryUtils import segments_intersect
+
+class AttackInfo(Object):
+    def customize(self):
+        self.tick_type = Object.TickTypes.PURGING
+        self.buffer = BGL.framebuffer.from_dims( len(self.message)*8, 8)
+        self.texture = self.buffer.get_texture()      
+        self.buftarget = "hud"
+        self.size = [ 1.0*len(self.message), -1.0 ]
+
+        self.lifetime = 100
+        with BGL.context.render_target(self.buffer):
+            BGL.context.clear(0.0,0.0,0.0,0.0)
+            BGL.lotext.render_text_pixels( self.message, 0,0, [1.0,1.0,1.0] )
+
+    def tick(self):
+        if self.lifetime<60:
+            self.size[0] *= 1.28
+            self.size[1] *= 1.28
+    
+        if self.lifetime<80:
+            self.color[3] = self.color[3]*0.95
+            self.color[0] = uniform(0.0,1.0)
+            self.color[1] = uniform(0.0,1.0)
+            self.color[2] = uniform(0.0,1.0)
+
+        if self.lifetime>0:
+            self.lifetime -=1
+            return True
+        else:
+            self.floor.objects.remove(self)
+            return False
+
+
+class FactoryLight(Object):
+    def customize(self):
+        self.visible = False
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_radius = 100
+        self.p = [ self.factory_def['x'], self.factory_def['y'] ]
+        if self.factory_def["meta"]["class"] == "red_test":
+            self.light_color = [ 1.0, 0.2,0.2,1.0 ]
+        if self.factory_def["meta"]["class"] == "blue_test":
+            self.light_color = [ 0.2, 0.2,1.0,1.0 ]
+
+class Door(Object):
+    def customize(self):
+        self.visible = False
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.parsed_pin = [ self.door_pin['x'], self.door_pin['y'] ]
+        self.parsed_end = [ self.door_end['x'], self.door_end['y'] ]
+        self.parsed_sensors = []
+        for sensor in self.sensors:
+            self.parsed_sensors.append([sensor['x'],sensor['y']])
+        self.opening = False
+        self.closed_ratio = 1.0
+        self.effective_closed_ratio = 1.0
+        self.sensrad2 = 30
+        self.open_speed = 0.1
+        self.close_speed = 0.2
+    
+    def tick(self):
+        self.effective_closed_ratio = (self.effective_closed_ratio * 0.8) + (self.closed_ratio*0.2)
+        self.opening = False
+        for sensor in self.parsed_sensors:
+            dx = self.floor.player.p[0] - sensor[0]
+            dy = self.floor.player.p[1] - sensor[1]
+            md = (dx*dx) + (dy*dy)
+            if( md < self.sensrad2 ):
+                self.opening = True
+                break
+        if self.opening:
+            if self.closed_ratio > 0.0:
+                self.closed_ratio = self.closed_ratio - self.open_speed                
+        else:
+            if self.closed_ratio < 1.0:
+                self.closed_ratio = self.closed_ratio + self.close_speed
+
+    def get_light_occluders(self):
+        dx = (self.parsed_end[0] - self.parsed_pin[0]) * self.effective_closed_ratio
+        dy = (self.parsed_end[1] - self.parsed_pin[1]) * self.effective_closed_ratio
+       
+        ex = dx + self.parsed_pin[0] 
+        ey = dy + self.parsed_pin[1] 
+
+        return [ [ self.parsed_pin, [ex,ey] ] ]
+        
 
 class SnapEnemy(Object):
+    TOTEM = 0
+    ENEMY = 1
     def parse(od,df):
         o = SnapEnemy( p = [ od["x"],od["y"] ] )
         df.snap_enemies.append(o)
         return o
 
-    def receive_attack(self):
-        for i in range(1,10):
-            self.floor.create_object( Splat( p = self.p ) )
-        
+    def raise_critical_attack(self):
+        self.snap_effect_emit = 20
+        self.floor.player.notify_crit()
+
+    def receive_snap_attack(self):
+        self.snap_effect_emit = 10
+
+        crit = 1
+
+        if(uniform(0.0,1.0)< (self.floor.player.crit_chance*self.floor.player.get_crit_mod())):
+            crit = 1.3
+            print("CRITICAL")
+            self.raise_critical_attack()
+
+        attack_amt = (self.floor.player.attack_str*crit) - self.defense
+
+        if(attack_amt<=0):
+            attack_amt = 1
+
+        attack_amt += uniform(0, self.floor.player.attack_bonus) * self.floor.player.attack_str
+
+        attack_amt = floor(attack_amt)
+        print("ATTACK -> {0}".format(attack_amt))
+
+        self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="{0}".format(attack_amt)))
+        self.hp = self.hp - attack_amt
+
     def tick(self):
-        self.light_radius = uniform(8.0,12.0)
+
+        if(self.snap_effect_emit>0):
+            self.snap_effect_emit = self.snap_effect_emit - 1
+            self.floor.create_object( Splat( p = self.p ) )
+
+        self.light_radius = uniform(2.0,12.0)
         return True
 
     def customize(self):
+        self.snap_type = SnapEnemy.ENEMY
+        self.snap_effect_emit = 0
         self.tick_type = Object.TickTypes.PURGING
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-
         self.light_radius = 10.0
         self.light_color = [ 1.0, 0.8, 0.0, 1.0 ]
         self.visible = True
@@ -43,6 +163,11 @@ class SnapEnemy(Object):
         self.buftarget = "popup"
         self.texture = Skeline.textures[2]
         self.size = [ 2.5, 2.5 ]
+        self.set_combat_vars(self)
+
+    def set_combat_vars(self):
+        self.hp = 50
+        self.defense = 10
 
 class AreaSwitch(Object):
     def customize(self):
@@ -110,27 +235,58 @@ class ERangedMagic(Object):
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
         self.light_radius = 5
         self.lifespan = 120
-        self.light_color = [ 0.0,0.0,1.0,1.0 ]
+        self.light_color = [ 1.0,0.3,0.0,0.4 ]
 
-        self.vx = cos( self.rad )*2
-        self.vy = sin( self.rad )*2
+        self.snapshot_fields = [ 'p' ]
+        self.vx = cos( self.rad )*0.8
+        self.vy = sin( self.rad )*0.8
+        
+        self.attack_str = 10
         
     def tick(self):
 
+
+
         self.light_color[1] = uniform(0.4,0.8)
         self.light_color[0] = uniform(0.0,1.0)
+        self.light_color[3] = uniform(0.0,1.0)
         self.light_radius = uniform(15,40)
         self.p[0] = self.p[0] + self.vx 
         self.p[1] = self.p[1] + self.vy 
         self.lifespan = self.lifespan - 1
+
+        segment = [
+                    [self.snapshot['p'][0], self.snapshot['p'][1]],
+                    [self.p[0], self.p[1] ]
+                  ]
+
+        for blocker in self.floor.get_light_occluders():
+            if segments_intersect( segment, blocker):
+                self.lifespan = 0
+                break                
+
+        dx = self.p[0] - self.floor.player.p[0]
+        dy = self.p[1] - self.floor.player.p[1]
+    
+        dx = dx * dx
+        dy = dy * dy
+
+        md = dx+dy
+
+        if md < 5:
+            self.floor.player.receive_ranged_attack(self)
+            self.floor.create_object( Splat( p = self.p, color=[1.0,0.0,0.0,1.0] ) )
+            self.floor.objects.remove(self)
+            return False
+
         if(self.lifespan>0):
             return True
         self.floor.objects.remove(self)
         return False
 
-class Skeline(Object):
-    def receive_attack(self):
-        SnapEnemy.receive_attack(self)
+class Skeline(SnapEnemy):
+    def receive_snap_attack(self):
+        SnapEnemy.receive_snap_attack(self)
 
     def parse(od,df):
         o = Skeline( p = [ od["x"],od["y"] ] )
@@ -149,7 +305,9 @@ class Skeline(Object):
         BGL.assets.get("KT-forest/texture/skeline0003"),
     ] 
     def customize(self):
+        self.triggered = False
         self.tick_type = Object.TickTypes.PURGING
+        self.snap_type = SnapEnemy.ENEMY
         self.visible = True
         self.z_index = 1
         self.buftarget = "popup"
@@ -158,12 +316,16 @@ class Skeline(Object):
         self.size = [ 2.5, 2.5 ]
         self.physics = { "radius" : 0.35, "mass"   : 0.0005, "friction" : 0.0 }
         #self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
-        self.state = Skeline.STATE_SEEKING_PLAYER
+        self.state = Skeline.STATE_SEEKING_RANDOM
         self.stimer = 0
         self.rvx = None
         self.speed = 3.0
         self.invert_seek = False
         self.flip_pxy = False
+
+        self.snap_effect_emit = 0
+        SnapEnemy.set_combat_vars(self)
+        
 
     def tick(self):
         SnapEnemy.tick(self)
@@ -171,6 +333,28 @@ class Skeline(Object):
         self.wfr = floor(self.widx/20)
         self.texture = Skeline.textures[self.wfr]
         self.light_type = Object.LightTypes.NONE
+
+        y = self.floor.player.p[0] - self.p[0]
+        x = self.floor.player.p[1] - self.p[1]
+
+        md = (x*x)+(y*y)
+        if( md < 250 ):
+            if not self.triggered:
+                self.triggered = True
+                test_segment = [ [ self.floor.player.p[0], self.floor.player.p[1] ], [self.p[0], self.p[1] ] ]
+                for segment in self.floor.get_light_occluders():
+                    if segments_intersect( segment, test_segment ):
+                        self.triggered = False
+                        break 
+        if( md > 300 ):
+            self.triggered = False
+
+        if not self.triggered:
+            self.visible = False
+            return True
+
+        self.visible = True
+
         self.stimer = self.stimer + 1
 
         if self.invert_seek:
@@ -187,6 +371,8 @@ class Skeline(Object):
                 x = self.floor.player.p[0] - self.p[0]
                 y = self.floor.player.p[1] - self.p[1]
     
+
+
             rad = atan2(y,x)
             vx = cos(rad) * calc_speed
             vy = sin(rad) * calc_speed
@@ -224,6 +410,13 @@ class Skeline(Object):
             if( self.stimer > 40 ):
                 self.state = Skeline.STATE_SEEKING_PLAYER
                 self.fireRanged()
+
+
+        if(self.hp < 0):
+            self.floor.objects.remove(self)
+            self.floor.snap_enemies.remove(self)
+            self.floor.create_object( SkullDeath( p = [ self.p[0], self.p[1] ] ) )
+            return False
 
         return True
 
@@ -297,8 +490,8 @@ class Splat(Object):
         return sp
 
     def tick(self):
-        self.size[0] = self.size[0] * 1.6 
-        self.size[1] = self.size[1] * 1.6 
+        self.size[0] = self.size[0] * 1.2 
+        self.size[1] = self.size[1] * 1.2 
         self.rad = self.rad + self.spin
         self.cooldown = self.cooldown - 2.0
         if(self.cooldown<=0):
@@ -502,14 +695,64 @@ class Totem(Object):
     texture = BGL.assets.get('KT-forest/texture/totem')
 
     def customize(self):
+        self.snap_type = SnapEnemy.TOTEM
         self.texture = Totem.texture
-        self.buftarget = "popup"
-
+        self.buftarget = "floor"
         self.size =  [ 4.0, 4.0 ]
-        self.light_type = Object.LightTypes.STATIC_SHADOWCASTER
-        self.light_color =  [ 1.0,0.0,1.0,1.0]
-        self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_color =  [ 1.0,0.5,1.0,1.0]
+        self.light_radius = 40
+        #self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
+        self.physics = None
         self.z_index = 1
+        self.anim_index = 0
+
+    def tick(self):
+        self.anim_index += 0.1
+        self.light_radius = 40 + (20*sin(self.anim_index))
+
+class SkullDeath(Object):
+    texture = BGL.assets.get('KT-forest/texture/skull0000')
+
+    def customize(self):
+        self.texture = SkullDeath.texture
+        self.buftarget = "hud"
+
+        self.size =  [ 5.0, 5.0 ]
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_color =  [ 1.0,0.0,1.0,1.0]
+        self.color = [ 1.0,1.0,1.0,0.5]
+        self.light_radius = 50.0
+        self.physics = None
+        self.z_index = 9000
+        self.tick_type = Object.TickTypes.PURGING
+        self.delta_vy = -0.03
+        self.lifetime = 0
+        self.delay = 0
+        self.visible = False
+        self.anim_tick = 0.2
+
+    def tick(self):
+
+        if(self.delay> 5):
+            self.visible = True
+            self.lifetime = self.lifetime + 1
+            self.p[1] = self.p[1] + self.delta_vy
+            self.delta_vy *= 1.1
+
+            self.anim_tick = self.anim_tick * 1.08
+            self.size[0] = sin( self.anim_tick ) * 5.0
+            self.size[1] = self.size[1] * 1.02
+            if(self.lifetime > 100):
+                self.floor.objects.remove(self)
+                return False
+            return True
+        else:
+            self.delay = self.delay + 1
+            return True
+        
+        
 
 class Shrub(Object):
         textures = [
@@ -719,7 +962,6 @@ class Rock(Object):
             Object.__init__(self,**overrides)
             self.physics["radius"] = self.size[0]*0.5
             self.physics["mass"] = self.physics["mass"] * self.size[0]
-            print("ROCK!")
 
         def tick(self):
             self.v[0] = self.v[0]*0.985
@@ -809,6 +1051,10 @@ class ForestGraveyard():
         df.player.p[1] = player_start['y']
 
 
+        self.door_pins = {}
+        self.door_ends = {}
+        self.door_sensors = {}
+
         self.objects = []
 
         #self.light_occluders = []
@@ -819,12 +1065,28 @@ class ForestGraveyard():
 
         self.generate_edge_trees( self.decorators )
 
+        self.magic_lines = ad["magic_lines"]
+        self.ad = ad
         self.generate_tiledata(df)
         df.area_switches = []
         for pd in ad["prop_defs"]:
             self.objects.append( Prop.parse(pd) )
 
         for od in ad["object_defs"]:
+            if od["key"] == "totem":
+                self.objects.append(Totem( p = [ od['x'],od['y'] ]))
+                df.snap_enemies.append(self.objects[-1])
+            if od["key"] == "light":
+                self.objects.append(FactoryLight( factory_def = od ))
+            if od["key"] == "door_pin":
+                self.door_pins[od["meta"]["door"]] = od
+            if od["key"] == "door_end":
+                self.door_ends[od["meta"]["door"]] = od
+            if od["key"] == "door_sensor":
+                if not od["meta"]["door"] in self.door_sensors:
+                    self.door_sensors[od["meta"]["door"]] = []
+                self.door_sensors[od["meta"]["door"]].append(od)
+
             if od["key"] == "area_switch":
                 p = [ od["x"], od["y"] ]
                 target_area = od["meta"]["target_area"]
@@ -855,16 +1117,21 @@ class ForestGraveyard():
                     emitter_def = [ od["x"]-5.0,od["y"]-5.0, 10.0,10.0, [ 0.3,1.0,0.5,1.0] ]    
                     self.photon_emitters.append(emitter_def)
 
-            if od["key"] == "snap_enemy":
+            if od["key"] in [ "snap_enemy", "skeline"]:
                 self.objects.append(Skeline.parse(od,df ))
 
 
 
+    def link_doors(self):
+        for key in self.door_sensors:
+            self.objects.append( Door( door_pin = self.door_pins[key], door_end = self.door_ends[key], sensors = self.door_sensors[key] ) )            
+            self.df.doors.append( self.objects[-1] )
+
     def compile(self, dungeon_floor, base_objects ):
 
         if dungeon_floor.area_def:
-            print("Compiling .AREA format")
             self.process_area_def( dungeon_floor, dungeon_floor.area_def )
+            self.link_doors()
 
         elif dungeon_floor.area_def is None:
             self.objects = []
@@ -950,7 +1217,6 @@ class ForestGraveyard():
         trees = 0
 
         for t in range(0,trees):
-            print("MAKING TREE")
             px,py = uniform(-df.width,df.width),uniform(-df.height,df.height)
             px*=0.4
             py*=0.4
@@ -1006,7 +1272,6 @@ class ForestGraveyard():
         for edge in edges:
 
             u_l = hypot( edge[1][0]-edge[0][0], edge[1][1]-edge[1][1])
-            print(u_l)
 
             for x in range(0,int(u_l+uniform(0.0,5.0))):
 
@@ -1172,9 +1437,48 @@ class ForestGraveyard():
     def generate_tiledata( self, df ):
 
         self.df = df #i give up
-        self.generate_voroni_pts()
+        #self.generate_voroni_pts()
 
         tile_data = [0]*(df.tilemap_width*df.tilemap_height)
+        for tile_def in self.ad["tile_defs"]:
+            addr = tile_def["x"] + (tile_def["y"]*df.tilemap_width)
+            tile_data[addr] = tile_def["idx"] + 1
+            
+
+
+        ##### tile_rows = []
+        ##### for row in range(0, df.tilemap_height):
+        #####     tile_rows.append( [None] * df.tilemap_height )
+        ##### for mline in self.magic_lines:
+        #####     line = mline['line']
+        #####     line['x1'] = int(((line['x1'] / (df.width)) * df.tilemap_width) + (df.tilemap_width/2))
+        #####     line['y1'] = int(((line['y1'] / (df.height)) * df.tilemap_height) + (df.tilemap_height/2))
+        #####     line['x2'] = int(((line['x2'] / (df.width)) * df.tilemap_width) + (df.tilemap_width/2))
+        #####     line['y2'] = int(((line['y2'] / (df.height)) * df.tilemap_height) + (df.tilemap_height/2))
+
+        #####     print(line)
+        #####     pts = vscan_line((line['x1'],line['y1']), (line['x2'],line['y2']))
+        #####     for pt in pts:
+        #####         print(pt[0],pt[1])
+        #####         tile_rows[pt[1]][pt[0]] = mline['magic_number']
+
+        ##### 
+        ##### for row_num, row in enumerate(tile_rows):
+
+        #####     print("ROW", row)
+        #####     converted = fill_scanline( row )
+        #####     print("SCANNED", converted)
+        #####     for x, cell in enumerate(converted):
+        #####         addr = (row_num * df.tilemap_width) + x
+        #####         tile_data[addr] = cell
+        #####     
+
+        ##### #exit()
+        self.tile_data = tile_data;
+            
+                
+        return;
+
         for x in range(0, df.tilemap_width):
             for y in range(0, df.tilemap_height):
                 ####### closest_sigil_point = None

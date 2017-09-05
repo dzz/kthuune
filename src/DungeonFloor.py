@@ -37,6 +37,9 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "freeze_frames" : 0,
+            "freeze_delay" : 0,
+            "doors" : [],
             "snap_enemies" : [],
             "using_tilemap" : True,
             "tilescale" : 3,
@@ -47,14 +50,14 @@ class DungeonFloor( Floor ):
             #"generator" : BasicGenerator(),
             "area" : None,
             "renderer_config" : {
-                "vision_lightmap_width" : 640,
-                "vision_lightmap_height" : 480,
+                "vision_lightmap_width" : 720,
+                "vision_lightmap_height" : 405,
                 "photon_map_width" : 1024,
                 "photon_map_height" : 1024,
                 "static_lightmap_width" : 1024,
                 "static_lightmap_height" : 1024,
-                "dynamic_lightmap_width" : 512,
-                "dynamic_lightmap_height" : 512,
+                "dynamic_lightmap_width" : 320,
+                "dynamic_lightmap_height" : 240,
                 "photon_mapper_config" : {
                     'stream' : True,
                     'photon_radius' :70.0,
@@ -66,20 +69,20 @@ class DungeonFloor( Floor ):
                     'photon_observe_chance' : 0.8
                 },
                 "physics" : {
-                    "timestep_divisions" : 5.0,
-                    "solver_iterations" : 5.0,
+                    "timestep_divisions" : 2.0,
+                    "solver_iterations" : 2.0,
                     "wall_friction" : 0.2
                 }
             }
         }, **kwargs )
         beagle_tileset = BGL.tileset(
-            texture = BGL.assets.get("KT-tiles/texture/dungeon_tiles"),
+            texture = BGL.assets.get("KT-tiles/texture/floor_tiles"),
             configuration = {
                 "firstgid" : 1,
                 "margin" : 0,
                 "name" : None,
                 "spacing" : 0,
-                "tilecount" : 20,
+                "tilecount" : 70,
                 "tileheight" : 32,
                 "tilewidth" : 32
             },
@@ -202,7 +205,20 @@ class DungeonFloor( Floor ):
  
         return objs
 
+    def get_dynamic_light_occluders(self):
+        occs = []
+        for door in self.doors:
+            occs.extend(door.get_light_occluders())
+        return occs
+
     def tick(self):
+        #dungeon floor
+
+        geometry = self.get_light_occluders()[:]
+        geometry.extend( self.get_dynamic_light_occluders())
+
+        self.vision_lightmap.update( geometry )
+        self.dynamic_lightmap.update( geometry )
         if not KTState.paused:
             Floor.tick(self)
             self.player.kill_success = False

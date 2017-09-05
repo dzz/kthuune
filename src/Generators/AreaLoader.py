@@ -7,6 +7,7 @@ def get_area_data(data):
     if key in area_cache:
         return area_cache[key]
     def defunge_line(line):
+        #print(line)
         return [[line['x1'],line['y1']],[line['x2'],line['y2']]]
 
     parsed = {
@@ -16,7 +17,9 @@ def get_area_data(data):
         "physics_occluders" : [],
         "decorators" : [],
         "object_defs" : [],
-        "prop_defs" : []
+        "prop_defs" : [],
+        "magic_lines" : [],
+        "tile_defs" : []
     }
 
     data = data.replace("\r","").split("\n")
@@ -25,11 +28,17 @@ def get_area_data(data):
 
     mode = ""
     for txt in data:
+        ########### read atom
         if txt=="MODEL":
             mode = txt
             row = 0
             continue
         if txt=="LINE":
+            mode = txt
+            row = 0
+            lines.append({})
+            continue
+        if txt=="MAGIC_LINE":
             mode = txt
             row = 0
             lines.append({})
@@ -44,15 +53,20 @@ def get_area_data(data):
             row = 0
             parsed["prop_defs"].append({})
             continue
+        if txt=="TILE":
+            mode = txt
+            parsed["tile_defs"].append({})
+            row = 0
+            continue
 
-
+        ##################### parse atom
         if mode == "MODEL":
             if row == 0:
                 parsed["width"] = float(txt)
             if row == 1:
                 parsed["height"] = float(txt)
 
-        if mode == "LINE":
+        if mode in [ "LINE", "MAGIC_LINE" ]:
             l = lines[-1]
             if row == 0:
                 lines[-1]["x1"] = float(txt)
@@ -63,15 +77,19 @@ def get_area_data(data):
             if row == 3:
                 lines[-1]["y2"] = float(txt)
 
-            if row == 4:
-                if txt=="True":
-                    parsed["light_occluders"].append(defunge_line(l))
-            if row == 5:
-                if txt=="True":
-                    parsed["physics_occluders"].append(defunge_line(l))
-            if row == 6:
-                if txt=="True":
-                    parsed["decorators"].append(defunge_line(l))
+            if mode == "LINE":
+                if row == 4:
+                    if txt=="True":
+                        parsed["light_occluders"].append(defunge_line(l))
+                if row == 5:
+                    if txt=="True":
+                        parsed["physics_occluders"].append(defunge_line(l))
+                if row == 6:
+                    if txt=="True":
+                        parsed["decorators"].append(defunge_line(l))
+            if mode == "MAGIC_LINE":
+                if row == 4:
+                    parsed["magic_lines"].append( { "line" : l, "magic_number" : int(txt) })
 
         if mode == "OBJECT":
             o = parsed["object_defs"][-1]
@@ -82,7 +100,11 @@ def get_area_data(data):
             if row == 2:
                 o["y"] = float(txt)
             if row == 3:
-                if o["key"] == "area_switch" and "=>" in txt:
+
+                if o["key"] in [ "door_pin", "door_end", "door_sensor" ]:
+                    o["meta"] = {}
+                    o["meta"]["door"] = txt.replace("\r","").replace("\n","")
+                elif o["key"] == "area_switch" and "=>" in txt:
                     txt = txt.replace("\r","").replace("\n","")
                     s = txt.split("=>")
                     o["meta"] = {}
@@ -91,12 +113,18 @@ def get_area_data(data):
                     o["meta"]["target_area"]="self"
                 else:
                     try:
-                        print("PARSING META")
-                        print(txt)
                         o["meta"] = json.loads(txt)
-                        print(o["meta"])
                     except Exception as e:
                         o["meta"] = {}
+
+        if mode == "TILE":
+            t = parsed["tile_defs"][-1]
+            if row ==0:
+                t["x"] = int(txt)
+            if row ==1:
+                t["y"] = int(txt) 
+            if row ==2:
+                t["idx"] = int(txt)
 
         if mode == "PROP":
             p = parsed["prop_defs"][-1]
@@ -115,6 +143,10 @@ def get_area_data(data):
                     
         row = row + 1
 
+
+    for tile_def in parsed["tile_defs"]:
+        tile_def["x"] = tile_def["x"] + int(parsed["width"]/2)
+        tile_def["y"] = tile_def["y"] + int(parsed["width"]/2)
 
     area_cache[key] = parsed
     return parsed

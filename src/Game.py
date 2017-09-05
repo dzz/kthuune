@@ -35,6 +35,14 @@ class Game( BaseGame ):
         floor.game = self
         return floor
 
+    def build_area_doortest(self):
+        area_raw = BGL.assets.get("KT-forest/textfile/doortest")
+        area_def = get_area_data( area_raw )
+
+        floor = DungeonFloor( tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
+        floor.game = self
+        return floor
+
     def build_area_arena(self):
         area_raw = BGL.assets.get("KT-forest/textfile/arena")
         area_def = get_area_data( area_raw )
@@ -67,6 +75,8 @@ class Game( BaseGame ):
                 Game.floor_cache[key] = self.build_area_tower()
             if key == "arena":
                 Game.floor_cache[key] = self.build_area_arena()
+            if key == "doortest":
+                Game.floor_cache[key] = self.build_area_doortest()
         else:
             cache_hit = True
 
@@ -97,11 +107,11 @@ class Game( BaseGame ):
 
 
     def create_player(self):
-        return KPlayer( sight_radius = 40.0, speed = 10.80, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) 
+        return KPlayer( sight_radius = 40.0, speed = 7.80, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) 
 
     def initialize(self):
 
-        self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.35 ) )
+        self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.25 ) )
         self.controllers    = self.create_tickable( Controllers() )
         self.player         = self.create_tickable( self.create_player() )
 
@@ -115,12 +125,12 @@ class Game( BaseGame ):
 
 
         #prime the cache
-        self.load_floor("area_test")
-        self.load_floor("tower")
-        self.load_floor("arena")
-        self.load_floor("docks")
+        ## self.load_floor("area_test")
+        ## self.load_floor("tower")
+        ## self.load_floor("arena")
+        ## self.load_floor("docks")
 
-        self.floor = self.create_tickable(self.load_floor("docks"))
+        self.floor = self.create_tickable(self.load_floor("doortest"))
 
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
         self.camera.set_player(self.player)
@@ -130,6 +140,14 @@ class Game( BaseGame ):
         self.player.render_hud()
 
     def tick(self):
+
+        if(self.floor.freeze_delay < 0):
+            if(self.floor.freeze_frames > 0):
+                self.floor.freeze_frames = self.floor.freeze_frames - 1
+                return
+        else:
+            self.floor.freeze_delay = self.floor.freeze_delay - 1
+
         KTState.pad = self.player.get_pad()
         KTState.start_pressed[1] = KTState.start_pressed[0]
         KTState.start_pressed[0] = KTState.pad.button_down(BGL.gamepads.buttons.START)

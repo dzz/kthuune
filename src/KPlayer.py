@@ -4,6 +4,8 @@ from Newfoundland.Player import Player
 from random import uniform,choice
 from math import floor,pi,atan2,sin, hypot
 
+from client.beagle.Newfoundland.GeometryUtils import segments_intersect
+
 
 def ur1():
     return uniform(0.0,1.0)
@@ -34,7 +36,6 @@ class PlayerPhantom(Object):
     
     def tick(self):
         self.animation_counter = self.animation_counter + 1
-        print(self.animation_counter)
         if(self.animation_counter-self.animation_threshold > 12 ):
             self.floor.objects.remove(self)
             return False
@@ -291,6 +292,20 @@ class KPlayer(Player):
     STATE_STUNNED = 1
     STATE_DODGING = 2
     
+    def get_crit_mod(self):
+
+        if self.combo_count > 8:
+            return 2.8
+        if self.sword.state == Sword.STATE_DISCHARGING:
+            return 2.1
+        else:
+            return 1.5
+
+    def receive_ranged_attack(self, attack):
+        self.hp = self.hp - attack.attack_str
+        self.attack_object = attack
+        self.attack_physics_timer = 10 
+ 
     def attempt_snap_attack(self):
         def se_priority(se):
             dx = se.p[0] - self.p[0]
@@ -298,8 +313,16 @@ class KPlayer(Player):
             se.last_priority_score = (dx*dx)+(dy*dy)
             return se.last_priority_score
             
+
+        def can_reach(player, se):
+            path = [[ player.p[0], player.p[1] ], [ se.p[0], se.p[1] ]]
+            for segment in player.floor.get_light_occluders():
+                if(segments_intersect( segment, path)):
+                    return False
+            return True
+            
         sorted_snap_enemies = sorted( self.floor.snap_enemies, key=lambda x:se_priority(x))
-        filtered_snap_enemies = list(filter( lambda x: x.last_priority_score < 400, sorted_snap_enemies))
+        filtered_snap_enemies = list(filter( lambda x: (x.last_priority_score < 400) and (can_reach(self,x)), sorted_snap_enemies))
 
         hit = False
         target = None
@@ -309,8 +332,13 @@ class KPlayer(Player):
             rad = atan2(dy,dx)
             
             delta = abs( rad - self.rad )
-            if(delta < 0.55):
-                se.receive_attack()
+            if(delta < 0.85):
+                self.floor.freeze_frames = 2
+                self.floor.freeze_delay = 3
+
+                ##ENEMY snaptype
+                if(se.snap_type == 1):
+                    se.receive_snap_attack()
                 for x in range(0,15):
                     self.floor.create_object( PlayerPhantom( player = self, animation_threshold = 2*x, target = se ) )
                 self.p[0] = se.p[0]
@@ -325,7 +353,9 @@ class KPlayer(Player):
                 pass
 
         if hit:
-            self.combo_count = self.combo_count + 1
+            self.combo_reset_cooldown = 60*4
+            if( se.snap_type == 1 ):
+                self.combo_count = self.combo_count + 1
         else:
             self.combo_count = 0
 
@@ -337,7 +367,9 @@ class KPlayer(Player):
     def __init__(self, **kwargs):
         #playerinit
 
+        self.attack_physics_timer = 0
         self.snap_cooldown = 0
+        self.combo_reset_cooldown = 0
         self.X_PRESSED = False
         self.X_STATE = [ False, False ]
 
@@ -357,6 +389,7 @@ class KPlayer(Player):
             "snapshot_fields" : [ 'p','hp' ],
             "dir" : [0.0,0.0],
         }
+        self.set_combat_vars()
         overrides.update(kwargs)
         Player.__init__(self, **overrides)
         self.base_light_color = self.light_color
@@ -412,7 +445,7 @@ class KPlayer(Player):
         self.attacked = False
         self.dash_flash = False
         self.dash_combo = False
-        self.hud_buffer = BGL.framebuffer.from_dims(320,240)
+        self.hud_buffer = BGL.framebuffer.from_dims(300,200)
         self.combo_count = 0
         self.can_combo = False
         self.kill_success = False
@@ -420,7 +453,15 @@ class KPlayer(Player):
         self.target_cooldown = 0.0
         self.hud_message_timeout = 0.0
         self.hud_message = ""
+        self.critical_hit_display_counter = 0
 
+
+    def set_combat_vars(self):
+        self.hp = 100
+        self.attack_str = 40
+        self.crit_chance = 1.0/5.0
+        self.attack_bonus = 0.2
+        self.defense = 5
 
     def get_pad(self):
         pad = self.controllers.get_virtualized_pad( self.num )
@@ -430,9 +471,19 @@ class KPlayer(Player):
         self.hud_message_timeout = 400
         self.hud_message = msg.upper()
 
+    def notify_crit(self):
+        self.critical_hit_display_counter = 60
+        self.floor.freeze_frames = 10
+        self.floor.freeze_delay = 4
+
     def render_hud(self):
+
         with BGL.context.render_target( self.hud_buffer ):
             BGL.context.clear(0.0,0.0,0.0,0.0)
+            if(self.critical_hit_display_counter>0) and (self.critical_hit_display_counter<55):
+                offsx = choice(range(-1,1))
+                offsy = choice(range(-1,1))
+                BGL.lotext.render_text_pixels("CRITICAL", 130-20+offsx,90-20+offsy, [ 1.0,0.0,0.0 ] )
             with BGL.blendmode.alpha_over:
                 #BGL.lotext.render_text_pixels("HP:{0}".format(self.hp-1), 130,220,[1.0,0.0,0.0] )
                 if(self.combo_count>1):
@@ -454,6 +505,7 @@ class KPlayer(Player):
 
         with BGL.blendmode.alpha_over:
             self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
+            self.floor.render_objects("hud")
 
 
         self.heartcard.render()
@@ -466,7 +518,7 @@ class KPlayer(Player):
         self.heartcard = HeartCard(self)
         self.swordcard = SwordCard(self)
         self.wandcard = WandCard(self)
-        self.hp = 100
+        #self.hp = 100
         self.dash_amt = 1.0
         self.sword = Sword(player=self)
         self.pumped_dashcombo = False
@@ -474,6 +526,7 @@ class KPlayer(Player):
         self.backstep_cooldown = -5
         self.backstepping = False
         self.cardtick = 0.0
+        self.attack_object = None
     
     def link_floor(self):
         self.floor.create_object( self.sword )
@@ -483,8 +536,8 @@ class KPlayer(Player):
         if self.hp > 0:
             base_params["rotation_local"] = 0.0
 
-        if self.state == KPlayer.STATE_STUNNED:
-            base_params["rotation_local"] = self.cardtick*13.1
+        #if self.state == KPlayer.STATE_STUNNED:
+        #    base_params["rotation_local"] = sin(self.cardtick)*0.2
 
 
         return base_params
@@ -554,7 +607,12 @@ class KPlayer(Player):
     def tick(self):
         #playertick
 
+        if(self.combo_reset_cooldown>0):
+            self.combo_reset_cooldown = self.combo_reset_cooldown - 1
+        else:
+            self.combo_count = 0
 
+        self.critical_hit_display_counter = self.critical_hit_display_counter - 1
         self.snap_cooldown = self.snap_cooldown - 1
         self.hud_message_timeout = self.hud_message_timeout - 1
         self.stimer = self.stimer + 1
@@ -569,7 +627,7 @@ class KPlayer(Player):
             self.light_color = [ 1.0,0.0,0.0,1.0]
             self.light_radius = 100
             self.texture = BGL.assets.get('KT-player/texture/skeleton')
-            self.size = [1.0,1.0]
+            self.size = [2.0,2.0]
             self.rad = atan2(self.p[0]-self.snapshot['p'][0],self.p[1]-self.snapshot['p'][1])
             return True
         pad = self.controllers.get_virtualized_pad( self.num )
@@ -590,7 +648,13 @@ class KPlayer(Player):
         if(self.state == KPlayer.STATE_STUNNED ):
             self.v[0] = self.v[0] * 0.2
             self.v[1] = self.v[1] * 0.2
+
+            #if(self.attack_object):
+            #    self.v[0] = self.v[0] + (self.attack_object.v[0]*4)
+            #    self.v[1] = self.v[1] + (self.attack_object.v[1]*4)
+
             if self.stimer > 15:
+                self.attack_object = None
                 self.set_state( KPlayer.STATE_DEFAULT )
 
         if(self.state == KPlayer.STATE_DODGING ):
@@ -666,5 +730,16 @@ class KPlayer(Player):
                 self.v[0] = 0
                 self.v[1] = 0
             
+            if(self.attack_physics_timer>0):
+
+                print("TRYING TO APPLY ATTACK REBOUND")
+                self.attack_physics_timer = self.attack_physics_timer - 1
+
+                print(self.attack_object.v)
+                self.v[0] = self.v[0] + (self.attack_object.vx*2)
+                self.v[1] = self.v[1] + (self.attack_object.vy*2)
+            else:
+                self.attack_object = None
+
             Object.tick(self)
 
