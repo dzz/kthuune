@@ -295,11 +295,11 @@ class KPlayer(Player):
     def get_crit_mod(self):
 
         if self.combo_count > 8:
-            return 1.8
+            return 2.8
         if self.sword.state == Sword.STATE_DISCHARGING:
-            return 1.5
+            return 2.1
         else:
-            return 1.0
+            return 1.5
 
     def receive_ranged_attack(self, attack):
         self.hp = self.hp - attack.attack_str
