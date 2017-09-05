@@ -50,8 +50,8 @@ class DungeonFloor( Floor ):
             #"generator" : BasicGenerator(),
             "area" : None,
             "renderer_config" : {
-                "vision_lightmap_width" : 320,
-                "vision_lightmap_height" : 240,
+                "vision_lightmap_width" : 720,
+                "vision_lightmap_height" : 405,
                 "photon_map_width" : 1024,
                 "photon_map_height" : 1024,
                 "static_lightmap_width" : 1024,
@@ -69,8 +69,8 @@ class DungeonFloor( Floor ):
                     'photon_observe_chance' : 0.8
                 },
                 "physics" : {
-                    "timestep_divisions" : 5.0,
-                    "solver_iterations" : 5.0,
+                    "timestep_divisions" : 2.0,
+                    "solver_iterations" : 2.0,
                     "wall_friction" : 0.2
                 }
             }

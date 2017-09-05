@@ -93,7 +93,7 @@ class SnapEnemy(Object):
         crit = 1
 
         if(uniform(0.0,1.0)< (self.floor.player.crit_chance*self.floor.player.get_crit_mod())):
-            crit = 2
+            crit = 1.3
             print("CRITICAL")
             self.raise_critical_attack()
 
@@ -132,7 +132,7 @@ class SnapEnemy(Object):
         self.set_combat_vars(self)
 
     def set_combat_vars(self):
-        self.hp = 100
+        self.hp = 50
         self.defense = 10
 
 class AreaSwitch(Object):
@@ -271,6 +271,7 @@ class Skeline(SnapEnemy):
         BGL.assets.get("KT-forest/texture/skeline0003"),
     ] 
     def customize(self):
+        self.triggered = False
         self.tick_type = Object.TickTypes.PURGING
         self.snap_type = SnapEnemy.ENEMY
         self.visible = True
@@ -281,7 +282,7 @@ class Skeline(SnapEnemy):
         self.size = [ 2.5, 2.5 ]
         self.physics = { "radius" : 0.35, "mass"   : 0.0005, "friction" : 0.0 }
         #self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
-        self.state = Skeline.STATE_SEEKING_PLAYER
+        self.state = Skeline.STATE_SEEKING_RANDOM
         self.stimer = 0
         self.rvx = None
         self.speed = 3.0
@@ -298,6 +299,28 @@ class Skeline(SnapEnemy):
         self.wfr = floor(self.widx/20)
         self.texture = Skeline.textures[self.wfr]
         self.light_type = Object.LightTypes.NONE
+
+        y = self.floor.player.p[0] - self.p[0]
+        x = self.floor.player.p[1] - self.p[1]
+
+        md = (x*x)+(y*y)
+        if( md < 250 ):
+            if not self.triggered:
+                self.triggered = True
+                test_segment = [ [ self.floor.player.p[0], self.floor.player.p[1] ], [self.p[0], self.p[1] ] ]
+                for segment in self.floor.get_light_occluders():
+                    if segments_intersect( segment, test_segment ):
+                        self.triggered = False
+                        break 
+        if( md > 300 ):
+            self.triggered = False
+
+        if not self.triggered:
+            self.visible = False
+            return True
+
+        self.visible = True
+
         self.stimer = self.stimer + 1
 
         if self.invert_seek:
@@ -314,6 +337,8 @@ class Skeline(SnapEnemy):
                 x = self.floor.player.p[0] - self.p[0]
                 y = self.floor.player.p[1] - self.p[1]
     
+
+
             rad = atan2(y,x)
             vx = cos(rad) * calc_speed
             vy = sin(rad) * calc_speed
@@ -638,13 +663,20 @@ class Totem(Object):
     def customize(self):
         self.snap_type = SnapEnemy.TOTEM
         self.texture = Totem.texture
-        self.buftarget = "popup"
+        self.buftarget = "floor"
         self.size =  [ 4.0, 4.0 ]
-        self.light_type = Object.LightTypes.STATIC_SHADOWCASTER
-        self.light_color =  [ 1.0,0.0,1.0,1.0]
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_color =  [ 1.0,0.5,1.0,1.0]
+        self.light_radius = 40
         #self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
         self.physics = None
         self.z_index = 1
+        self.anim_index = 0
+
+    def tick(self):
+        self.anim_index += 0.1
+        self.light_radius = 40 + (20*sin(self.anim_index))
 
 class SkullDeath(Object):
     texture = BGL.assets.get('KT-forest/texture/skull0000')
@@ -661,7 +693,7 @@ class SkullDeath(Object):
         self.physics = None
         self.z_index = 9000
         self.tick_type = Object.TickTypes.PURGING
-        self.delta_vy = -0.1
+        self.delta_vy = -0.03
         self.lifetime = 0
         self.delay = 0
         self.visible = False
@@ -669,14 +701,15 @@ class SkullDeath(Object):
 
     def tick(self):
 
-        if(self.delay> 15):
+        if(self.delay> 5):
             self.visible = True
             self.lifetime = self.lifetime + 1
             self.p[1] = self.p[1] + self.delta_vy
             self.delta_vy *= 1.1
 
-            self.anim_tick = self.anim_tick + 0.2
+            self.anim_tick = self.anim_tick * 1.08
             self.size[0] = sin( self.anim_tick ) * 5.0
+            self.size[1] = self.size[1] * 1.02
             if(self.lifetime > 100):
                 self.floor.objects.remove(self)
                 return False
