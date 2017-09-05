@@ -303,9 +303,8 @@ class KPlayer(Player):
 
     def receive_ranged_attack(self, attack):
         self.hp = self.hp - attack.attack_str
-        self.state = KPlayer.STATE_STUNNED
-        self.stimer = 0
         self.attack_object = attack
+        self.attack_physics_timer = 10 
  
     def attempt_snap_attack(self):
         def se_priority(se):
@@ -355,7 +354,7 @@ class KPlayer(Player):
 
         if hit:
             self.combo_reset_cooldown = 60*4
-            if( se.snap_type == 0 ):
+            if( se.snap_type == 1 ):
                 self.combo_count = self.combo_count + 1
         else:
             self.combo_count = 0
@@ -368,6 +367,7 @@ class KPlayer(Player):
     def __init__(self, **kwargs):
         #playerinit
 
+        self.attack_physics_timer = 0
         self.snap_cooldown = 0
         self.combo_reset_cooldown = 0
         self.X_PRESSED = False
@@ -649,9 +649,9 @@ class KPlayer(Player):
             self.v[0] = self.v[0] * 0.2
             self.v[1] = self.v[1] * 0.2
 
-            if(self.attack_object):
-                self.v[0] = self.v[0] + (self.attack_object.v[0]*4)
-                self.v[1] = self.v[1] + (self.attack_object.v[1]*4)
+            #if(self.attack_object):
+            #    self.v[0] = self.v[0] + (self.attack_object.v[0]*4)
+            #    self.v[1] = self.v[1] + (self.attack_object.v[1]*4)
 
             if self.stimer > 15:
                 self.attack_object = None
@@ -730,5 +730,16 @@ class KPlayer(Player):
                 self.v[0] = 0
                 self.v[1] = 0
             
+            if(self.attack_physics_timer>0):
+
+                print("TRYING TO APPLY ATTACK REBOUND")
+                self.attack_physics_timer = self.attack_physics_timer - 1
+
+                print(self.attack_object.v)
+                self.v[0] = self.v[0] + (self.attack_object.vx*2)
+                self.v[1] = self.v[1] + (self.attack_object.vy*2)
+            else:
+                self.attack_object = None
+
             Object.tick(self)
 
