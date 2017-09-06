@@ -344,7 +344,7 @@ class KPlayer(Player):
                 self.p[0] = se.p[0]
                 self.p[1] = se.p[1]
                 self.sword.state = Sword.STATE_DISCHARGING
-                self.sword.stimer = 0
+                self.sword.stimer = 11
                 self.snap_cooldown = 30
                 hit = True
                 target = se
@@ -611,7 +611,7 @@ class KPlayer(Player):
             self.snap_attack_frozen = False
 
     def tick(self):
-        #playertick
+        #player tick
 
         if(self.combo_reset_cooldown>0):
             self.combo_reset_cooldown = self.combo_reset_cooldown - 1
@@ -639,7 +639,7 @@ class KPlayer(Player):
         pad = self.controllers.get_virtualized_pad( self.num )
         self.deal_with_buttons(pad)
 
-        if self.X_PRESSED:
+        if self.X_PRESSED or ( (self.sword.state == Sword.STATE_DISCHARGING) and (self.sword.stimer == 10)):
             self.attempt_snap_attack()
 
         self.light_color = self.base_light_color

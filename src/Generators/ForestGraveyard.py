@@ -166,7 +166,7 @@ class SnapEnemy(Object):
         self.set_combat_vars(self)
 
     def set_combat_vars(self):
-        self.hp = 50
+        self.hp = 90
         self.defense = 10
 
 class AreaSwitch(Object):
@@ -287,6 +287,8 @@ class ERangedMagic(Object):
 class Skeline(SnapEnemy):
     def receive_snap_attack(self):
         SnapEnemy.receive_snap_attack(self)
+        self.stimer = 0
+        self.state = Skeline.STATE_SEEKING_RANDOM
 
     def parse(od,df):
         o = Skeline( p = [ od["x"],od["y"] ] )
@@ -384,7 +386,7 @@ class Skeline(SnapEnemy):
                 self.invert_seek = choice( [ True, False ] )
                 if( self.state == Skeline.STATE_SEEKING_RANDOM ):
                     self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_CHARGING_SHOT ] )
-                    self.flip_pxy = choice( [ True, False ] )
+                    self.flip_pxy = choice( [ True, True, True, False ] )
         if self.state == Skeline.STATE_SEEKING_RANDOM:
             if not self.rvx:
                 self.rvx = [ uniform(-1.0,1.0), uniform(-1.0,1.0) ]
@@ -401,7 +403,7 @@ class Skeline(SnapEnemy):
             self.v = [0.0,0.0]
             self.texture = Skeline.textures[2]
             self.floor.create_object( Flare( p = [ self.p[0], self.p[1] ] ) )
-            if( self.stimer > 40 ):
+            if( self.stimer > 30 ):
                 self.stimer = 0
                 self.state = Skeline.STATE_FIRING_SHOT
                 self.pickTarget()
