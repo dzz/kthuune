@@ -344,7 +344,7 @@ class KPlayer(Player):
                 self.p[0] = se.p[0]
                 self.p[1] = se.p[1]
                 self.sword.state = Sword.STATE_DISCHARGING
-                self.sword.stimer = 11
+                self.sword.stimer = 11 #short circuit the 'snap' window
                 self.snap_cooldown = 30
                 hit = True
                 target = se
