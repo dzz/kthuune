@@ -306,6 +306,10 @@ class KPlayer(Player):
         self.attack_object = attack
         self.attack_physics_timer = 25 
         self.set_hud_message("YOU GOT HIT!")
+
+        self.link_count = 0
+        self.combo_count = 0
+        self.combo_reset_cooldown = 0
  
     def attempt_snap_attack(self):
         def se_priority(se):
@@ -362,11 +366,13 @@ class KPlayer(Player):
 
         if hit:
             self.snap_attack_frozen = True
-            self.combo_reset_cooldown = 60*4
+            self.combo_reset_cooldown = 60*3
             if( se.snap_type == 1 ):
                 self.combo_count = self.combo_count + 1
+            self.link_count = self.link_count + 1
         else:
             self.combo_count = 0
+            self.link_count = 0
 
         
     def set_state(self,state):
@@ -380,6 +386,7 @@ class KPlayer(Player):
         self.attack_physics_timer = 0
         self.snap_cooldown = 0
         self.combo_reset_cooldown = 0
+        self.link_count = 0
         self.X_PRESSED = False
         self.X_STATE = [ False, False ]
 
@@ -457,6 +464,7 @@ class KPlayer(Player):
         self.dash_combo = False
         self.hud_buffer = BGL.framebuffer.from_dims(320,240)
         self.combo_count = 0
+        self.link_count = 0
         self.can_combo = False
         self.kill_success = False
         self.target_consumed = False
@@ -625,6 +633,7 @@ class KPlayer(Player):
             self.combo_reset_cooldown = self.combo_reset_cooldown - 1
         else:
             self.combo_count = 0
+            self.link_count = 0
 
         self.critical_hit_display_counter = self.critical_hit_display_counter - 1
         self.snap_cooldown = self.snap_cooldown - 1
@@ -647,7 +656,7 @@ class KPlayer(Player):
         pad = self.controllers.get_virtualized_pad( self.num )
         self.deal_with_buttons(pad)
 
-        if self.X_PRESSED or ( (self.sword.state == Sword.STATE_DISCHARGING) and (self.sword.stimer == 10)):
+        if (self.X_PRESSED and self.link_count>0) or ( (self.sword.state == Sword.STATE_DISCHARGING) and (self.sword.stimer == 10)):
             self.attempt_snap_attack()
 
         self.light_color = self.base_light_color
