@@ -310,6 +310,8 @@ class KPlayer(Player):
         self.combo_count = 0
         self.combo_reset_cooldown = 0
         self.hurt_flash_timer = 15
+        self.sword.state = Sword.STATE_IDLE
+        self.sword.stimer = 0
  
     def attempt_snap_attack(self):
         def se_priority(se):
@@ -334,6 +336,8 @@ class KPlayer(Player):
         for se in filtered_snap_enemies:
 
             crit = False
+            if self.last_link == 0:
+                crit = True
             delta = None
             if(se.last_priority_score<5) and (se.snap_type == 1) and (se.iframes in range(1,5)):
                 delta = 0
@@ -369,6 +373,7 @@ class KPlayer(Player):
             self.combo_reset_cooldown = 60*3
             if( se.snap_type == 1 ):
                 self.combo_count = self.combo_count + 1
+            self.last_link = se.snap_type
             self.link_count = self.link_count + 1
         else:
             self.combo_count = 0
@@ -392,6 +397,7 @@ class KPlayer(Player):
 
         self.stimer = 0
         self.state = KPlayer.STATE_DEFAULT
+        self.last_link = None
         self.hurt_flash_timer = 0
         overrides =  {
             "light_type" : Object.LightTypes.DYNAMIC_SHADOWCASTER,
@@ -636,6 +642,7 @@ class KPlayer(Player):
         else:
             self.combo_count = 0
             self.link_count = 0
+            self.last_link = None
 
         self.critical_hit_display_counter = self.critical_hit_display_counter - 1
         self.snap_cooldown = self.snap_cooldown - 1
