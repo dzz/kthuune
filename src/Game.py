@@ -107,7 +107,7 @@ class Game( BaseGame ):
 
 
     def create_player(self):
-        return KPlayer( sight_radius = 40.0, speed = 7.80, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) 
+        return KPlayer( sight_radius = 40.0, speed = 8.40, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) 
 
     def initialize(self):
 

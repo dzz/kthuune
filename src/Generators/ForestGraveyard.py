@@ -244,8 +244,8 @@ class ERangedMagic(Object):
 
         self.size = [ 1.5,1.5 ]
         self.snapshot_fields = [ 'p' ]
-        self.vx = cos( self.rad )*0.8
-        self.vy = sin( self.rad )*0.8
+        self.vx = cos( self.rad )*0.72
+        self.vy = sin( self.rad )*0.72
         
         self.attack_str = 10
         
