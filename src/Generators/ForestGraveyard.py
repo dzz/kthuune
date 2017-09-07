@@ -119,12 +119,14 @@ class SnapEnemy(Object):
         self.snap_effect_emit = 20
         self.floor.player.notify_crit()
 
-    def receive_snap_attack(self):
+    def receive_snap_attack(self, was_crit):
+        self.iframes = 20
         self.snap_effect_emit = 10
 
         crit = 1
 
-        if(uniform(0.0,1.0)< (self.floor.player.crit_chance*self.floor.player.get_crit_mod())):
+        #if(uniform(0.0,1.0)< (self.floor.player.crit_chance*self.floor.player.get_crit_mod())):
+        if was_crit:
             crit = 1.3
             print("CRITICAL")
             self.raise_critical_attack()
@@ -144,6 +146,8 @@ class SnapEnemy(Object):
 
     def tick(self):
 
+        if(self.iframes>0):
+            self.iframes -=1
         if(self.snap_effect_emit>0):
             self.snap_effect_emit = self.snap_effect_emit - 1
             self.floor.create_object( Splat( p = self.p ) )
@@ -285,8 +289,8 @@ class ERangedMagic(Object):
         return False
 
 class Skeline(SnapEnemy):
-    def receive_snap_attack(self):
-        SnapEnemy.receive_snap_attack(self)
+    def receive_snap_attack(self, was_crit):
+        SnapEnemy.receive_snap_attack(self, was_crit)
         self.stimer = 0
         self.state = Skeline.STATE_SEEKING_RANDOM
 
@@ -326,6 +330,7 @@ class Skeline(SnapEnemy):
         self.flip_pxy = False
 
         self.snap_effect_emit = 0
+        self.iframes = 0
         SnapEnemy.set_combat_vars(self)
         
 
@@ -352,7 +357,7 @@ class Skeline(SnapEnemy):
             self.triggered = False
 
         if not self.triggered:
-            self.visible = False
+            #self.visible = False
             return True
 
         self.visible = True
@@ -403,13 +408,13 @@ class Skeline(SnapEnemy):
             self.v = [0.0,0.0]
             self.texture = Skeline.textures[2]
             self.floor.create_object( Flare( p = [ self.p[0], self.p[1] ] ) )
-            if( self.stimer > 30 ):
+            if( self.stimer > 20 ):
                 self.stimer = 0
                 self.state = Skeline.STATE_FIRING_SHOT
                 self.pickTarget()
         if self.state == Skeline.STATE_FIRING_SHOT:
             self.texture = Skeline.textures[3]
-            if( self.stimer > 40 ):
+            if( self.stimer > 15 ):
                 self.state = Skeline.STATE_SEEKING_PLAYER
                 self.fireRanged()
 

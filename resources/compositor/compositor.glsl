@@ -458,7 +458,7 @@ void main(void) {
     vec4 LitFloor = ((light_texel+clouds(parallaxed_UV))*(4*photon_texel))+((light_texel*3)*clouds(inv_parallaxed_UV))*floor_texel;
 
     float mask = 1.0 - LitObject.a;
-    vec4 SeenFloor = (LitFloor * vision_texel) * mask;
+    vec4 SeenFloor = (((0.6*water())+0.4)*LitFloor * vision_texel) * mask;
 
     LitObject = LitObject * LitObject.a;
     

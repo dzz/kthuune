@@ -304,7 +304,7 @@ class KPlayer(Player):
     def receive_ranged_attack(self, attack):
         self.hp = self.hp - attack.attack_str
         self.attack_object = attack
-        self.attack_physics_timer = 10 
+        self.attack_physics_timer = 25 
  
     def attempt_snap_attack(self):
         def se_priority(se):
@@ -322,23 +322,30 @@ class KPlayer(Player):
             return True
             
         sorted_snap_enemies = sorted( self.floor.snap_enemies, key=lambda x:se_priority(x))
-        filtered_snap_enemies = list(filter( lambda x: (x.last_priority_score < 400) and (can_reach(self,x)), sorted_snap_enemies))
+        filtered_snap_enemies = list(filter( lambda x: ((x.last_priority_score < 400) and (can_reach(self,x))) or x.last_priority_score<5, sorted_snap_enemies))
 
         hit = False
         target = None
         for se in filtered_snap_enemies:
-            dx = se.p[0] - self.p[0]
-            dy = se.p[1] - self.p[1]
-            rad = atan2(dy,dx)
-            
-            delta = abs( rad - self.rad )
+
+            crit = False
+            delta = None
+            if(se.last_priority_score<5) and (se.snap_type == 1) and (se.iframes in range(1,5)):
+                delta = 0
+                crit = True
+            else:
+                dx = se.p[0] - self.p[0]
+                dy = se.p[1] - self.p[1]
+                rad = atan2(dy,dx)
+                
+                delta = abs( rad - self.rad )
             if(delta < 0.85):
                 self.floor.freeze_frames = 2
                 self.floor.freeze_delay = 3
 
                 ##ENEMY snaptype
                 if(se.snap_type == 1):
-                    se.receive_snap_attack()
+                    se.receive_snap_attack(crit)
                 for x in range(0,15):
                     self.floor.create_object( PlayerPhantom( player = self, animation_threshold = 2*x, target = se ) )
                 self.p[0] = se.p[0]
@@ -747,8 +754,8 @@ class KPlayer(Player):
                 self.attack_physics_timer = self.attack_physics_timer - 1
 
                 print(self.attack_object.v)
-                self.v[0] = self.v[0] + (self.attack_object.vx*2)
-                self.v[1] = self.v[1] + (self.attack_object.vy*2)
+                self.v[0] = (self.v[0]*0.2) + (self.attack_object.vx*2)
+                self.v[1] = (self.v[1]*0.2) + (self.attack_object.vy*2)
             else:
                 self.attack_object = None
 
