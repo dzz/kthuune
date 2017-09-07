@@ -39,11 +39,15 @@ class DungeonCamera (Camera):
             else:
                 self.zoom = (self.zoom*0.99) + (calc_zoom*0.01)
 
-            rate = DungeonCamera.rate
+            if self.player.link_count == 0:
+                rate = DungeonCamera.rate
+            else:
+                rate = 0.04
 
 
             self.p[0] = (self.player.p[0]+aim_offset_x)* rate + ((1.0-rate)*self.p[0])
             self.p[1] = (self.player.p[1]+aim_offset_y)* rate + ((1.0-rate)*self.p[1])
+
         else:
             self.p[0] = self.p[0] + KTState.pad.leftStick[0]
             self.p[1] = self.p[1] + KTState.pad.leftStick[1]

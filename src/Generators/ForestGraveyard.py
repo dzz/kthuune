@@ -242,6 +242,7 @@ class ERangedMagic(Object):
         self.lifespan = 120
         self.light_color = [ 1.0,0.3,0.0,0.4 ]
 
+        self.size = [ 1.5,1.5 ]
         self.snapshot_fields = [ 'p' ]
         self.vx = cos( self.rad )*0.8
         self.vy = sin( self.rad )*0.8

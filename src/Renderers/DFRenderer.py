@@ -56,6 +56,9 @@ class DFRenderer( FloorRenderer ):
                     uniform_fade.apply_fadeout( 1.0 / 8.0 )
             elif (self.player.hp < 0.0):
                     with BGL.blendmode.alpha_over:
+                        uniform_fade.apply_fadeout( 1.0 / 12.0 )
+            elif (self.player.link_count > 0):
+                    with BGL.blendmode.alpha_over:
                         uniform_fade.apply_fadeout( 1.0 / 16.0 )
             else:
                 with BGL.blendmode.alpha_over:

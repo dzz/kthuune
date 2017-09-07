@@ -306,10 +306,10 @@ class KPlayer(Player):
         self.attack_object = attack
         self.attack_physics_timer = 25 
         self.set_hud_message("YOU GOT HIT!")
-
         self.link_count = 0
         self.combo_count = 0
         self.combo_reset_cooldown = 0
+        self.hurt_flash_timer = 15
  
     def attempt_snap_attack(self):
         def se_priority(se):
@@ -392,6 +392,7 @@ class KPlayer(Player):
 
         self.stimer = 0
         self.state = KPlayer.STATE_DEFAULT
+        self.hurt_flash_timer = 0
         overrides =  {
             "light_type" : Object.LightTypes.DYNAMIC_SHADOWCASTER,
             "light_radius" : 45.0,
@@ -405,6 +406,7 @@ class KPlayer(Player):
             "buftarget" : "popup",
             "snapshot_fields" : [ 'p','hp' ],
             "dir" : [0.0,0.0],
+            "color" : [0.0,0.0,0.0,1.0]
         }
         self.set_combat_vars()
         overrides.update(kwargs)
@@ -681,12 +683,12 @@ class KPlayer(Player):
                 self.set_state( KPlayer.STATE_DEFAULT )
 
         if(self.state == KPlayer.STATE_DODGING ):
-            self.v[0] = self.dv[0] * 3
-            self.v[1] = self.dv[1] * 3
+            self.v[0] = self.dv[0] * 4
+            self.v[1] = self.dv[1] * 4
 
             if(self.sword.state is not Sword.STATE_IDLE):
                 self.set_state(KPlayer.STATE_DEFAULT)
-            if(self.stimer > 25 ):
+            if(self.stimer > 9 ):
                 self.set_state(KPlayer.STATE_DEFAULT)
 
         if(self.state == KPlayer.STATE_DEFAULT ):
@@ -769,5 +771,14 @@ class KPlayer(Player):
             else:
                 self.attack_object = None
 
+
+            if(self.hurt_flash_timer>0):
+                self.color = [1.0,0.0,0.0,1.0]
+                self.hurt_flash_timer -= 1
+            elif(self.link_count>0):
+                    self.color = [1.0,1.0,0.4,1.0]
+            else:
+                self.color = [1.0,1.0,1.0,1.0]
+        
             Object.tick(self)
 
