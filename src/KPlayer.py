@@ -305,6 +305,7 @@ class KPlayer(Player):
         self.hp = self.hp - attack.attack_str
         self.attack_object = attack
         self.attack_physics_timer = 25 
+        self.set_hud_message("YOU GOT HIT!")
  
     def attempt_snap_attack(self):
         def se_priority(se):
@@ -386,7 +387,7 @@ class KPlayer(Player):
         self.state = KPlayer.STATE_DEFAULT
         overrides =  {
             "light_type" : Object.LightTypes.DYNAMIC_SHADOWCASTER,
-            "light_radius" : 15.0,
+            "light_radius" : 45.0,
             "light_color" : [ 0.65,0.45,0.3,1.0],
             "walk_tick" : 0,
             "z_index" : 1,
@@ -454,7 +455,7 @@ class KPlayer(Player):
         self.attacked = False
         self.dash_flash = False
         self.dash_combo = False
-        self.hud_buffer = BGL.framebuffer.from_dims(300,200)
+        self.hud_buffer = BGL.framebuffer.from_dims(320,240)
         self.combo_count = 0
         self.can_combo = False
         self.kill_success = False
@@ -476,8 +477,8 @@ class KPlayer(Player):
         pad = self.controllers.get_virtualized_pad( self.num )
         return pad
 
-    def set_hud_message(self, msg):
-        self.hud_message_timeout = 400
+    def set_hud_message(self, msg, timeout = 400):
+        self.hud_message_timeout = timeout
         self.hud_message = msg.upper()
 
     def notify_crit(self):
@@ -498,13 +499,13 @@ class KPlayer(Player):
                 if(self.combo_count>1):
                     offsx = choice(range(-1,1))
                     offsy = choice(range(-1,1))
-                    BGL.lotext.render_text_pixels("COMBO:{0}".format(self.combo_count-1), 130+offsx,90+offsy, [1.0,uniform(0.0,1.0),1.0] )
+                    BGL.lotext.render_text_pixels("COMBO:{0}".format(self.combo_count-1), 4+offsx,4+offsy, [1.0,uniform(0.0,1.0),1.0] )
 
                 if(self.hud_message_timeout>0):
                     mx = 160 - floor(len(self.hud_message)*4)
 
                     f = 1.0
-                    if(self.hud_message_timeout<100):
+                    if(self.hud_message_timeout<20):
                         f = self.hud_message_timeout / 100.0;
                         
                     urc = [ ur1()*f,ur1()*f,ur1()*f,1.0 ]

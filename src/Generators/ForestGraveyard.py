@@ -118,6 +118,7 @@ class SnapEnemy(Object):
     def raise_critical_attack(self):
         self.snap_effect_emit = 20
         self.floor.player.notify_crit()
+        self.floor.create_object( SwordCrit( p = [ self.p[0], self.p[1]-30 ]))
 
     def receive_snap_attack(self, was_crit):
         self.iframes = 20
@@ -423,6 +424,8 @@ class Skeline(SnapEnemy):
             self.floor.objects.remove(self)
             self.floor.snap_enemies.remove(self)
             self.floor.create_object( SkullDeath( p = [ self.p[0], self.p[1] ] ) )
+            self.floor.player.set_hud_message("KILL!", 60)
+            self.floor.freeze_frames = 3
             return False
 
         return True
@@ -726,7 +729,7 @@ class SkullDeath(Object):
         self.texture = SkullDeath.texture
         self.buftarget = "hud"
 
-        self.size =  [ 5.0, 5.0 ]
+        self.size =  [ 3.0, 3.0 ]
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
         self.light_color =  [ 1.0,0.0,1.0,1.0]
         self.color = [ 1.0,1.0,1.0,0.5]
@@ -752,6 +755,45 @@ class SkullDeath(Object):
             self.size[0] = sin( self.anim_tick ) * 5.0
             self.size[1] = self.size[1] * 1.02
             if(self.lifetime > 100):
+                self.floor.objects.remove(self)
+                return False
+            return True
+        else:
+            self.delay = self.delay + 1
+            return True
+
+class SwordCrit(Object):
+    texture = BGL.assets.get('KT-player/texture/sword')
+
+    def customize(self):
+        self.texture = SwordCrit.texture
+        self.buftarget = "hud"
+
+        self.size =  [ 9.0, 9.0 ]
+        self.rad = 3.14/2
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_color =  [ 0.0,1.0,0.0,1.0]
+        self.color = [ 1.0,1.0,1.0,0.5]
+        self.light_radius = 50.0
+        self.physics = None
+        self.z_index = 9000
+        self.tick_type = Object.TickTypes.PURGING
+        self.delta_vy = 0.3
+        self.lifetime = 0
+        self.delay = 0
+        self.visible = False
+        self.anim_tick = 0.2
+
+    def tick(self):
+
+        if(self.delay> 5):
+            self.visible = True
+            self.lifetime = self.lifetime + 1
+            self.p[1] = self.p[1] + self.delta_vy
+            self.delta_vy *= 1.2
+
+            self.anim_tick = self.anim_tick * 1.08
+            if(self.lifetime > 30):
                 self.floor.objects.remove(self)
                 return False
             return True
