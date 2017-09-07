@@ -772,7 +772,8 @@ class SwordCrit(Object):
 
         self.size =  [ 9.0, 9.0 ]
         self.rad = 3.14/2
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        #self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_type = Object.LightTypes.NONE
         self.light_color =  [ 0.0,1.0,0.0,1.0]
         self.color = [ 1.0,1.0,1.0,0.5]
         self.light_radius = 50.0

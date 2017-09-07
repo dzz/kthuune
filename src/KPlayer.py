@@ -309,7 +309,7 @@ class KPlayer(Player):
         self.link_count = 0
         self.combo_count = 0
         self.combo_reset_cooldown = 0
-        self.hurt_flash_timer = 15
+        self.hurt_flash_timer = 25
         self.sword.state = Sword.STATE_IDLE
         self.sword.stimer = 0
  
@@ -329,7 +329,7 @@ class KPlayer(Player):
             return True
             
         sorted_snap_enemies = sorted( self.floor.snap_enemies, key=lambda x:se_priority(x))
-        filtered_snap_enemies = list(filter( lambda x: ((x.last_priority_score < 400) and (can_reach(self,x))) or x.last_priority_score<5, sorted_snap_enemies))
+        filtered_snap_enemies = list(filter( lambda x: ((x.last_priority_score < 400) and (can_reach(self,x))) or x.last_priority_score<10, sorted_snap_enemies))
 
         hit = False
         target = None
@@ -339,7 +339,7 @@ class KPlayer(Player):
             if self.last_link == 0:
                 crit = True
             delta = None
-            if(se.last_priority_score<5) and (se.snap_type == 1) and (se.iframes in range(1,5)):
+            if(se.last_priority_score<10) and (se.snap_type == 1) and (se.iframes in range(1,9)):
                 delta = 0
                 crit = True
             else:
@@ -350,7 +350,7 @@ class KPlayer(Player):
                 delta = abs( rad - self.rad )
             if(delta < 0.85):
                 self.floor.freeze_frames = 2
-                self.floor.freeze_delay = 3
+                self.floor.freeze_delay = 2
 
                 ##ENEMY snaptype
                 if(se.snap_type == 1):
@@ -499,7 +499,7 @@ class KPlayer(Player):
 
     def notify_crit(self):
         self.critical_hit_display_counter = 60
-        self.floor.freeze_frames = 10
+        self.floor.freeze_frames = 6
         self.floor.freeze_delay = 4
 
     def render_hud(self):
@@ -509,7 +509,7 @@ class KPlayer(Player):
             if(self.critical_hit_display_counter>0) and (self.critical_hit_display_counter<55):
                 offsx = choice(range(-1,1))
                 offsy = choice(range(-1,1))
-                BGL.lotext.render_text_pixels("CRITICAL", 130-20+offsx,90-20+offsy, [ 1.0,0.0,0.0 ] )
+                #BGL.lotext.render_text_pixels("CRITICAL", 130-20+offsx,90-20+offsy, [ 1.0,0.0,0.0 ] )
             with BGL.blendmode.alpha_over:
                 #BGL.lotext.render_text_pixels("HP:{0}".format(self.hp-1), 130,220,[1.0,0.0,0.0] )
                 if(self.combo_count>1):
@@ -783,7 +783,7 @@ class KPlayer(Player):
                 self.color = [1.0,0.0,0.0,1.0]
                 self.hurt_flash_timer -= 1
             elif(self.link_count>0):
-                    self.color = [1.0,1.0,0.4,1.0]
+                    self.color = [1.0,1.0,0.7,1.0]
             else:
                 self.color = [1.0,1.0,1.0,1.0]
         
