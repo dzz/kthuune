@@ -356,7 +356,9 @@ class KPlayer(Player):
                 rad = atan2(dy,dx)
                 
                 delta = abs( rad - self.rad )
-            if(delta < 0.85):
+
+            print( delta)
+            if(delta < 0.42) or (delta > ((2*pi)-0.42)):
                 self.floor.freeze_frames = 2
                 self.floor.freeze_delay = 2
 
