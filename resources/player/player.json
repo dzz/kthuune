@@ -60,6 +60,17 @@
         ],
         "shader" :  [
             { "name" : "card", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/cardp" }
+        ],
+        "path" : [
+            { "name" : "charge_initiated", "path" : "{package_path}/sounds/charge_initiated.wav" },
+            { "name" : "charge_executed", "path" : "{package_path}/sounds/charge_executed.wav" },
+            { "name" : "snap_landed", "path" : "{package_path}/sounds/snap_landed.wav" },
+            { "name" : "basic_hit", "path" : "{package_path}/sounds/basic_hit.wav" },
+            { "name" : "crit", "path" : "{package_path}/sounds/crit.wav" },
+            { "name" : "combo", "path" : "{package_path}/sounds/combo.wav" },
+            { "name" : "enemy_killed", "path" : "{package_path}/sounds/enemy_killed.wav" },
+            { "name" : "player_hurt", "path" : "{package_path}/sounds/player_hurt.wav" },
+            { "name" : "enemy_projectile", "path" : "{package_path}/sounds/enemy_projectile.wav" }
         ]
     }
 }

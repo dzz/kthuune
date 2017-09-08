@@ -1,3 +1,5 @@
+import audio
+
 from Beagle import API as BGL
 from Newfoundland.Object import Object
 from Newfoundland.Player import Player
@@ -5,6 +7,8 @@ from random import uniform,choice
 from math import floor,pi,atan2,sin, hypot
 
 from client.beagle.Newfoundland.GeometryUtils import segments_intersect
+
+from .KSounds import KSounds
 
 
 def ur1():
@@ -33,6 +37,7 @@ class PlayerPhantom(Object):
         self.light_color = [ 0.0,0.0,1.0,1.0 ]
         self.animation_counter = 0
         self.size = [ 3.0,3.0]
+
     
     def tick(self):
         self.animation_counter = self.animation_counter + 1
@@ -68,7 +73,7 @@ class HeartCard(Card):
         self.fridx = choice( range(0,180) )
         self.player = player
 
-    def tick(self):
+    def tick(self): 
         self.fridx = (self.fridx + 1) %180
 
     def get_shader_params(self):
@@ -204,6 +209,7 @@ class Sword(Object):
                     self.stamina = self.stamina * 0.83
                     self.state = Sword.STATE_CHARGING
                     self.stimer = 0
+                    KSounds.play( KSounds.charge_initiated )
                 else:
                     self.player.set_state(KPlayer.STATE_STUNNED)
 
@@ -212,6 +218,7 @@ class Sword(Object):
             self.discharge_mod = self.discharge_mod * 1.02
             if not pad.button_down( btns.RIGHT_BUMPER ) or self.stamina < 0.02:
                 if(self.stimer > Sword.spin_attack_threshold):
+                    KSounds.play(KSounds.charge_executed)
                     self.state = Sword.STATE_DISCHARGING
                     self.stimer = 0
                 else:
@@ -312,6 +319,7 @@ class KPlayer(Player):
         self.hurt_flash_timer = 25
         self.sword.state = Sword.STATE_IDLE
         self.sword.stimer = 0
+        KSounds.play( KSounds.player_hurt )
  
     def attempt_snap_attack(self):
         def se_priority(se):
@@ -355,6 +363,8 @@ class KPlayer(Player):
                 ##ENEMY snaptype
                 if(se.snap_type == 1):
                     se.receive_snap_attack(crit)
+                    if crit:
+                        KSounds.play( KSounds.crit )
                 for x in range(0,15):
                     self.floor.create_object( PlayerPhantom( player = self, animation_threshold = 2*x, target = se ) )
                 self.p[0] = se.p[0]
@@ -373,8 +383,10 @@ class KPlayer(Player):
             self.combo_reset_cooldown = 60*3
             if( se.snap_type == 1 ):
                 self.combo_count = self.combo_count + 1
+                KSounds.play( KSounds.basic_hit )
             self.last_link = se.snap_type
             self.link_count = self.link_count + 1
+            KSounds.play( KSounds.snap_landed )
         else:
             self.combo_count = 0
             self.link_count = 0
@@ -480,7 +492,6 @@ class KPlayer(Player):
         self.hud_message_timeout = 0.0
         self.hud_message = ""
         self.critical_hit_display_counter = 0
-
 
     def set_combat_vars(self):
         self.hp = 100
@@ -618,6 +629,7 @@ class KPlayer(Player):
 
 
     def notify_enemy_killed(self):
+        KSounds.play( KSounds.enemy_killed )
         self.kill_success = True
         pass
 

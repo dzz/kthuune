@@ -20,6 +20,8 @@ from .magic_lines import vscan_line, fill_scanline
 import random
 from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 
+from ..KSounds import KSounds
+
 class AttackInfo(Object):
     def customize(self):
         self.tick_type = Object.TickTypes.PURGING
@@ -426,6 +428,7 @@ class Skeline(SnapEnemy):
             self.floor.snap_enemies.remove(self)
             self.floor.create_object( SkullDeath( p = [ self.p[0], self.p[1] ] ) )
             self.floor.player.set_hud_message("KILL!", 60)
+            self.floor.player.notify_enemy_killed()
             self.floor.freeze_frames = 3
             return False
 
@@ -442,6 +445,7 @@ class Skeline(SnapEnemy):
         #y = self.floor.player.p[1] - self.p[1]
         #rad = atan2(y,x)
         self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = self.target_rad ) )
+        KSounds.play(KSounds.enemy_projectile)
 
     def get_shader_params(self):
         bp = Object.get_shader_params(self)
