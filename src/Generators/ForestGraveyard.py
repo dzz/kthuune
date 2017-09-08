@@ -130,7 +130,7 @@ class SnapEnemy(Object):
 
         #if(uniform(0.0,1.0)< (self.floor.player.crit_chance*self.floor.player.get_crit_mod())):
         if was_crit:
-            crit = 1.3
+            crit = 1.8
             print("CRITICAL")
             self.raise_critical_attack()
 
@@ -173,7 +173,7 @@ class SnapEnemy(Object):
         self.set_combat_vars(self)
 
     def set_combat_vars(self):
-        self.hp = 90
+        self.hp = 85
         self.defense = 10
 
 class AreaSwitch(Object):
@@ -295,7 +295,7 @@ class ERangedMagic(Object):
 class Skeline(SnapEnemy):
     def receive_snap_attack(self, was_crit):
         SnapEnemy.receive_snap_attack(self, was_crit)
-        self.stimer = 0
+        self.stimer = -10
         self.state = Skeline.STATE_SEEKING_RANDOM
 
     def parse(od,df):

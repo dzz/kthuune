@@ -338,6 +338,7 @@ class KPlayer(Player):
             
         sorted_snap_enemies = sorted( self.floor.snap_enemies, key=lambda x:se_priority(x))
         filtered_snap_enemies = list(filter( lambda x: ((x.last_priority_score < 400) and (can_reach(self,x))) or x.last_priority_score<10, sorted_snap_enemies))
+        filtered_snap_enemies = sorted( filtered_snap_enemies, key=lambda x:2.0-x.snap_type) #prioritize non totems
 
         hit = False
         target = None
@@ -347,7 +348,7 @@ class KPlayer(Player):
             if self.last_link == 0:
                 crit = True
             delta = None
-            if(se.last_priority_score<10) and (se.snap_type == 1) and (se.iframes in range(1,9)):
+            if(se.last_priority_score<9) and (se.snap_type == 1) and (se.iframes in range(2,7)):
                 delta = 0
                 crit = True
             else:
@@ -781,7 +782,7 @@ class KPlayer(Player):
                 self.v[0] = 0
                 self.v[1] = 0 
 
-            if(self.attack_physics_timer>0):
+            if(self.attack_physics_timer>0 and self.attack_object):#the and here is a hack around a bug
 
                 print("TRYING TO APPLY ATTACK REBOUND")
                 self.attack_physics_timer = self.attack_physics_timer - 1
