@@ -158,6 +158,27 @@ class Door(Object):
 class SnapEnemy(Object):
     TOTEM = 0
     ENEMY = 1
+
+
+    def can_see_player(self):
+        test_segment = [ [ self.floor.player.p[0], self.floor.player.p[1] ], [self.p[0], self.p[1] ] ]
+        for segment in self.floor.get_light_occluders():
+            if segments_intersect( segment, test_segment ):
+                return False
+        return True
+
+    def die(self):
+        self.floor.objects.remove(self)
+        self.floor.snap_enemies.remove(self)
+        self.floor.create_object( SkullDeath( p = [ self.p[0], self.p[1] ] ) )
+        self.floor.player.set_hud_message("KILL!", 60)
+        self.floor.player.notify_enemy_killed()
+        self.floor.freeze_frames = 3
+        
+        if(uniform(0.0,1.0) > 0.78):
+            self.floor.create_object(HealthVial(p=[ self.p[0], self.p[1]]))
+
+
     def parse(od,df):
         o = SnapEnemy( p = [ od["x"],od["y"] ] )
         df.snap_enemies.append(o)
@@ -299,8 +320,6 @@ class ERangedMagic(Object):
         
     def tick(self):
 
-
-
         self.light_color[1] = uniform(0.4,0.8)
         self.light_color[0] = uniform(0.0,1.0)
         self.light_color[3] = uniform(0.0,1.0)
@@ -337,6 +356,168 @@ class ERangedMagic(Object):
             return True
         self.floor.objects.remove(self)
         return False
+
+class Acolyte(SnapEnemy):
+    def receive_snap_attack(self, was_crit):
+        SnapEnemy.receive_snap_attack(self, was_crit)
+        self.stimer = 0
+        self.state = Acolyte.STATE_CHARGING_SHOT
+
+    def parse(od,df):
+        o = Acolyte( p = [ od["x"],od["y"] ] )
+        df.snap_enemies.append(o)
+        return o
+
+    STATE_SEEKING_RANDOM = 0
+    STATE_SEEKING_PLAYER = 1
+    STATE_CHARGING_SHOT = 2
+    STATE_FIRING_SHOT = 3
+
+    textures = [
+        BGL.assets.get("KT-forest/texture/acolyte0000"),
+        BGL.assets.get("KT-forest/texture/acolyte0001"),
+        BGL.assets.get("KT-forest/texture/acolyte0002")
+    ] 
+    def customize(self):
+        self.fire_count = 0
+        self.triggered = False
+        self.tick_type = Object.TickTypes.PURGING
+        self.snap_type = SnapEnemy.ENEMY
+        self.visible = True
+        self.z_index = 1
+        self.buftarget = "popup"
+        self.texture = Acolyte.textures[0]
+        self.widx = int(uniform(0.0,40.0))
+        self.size = [ 4, 4 ]
+        self.physics = { "radius" : 0.35, "mass"   : 0.0005, "friction" : 0.0 }
+        #self.state = choice( [ Acolyte.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
+        self.state = Acolyte.STATE_SEEKING_RANDOM
+        self.stimer = 0
+        self.rvx = None
+        self.speed = 0.8
+        self.invert_seek = False
+        self.flip_pxy = False
+
+        self.wavidx = 0
+        self.snap_effect_emit = 0
+        self.iframes = 0
+        SnapEnemy.set_combat_vars(self)
+
+        self.hp = 1000
+        
+
+    def tick(self):
+
+        self.wavidx = self.wavidx + 0.01
+        SnapEnemy.tick(self)
+        self.widx = (self.widx + 1) % 40
+        self.wfr = floor(self.widx/20)
+        self.texture = Acolyte.textures[0]
+        self.light_type = Object.LightTypes.NONE
+
+        y = self.floor.player.p[0] - self.p[0]
+        x = self.floor.player.p[1] - self.p[1]
+
+        md = (x*x)+(y*y)
+        if( md < 250 ):
+            if not self.triggered:
+                self.triggered = True
+                if not self.can_see_player():
+                    self.triggered = False
+
+        if( md > 300 ):
+            self.triggered = False
+
+        if not self.triggered:
+            #self.visible = False
+            return True
+
+        self.visible = True
+
+        self.stimer = self.stimer + 1
+
+        calc_speed = self.speed
+
+        if self.state == Acolyte.STATE_SEEKING_PLAYER:
+            self.fire_count = 0
+            self.rvx = None
+            if self.flip_pxy:
+                y = self.floor.player.p[0] - self.p[0]
+                x = self.floor.player.p[1] - self.p[1]
+            else:
+                x = self.floor.player.p[0] - self.p[0]
+                y = self.floor.player.p[1] - self.p[1]
+    
+
+
+            rad = atan2(y,x)
+            vx = cos(rad) * calc_speed
+            vy = sin(rad) * calc_speed
+            self.v = [ vx,vy]
+
+            if(self.stimer > 25 ):
+                self.stimer = 0
+                self.state = choice( [ Acolyte.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
+                self.invert_seek = choice( [ True, False ] )
+                if( self.state == Acolyte.STATE_SEEKING_RANDOM ):
+                    self.state = choice( [ Acolyte.STATE_SEEKING_RANDOM, Skeline.STATE_CHARGING_SHOT ] )
+                    self.flip_pxy = choice( [ True, True, True, False ] )
+        if self.state == Acolyte.STATE_SEEKING_RANDOM:
+            self.fire_count = 0
+            if not self.rvx:
+                self.rvx = [ uniform(-1.0,1.0), uniform(-1.0,1.0) ]
+                self.flip_pxy = choice( [ True, False ] )
+            self.v = [ self.rvx[0] * calc_speed, self.rvx[1] * calc_speed ]
+            if(self.stimer > 80 ):
+                self.stimer = 0
+                self.state = choice( [ Acolyte.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER, Skeline.STATE_CHARGING_SHOT ] )
+                self.invert_seek = choice( [ True, True,True, False ] )
+        if self.state == Acolyte.STATE_CHARGING_SHOT:
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_color = [9.0,0.4,0.1,1.0]
+            self.light_radius = uniform(30.0,50.0)
+            self.v = [0.0,0.0]
+            self.texture = Acolyte.textures[1]
+            self.floor.create_object( Flare( p = [ self.p[0], self.p[1] ] ) )
+            if( self.stimer > 40 ):
+                self.stimer = 0
+                self.state = Acolyte.STATE_FIRING_SHOT
+                self.pickTarget()
+        if self.state == Acolyte.STATE_FIRING_SHOT:
+            self.texture = Acolyte.textures[2]
+            if( self.stimer > 10 ):
+                self.fireRanged()
+                self.fire_count = self.fire_count + 1
+                if self.fire_count >3:
+                    self.state = Acolyte.STATE_SEEKING_PLAYER
+                    self.fire_count = 0
+                else:
+                    self.state = Acolyte.STATE_CHARGING_SHOT
+
+        if(self.hp < 0):
+            SnapEnemy.die(self)
+            return False
+
+        return True
+
+    def pickTarget(self):
+        x = self.floor.player.p[0] - self.p[0]
+        y = self.floor.player.p[1] - self.p[1]
+        rad = atan2(y,x)
+        self.target_rad = rad
+        
+    def fireRanged(self):
+        #x = self.floor.player.p[0] - self.p[0]
+        #y = self.floor.player.p[1] - self.p[1]
+        #rad = atan2(y,x)
+        self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = self.target_rad ) )
+        KSounds.play(KSounds.enemy_projectile)
+
+    def get_shader_params(self):
+        bp = Object.get_shader_params(self)
+        bp['translation_local'][0] = 0.1
+        bp['translation_local'][1] = -0.4 + (sin( self.wavidx )*0.2)
+        return bp
 
 class Skeline(SnapEnemy):
     def receive_snap_attack(self, was_crit):
@@ -468,18 +649,8 @@ class Skeline(SnapEnemy):
                 self.state = Skeline.STATE_SEEKING_PLAYER
                 self.fireRanged()
 
-
         if(self.hp < 0):
-            self.floor.objects.remove(self)
-            self.floor.snap_enemies.remove(self)
-            self.floor.create_object( SkullDeath( p = [ self.p[0], self.p[1] ] ) )
-            self.floor.player.set_hud_message("KILL!", 60)
-            self.floor.player.notify_enemy_killed()
-            self.floor.freeze_frames = 3
-
-            if(uniform(0.0,1.0) > 0.78):
-                self.floor.create_object(HealthVial(p=[ self.p[0], self.p[1]]))
-
+            SnapEnemy.die(self)
             return False
 
         return True
@@ -1224,6 +1395,9 @@ class ForestGraveyard():
 
             if od["key"] in [ "snap_enemy", "skeline"]:
                 self.objects.append(Skeline.parse(od,df ))
+
+            if od["key"] in [ "acolyte" ]:
+                self.objects.append(Acolyte.parse(od,df ))
 
 
 

@@ -345,7 +345,7 @@ class KPlayer(Player):
             return True
             
         sorted_snap_enemies = sorted( self.floor.snap_enemies, key=lambda x:se_priority(x))
-        filtered_snap_enemies = list(filter( lambda x: ((x.last_priority_score < 500) and (can_reach(self,x))) or x.last_priority_score<10, sorted_snap_enemies))
+        filtered_snap_enemies = list(filter( lambda x: ((x.last_priority_score < 450) and (can_reach(self,x))) or x.last_priority_score<10, sorted_snap_enemies))
         filtered_snap_enemies = sorted( filtered_snap_enemies, key=lambda x:2.0-x.snap_type) #prioritize non totems
 
         hit = False
@@ -367,7 +367,7 @@ class KPlayer(Player):
                 delta = abs( rad - self.rad )
 
             print( delta)
-            tolerance = 0.72
+            tolerance = (pi*2)/12.0
             if(delta < tolerance) or (delta > ((2*pi)-(tolerance))):
                 self.floor.freeze_frames = 2
                 self.floor.freeze_delay = 2
