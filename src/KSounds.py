@@ -10,7 +10,7 @@ class KSounds:
     enemy_killed = audio.baudy_load_sound(BGL.assets.get("KT-player/path/enemy_killed")) 
     player_hurt = audio.baudy_load_sound(BGL.assets.get("KT-player/path/player_hurt")) 
     enemy_projectile = audio.baudy_load_sound(BGL.assets.get("KT-player/path/enemy_projectile")) 
-    #combo = audio.baudy_load_sound(BGL.assets.get("KT-player/path/combo")) 
+    health = audio.baudy_load_sound(BGL.assets.get("KT-player/path/health")) 
 
     def play(sound_id):
         audio.baudy_play_sound(sound_id)

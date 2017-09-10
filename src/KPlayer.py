@@ -295,10 +295,18 @@ class Sword(Object):
 
 class KPlayer(Player):
 
+    ComboSecs = 3.5
     STATE_DEFAULT = 0
     STATE_STUNNED = 1
     STATE_DODGING = 2
     
+    def consume_hp(self):
+        KSounds.play(KSounds.health)
+        self.hp = self.hp + 15
+        if(self.hp>100):
+            self.hp = 100
+        pass
+
     def get_crit_mod(self):
 
         if self.combo_count > 8:
@@ -337,7 +345,7 @@ class KPlayer(Player):
             return True
             
         sorted_snap_enemies = sorted( self.floor.snap_enemies, key=lambda x:se_priority(x))
-        filtered_snap_enemies = list(filter( lambda x: ((x.last_priority_score < 400) and (can_reach(self,x))) or x.last_priority_score<10, sorted_snap_enemies))
+        filtered_snap_enemies = list(filter( lambda x: ((x.last_priority_score < 500) and (can_reach(self,x))) or x.last_priority_score<10, sorted_snap_enemies))
         filtered_snap_enemies = sorted( filtered_snap_enemies, key=lambda x:2.0-x.snap_type) #prioritize non totems
 
         hit = False
@@ -359,7 +367,8 @@ class KPlayer(Player):
                 delta = abs( rad - self.rad )
 
             print( delta)
-            if(delta < 0.42) or (delta > ((2*pi)-0.42)):
+            tolerance = 0.72
+            if(delta < tolerance) or (delta > ((2*pi)-(tolerance))):
                 self.floor.freeze_frames = 2
                 self.floor.freeze_delay = 2
 
@@ -383,7 +392,7 @@ class KPlayer(Player):
 
         if hit:
             self.snap_attack_frozen = True
-            self.combo_reset_cooldown = 60*3
+            self.combo_reset_cooldown = 60*KPlayer.ComboSecs
             if( se.snap_type == 1 ):
                 self.combo_count = self.combo_count + 1
                 KSounds.play( KSounds.basic_hit )
@@ -723,6 +732,9 @@ class KPlayer(Player):
                     self.dv = [ delta[0] * self.speed, delta[1] * self.speed ]
                     self.can_backstep = False
                     self.set_state(KPlayer.STATE_DODGING)
+                    self.combo_reset_cooldown = 60*KPlayer.ComboSecs
+                    self.link_count = 1
+                    
 
 
             calc_speed = self.speed

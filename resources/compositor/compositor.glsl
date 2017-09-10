@@ -455,7 +455,9 @@ void main(void) {
     ///
 
     
-    vec4 LitFloor = ((light_texel+clouds(parallaxed_UV))*(4*photon_texel))+((light_texel*3)*clouds(inv_parallaxed_UV))*floor_texel;
+    //vec4 LitFloor = ((light_texel+clouds(parallaxed_UV))*(4*photon_texel))+((light_texel*3)*clouds(inv_parallaxed_UV))*floor_texel;
+
+    vec4 LitFloor = light_texel*floor_texel;
 
     float mask = 1.0 - LitObject.a;
     vec4 SeenFloor = (((0.6*water())+0.4)*LitFloor * vision_texel) * mask;
@@ -464,7 +466,10 @@ void main(void) {
     
     //vec4 combined_light = ((photon_texel + light_texel) * 1.3);
 
-    gl_FragColor = (SeenFloor + LitObject) * vision_texel;
+    vec4 background = texture( reflect_map, (inv_parallaxed_UV*0.8* ((UV.y*0.2)+0.7)) + (from_c*camera_position *-0.001 * ((UV.y*0.3)+0.7) ));
+
+    background = background + water();
+    gl_FragColor = (SeenFloor + LitObject) * vision_texel + background;
     //gl_FragColor = (clouds(parallaxed_UV)*(4*photon_texel))+(light_texel*clouds(inv_parallaxed_UV))*floor_texel;
 //gl_FragColor =light_texel;
 
