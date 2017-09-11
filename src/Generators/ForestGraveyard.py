@@ -169,7 +169,8 @@ class SnapEnemy(Object):
 
     def die(self):
         self.floor.objects.remove(self)
-        self.floor.snap_enemies.remove(self)
+        if(self in self.floor.snap_enemies):
+            self.floor.snap_enemies.remove(self)
         self.floor.create_object( SkullDeath( p = [ self.p[0], self.p[1] ] ) )
         self.floor.player.set_hud_message("KILL!", 60)
         self.floor.player.notify_enemy_killed()
@@ -518,6 +519,122 @@ class Acolyte(SnapEnemy):
         bp['translation_local'][0] = 0.1
         bp['translation_local'][1] = -0.4 + (sin( self.wavidx )*0.2)
         return bp
+
+class Stork(SnapEnemy):
+    def receive_snap_attack(self, was_crit):
+        SnapEnemy.receive_snap_attack(self, was_crit)
+
+    def parse(od,df):
+        o = Stork( p = [ od["x"],od["y"] ] )
+        df.snap_enemies.append(o)
+        return o
+
+    STATE_WAITING = 0
+    STATE_LEAPING = 1
+    STATE_LANDING = 2
+
+    textures = [
+        BGL.assets.get("KT-forest/texture/stork0000"),
+        BGL.assets.get("KT-forest/texture/stork0001"),
+        BGL.assets.get("KT-forest/texture/stork0002")
+    ] 
+    def customize(self):
+        self.fire_count = 0
+        self.triggered = False
+        self.tick_type = Object.TickTypes.PURGING
+        self.snap_type = SnapEnemy.ENEMY
+        self.visible = True
+        self.z_index = 1
+        self.buftarget = "popup"
+        self.texture = Stork.textures[0]
+        self.widx = int(uniform(0.0,40.0))
+        self.size = [ 4, 4 ]
+        self.physics = { "radius" : 0.35, "mass"   : 0.0005, "friction" : 0.0 }
+        #self.state = choice( [ Stork.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
+        self.state = Stork.STATE_WAITING
+        self.stimer = 0
+        self.rvx = None
+        self.speed = 0.8
+        self.invert_seek = False
+        self.flip_pxy = False
+
+        self.wavidx = 0
+        self.snap_effect_emit = 0
+        self.iframes = 0
+        SnapEnemy.set_combat_vars(self)
+
+        self.hp = 250
+        
+
+    def tick(self):
+        y = self.floor.player.p[0] - self.p[0]
+        x = self.floor.player.p[1] - self.p[1]
+
+        md = (x*x)+(y*y)
+        if( md < 250 ):
+            if not self.triggered:
+                self.triggered = True
+                if not self.can_see_player():
+                    self.triggered = False
+
+        if(not self.triggered):
+            return True
+        self.stimer = self.stimer + 1
+
+        fridx = int( (self.stimer % 80) / 40)
+        self.texture = Stork.textures[fridx]
+
+        SnapEnemy.tick(self)
+
+        if(self.state == Stork.STATE_WAITING):
+            if self.stimer > 120:
+                if(self.stimer < 10):
+                    self.texture = Stork.textures[2]
+                if(self.stimer == 11):
+                    self.fire_circle()
+                self.target_p = list(self.floor.player.p)
+                self.stimer = 0
+                self.state = Stork.STATE_LEAPING
+                self.physics_suspended = True
+                self.floor.snap_enemies.remove(self)
+
+        if(self.state == Stork.STATE_LEAPING):
+            self.texture = Stork.textures[2]
+            self.p[1] = self.p[1] - 1.0
+            if(self.stimer > 60):
+                self.stimer = 0
+                self.state = Stork.STATE_LANDING
+
+        if(self.state == Stork.STATE_LANDING):
+            self.texture = Stork.textures[2]
+            dx = self.target_p[0] - self.p[0]
+            dy = self.target_p[1] - self.p[1]
+
+            self.p[0] = self.p[0] + (dx*0.2)
+            self.p[1] = self.p[1] + (dy*0.2)
+
+            if(self.stimer>40):
+                self.stimer = 0
+                self.p[0] = self.target_p[0]
+                self.p[1] = self.target_p[1]
+                self.physics_suspended = False
+                self.state = Stork.STATE_WAITING
+                self.floor.snap_enemies.append(self)
+                self.fire_circle()
+
+        if(self.hp < 0):
+            SnapEnemy.die(self)
+            return False
+        return True
+
+    def fire_circle(self):
+        num_shots = 5
+        rad = (pi*2)/num_shots
+        KSounds.play(KSounds.enemy_projectile)
+        for x in range(0,num_shots):
+            self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = rad * x ) )
+        
+
 
 class Skeline(SnapEnemy):
     def receive_snap_attack(self, was_crit):
@@ -1398,6 +1515,9 @@ class ForestGraveyard():
 
             if od["key"] in [ "acolyte" ]:
                 self.objects.append(Acolyte.parse(od,df ))
+
+            if od["key"] in [ "stork" ]:
+                self.objects.append(Stork.parse(od,df ))
 
 
 
