@@ -521,6 +521,12 @@ class Acolyte(SnapEnemy):
         return bp
 
 class Stork(SnapEnemy):
+    def get_shader_params(self):
+        bp = Object.get_shader_params(self)
+        bp['translation_local'][0] = 0.1
+        bp['translation_local'][1] = -0.4
+        return bp
+
     def receive_snap_attack(self, was_crit):
         SnapEnemy.receive_snap_attack(self, was_crit)
 
@@ -600,12 +606,15 @@ class Stork(SnapEnemy):
 
         if(self.state == Stork.STATE_LEAPING):
             self.texture = Stork.textures[2]
-            self.p[1] = self.p[1] - 1.0
+            self.p[1] = self.p[1] - 0.5
+            self.size[0] = self.size[0] + 0.5
+            self.size[1] = self.size[1] + 0.5
             if(self.stimer > 60):
                 self.stimer = 0
                 self.state = Stork.STATE_LANDING
 
         if(self.state == Stork.STATE_LANDING):
+            self.size = [ 4, 4 ]
             self.texture = Stork.textures[2]
             dx = self.target_p[0] - self.p[0]
             dy = self.target_p[1] - self.p[1]
