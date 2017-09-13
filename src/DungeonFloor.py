@@ -9,6 +9,7 @@ from .Renderers.DFRenderer import DFRenderer
 from random import uniform
 from math import sin,cos,hypot
 from .AimingBeam import AimingBeam
+from .AimingBeam import LazerBeam
 from .KTState import KTState
 import client.system.keyboard as keyboard
 
@@ -130,7 +131,9 @@ class DungeonFloor( Floor ):
 
        
         self.player.aiming_beam = AimingBeam() 
+        self.player.lazer_beam = LazerBeam() 
         floor_configuration["objects"].append( self.player.aiming_beam )
+        floor_configuration["objects"].append( self.player.lazer_beam )
         self.aiming_beam = self.player.aiming_beam
 
         #self.light_occluders = self.generator.get_light_occluders()

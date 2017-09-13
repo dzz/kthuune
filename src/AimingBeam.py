@@ -32,6 +32,66 @@ class RangedMagic(Object):
         self.floor.objects.remove(self)
         return False
 
+class LazerBeam(Object):
+    def __init__(self,**kwargs):
+        Object.__init__(self,**kwargs)
+        self.texture = BGL.assets.get("KT-player/texture/beam")
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.size = [30.0,0.1]
+        self.light_color = [ 0.5,0.5,0.5,0.5]
+        self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
+        self.visible = False
+        self.buftarget = "popup"
+        self.fired = False
+        self.aiming = False
+
+    def fireRanged(self):
+        self.floor.create_object( RangedMagic( p = [ self.floor.player.p[0], self.floor.player.p[1] ], rad = self.floor.player.rad ) )
+        print("KABOOM!")
+
+    def tick(self):
+        offs = 30
+        #self.size[1] = 0.5
+        offsx = cos(self.floor.player.rad) * offs
+        offsy = sin(self.floor.player.rad) * offs
+
+        self.p[0] = self.floor.player.p[0] + offsx
+        self.p[1] = self.floor.player.p[1] + offsy
+        self.rad = self.floor.player.rad
+
+    def _tick(self):
+        offs = 30
+
+        pad = self.floor.player.controllers.get_virtualized_pad(self.floor.player.num)
+
+        if(pad.triggers[0]+1.0<0.05) and self.fired:
+            self.fired = False
+
+        if(pad.triggers[1]>0.7) and (pad.triggers[0]+1.0>0.1):
+            if not self.fired:
+                self.fireRanged()
+                self.fired = True
+
+
+        self.size[1] = (pad.triggers[0]+1.0)*4.0;
+
+        if(self.size[1] < 0.1):
+            self.aiming = False
+            self.size[1] = 0.0
+        elif(self.fired):
+            self.aiming = False
+            self.size[1] = 0.0
+        else:
+            self.aiming = True
+
+        #print("fired?", self.fired)
+        #print("aiming?", self.aiming)
+        offsx = cos(self.floor.player.rad) * offs
+        offsy = sin(self.floor.player.rad) * offs
+
+        self.p[0] = self.floor.player.p[0] + offsx
+        self.p[1] = self.floor.player.p[1] + offsy
+        self.rad = self.floor.player.rad
 class AimingBeam(Object):
     def __init__(self,**kwargs):
         Object.__init__(self,**kwargs)

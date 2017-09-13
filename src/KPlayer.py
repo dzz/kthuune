@@ -299,6 +299,7 @@ class KPlayer(Player):
     STATE_DEFAULT = 0
     STATE_STUNNED = 1
     STATE_DODGING = 2
+    STATE_FIRING = 3
     
     def consume_hp(self):
         KSounds.play(KSounds.health)
@@ -329,7 +330,7 @@ class KPlayer(Player):
         self.sword.stimer = 0
         KSounds.play( KSounds.player_hurt )
  
-    def attempt_snap_attack(self):
+    def attempt_snap_attack(self, snap = True):
         def se_priority(se):
             dx = se.p[0] - self.p[0]
             dy = se.p[1] - self.p[1]
@@ -379,8 +380,18 @@ class KPlayer(Player):
                         KSounds.play( KSounds.crit )
                 for x in range(0,15):
                     self.floor.create_object( PlayerPhantom( player = self, animation_threshold = 2*x, target = se ) )
-                self.p[0] = se.p[0]
-                self.p[1] = se.p[1]
+
+                if snap:
+                    self.p[0] = se.p[0]
+                    self.p[1] = se.p[1]
+                else:
+                    tmp = [ se.p[0],se.p[1] ]
+                    se.p[0] = self.p[0]
+                    se.p[1] = self.p[1]
+                    self.p[0] = tmp[0]
+                    self.p[1] = tmp[1]
+                    
+                    
                 self.sword.state = Sword.STATE_DISCHARGING
                 self.sword.stimer = 11 #short circuit the 'snap' window
                 self.snap_cooldown = 30
@@ -418,6 +429,8 @@ class KPlayer(Player):
         self.link_count = 0
         self.X_PRESSED = False
         self.X_STATE = [ False, False ]
+        self.A_PRESSED = False
+        self.A_STATE = [ False, False ]
 
         self.stimer = 0
         self.state = KPlayer.STATE_DEFAULT
@@ -576,6 +589,7 @@ class KPlayer(Player):
         self.backstepping = False
         self.cardtick = 0.0
         self.attack_object = None
+        self.fire_timer = 0
     
     def link_floor(self):
         self.floor.create_object( self.sword )
@@ -655,11 +669,28 @@ class KPlayer(Player):
         else:
             self.X_PRESSED = False
 
+        self.A_STATE[0] = self.A_STATE[1]
+        self.A_STATE[1] = pad.button_down( BGL.gamepads.buttons.A )
+    
+        if self.A_STATE[1] is True and self.A_STATE[0] is False:
+            self.A_PRESSED = True
+        else:
+            self.A_PRESSED = False
+
         if self.X_STATE[1] is False:
             self.snap_attack_frozen = False
 
+        if self.A_PRESSED:
+            print("a pressed")
+            self.state = KPlayer.STATE_FIRING
+
+
     def tick(self):
         #player tick
+
+
+                
+
 
         if(self.combo_reset_cooldown>0):
             self.combo_reset_cooldown = self.combo_reset_cooldown - 1
@@ -676,6 +707,8 @@ class KPlayer(Player):
         self.heartcard.tick()
         self.swordcard.tick()
         self.wandcard.tick()
+
+        print("state", self.state)
 
         self.pumped_dashcombo = False
         if(self.hp < 0 ):
@@ -722,6 +755,28 @@ class KPlayer(Player):
             if(self.stimer > 9 ):
                 self.set_state(KPlayer.STATE_DEFAULT)
 
+        if(self.state == KPlayer.STATE_FIRING):
+            self.fire_timer = self.fire_timer + 1
+            self.v[0] = self.v[0] * 0.4
+            self.v[1] = self.v[1] * 0.4
+            delta = [ pad.left_stick[0] , pad.left_stick[1]  ]
+            self.v[0] = self.v[0] + (delta[0]*0.2)
+            self.v[1] = self.v[1] + (delta[1]*0.2)
+            self.rad = atan2( self.v[1], self.v[0] )
+
+
+            if(self.fire_timer>8):
+                self.lazer_beam.visible = True
+                self.lazer_beam.size[1] *= 1.15
+
+                if(self.fire_timer==20):
+                    self.attempt_snap_attack(False)
+            if(self.fire_timer>40):
+                self.lazer_beam.size[1] = 0.1
+                self.lazer_beam.visible = False
+                self.fire_timer = 0
+                self.state = KPlayer.STATE_DEFAULT
+
         if(self.state == KPlayer.STATE_DEFAULT ):
             if not pad.button_down( BGL.gamepads.buttons.B ):
                 self.can_backstep = True
@@ -755,10 +810,18 @@ class KPlayer(Player):
                 calc_speed = calc_speed * 0.5
 
             self.filtered_speed = (self.filtered_speed*0.8) + (calc_speed*0.2)
+
+            #if(self.state == KPlayer.STATE_FIRING):
+            #    self.v[0] = self.v[0] * 0.01
+            #    self.v[1] = self.v[1] * 0.01
+
             calc_speed = self.filtered_speed
             Object.tick(self)
             pad = self.controllers.get_virtualized_pad( self.num )
 
+                #delta = [0.0,0.0]
+                #self.v[0] = self.v[0]*0.8+delta[0]*0.2
+                #self.v[1] = self.v[1]*0.8+delta[1]*0.2
             delta = [ pad.left_stick[0] * calc_speed, pad.left_stick[1] * calc_speed ]
             self.v[0] = self.v[0]*0.8+delta[0]*0.2
             self.v[1] = self.v[1]*0.8+delta[1]*0.2

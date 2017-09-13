@@ -1059,7 +1059,7 @@ class Totem(Object):
     def customize(self):
         self.snap_type = SnapEnemy.TOTEM
         self.texture = Totem.texture
-        self.buftarget = "floor"
+        self.buftarget = "popup"
         self.size =  [ 4.0, 4.0 ]
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
