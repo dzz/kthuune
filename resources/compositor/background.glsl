@@ -21,6 +21,6 @@ void main(void) {
     float warp = 0.7+(0.3*l);
     vec2 shifted = shift(uv + scp)*warp;
     
-    vec4 texel = texture( bg_texture, unshift(shifted*0.7) );
+    vec4 texel = texture( bg_texture, unshift(shifted*0.8) );
     gl_FragColor = texel;
 }

@@ -391,6 +391,10 @@ class KPlayer(Player):
                         se.p[1] = self.p[1]
                         self.p[0] = tmp[0]
                         self.p[1] = tmp[1]
+                    if se.snap_type == 0:
+                        self.p[0] = se.p[0]
+                        self.p[1] = se.p[1]
+            
                     
                     
                 self.sword.state = Sword.STATE_DISCHARGING
@@ -572,8 +576,8 @@ class KPlayer(Player):
 
 
         self.heartcard.render()
-        self.swordcard.render()
-        self.wandcard.render()
+        #self.swordcard.render()
+        #self.wandcard.render()
 
 
 

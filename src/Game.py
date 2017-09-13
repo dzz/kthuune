@@ -144,7 +144,7 @@ class Game( BaseGame ):
         self.background.render() 
         with BGL.blendmode.alpha_over:
             self.floor.render()
-        #self.player.render_hud()
+        self.player.render_hud()
 
     def tick(self):
 
