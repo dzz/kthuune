@@ -13,6 +13,8 @@ from .superstructure import generate_qualified_areas
 from .Generators.AreaLoader import get_area_data
 from .Generators.ForestGraveyard import ForestGraveyard
 
+from .Background import Background
+
 class Game( BaseGame ):
 
     paused = False
@@ -63,6 +65,8 @@ class Game( BaseGame ):
     ###############
 
     def load_floor( self, key ):
+
+        self.background = Background()
         Game.floor_cache = {}
         cache_hit = False
         self.area_name = key
@@ -136,8 +140,11 @@ class Game( BaseGame ):
         self.camera.set_player(self.player)
 
     def render(self):
-        self.floor.render()
-        self.player.render_hud()
+        self.background.camera = self.camera
+        self.background.render() 
+        with BGL.blendmode.alpha_over:
+            self.floor.render()
+        #self.player.render_hud()
 
     def tick(self):
 

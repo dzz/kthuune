@@ -385,11 +385,12 @@ class KPlayer(Player):
                     self.p[0] = se.p[0]
                     self.p[1] = se.p[1]
                 else:
-                    tmp = [ se.p[0],se.p[1] ]
-                    se.p[0] = self.p[0]
-                    se.p[1] = self.p[1]
-                    self.p[0] = tmp[0]
-                    self.p[1] = tmp[1]
+                    if se.snap_type == 1:
+                        tmp = [ se.p[0],se.p[1] ]
+                        se.p[0] = self.p[0]
+                        se.p[1] = self.p[1]
+                        self.p[0] = tmp[0]
+                        self.p[1] = tmp[1]
                     
                     
                 self.sword.state = Sword.STATE_DISCHARGING
@@ -708,7 +709,6 @@ class KPlayer(Player):
         self.swordcard.tick()
         self.wandcard.tick()
 
-        print("state", self.state)
 
         self.pumped_dashcombo = False
         if(self.hp < 0 ):

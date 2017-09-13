@@ -11,6 +11,11 @@
                 "name" : "fadetowhite",
                 "vertex_program" : "{beagle-2d}/vertex/no_transform",
                 "pixel_program" : "{package_path}/fadetowhite"
+            },
+            {
+                "name" : "background",
+                "vertex_program" : "{beagle-2d}/vertex/no_transform",
+                "pixel_program" : "{package_path}/background"
             }
         ]
     }
