@@ -1,6 +1,7 @@
 #version 330
 
 in vec2 uv;
+uniform float parallax;
 uniform vec2 camera_position;
 
 uniform sampler2D bg_texture;
@@ -10,17 +11,17 @@ vec2 shift(vec2 v) {
 }
 
 vec2 unshift(vec2 v) {
-    return vec2(v.x+0.5,v.y+0.5);
+    return vec2(v.x+0.5,1.0-(v.y+0.5)) ;
 }
 
 void main(void) {
 
-    float parallax = 0.01;
-    vec2 scp = camera_position * parallax;
+    //float parallax = 0.01;
+    vec2 scp = (camera_position*vec2(1.0,-1.0)) * parallax;
     float l = 2.0 - length(shift(uv));
-    float warp = 0.7+(0.3*l);
+    float warp = 0.25+(0.8*l);
     vec2 shifted = shift(uv + scp)*warp;
     
-    vec4 texel = texture( bg_texture, unshift(shifted*0.8) );
+    vec4 texel = texture( bg_texture, unshift(shifted*0.2) );
     gl_FragColor = texel;
 }
