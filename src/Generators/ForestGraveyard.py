@@ -237,7 +237,7 @@ class SnapEnemy(Object):
         self.z_index = 1
         self.buftarget = "popup"
         self.texture = Skeline.textures[2]
-        self.size = [ 2.5, 2.5 ]
+        self.size = [ 1.75, 1.75 ]
         self.set_combat_vars(self)
 
     def set_combat_vars(self):
@@ -1275,7 +1275,7 @@ class TreeTop(Object):
             Object.__init__(self,**overrides)
             self.t = 0
             self.base_size = [ self.size[0], self.size[1] ]
-            self.draw_color = [1.0,1.0,1.0,1.0]
+            self.draw_color = [0.5,uniform(0.6,1.0),0.5,0.5]
             #if(self.texture == BGL.assets.get("KT-forest/texture/treetop2")):
             #    self.z_index = self.z_index + 1
 
@@ -1847,10 +1847,16 @@ class ForestGraveyard():
         self.df = df #i give up
         #self.generate_voroni_pts()
 
+        print('')
+        print(df.tilemap_width)
+        print(df.tilemap_height)
         tile_data = [0]*(df.tilemap_width*df.tilemap_height)
         for tile_def in self.ad["tile_defs"]:
+            print(tile_def)
             addr = tile_def["x"] + (tile_def["y"]*df.tilemap_width)
+            print(addr)
             tile_data[addr] = tile_def["idx"] + 1
+    
             
 
 

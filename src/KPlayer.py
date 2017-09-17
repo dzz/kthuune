@@ -44,7 +44,7 @@ class PlayerPhantom(Object):
         self.light_radius = 8.0
         self.light_color = [ 0.0,0.0,1.0,1.0 ]
         self.animation_counter = 0
-        self.size = [ 3.0,3.0]
+        self.size = [ 1.5,1.5]
 
     
     def tick(self):

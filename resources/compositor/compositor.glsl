@@ -437,12 +437,17 @@ void main(void) {
     vec2 parallaxed_UV = ((UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * from_c ))) + vec2(0.5,0.5);
     vec2 inv_parallaxed_UV = ((inv_UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * (1.7-from_c) ))) + vec2(0.5,0.5);
 
+    //hack test
+    parallaxed_UV = UV;
+    inv_parallaxed_UV = UV;
+
 
 
     vec4 photon_texel =  texture(photon_buffer, UV);
     vec4 floor_texel = texture(floor_buffer,parallaxed_UV);
     vec4 light_texel = texture( light_buffer, UV);
     vec4 object_texel = texture( object_buffer, inv_parallaxed_UV);
+    //vec4 canopy_texel = texture( object_buffer, inv_parallaxed_UV);
     vec4 vision_texel = texture( vision_buffer, parallaxed_UV);
 
 

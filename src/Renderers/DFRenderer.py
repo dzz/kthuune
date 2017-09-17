@@ -15,7 +15,7 @@ class DFRenderer( FloorRenderer ):
         self.photon_buffer = BGL.framebuffer.from_screen()
         self.floor_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.light_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
-        self.object_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 2.0)
+        self.object_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
 
     def encode_player_lights( self ):
@@ -66,10 +66,10 @@ class DFRenderer( FloorRenderer ):
             with BGL.blendmode.alpha_over:
                 self.render_objects("popup")
 
-        with BGL.context.render_target( self.canopy_buffer ):
-            BGL.context.clear(0.0,0.0,0.0,0.0)
-            with BGL.blendmode.alpha_over:
-                self.render_objects("canopy")
+        #with BGL.context.render_target( self.canopy_buffer ):
+        #    BGL.context.clear(0.0,0.0,0.0,0.0)
+        #    with BGL.blendmode.alpha_over:
+        #        self.render_objects("canopy")
 
     def render_objects(self, buftarget):
         """ Render floor objects """
@@ -103,6 +103,8 @@ class DFRenderer( FloorRenderer ):
             "target_width" : Platform.video.get_screen_width(),
             "target_height" : Platform.video.get_screen_height() 
         })
+        with BGL.blendmode.alpha_over:
+            self.render_objects("canopy")
 
     def configure_vision_lightmapper(self):
         class FadingLightMapper( LightMapper ):

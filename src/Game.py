@@ -115,7 +115,7 @@ class Game( BaseGame ):
 
     def initialize(self):
 
-        self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.25 ) )
+        self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.35 ) )
         self.controllers    = self.create_tickable( Controllers() )
         self.player         = self.create_tickable( self.create_player() )
 
