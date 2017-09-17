@@ -97,8 +97,8 @@ class AimingBeam(Object):
         Object.__init__(self,**kwargs)
         self.texture = BGL.assets.get("KT-player/texture/beam")
         self.tick_type = Object.TickTypes.TICK_FOREVER
-        self.size = [30.0,1.0]
-        self.light_color = [ 0.5,0.5,0.5,0.5]
+        self.size = [30.0,10.0]
+        self.light_color = [ 0.2,0.2,0.2,1.0]
         self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
         self.visible = False
         self.buftarget = "popup"
@@ -110,8 +110,8 @@ class AimingBeam(Object):
         print("KABOOM!")
 
     def tick(self):
-        offs = 30
-        self.size[1] = 30 + ur(-1.0,1.0)
+        offs = 28
+        #self.size[1] = 30
         offsx = cos(self.floor.player.rad) * offs
         offsy = sin(self.floor.player.rad) * offs
 

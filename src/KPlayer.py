@@ -44,7 +44,7 @@ class PlayerPhantom(Object):
         self.light_radius = 8.0
         self.light_color = [ 0.0,0.0,1.0,1.0 ]
         self.animation_counter = 0
-        self.size = [ 1.5,1.5]
+        self.size = [ 2.5,2.5]
 
     
     def tick(self):
@@ -451,8 +451,8 @@ class KPlayer(Player):
         self.hurt_flash_timer = 0
         overrides =  {
             "light_type" : Object.LightTypes.DYNAMIC_SHADOWCASTER,
-            "light_radius" : 45.0,
-            "light_color" : [ 0.65,0.45,0.3,1.0],
+            "light_radius" : 5.0,
+            "light_color" : [ 0.65,0.45,0.3,0.3],
             "walk_tick" : 0,
             "z_index" : 1,
             "sword_swing" : 0,

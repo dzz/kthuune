@@ -36,7 +36,7 @@ class HealthVial(Object):
         self.tick_type = Object.TickTypes.PURGING
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
         self.light_color = [ 1.0, 0.0, 0.0, 1.0 ]
-        self.light_radius = 50
+        self.light_radius = 10
         self.trigger_timer = 0
         self.visible = False
 
@@ -111,6 +111,10 @@ class FactoryLight(Object):
             self.light_color = [ 1.0, 0.2,0.2,1.0 ]
         if self.factory_def["meta"]["class"] == "blue_test":
             self.light_color = [ 0.2, 0.2,1.0,1.0 ]
+        if self.factory_def["meta"]["class"] == "green":
+            self.light_radius = 200
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_color = [ 0.5, 1.0,0.2,1.0 ]
 
 class Door(Object):
     def customize(self):
@@ -1063,8 +1067,8 @@ class Totem(Object):
         self.size =  [ 4.0, 4.0 ]
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_color =  [ 1.0,0.5,1.0,1.0]
-        self.light_radius = 40
+        self.light_color =  [ 0.4,0.2,0.7,1.0]
+        self.light_radius = 10
         #self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
         self.physics = None
         self.z_index = 1
@@ -1072,7 +1076,7 @@ class Totem(Object):
 
     def tick(self):
         self.anim_index += 0.1
-        self.light_radius = 40 + (20*sin(self.anim_index))
+        #self.light_radius = 10 + (3*sin(self.anim_index))
 
 class SkullDeath(Object):
     texture = BGL.assets.get('KT-forest/texture/skull0000')

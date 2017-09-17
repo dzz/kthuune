@@ -3423,6 +3423,11 @@ skeline
 89
 107
 {}
+OBJECT
+light
+-98
+28
+{ "class" : "green"}
 TILE
 -48
 12

@@ -194,7 +194,8 @@ vec4 alphablend( vec4 a, vec4 b) {
     vec4 mixed;
  
     mixed.rgb = blended;
-    mixed.a = 1.0;
+
+    if((a.a)+(b.a)>0.98) mixed.a = 1.0; else mixed.a = a.a+b.a;
 
     return mixed;
 }
@@ -438,6 +439,7 @@ void main(void) {
     vec2 inv_parallaxed_UV = ((inv_UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * (1.7-from_c) ))) + vec2(0.5,0.5);
 
     //hack test
+    UV = vec2(0.1,0.1)+(uv*0.8);
     parallaxed_UV = UV;
     inv_parallaxed_UV = UV;
 
@@ -462,7 +464,7 @@ void main(void) {
     
     //vec4 LitFloor = ((light_texel+clouds(parallaxed_UV))*(4*photon_texel))+((light_texel*3)*clouds(inv_parallaxed_UV))*floor_texel;
 
-    vec4 LitFloor = light_texel*floor_texel;
+    vec4 LitFloor = light_texel;
 
     float mask = 1.0 - LitObject.a;
     vec4 SeenFloor = (((0.6*water())+0.4)*LitFloor * vision_texel) * mask;
@@ -474,7 +476,9 @@ void main(void) {
     vec4 background = texture( reflect_map, (inv_parallaxed_UV*0.8* ((UV.y*0.2)+0.7)) + (from_c*camera_position *-0.001 * ((UV.y*0.3)+0.7) ));
 
     //background = background + water();
-    gl_FragColor = (SeenFloor + LitObject) * vision_texel;
+    SeenFloor = (light_texel*light_texel) * floor_texel;
+    gl_FragColor = alphablend( SeenFloor, LitObject);
+
     //gl_FragColor = (clouds(parallaxed_UV)*(4*photon_texel))+(light_texel*clouds(inv_parallaxed_UV))*floor_texel;
 //gl_FragColor =light_texel;
 
