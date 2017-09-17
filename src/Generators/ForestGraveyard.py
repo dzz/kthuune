@@ -298,7 +298,7 @@ class Sword(Object):
     STATE_SPIN_ATTACK = 5
 
 class vconf():
-    visRad = 60
+    visRad = 20
 
 class ERangedMagic(Object):
     arrow_texture = BGL.assets.get("KT-player/texture/flare")
@@ -1265,7 +1265,7 @@ class TreeTop(Object):
                     'rad' : uniform(-3.14,3.14),
                     'parallax' : 1.2,
                     'z_index' : 100,
-                    'wind_speed' : uniform(0.01,0.2),
+                    'wind_speed' : uniform(0.1,0.3),
                     'wind_mod' : uniform(1.1,1.2),
                     'buftarget' : 'canopy'
                 }
@@ -1275,7 +1275,7 @@ class TreeTop(Object):
             Object.__init__(self,**overrides)
             self.t = 0
             self.base_size = [ self.size[0], self.size[1] ]
-            self.draw_color = [0.5,uniform(0.6,1.0),0.5,0.5]
+            self.draw_color = [0.5,uniform(0.6,1.0),0.5,0.3]
             #if(self.texture == BGL.assets.get("KT-forest/texture/treetop2")):
             #    self.z_index = self.z_index + 1
 
@@ -1683,10 +1683,10 @@ class ForestGraveyard():
 
             for x in range(0,int(u_l+uniform(0.0,5.0))):
 
-                if uniform(0.0,1.0) < 0.7:
+                if uniform(0.0,1.0) < 0.8:
                     continue
                     
-                size = uniform(0.2,2.0)
+                size = uniform(1.5,2.5)
                 dx = edge[1][0] - edge[0][0]
                 dy = edge[1][1] - edge[0][1]
                 d = uniform(0.0,1.0)
