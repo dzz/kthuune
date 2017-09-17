@@ -1279,7 +1279,8 @@ class TreeTop(Object):
             Object.__init__(self,**overrides)
             self.t = 0
             self.base_size = [ self.size[0], self.size[1] ]
-            self.draw_color = [0.5,uniform(0.6,1.0),0.5,0.3]
+            self.draw_color = [0.5,uniform(0.6,1.0),0.5,0.6]
+            self.last_a = self.draw_color[3]
             #if(self.texture == BGL.assets.get("KT-forest/texture/treetop2")):
             #    self.z_index = self.z_index + 1
 
@@ -1288,6 +1289,8 @@ class TreeTop(Object):
             if(self.should_draw()):
                 self.size[0] = self.base_size[0] * ( 4.0 + (1.5*(sin(self.t* self.wind_speed))))
                 self.size[1] = self.base_size[1] * ( 4.0 + (1.5*(cos(self.t* self.wind_speed*self.wind_mod))))
+
+            
             return True
 
         def should_draw(self):
@@ -1306,7 +1309,18 @@ class TreeTop(Object):
             tw[0] = tw[0]*self.parallax
             tw[1] = tw[1]*self.parallax
             params["translation_world" ] = tw
-            params["filter_color"] = self.draw_color
+            params["filter_color"] = list(self.draw_color)
+
+            dx = self.p[0] - self.floor.player.p[0]
+            dy = self.p[1] - self.floor.player.p[1]
+            md = (dx*dx)+(dy*dy)
+            impulse_a = self.draw_color[3]
+            if(md < 90):
+                impulse_a = 0.0
+
+            self.last_a = (self.last_a * 0.9) + (impulse_a*0.1)
+            params["filter_color"][3] = self.last_a
+                
             return params
 
 class TreeRoots(Object):
@@ -1396,7 +1410,7 @@ class TreeShadow(Object):
                     'rad' : tt.rad,
                     'z_index' : 0,
                     'tt' : tt,
-                    'buftarget' : 'floor'
+                    'buftarget' : 'shadow'
                 }
             overrides.update(kwargs)
             Object.__init__(self,**overrides)
@@ -1690,7 +1704,7 @@ class ForestGraveyard():
                 if uniform(0.0,1.0) < 0.8:
                     continue
                     
-                size = uniform(1.5,2.5)
+                size = uniform(2.5,5.5)
                 dx = edge[1][0] - edge[0][0]
                 dy = edge[1][1] - edge[0][1]
                 d = uniform(0.0,1.0)
@@ -1700,7 +1714,7 @@ class ForestGraveyard():
                 if(uniform(0.0,1.0)>0.2):
                     self.tree_pts.append(p)
 
-                tt = TreeTop( p=p, size=[size,size],parralax = uniform(1.1,1.8)) 
+                tt = TreeTop( p=p, size=[size,size],parralax = uniform(1.1,2.8)) 
                 self.objects.append( tt )
                 if(uniform(0.0,1.0)>0.8):
                     self.objects.append( TreeShadow(p=p, TreeTop=tt) )
