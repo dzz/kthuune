@@ -476,7 +476,7 @@ void main(void) {
     vec4 background = texture( reflect_map, (inv_parallaxed_UV*0.8* ((UV.y*0.2)+0.7)) + (from_c*camera_position *-0.001 * ((UV.y*0.3)+0.7) ));
 
     //background = background + water();
-    SeenFloor = (light_texel*light_texel) * floor_texel;
+    SeenFloor = (light_texel) * floor_texel;
     gl_FragColor = alphablend( SeenFloor, LitObject);
 
     //gl_FragColor = (clouds(parallaxed_UV)*(4*photon_texel))+(light_texel*clouds(inv_parallaxed_UV))*floor_texel;

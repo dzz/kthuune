@@ -35,9 +35,9 @@ class DFRenderer( FloorRenderer ):
             with BGL.blendmode.alpha_over:
                 self.render_objects("floor")
 
-        with BGL.context.render_target( self.photon_buffer ):
-            BGL.context.clear(0.0,0.0,0.0,1.0)
-            self.render_photon_map()
+        #with BGL.context.render_target( self.photon_buffer ):
+        #    BGL.context.clear(0.0,0.0,0.0,1.0)
+        #    self.render_photon_map()
 
         with BGL.context.render_target( self.light_buffer ):
             if(self.player.dash_flash):

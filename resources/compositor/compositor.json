@@ -16,6 +16,11 @@
                 "name" : "background",
                 "vertex_program" : "{beagle-2d}/vertex/no_transform",
                 "pixel_program" : "{package_path}/background"
+            },
+            {
+                "name" : "fog",
+                "vertex_program" : "{beagle-2d}/vertex/no_transform",
+                "pixel_program" : "{package_path}/fog"
             }
         ]
     }

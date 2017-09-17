@@ -1067,8 +1067,8 @@ class Totem(Object):
         self.size =  [ 4.0, 4.0 ]
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_color =  [ 0.4,0.2,0.7,1.0]
-        self.light_radius = 10
+        self.light_color =  [ 0.7,0.4,0.9,1.0]
+        self.light_radius = 5
         #self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
         self.physics = None
         self.z_index = 1
@@ -1076,7 +1076,7 @@ class Totem(Object):
 
     def tick(self):
         self.anim_index += 0.1
-        #self.light_radius = 10 + (3*sin(self.anim_index))
+        self.light_radius = 7 + (3*sin(self.anim_index))
 
 class SkullDeath(Object):
     texture = BGL.assets.get('KT-forest/texture/skull0000')
@@ -1870,9 +1870,7 @@ class ForestGraveyard():
         print(df.tilemap_height)
         tile_data = [0]*(df.tilemap_width*df.tilemap_height)
         for tile_def in self.ad["tile_defs"]:
-            print(tile_def)
             addr = tile_def["x"] + (tile_def["y"]*df.tilemap_width)
-            print(addr)
             tile_data[addr] = tile_def["idx"] + 1
     
             

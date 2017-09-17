@@ -14,6 +14,7 @@ from .Generators.AreaLoader import get_area_data
 from .Generators.ForestGraveyard import ForestGraveyard
 
 from .Background import Background
+from .Fog import Fog
 
 class Game( BaseGame ):
 
@@ -67,6 +68,7 @@ class Game( BaseGame ):
     def load_floor( self, key ):
 
         self.background = Background()
+        self.fog = Fog()
         Game.floor_cache = {}
         cache_hit = False
         self.area_name = key
@@ -144,6 +146,8 @@ class Game( BaseGame ):
         self.background.render() 
         with BGL.blendmode.alpha_over:
             self.floor.render()
+        self.fog.camera = self.camera
+        self.fog.render(self.floor) 
         self.player.render_hud()
 
     def tick(self):
