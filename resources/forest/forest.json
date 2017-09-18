@@ -2,8 +2,8 @@
     "preload": true,
     "resources" : {
         "texture" : [
-            { "name" : "treetop", "filename" : "{package_path}/treetop.png", "filtered" : false },
-            { "name" : "treetop2", "filename" : "{package_path}/treetop2.png", "filtered" : false },
+            { "name" : "treetop", "filename" : "{package_path}/treetop.png", "filtered" : true },
+            { "name" : "treetop2", "filename" : "{package_path}/treetop2.png", "filtered" : true },
             { "name" : "treeroots", "filename" : "{package_path}/roots.png", "filtered" : false },
             { "name" : "portal", "filename" : "{package_path}/portal.png", "filtered" : true },
             { "name" : "background", "filename" : "{package_path}/background.png", "filtered" : true },

@@ -14,6 +14,12 @@ class Fog:
             Fog.primitive.render_shaded( Fog.shader, {
                 "light_buffer" : floor.light_buffer,
                 "camera_position" : self.camera.p,
+                "parallax" : [ 3.0 ],
+                "tick" : floor._tick,
+            } )
+            Fog.primitive.render_shaded( Fog.shader, {
+                "light_buffer" : floor.light_buffer,
+                "camera_position" : self.camera.p,
                 "parallax" : [ 4.0 ],
                 "tick" : floor._tick,
             } )

@@ -1315,10 +1315,10 @@ class TreeTop(Object):
             dy = self.p[1] - self.floor.player.p[1]
             md = (dx*dx)+(dy*dy)
             impulse_a = self.draw_color[3]
-            if(md < 90):
+            if(md < 140):
                 impulse_a = 0.0
 
-            self.last_a = (self.last_a * 0.9) + (impulse_a*0.1)
+            self.last_a = (self.last_a * 0.95) + (impulse_a*0.05)
             params["filter_color"][3] = self.last_a
                 
             return params

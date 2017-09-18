@@ -1,9 +1,17 @@
+
+=== INFRASTRUCTURE BUGS ===
+
+* Memory Leaks
+* Throbbing Lights
+
+=== DESIGN NOTES I NEVER READ ===
+
 * object placement editor / lighting tool?
 * enemy types:
    spider
    wolf
    beetle
-* scene transitions
+* scene transitions [done!]
 * inventory system
 * dialog system
 * rpg / skills system design
