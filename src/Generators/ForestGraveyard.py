@@ -63,13 +63,12 @@ class HealthVial(Object):
         md = (dx*dx) + (dy*dy)
 
         if (md<2):
-            #self.floor.player.consume_hp()
-            KSounds.play( KSounds.pickup )
-
             if(self.floor.player.has_inv()):
                 self.floor.objects.remove(self)
                 self.floor.player.add_inv("hp_vial")
-            return False
+                KSounds.play( KSounds.pickup )
+                return False
+
         return True
 
 class AttackInfo(Object):
