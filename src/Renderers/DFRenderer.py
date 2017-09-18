@@ -13,6 +13,7 @@ class DFRenderer( FloorRenderer ):
 
     def create_compositing_buffers(self):
         self.photon_buffer = BGL.framebuffer.from_screen()
+        self.shadow_buffer = BGL.framebuffer.from_screen()
         self.floor_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.light_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.object_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
@@ -27,6 +28,11 @@ class DFRenderer( FloorRenderer ):
         self.photon_map.compute_next()
         self.compute_vision_lightmap()
         self.compute_dynamic_lightmap()
+
+        with BGL.context.render_target( self.shadow_buffer ):
+            BGL.context.clear(1.0,1.0,1.0,1.0)
+            with BGL.blendmode.alpha_over:
+                self.render_objects("shadow")
 
         with BGL.context.render_target( self.floor_buffer ):
             BGL.context.clear(0.0,0.0,0.0,0.0)
@@ -94,6 +100,7 @@ class DFRenderer( FloorRenderer ):
             "tick"              : self._tick,
             "camera_position" : self.camera.p,
             "floor_buffer" : self.floor_buffer,
+            "shadow_buffer" : self.shadow_buffer,
             "light_buffer" : self.light_buffer,
             "object_buffer" : self.object_buffer,
             "vision_buffer" : self.vision_lightmap.get_lightmap_texture(),

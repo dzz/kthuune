@@ -15,6 +15,7 @@ uniform sampler2D vision_buffer;
 uniform sampler2D photon_buffer;
 uniform sampler2D reflect_map;
 uniform sampler2D canopy_buffer;
+uniform sampler2D shadow_buffer;
 
 in vec2 uv;
 
@@ -448,6 +449,8 @@ void main(void) {
     vec4 photon_texel =  texture(photon_buffer, UV);
     vec4 floor_texel = texture(floor_buffer,parallaxed_UV);
     vec4 light_texel = texture( light_buffer, UV);
+    vec4 shadow_texel = texture( shadow_buffer, UV);
+
     vec4 object_texel = texture( object_buffer, inv_parallaxed_UV);
     //vec4 canopy_texel = texture( object_buffer, inv_parallaxed_UV);
     vec4 vision_texel = texture( vision_buffer, parallaxed_UV);
@@ -476,8 +479,12 @@ void main(void) {
     vec4 background = texture( reflect_map, (inv_parallaxed_UV*0.8* ((UV.y*0.2)+0.7)) + (from_c*camera_position *-0.001 * ((UV.y*0.3)+0.7) ));
 
     //background = background + water();
-    SeenFloor = (light_texel) * floor_texel;
+
+    vec4 merged_light = light_texel * shadow_texel;
+    merged_light.a = 1.0;
+    SeenFloor = (merged_light) * floor_texel;
     gl_FragColor = alphablend( SeenFloor, LitObject);
+    //gl_FragColor = shadow_texel;
 
     //gl_FragColor = (clouds(parallaxed_UV)*(4*photon_texel))+(light_texel*clouds(inv_parallaxed_UV))*floor_texel;
 //gl_FragColor =light_texel;

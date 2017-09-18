@@ -62,7 +62,8 @@
             { "name" : "healthvial0001", "filename" : "{package_path}/healthvial0001.png", "filtered" : false }
         ],
         "shader" :  [
-            { "name" : "card", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/cardp" }
+            { "name" : "card", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/cardp" },
+            { "name" : "islot", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/islotp" }
         ],
         "path" : [
             { "name" : "charge_initiated", "path" : "{package_path}/sounds/charge_initiated.wav" },
@@ -74,7 +75,8 @@
             { "name" : "enemy_killed", "path" : "{package_path}/sounds/enemy_killed.wav" },
             { "name" : "player_hurt", "path" : "{package_path}/sounds/player_hurt.wav" },
             { "name" : "enemy_projectile", "path" : "{package_path}/sounds/enemy_projectile.wav" },
-            { "name" : "health", "path" : "{package_path}/sounds/health.wav" }
+            { "name" : "health", "path" : "{package_path}/sounds/health.wav" },
+            { "name" : "pickup", "path" : "{package_path}/sounds/pickup.wav" }
         ]
     }
 }

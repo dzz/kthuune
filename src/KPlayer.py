@@ -64,6 +64,56 @@ class PlayerPhantom(Object):
 class Hud():
     view = BGL.view.widescreen_16_9
 
+class PlayerInvSlot():
+    _tick = 0.0
+    offs = 0.8
+    shader = BGL.assets.get("KT-player/shader/islot")
+    primitive = BGL.primitive.unit_uv_square
+    icons = {
+        "hp_vial" : [ 
+                        BGL.assets.get("KT-player/texture/healthvial0000"),
+                        BGL.assets.get("KT-player/texture/healthvial0001")
+                    ]
+    }
+    def tick():
+        PlayerInvSlot._tick = PlayerInvSlot._tick + 0.01
+
+    def render(idx, icon, selected):
+
+        filter_color = [0.7,0.7,0.7,0.7]
+        if(selected):
+            filter_color = [1.0,1.0,1.0,1.0]
+        PlayerInvSlot.primitive.render_shaded( PlayerInvSlot.shader, PlayerInvSlot.get_shader_params(idx, filter_color) )
+
+        if icon and icon in PlayerInvSlot.icons:
+            with BGL.blendmode.alpha_over:
+                PlayerInvSlot.primitive.render_shaded( PlayerInvSlot.shader, PlayerInvSlot.get_icon_shader_params(idx, filter_color, icon) )
+            
+
+    def get_shader_params(idx, filter_color):
+        return {
+            "texBuffer"            : BGL.assets.get("KT-player/texture/inventory_slot"),
+            "translation_local"    : [ 0, 0 ],
+            "scale_local"          : [ 2.4*0.15,3.2*0.15 ],
+            "translation_world"    : [ (-7.5) + (idx*PlayerInvSlot.offs),3.8],
+            "scale_world"          : [1.0,1.0],
+            "view"                 : Hud.view,
+            "rotation_local"       : 0.0,
+            "filter_color"         : filter_color,
+            "uv_translate"         : [ 0,0 ] }
+
+    def get_icon_shader_params(idx, filter_color, icon):
+        return {
+            "texBuffer"            : PlayerInvSlot.icons[icon][ (floor(PlayerInvSlot._tick)+idx)%len(PlayerInvSlot.icons[icon]) ],
+            "translation_local"    : [ 0, 0 ],
+            "scale_local"          : [ 0.4,0.4 ],
+            "translation_world"    : [ (-7.5) + (idx*PlayerInvSlot.offs),3.8],
+            "scale_world"          : [1.0,1.0],
+            "view"                 : Hud.view,
+            "rotation_local"       : 0.0,
+            "filter_color"         : filter_color,
+            "uv_translate"         : [ 0,0 ] }
+    
 class Card():
     shader = BGL.assets.get("KT-player/shader/card")
     primitive = BGL.primitive.unit_uv_square
@@ -309,6 +359,17 @@ class KPlayer(Player):
     STATE_DODGING = 2
     STATE_FIRING = 3
     
+    def has_inv(self):
+        for x in self.inventory:
+            if x is None:
+                return True
+
+    def add_inv(self,inv):
+        for i, o in enumerate(self.inventory):
+            if o is None:
+                self.inventory[i] = inv
+                return
+
     def consume_hp(self):
         KSounds.play(KSounds.health)
         self.hp = self.hp + 15
@@ -444,6 +505,13 @@ class KPlayer(Player):
         self.X_STATE = [ False, False ]
         self.A_PRESSED = False
         self.A_STATE = [ False, False ]
+        self.Y_PRESSED = False
+        self.Y_STATE = [ False, False ]
+
+        self.LEFT_STATE = [ False, False ]
+        self.LEFT_PRESSED = False
+        self.RIGHT_STATE = [ False, False ]
+        self.RIGHT_PRESSED = False
 
         self.stimer = 0
         self.state = KPlayer.STATE_DEFAULT
@@ -584,12 +652,23 @@ class KPlayer(Player):
 
 
         self.heartcard.render()
+
+        for x in reversed(range(0,self.max_invslots)):
+            if x is not self.sel_invslot:
+                PlayerInvSlot.render(x, self.inventory[x], False)
+        PlayerInvSlot.render(self.sel_invslot, self.inventory[self.sel_invslot], True)
         #self.swordcard.render()
         #self.wandcard.render()
 
 
 
     def customize(self):
+        self.sel_invslot = 0
+        self.max_invslots = 5
+
+        self.inventory = [None] * self.max_invslots
+        self.inventory[0] = "hp_vial"
+        self.inventory[1] = "hp_vial"
         self.heartcard = HeartCard(self)
         self.swordcard = SwordCard(self)
         self.wandcard = WandCard(self)
@@ -682,6 +761,30 @@ class KPlayer(Player):
         else:
             self.X_PRESSED = False
 
+        self.Y_STATE[0] = self.Y_STATE[1]
+        self.Y_STATE[1] = pad.button_down( BGL.gamepads.buttons.Y )
+    
+        if self.Y_STATE[1] is True and self.Y_STATE[0] is False:
+            self.Y_PRESSED = True
+        else:
+            self.Y_PRESSED = False
+
+        self.LEFT_STATE[0] = self.LEFT_STATE[1]
+        self.LEFT_STATE[1] = pad.button_down( BGL.gamepads.buttons.DPAD_LEFT )
+    
+        if self.LEFT_STATE[1] is True and self.LEFT_STATE[0] is False:
+            self.LEFT_PRESSED = True
+        else:
+            self.LEFT_PRESSED = False
+
+        self.RIGHT_STATE[0] = self.RIGHT_STATE[1]
+        self.RIGHT_STATE[1] = pad.button_down( BGL.gamepads.buttons.DPAD_RIGHT )
+    
+        if self.RIGHT_STATE[1] is True and self.RIGHT_STATE[0] is False:
+            self.RIGHT_PRESSED = True
+        else:
+            self.RIGHT_PRESSED = False
+
         self.A_STATE[0] = self.A_STATE[1]
         self.A_STATE[1] = pad.button_down( BGL.gamepads.buttons.A )
     
@@ -697,8 +800,27 @@ class KPlayer(Player):
             print("a pressed")
             self.state = KPlayer.STATE_FIRING
 
+        if self.Y_PRESSED:
+            self.consume_inventory()
+
+
+    def consume_inventory(self):
+        inv = self.inventory[ self.sel_invslot]
+        self.inventory[self.sel_invslot] = None
+        if(inv is "hp_vial"):
+            self.consume_hp()
 
     def tick(self):
+
+        if(self.LEFT_PRESSED):
+            self.sel_invslot -= 1
+            if(self.sel_invslot<0):
+                self.sel_invslot = self.max_invslots -1
+        if(self.RIGHT_PRESSED):
+            self.sel_invslot += 1
+            if(self.sel_invslot == self.max_invslots):
+                self.sel_invslot = 0
+        PlayerInvSlot.tick()
         #player tick
 
 
