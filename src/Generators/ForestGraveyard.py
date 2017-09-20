@@ -36,7 +36,7 @@ class HealthVial(Object):
         self.tick_type = Object.TickTypes.PURGING
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
         self.light_color = [ 1.0, 0.0, 0.0, 1.0 ]
-        self.light_radius = 10
+        self.light_radius = 10.
         self.trigger_timer = 0
         self.visible = False
 
@@ -106,7 +106,7 @@ class AttackInfo(Object):
 class FactoryLight(Object):
     def customize(self):
         self.visible = False
-        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.tick_type = Object.TickTypes.STATIC
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
         self.light_radius = 100
         self.p = [ self.factory_def['x'], self.factory_def['y'] ]
@@ -115,9 +115,9 @@ class FactoryLight(Object):
         if self.factory_def["meta"]["class"] == "blue_test":
             self.light_color = [ 0.2, 0.2,1.0,1.0 ]
         if self.factory_def["meta"]["class"] == "green":
-            self.light_radius = 200
+            self.light_radius = 25.
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-            self.light_color = [ 0.5, 1.0,0.2,1.0 ]
+            self.light_color = [ 0.5, 1.0,0.8,1.0 ]
 
 class Door(Object):
     def customize(self):

@@ -432,7 +432,7 @@ void main(void) {
     centered_UV*= centered_UV;
 
     float from_c = (length(centered_UV * vec2(1.7,1.0)))*1.2;
-    float parallax_ratio = 0.001*from_c;
+    float parallax_ratio = 0.01*from_c;
 
     from_c = from_c*from_c;
 
@@ -440,9 +440,9 @@ void main(void) {
     vec2 inv_parallaxed_UV = ((inv_UV-vec2(0.5,0.5)) * (1.0+(parallax_ratio * (1.7-from_c) ))) + vec2(0.5,0.5);
 
     //hack test
-    UV = vec2(0.1,0.1)+(uv*0.8);
-    parallaxed_UV = UV;
-    inv_parallaxed_UV = UV;
+    //UV = vec2(0.1,0.1)+(uv*0.8);
+    //parallaxed_UV = UV;
+    //inv_parallaxed_UV = UV;
 
 
 

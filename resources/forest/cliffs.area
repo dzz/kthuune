@@ -4567,6 +4567,11 @@ player_start
 28
 {}
 OBJECT
+light
+-98
+28
+{ "class" : "green"}
+OBJECT
 totem
 -38
 28
@@ -4873,9 +4878,29 @@ skeline
 {}
 OBJECT
 light
--98
+24
 28
-{ "class" : "green"}
+{"class":"green"}
+OBJECT
+light
+-4
+62
+{"class":"green"}
+OBJECT
+light
+-4
+-32
+{"class":"green"}
+OBJECT
+light
+-94
+-16
+{"class":"green"}
+OBJECT
+light
+80
+78
+{"class":"green"}
 TILE
 -48
 12
