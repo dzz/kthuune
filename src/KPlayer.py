@@ -78,36 +78,43 @@ class PlayerInvSlot():
     def tick():
         PlayerInvSlot._tick = PlayerInvSlot._tick + 0.01
 
-    def render(idx, icon, selected):
+    def render(idx, icon, selected, active):
 
         filter_color = [0.7,0.7,0.7,0.7]
         if(selected):
             filter_color = [1.0,1.0,1.0,1.0]
-        PlayerInvSlot.primitive.render_shaded( PlayerInvSlot.shader, PlayerInvSlot.get_shader_params(idx, filter_color) )
+        PlayerInvSlot.primitive.render_shaded( PlayerInvSlot.shader, PlayerInvSlot.get_shader_params(idx, filter_color, active) )
 
         if icon and icon in PlayerInvSlot.icons:
             with BGL.blendmode.alpha_over:
-                PlayerInvSlot.primitive.render_shaded( PlayerInvSlot.shader, PlayerInvSlot.get_icon_shader_params(idx, filter_color, icon) )
+                PlayerInvSlot.primitive.render_shaded( PlayerInvSlot.shader, PlayerInvSlot.get_icon_shader_params(idx, filter_color, icon, active) )
             
 
-    def get_shader_params(idx, filter_color):
+    def get_shader_params(idx, filter_color, active):
+
+        yoffs = 0
+        if(active):
+            yoffs = 0.15
         return {
             "texBuffer"            : BGL.assets.get("KT-player/texture/inventory_slot"),
             "translation_local"    : [ 0, 0 ],
             "scale_local"          : [ 2.4*0.15,3.2*0.15 ],
-            "translation_world"    : [ (-7.5) + (idx*PlayerInvSlot.offs),3.8],
+            "translation_world"    : [ (-7.5) + (idx*PlayerInvSlot.offs),3.8 - yoffs],
             "scale_world"          : [1.0,1.0],
             "view"                 : Hud.view,
             "rotation_local"       : 0.0,
             "filter_color"         : filter_color,
             "uv_translate"         : [ 0,0 ] }
 
-    def get_icon_shader_params(idx, filter_color, icon):
+    def get_icon_shader_params(idx, filter_color, icon, active):
+        yoffs = 0
+        if(active):
+            yoffs = 0.15
         return {
             "texBuffer"            : PlayerInvSlot.icons[icon][ (floor(PlayerInvSlot._tick)+idx)%len(PlayerInvSlot.icons[icon]) ],
             "translation_local"    : [ 0, 0 ],
             "scale_local"          : [ 0.4,0.4 ],
-            "translation_world"    : [ (-7.5) + (idx*PlayerInvSlot.offs),3.8],
+            "translation_world"    : [ (-7.5) + (idx*PlayerInvSlot.offs),3.8 - yoffs],
             "scale_world"          : [1.0,1.0],
             "view"                 : Hud.view,
             "rotation_local"       : 0.0,
@@ -655,14 +662,15 @@ class KPlayer(Player):
 
         for x in reversed(range(0,self.max_invslots)):
             if x is not self.sel_invslot:
-                PlayerInvSlot.render(x, self.inventory[x], False)
-        PlayerInvSlot.render(self.sel_invslot, self.inventory[self.sel_invslot], True)
+                PlayerInvSlot.render(x, self.inventory[x], False, x == self.active_invslot)
+        PlayerInvSlot.render(self.sel_invslot, self.inventory[self.sel_invslot], True, self.sel_invslot == self.active_invslot)
         #self.swordcard.render()
         #self.wandcard.render()
 
 
 
     def customize(self):
+        self.active_invslot = None
         self.sel_invslot = 0
         self.max_invslots = 5
 
@@ -801,7 +809,17 @@ class KPlayer(Player):
             self.state = KPlayer.STATE_FIRING
 
         if self.Y_PRESSED:
-            self.consume_inventory()
+
+            if(self.sel_invslot == self.active_invslot):
+                self.consume_inventory()
+                self.active_invslot = None
+            else:
+                if(self.inventory[self.sel_invslot] is None) and (self.active_invslot is not None):
+                    self.inventory[self.sel_invslot] = self.inventory[self.active_invslot]
+                    self.inventory[self.active_invslot] = None
+                    self.active_invslot = None
+                else:
+                    self.active_invslot = self.sel_invslot
 
 
     def consume_inventory(self):
