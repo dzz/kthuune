@@ -414,13 +414,19 @@ void xx_main(void) {
 ///////////////}
 
 //this is the main that is most representitive of the current design as of sep 4th 2017
+
+//sep 19 -- updated to merge flattiness with curviness and ... less dramatic but still a lil
+//bit of magic
+
 void main(void) {
 
+    vec2 cc_UV = (uv+vec2(-0.5,-0.5))*2;
+    float cc_l = smoothstep(0.0,1.0,length(cc_UV)*1.2);
 
     vec2 UV = vec2(0.1,0.1)+(uv*0.8);
 
     vec2 inv_UV = UV;
-    float x_scale = 0.9+(0.3*(UV.y*UV.y));
+    float x_scale = 0.95+(0.1*(UV.y*UV.y));
     UV.x -= 0.5;
     UV.x *= x_scale;
     UV.x += 0.5;
@@ -451,7 +457,10 @@ void main(void) {
     vec4 light_texel = texture( light_buffer, UV);
     vec4 shadow_texel = texture( shadow_buffer, UV);
 
-    vec4 object_texel = texture( object_buffer, inv_parallaxed_UV);
+
+
+    vec2 merged_uv = (cc_l*parallaxed_UV) + ((1.0-cc_l)*inv_parallaxed_UV);
+    vec4 object_texel = texture( object_buffer, merged_uv);
     //vec4 canopy_texel = texture( object_buffer, inv_parallaxed_UV);
     vec4 vision_texel = texture( vision_buffer, parallaxed_UV);
 

@@ -305,7 +305,7 @@ class Sword(Object):
     STATE_SPIN_ATTACK = 5
 
 class vconf():
-    visRad = 20
+    visRad = 50
 
 class ERangedMagic(Object):
     arrow_texture = BGL.assets.get("KT-player/texture/flare")
@@ -1403,7 +1403,7 @@ class Rock(Object):
 
 class TreeShadow(Object):
         def __init__(self,**kwargs):
-            self.scale = 3
+            self.scale = 2
             tt = kwargs['TreeTop']
             overrides = {
                     "num" : 0,
