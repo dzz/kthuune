@@ -612,6 +612,7 @@ class Stork(SnapEnemy):
                 self.floor.snap_enemies.remove(self)
 
         if(self.state == Stork.STATE_LEAPING):
+            self.fire_idx = 0
             self.texture = Stork.textures[2]
             self.p[1] = self.p[1] - 0.5
             self.size[0] = self.size[0] + 0.5
@@ -629,14 +630,19 @@ class Stork(SnapEnemy):
             self.p[0] = self.p[0] + (dx*0.2)
             self.p[1] = self.p[1] + (dy*0.2)
 
+
             if(self.stimer>40):
-                self.stimer = 0
                 self.p[0] = self.target_p[0]
                 self.p[1] = self.target_p[1]
                 self.physics_suspended = False
-                self.state = Stork.STATE_WAITING
-                self.floor.snap_enemies.append(self)
-                self.fire_circle()
+                if not self in self.floor.snap_enemies:
+                    self.floor.snap_enemies.append(self)
+                if(self.stimer % 15 == 0):
+                    self.fire_circle()
+                    self.fire_idx = self.fire_idx + 1
+                if(self.stimer>(40+(15*3))):
+                    self.stimer = 0
+                    self.state = Stork.STATE_WAITING
 
         if(self.hp < 0):
             SnapEnemy.die(self)
@@ -644,11 +650,13 @@ class Stork(SnapEnemy):
         return True
 
     def fire_circle(self):
-        num_shots = 5
+        num_shots = 3
         rad = (pi*2)/num_shots
         KSounds.play(KSounds.enemy_projectile)
-        for x in range(0,num_shots):
-            self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = rad * x ) )
+        #for x in range(0,num_shots):
+        #    self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = rad * x ) )
+        x = self.fire_idx
+        self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = rad * x ) )
         
 
 
