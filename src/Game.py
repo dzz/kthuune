@@ -143,11 +143,11 @@ class Game( BaseGame ):
 
     def render(self):
         self.background.camera = self.camera
-        self.background.render() 
+        self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
         #with BGL.blendmode.alpha_over:
         self.floor.render()
         self.fog.camera = self.camera
-        self.fog.render(self.floor) 
+        self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture()) 
         self.player.render_hud()
 
     def tick(self):
