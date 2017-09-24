@@ -240,7 +240,10 @@ class DungeonFloor( Floor ):
         else:
             pass
 
-        self.fog_level_real = (self.fog_level_real * 0.98) + (self.fog_level_impulse*0.02)
+        if(self.fog_level_impulse < self.fog_level_real):
+            self.fog_level_real = (self.fog_level_real * 0.995) + (self.fog_level_impulse*0.005)
+        if(self.fog_level_impulse > self.fog_level_real):
+            self.fog_level_real = (self.fog_level_real * 0.95) + (self.fog_level_impulse*0.05)
 
     def get_occluders(self):
         return self.light_occluders
