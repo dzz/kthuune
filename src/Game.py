@@ -144,8 +144,8 @@ class Game( BaseGame ):
     def render(self):
         self.background.camera = self.camera
         self.background.render() 
-        with BGL.blendmode.alpha_over:
-            self.floor.render()
+        #with BGL.blendmode.alpha_over:
+        self.floor.render()
         self.fog.camera = self.camera
         self.fog.render(self.floor) 
         self.player.render_hud()

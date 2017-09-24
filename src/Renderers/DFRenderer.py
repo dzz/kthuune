@@ -96,20 +96,21 @@ class DFRenderer( FloorRenderer ):
 
     def render_composite(self):
         shader  = self.compositor_shader
-        BGL.compositor.render_composite( shader, {
-            "tick"              : self._tick,
-            "camera_position" : self.camera.p,
-            "floor_buffer" : self.floor_buffer,
-            "shadow_buffer" : self.shadow_buffer,
-            "light_buffer" : self.light_buffer,
-            "object_buffer" : self.object_buffer,
-            "vision_buffer" : self.vision_lightmap.get_lightmap_texture(),
-            "photon_buffer" : self.photon_buffer,
-            "reflect_map" : self.reflection_map,
-            "canopy_buffer" : self.canopy_buffer,
-            "target_width" : Platform.video.get_screen_width(),
-            "target_height" : Platform.video.get_screen_height() 
-        })
+        with BGL.blendmode.alpha_over:
+            BGL.compositor.render_composite( shader, {
+                "tick"              : self._tick,
+                "camera_position" : self.camera.p,
+                "floor_buffer" : self.floor_buffer,
+                "shadow_buffer" : self.shadow_buffer,
+                "light_buffer" : self.light_buffer,
+                "object_buffer" : self.object_buffer,
+                "vision_buffer" : self.vision_lightmap.get_lightmap_texture(),
+                "photon_buffer" : self.photon_buffer,
+                "reflect_map" : self.reflection_map,
+                "canopy_buffer" : self.canopy_buffer,
+                "target_width" : Platform.video.get_screen_width(),
+                "target_height" : Platform.video.get_screen_height() 
+            })
         with BGL.blendmode.alpha_over:
             self.render_objects("canopy")
 

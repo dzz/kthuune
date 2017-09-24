@@ -452,17 +452,17 @@ void main(void) {
 
 
 
+    vec2 merged_uv = (cc_l*parallaxed_UV) + ((1.0-cc_l)*inv_parallaxed_UV);
     vec4 photon_texel =  texture(photon_buffer, UV);
     vec4 floor_texel = texture(floor_buffer,parallaxed_UV);
-    vec4 light_texel = texture( light_buffer, UV);
+    vec4 light_texel = texture( light_buffer, merged_uv);
     vec4 shadow_texel = texture( shadow_buffer, UV);
 
 
 
-    vec2 merged_uv = (cc_l*parallaxed_UV) + ((1.0-cc_l)*inv_parallaxed_UV);
     vec4 object_texel = texture( object_buffer, merged_uv);
     //vec4 canopy_texel = texture( object_buffer, inv_parallaxed_UV);
-    vec4 vision_texel = texture( vision_buffer, parallaxed_UV);
+    vec4 vision_texel = texture( vision_buffer, merged_uv);
 
 
     float exposure = 1.2;
@@ -493,7 +493,6 @@ void main(void) {
     merged_light.a = 1.0;
     SeenFloor = (merged_light) * floor_texel;
     gl_FragColor = alphablend( SeenFloor, LitObject);
-    //gl_FragColor = shadow_texel;
 
     //gl_FragColor = (clouds(parallaxed_UV)*(4*photon_texel))+(light_texel*clouds(inv_parallaxed_UV))*floor_texel;
 //gl_FragColor =light_texel;
