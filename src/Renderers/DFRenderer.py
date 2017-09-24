@@ -7,8 +7,11 @@ from Newfoundland.Object import GuppyRenderer
 
 class DFRenderer( FloorRenderer ):
 
+    GR = GuppyRenderer()
+    HittableShader = BGL.assets.get("KT-compositor/shader/hittables")
+
     def __init__(self,**kwargs):
-        self.guppyRenderer = GuppyRenderer()
+        self.guppyRenderer = DFRenderer.GR
         FloorRenderer.__init__(self,**kwargs)
 
     def create_compositing_buffers(self):
@@ -18,6 +21,7 @@ class DFRenderer( FloorRenderer ):
         self.light_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.object_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
+        self.hittable_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.5)
 
     def encode_player_lights( self ):
         return list(map(lambda player: { "position": player.p, "color" : [0.34,0.34,0.42,1.0], "radius" : player.sight_radius },self.get_player_objects()))
@@ -72,6 +76,13 @@ class DFRenderer( FloorRenderer ):
             with BGL.blendmode.alpha_over:
                 self.render_objects("popup")
 
+
+        with BGL.context.render_target( self.hittable_buffer ):
+            with BGL.blendmode.alpha_over:
+                uniform_fade.apply_fadeout( 1.0 / 32.0 )
+                renderable_objects = self.player.hittable_hilight
+                self.guppyRenderer.renderObjects( renderable_objects )
+            
         #with BGL.context.render_target( self.canopy_buffer ):
         #    BGL.context.clear(0.0,0.0,0.0,0.0)
         #    with BGL.blendmode.alpha_over:
@@ -82,16 +93,7 @@ class DFRenderer( FloorRenderer ):
         objects = []
         objects.extend( self.objects )
         objects.extend( self.get_player_objects() )
-
         renderable_objects = list(filter(lambda x: x.should_draw() and x.visible and x.buftarget == buftarget, objects))
-
-        #renderable_objects.sort( key = lambda x: x.texture._tex )
-        #renderable_objects.sort( key = lambda x: x.p[1] )
-        #renderable_objects.sort( key = lambda x: x.z_index )
-        #for obj in renderable_objects:
-        #    obj.render()
-
-
         self.guppyRenderer.renderObjects( renderable_objects )
 
     def render_composite(self):
@@ -113,6 +115,8 @@ class DFRenderer( FloorRenderer ):
             })
         with BGL.blendmode.alpha_over:
             self.render_objects("canopy")
+        with BGL.blendmode.add:
+            self.hittable_buffer.render_processed(DFRenderer.HittableShader, { "amt" : self.player.hittable_hint_real})
 
     def configure_vision_lightmapper(self):
         class FadingLightMapper( LightMapper ):

@@ -422,8 +422,12 @@ class KPlayer(Player):
             return True
             
         sorted_snap_enemies = sorted( self.floor.snap_enemies, key=lambda x:se_priority(x))
-        filtered_snap_enemies = list(filter( lambda x: ((x.last_priority_score < 450) and (can_reach(self,x))) or x.last_priority_score<10, sorted_snap_enemies))
+
+        filtered_snap_enemies = list(filter( lambda x: ((x.last_priority_score < 550) and (can_reach(self,x))) or x.last_priority_score<10, sorted_snap_enemies))
         filtered_snap_enemies = sorted( filtered_snap_enemies, key=lambda x:2.0-x.snap_type) #prioritize non totems
+
+        self.hittable_hilight= filtered_snap_enemies
+        self.hittable_hint_impulse = 1.0
 
         hit = False
         target = None
@@ -433,7 +437,7 @@ class KPlayer(Player):
             if self.last_link == 0:
                 crit = True
             delta = None
-            if(se.last_priority_score<9) and (se.snap_type == 1) and (se.iframes in range(2,7)):
+            if(se.last_priority_score<9) and (se.snap_type == 1) and (se.iframes in range(3,10)):
                 delta = 0
                 crit = True
             else:
@@ -444,7 +448,7 @@ class KPlayer(Player):
                 delta = abs( rad - self.rad )
 
             print( delta)
-            tolerance = (pi*2)/12.0
+            tolerance = (pi*2)/9.5
             if(delta < tolerance) or (delta > ((2*pi)-(tolerance))):
                 self.floor.freeze_frames = 2
                 self.floor.freeze_delay = 2
@@ -484,6 +488,7 @@ class KPlayer(Player):
 
         if hit:
             self.snap_attack_frozen = True
+            self.hittable_hint_impulse = 0.0
             self.combo_reset_cooldown = 60*KPlayer.ComboSecs
             if( se.snap_type == 1 ):
                 self.combo_count = self.combo_count + 1
@@ -690,6 +695,10 @@ class KPlayer(Player):
         self.cardtick = 0.0
         self.attack_object = None
         self.fire_timer = 0
+
+        self.hittable_hilight = []
+        self.hittable_hint_real = 0.0
+        self.hittable_hint_impulse = 0.0
     
     def link_floor(self):
         self.floor.create_object( self.sword )
@@ -830,6 +839,8 @@ class KPlayer(Player):
 
     def tick(self):
 
+        self.hittable_hint_real = (self.hittable_hint_real*0.99)+ (self.hittable_hint_impulse*0.01)
+        self.hittable_hint_impulse *= 0.98
         if(self.LEFT_PRESSED):
             self.sel_invslot -= 1
             if(self.sel_invslot<0):

@@ -411,12 +411,13 @@ class Acolyte(SnapEnemy):
         self.iframes = 0
         SnapEnemy.set_combat_vars(self)
 
-        self.hp = 1000
+        self.hp = 650
         
 
     def tick(self):
 
-        self.floor.add_fog(self, 0.7)
+        if self.triggered:
+            self.floor.add_fog(self, 0.7)
         self.wavidx = self.wavidx + 0.01
         SnapEnemy.tick(self)
         self.widx = (self.widx + 1) % 40
@@ -581,7 +582,9 @@ class Stork(SnapEnemy):
         
 
     def tick(self):
-        self.floor.add_fog(self, 0.5)
+        if self.triggered:
+            self.floor.add_fog(self, 0.5)
+
         y = self.floor.player.p[0] - self.p[0]
         x = self.floor.player.p[1] - self.p[1]
 
@@ -709,7 +712,8 @@ class Skeline(SnapEnemy):
         
 
     def tick(self):
-        self.floor.add_fog(self, 0.30)
+        if self.triggered:
+            self.floor.add_fog(self, 0.30)
         SnapEnemy.tick(self)
         self.widx = (self.widx + 1) % 40
         self.wfr = floor(self.widx/20)

@@ -4,8 +4,8 @@ in vec2 uv;
 uniform float parallax;
 uniform float fog_level;
 uniform vec2 camera_position;
-uniform sampler2D vision_tex;
 uniform sampler2D bg_texture;
+uniform sampler2D vision_tex;
 
 vec2 shift(vec2 v) {
     return vec2(v.x-0.5,v.y-0.5);
