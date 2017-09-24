@@ -113,7 +113,7 @@ class Game( BaseGame ):
 
 
     def create_player(self):
-        return KPlayer( sight_radius = 40.0, speed = 7.20, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) 
+        return KPlayer( sight_radius = 90.0, speed = 7.20, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) 
 
     def initialize(self):
 
@@ -147,7 +147,7 @@ class Game( BaseGame ):
         #with BGL.blendmode.alpha_over:
         self.floor.render()
         self.fog.camera = self.camera
-        self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture()) 
+        self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real) 
         self.player.render_hud()
 
     def tick(self):

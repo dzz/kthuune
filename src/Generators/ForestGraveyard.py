@@ -416,6 +416,7 @@ class Acolyte(SnapEnemy):
 
     def tick(self):
 
+        self.floor.add_fog(self, 0.5)
         self.wavidx = self.wavidx + 0.01
         SnapEnemy.tick(self)
         self.widx = (self.widx + 1) % 40
@@ -580,6 +581,7 @@ class Stork(SnapEnemy):
         
 
     def tick(self):
+        self.floor.add_fog(self, 0.3)
         y = self.floor.player.p[0] - self.p[0]
         x = self.floor.player.p[1] - self.p[1]
 
@@ -707,6 +709,7 @@ class Skeline(SnapEnemy):
         
 
     def tick(self):
+        self.floor.add_fog(self, 0.10)
         SnapEnemy.tick(self)
         self.widx = (self.widx + 1) % 40
         self.wfr = floor(self.widx/20)
@@ -1703,8 +1706,12 @@ class ForestGraveyard():
 
 
     def generate_edge_trees(self, edges = None):
-        if not edges:
-            edges = self.map_edges 
+        if "map_edges" in self.__dict__:
+            if not edges:
+                edges = self.map_edges 
+        else:
+            if not edges:
+                edges = []
 
         for edge in edges:
 

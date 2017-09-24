@@ -146,6 +146,8 @@ class DungeonFloor( Floor ):
 
 
 
+        self.fog_level_real = 0.0
+        self.fog_level_impulse = 0.0
         Floor.__init__(self,**floor_configuration)
 
     def reattach_player(self):
@@ -214,9 +216,19 @@ class DungeonFloor( Floor ):
             occs.extend(door.get_light_occluders())
         return occs
 
+    def add_fog(self,emitter, amt):
+
+        dx =  emitter.p[0] - self.camera.p[0]
+        dy =  emitter.p[1] - self.camera.p[1]
+        md = (dx*dx)+(dy*dy)
+
+        if md < 250:
+            self.fog_level_impulse = self.fog_level_impulse + amt
+
     def tick(self):
         #dungeon floor
 
+        self.fog_level_impulse = 0.0
         geometry = self.get_light_occluders()[:]
         geometry.extend( self.get_dynamic_light_occluders())
 
@@ -227,6 +239,8 @@ class DungeonFloor( Floor ):
             self.player.kill_success = False
         else:
             pass
+
+        self.fog_level_real = (self.fog_level_real * 0.98) + (self.fog_level_impulse*0.02)
 
     def get_occluders(self):
         return self.light_occluders

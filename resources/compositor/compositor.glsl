@@ -454,8 +454,9 @@ void main(void) {
 
     vec2 merged_uv = (cc_l*parallaxed_UV) + ((1.0-cc_l)*inv_parallaxed_UV);
     vec4 photon_texel =  texture(photon_buffer, UV);
-    vec4 floor_texel = texture(floor_buffer,parallaxed_UV);
-    vec4 light_texel = texture( light_buffer, merged_uv);
+    vec4 floor_texel = texture(floor_buffer,parallaxed_UV) *
+        smoothstep(0.0,1.0,texture(vision_buffer, parallaxed_UV)*24);
+    vec4 light_texel = texture( light_buffer, parallaxed_UV);
     vec4 shadow_texel = texture( shadow_buffer, UV);
 
 

@@ -2,6 +2,7 @@
 
 in vec2 uv;
 uniform float parallax;
+uniform float fog_level;
 uniform vec2 camera_position;
 uniform sampler2D light_buffer;
 uniform sampler2D vision_tex;
@@ -104,16 +105,18 @@ void main(void) {
     vec2 shifted = shift(uv + scp)*-1*warp;
     
     vec4 vision_texel = texture( vision_tex, uv);
-    vec4 light_texel = texture( light_buffer, uv) * vision_texel;
+    vec4 light_texel = texture( light_buffer, uv) * smoothstep(0.0,1.0,vision_texel*24);
 
 
     vec4 computed = vec4(1.0,1.0,1.0,length(shift(uv))) * light_texel * clouds(uv);
     
 
     
-        computed.r *= (1.0 - vision_texel.r);
-        computed.g *= (1.0 - vision_texel.r);
-        computed.b *= (1.0 - vision_texel.r);
+        //computed.r *= (1.0 - vision_texel.r);
+        //computed.g *= (1.0 - vision_texel.r);
+        //computed.b *= (1.0 - vision_texel.r);
+
+    computed.a = computed.a * fog_level;
     gl_FragColor = computed;
     //gl_FragColor = clouds(uv*parallax*warp);
 }

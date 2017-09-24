@@ -2,6 +2,7 @@
 
 in vec2 uv;
 uniform float parallax;
+uniform float fog_level;
 uniform vec2 camera_position;
 uniform sampler2D vision_tex;
 uniform sampler2D bg_texture;
@@ -25,8 +26,9 @@ void main(void) {
     vec4 vision_texel = texture( vision_tex, uv );
     vision_texel.a = 1.0;
 
-    vision_texel = smoothstep(0.0,1.0, vision_texel*24);
+    vision_texel = smoothstep(0.0,1.0, vision_texel*12);
     
     vec4 texel = texture( bg_texture, unshift(shifted*0.2) ) * vision_texel;
+
     gl_FragColor = texel;
 }
