@@ -488,7 +488,6 @@ class KPlayer(Player):
 
         if hit:
             self.snap_attack_frozen = True
-            self.hittable_hint_impulse = 0.0
             self.combo_reset_cooldown = 60*KPlayer.ComboSecs
             if( se.snap_type == 1 ):
                 self.combo_count = self.combo_count + 1
@@ -950,6 +949,7 @@ class KPlayer(Player):
                     self.dv = [ delta[0] * self.speed, delta[1] * self.speed ]
                     self.can_backstep = False
                     self.set_state(KPlayer.STATE_DODGING)
+                    #self.attempt_snap_attack()
                     self.combo_reset_cooldown = 60*KPlayer.ComboSecs
                     self.link_count = 1
                     

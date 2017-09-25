@@ -116,7 +116,7 @@ void main(void) {
         //computed.g *= (1.0 - vision_texel.r);
         //computed.b *= (1.0 - vision_texel.r);
 
-    computed.a = computed.a * fog_level;
+    computed.a = computed.a * smoothstep(0.0,0.9,(fog_level*fog_level)*2.7);
     gl_FragColor = computed;
     //gl_FragColor = clouds(uv*parallax*warp);
 }

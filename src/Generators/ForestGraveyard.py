@@ -411,7 +411,7 @@ class Acolyte(SnapEnemy):
         self.iframes = 0
         SnapEnemy.set_combat_vars(self)
 
-        self.hp = 650
+        self.hp = 350
         
 
     def tick(self):
@@ -874,6 +874,7 @@ class Splat(Object):
         return sp
 
     def tick(self):
+        self.floor.add_fog( self, 0.1 )
         self.size[0] = self.size[0] * 1.2 
         self.size[1] = self.size[1] * 1.2 
         self.rad = self.rad + self.spin
