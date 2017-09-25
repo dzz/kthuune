@@ -105,7 +105,12 @@ void main(void) {
     vec2 shifted = shift(uv + scp)*-1*warp;
     
     vec4 vision_texel = texture( vision_tex, uv);
-    vec4 light_texel = texture( light_buffer, uv) * smoothstep(0.0,1.0,vision_texel*24);
+
+    vec2 light_uv = vec2( uv.x-0.5,uv.y-0.5);
+    light_uv *= 1.0 - (parallax/10.0);
+    light_uv += vec2(0.5,0.5);
+
+    vec4 light_texel = texture( light_buffer, light_uv) * smoothstep(0.0,1.0,vision_texel*24);
 
 
     vec4 computed = vec4(1.0,1.0,1.0,length(shift(uv))) * light_texel * clouds(uv);

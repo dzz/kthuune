@@ -241,7 +241,7 @@ class DungeonFloor( Floor ):
             pass
 
         if(self.fog_level_impulse < self.fog_level_real):
-            self.fog_level_real = (self.fog_level_real * 0.995) + (self.fog_level_impulse*0.005)
+            self.fog_level_real = (self.fog_level_real * 0.97) + (self.fog_level_impulse*0.03)
         if(self.fog_level_impulse > self.fog_level_real):
             self.fog_level_real = (self.fog_level_real * 0.95) + (self.fog_level_impulse*0.05)
 
