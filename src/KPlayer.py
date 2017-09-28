@@ -487,6 +487,7 @@ class KPlayer(Player):
                 pass
 
         if hit:
+            self.snap_animation_buffer = 20
             self.snap_attack_frozen = True
             self.combo_reset_cooldown = 60*KPlayer.ComboSecs
             if( se.snap_type == 1 ):
@@ -698,6 +699,8 @@ class KPlayer(Player):
         self.hittable_hilight = []
         self.hittable_hint_real = 0.0
         self.hittable_hint_impulse = 0.0
+
+        self.snap_animation_buffer = 0
     
     def link_floor(self):
         self.floor.create_object( self.sword )
@@ -851,6 +854,7 @@ class KPlayer(Player):
         PlayerInvSlot.tick()
         #player tick
 
+        self.snap_animation_buffer -= 1
 
                 
 

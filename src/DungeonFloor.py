@@ -235,7 +235,10 @@ class DungeonFloor( Floor ):
         self.vision_lightmap.update( geometry )
         self.dynamic_lightmap.update( geometry )
         if not KTState.paused:
-            Floor.tick(self)
+            if(self.player.snap_animation_buffer<=0):
+                Floor.tick(self)
+            else:
+                pass
             self.player.kill_success = False
         else:
             pass
