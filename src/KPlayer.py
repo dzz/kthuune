@@ -461,6 +461,7 @@ class KPlayer(Player):
                 for x in range(0,15):
                     self.floor.create_object( PlayerPhantom( player = self, animation_threshold = 2*x, target = se ) )
 
+                self.display_p = [ self.p[0], self.p[1] ]
                 if snap:
                     self.p[0] = se.p[0]
                     self.p[1] = se.p[1]
@@ -487,10 +488,10 @@ class KPlayer(Player):
                 pass
 
         if hit:
-            self.snap_animation_buffer = 20
             self.snap_attack_frozen = True
             self.combo_reset_cooldown = 60*KPlayer.ComboSecs
             if( se.snap_type == 1 ):
+                self.snap_animation_buffer = max((1+self.combo_count)*4,20)
                 self.combo_count = self.combo_count + 1
                 KSounds.play( KSounds.basic_hit )
             self.last_link = se.snap_type
@@ -701,6 +702,7 @@ class KPlayer(Player):
         self.hittable_hint_impulse = 0.0
 
         self.snap_animation_buffer = 0
+        self.display_p = [0.0,0.0]
     
     def link_floor(self):
         self.floor.create_object( self.sword )
@@ -709,6 +711,11 @@ class KPlayer(Player):
         base_params = Player.get_shader_params(self)
         if self.hp > 0:
             base_params["rotation_local"] = 0.0
+        if(self.snap_animation_buffer>0):
+            #print(base_params)
+            #print(self.display_p,self.p)
+            #base_params["texBuffer"] = BGL.assets.get("KT-player/texture/healthvial0000")
+            base_params["translation_world"] = self.get_camera().translate_position( self.display_p )
 
         #if self.state == KPlayer.STATE_STUNNED:
         #    base_params["rotation_local"] = sin(self.cardtick)*0.2
@@ -841,6 +848,7 @@ class KPlayer(Player):
 
     def tick(self):
 
+
         self.hittable_hint_real = (self.hittable_hint_real*0.99)+ (self.hittable_hint_impulse*0.01)
         self.hittable_hint_impulse *= 0.98
         if(self.LEFT_PRESSED):
@@ -855,9 +863,9 @@ class KPlayer(Player):
         #player tick
 
         self.snap_animation_buffer -= 1
-
-                
-
+        if(self.snap_animation_buffer>0):
+            self.display_p[0] = (self.display_p[0]*0.8) + (self.p[0]*0.2)
+            self.display_p[1] = (self.display_p[1]*0.8) + (self.p[1]*0.2)
 
         if(self.combo_reset_cooldown>0):
             self.combo_reset_cooldown = self.combo_reset_cooldown - 1

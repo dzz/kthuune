@@ -222,6 +222,11 @@ class SnapEnemy(Object):
         self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="{0}".format(attack_amt)))
         self.hp = self.hp - attack_amt
 
+        if self.floor.player.snap_animation_buffer>0 and self.hp<=0:
+            r = self.tick()
+            if not r:
+                self.floor.purging_tick_manager.tickables.remove(self)
+
     def tick(self):
 
         if(self.iframes>0):
@@ -319,7 +324,7 @@ class ERangedMagic(Object):
         self.lifespan = 120
         self.light_color = [ 1.0,0.3,0.0,0.4 ]
 
-        self.size = [ 1.5,1.5 ]
+        self.size = [ 0.5,0.5 ]
         self.snapshot_fields = [ 'p' ]
         self.vx = cos( self.rad )*0.72
         self.vy = sin( self.rad )*0.72
@@ -328,6 +333,13 @@ class ERangedMagic(Object):
         
     def tick(self):
 
+        deadly = False
+        if(self.size[0] < 1.5):
+            growth = 1.1
+            self.size[0] *= growth
+            self.size[1] *= growth
+        else:
+            deadly = True
         self.light_color[1] = uniform(0.4,0.8)
         self.light_color[0] = uniform(0.0,1.0)
         self.light_color[3] = uniform(0.0,1.0)
@@ -345,6 +357,9 @@ class ERangedMagic(Object):
             if segments_intersect( segment, blocker):
                 self.lifespan = 0
                 break                
+
+        if not deadly:
+            return True
 
         dx = self.p[0] - self.floor.player.p[0]
         dy = self.p[1] - self.floor.player.p[1]
@@ -439,6 +454,9 @@ class Acolyte(SnapEnemy):
             self.triggered = False
 
         if not self.triggered:
+            if(self.hp < 0):
+                SnapEnemy.die(self)
+                return False
             #self.visible = False
             return True
 
@@ -595,8 +613,12 @@ class Stork(SnapEnemy):
                 if not self.can_see_player():
                     self.triggered = False
 
-        if(not self.triggered):
+        if not self.triggered:
+            if(self.hp < 0):
+                SnapEnemy.die(self)
+                return False
             return True
+
         self.stimer = self.stimer + 1
 
         fridx = int( (self.stimer % 80) / 40)
@@ -736,6 +758,9 @@ class Skeline(SnapEnemy):
             self.triggered = False
 
         if not self.triggered:
+            if(self.hp < 0):
+                SnapEnemy.die(self)
+                return False
             #self.visible = False
             return True
 
@@ -878,7 +903,7 @@ class Splat(Object):
         self.size[0] = self.size[0] * 1.2 
         self.size[1] = self.size[1] * 1.2 
         self.rad = self.rad + self.spin
-        self.cooldown = self.cooldown - 2.0
+        self.cooldown = self.cooldown - 4.0
         if(self.cooldown<=0):
             self.floor.objects.remove(self)
             return False

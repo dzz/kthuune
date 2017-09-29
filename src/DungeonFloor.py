@@ -238,7 +238,14 @@ class DungeonFloor( Floor ):
             if(self.player.snap_animation_buffer<=0):
                 Floor.tick(self)
             else:
-                pass
+                for tickable in self.purging_tick_manager.tickables:
+                    if tickable.physics is None:
+                        r = tickable.tick()
+                        if not r:
+                            self.purging_tick_manager.tickables.remove(tickable)
+                        
+                self.fog_level_impulse = -0.2
+                self._tick = self._tick+1.0
             self.player.kill_success = False
         else:
             pass
