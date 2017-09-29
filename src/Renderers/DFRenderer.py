@@ -79,7 +79,7 @@ class DFRenderer( FloorRenderer ):
 
         with BGL.context.render_target( self.hittable_buffer ):
             with BGL.blendmode.alpha_over:
-                uniform_fade.apply_fadeout( 1.0 / 32.0 )
+                uniform_fade.apply_fadeout( 1.0 / 16.0 )
                 renderable_objects = self.player.hittable_hilight
                 self.guppyRenderer.renderObjects( renderable_objects )
             
@@ -98,6 +98,9 @@ class DFRenderer( FloorRenderer ):
 
     def render_composite(self):
         shader  = self.compositor_shader
+        with BGL.context.render_target( self.object_buffer ):
+            with BGL.blendmode.add:
+                self.hittable_buffer.render_processed(DFRenderer.HittableShader, { "amt" : self.player.hittable_hint_real})
         with BGL.blendmode.alpha_over:
             BGL.compositor.render_composite( shader, {
                 "tick"              : self._tick,
@@ -115,8 +118,6 @@ class DFRenderer( FloorRenderer ):
             })
         with BGL.blendmode.alpha_over:
             self.render_objects("canopy")
-        with BGL.blendmode.add:
-            self.hittable_buffer.render_processed(DFRenderer.HittableShader, { "amt" : self.player.hittable_hint_real})
 
     def configure_vision_lightmapper(self):
         class FadingLightMapper( LightMapper ):

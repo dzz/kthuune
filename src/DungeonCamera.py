@@ -42,7 +42,7 @@ class DungeonCamera (Camera):
             if self.player.link_count == 0:
                 rate = DungeonCamera.rate
             else:
-                rate = 0.04
+                rate = 0.1
 
 
             pad = self.player.controllers.get_virtualized_pad( self.player.num )

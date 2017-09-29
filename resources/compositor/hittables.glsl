@@ -16,6 +16,7 @@ vec2 scaleup( vec2 o, float scl ) {
 }
 void main() {
 
+    float modamt = (amt*amt*amt);
     vec4 samp = (
         texture( hittables, scaleup(uv,0.9)) +
         texture( hittables, scaleup(uv,0.8)) +
@@ -24,6 +25,6 @@ void main() {
 
     float famt = samp.a;
 
-    gl_FragColor = vec4( 1.0,0.8,0.5,1.0) * famt * amt;
+    gl_FragColor = vec4( 1.0,0.8,0.5,1.0) * famt * modamt;
     //gl_FragColor = vec4( halo.r,samp.g, samp.b, 1.0) * famt * amt;
 }
