@@ -245,7 +245,7 @@ class DungeonFloor( Floor ):
                             self.purging_tick_manager.tickables.remove(tickable)
                         
                 self.fog_level_impulse = -0.2
-                self._tick = self._tick+1.0
+                self._tick = self._tick+0.25
             self.player.kill_success = False
         else:
             pass

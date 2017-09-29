@@ -448,7 +448,7 @@ class KPlayer(Player):
                 delta = abs( rad - self.rad )
 
             print( delta)
-            tolerance = (pi*2)/9.5
+            tolerance = (pi*2)/10.25
             if(delta < tolerance) or (delta > ((2*pi)-(tolerance))):
                 self.floor.freeze_frames = 2
                 self.floor.freeze_delay = 2
@@ -491,7 +491,7 @@ class KPlayer(Player):
             self.snap_attack_frozen = True
             self.combo_reset_cooldown = 60*KPlayer.ComboSecs
             if( se.snap_type == 1 ):
-                self.snap_animation_buffer = max((1+self.combo_count)*4,20)
+                self.snap_animation_buffer = max((1+self.combo_count)*3,15)
                 self.combo_count = self.combo_count + 1
                 KSounds.play( KSounds.basic_hit )
             self.last_link = se.snap_type
