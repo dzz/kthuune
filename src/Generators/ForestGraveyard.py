@@ -183,7 +183,7 @@ class SnapEnemy(Object):
         self.floor.player.notify_enemy_killed()
         self.floor.freeze_frames = 3
         
-        if(uniform(0.0,1.0) > 0.78):
+        if(uniform(0.0,1.0) > 0.95):
             self.floor.create_object(HealthVial(p=[ self.p[0], self.p[1]]))
 
 
@@ -322,12 +322,14 @@ class ERangedMagic(Object):
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
         self.light_radius = 5
         self.lifespan = 120
-        self.light_color = [ 1.0,0.3,0.0,0.4 ]
+        self.light_color = [ 0.6,1.0,0.3,0.4 ]
 
         self.size = [ 0.5,0.5 ]
         self.snapshot_fields = [ 'p' ]
-        self.vx = cos( self.rad )*0.72
-        self.vy = sin( self.rad )*0.72
+
+        spd = 0.83 + uniform(0.001, 0.01)
+        self.vx = cos( self.rad )*spd
+        self.vy = sin( self.rad )*spd
         
         self.attack_str = 10
         
@@ -335,7 +337,7 @@ class ERangedMagic(Object):
 
         deadly = False
         if(self.size[0] < 1.5):
-            growth = 1.1
+            growth = 1.8
             self.size[0] *= growth
             self.size[1] *= growth
         else:
@@ -507,13 +509,13 @@ class Acolyte(SnapEnemy):
             self.v = [0.0,0.0]
             self.texture = Acolyte.textures[1]
             self.floor.create_object( Flare( p = [ self.p[0], self.p[1] ] ) )
-            if( self.stimer > 40 ):
+            if( self.stimer > 25 ):
                 self.stimer = 0
                 self.state = Acolyte.STATE_FIRING_SHOT
                 self.pickTarget()
         if self.state == Acolyte.STATE_FIRING_SHOT:
             self.texture = Acolyte.textures[2]
-            if( self.stimer > 10 ):
+            if( self.stimer > 8 ):
                 self.fireRanged()
                 self.fire_count = self.fire_count + 1
                 if self.fire_count >3:
@@ -789,9 +791,9 @@ class Skeline(SnapEnemy):
             vy = sin(rad) * calc_speed
             self.v = [ vx,vy]
 
-            if(self.stimer > 40 ):
+            if(self.stimer > 4 ):
                 self.stimer = 0
-                self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
+                self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER, Skeline.STATE_SEEKING_PLAYER ] )
                 self.invert_seek = choice( [ True, False ] )
                 if( self.state == Skeline.STATE_SEEKING_RANDOM ):
                     self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_CHARGING_SHOT ] )
@@ -1362,7 +1364,7 @@ class TreeTop(Object):
             if(md < 140):
                 impulse_a = 0.0
 
-            self.last_a = (self.last_a * 0.95) + (impulse_a*0.05)
+            self.last_a = (self.last_a * 0.9) + (impulse_a*0.1)
             params["filter_color"][3] = self.last_a
                 
             return params

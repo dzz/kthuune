@@ -360,6 +360,12 @@ class Sword(Object):
 
 class KPlayer(Player):
 
+    BirdmanTick = 0
+    BirdmanTextures = [
+        BGL.assets.get("KT-player/texture/birdman0000"),
+        BGL.assets.get("KT-player/texture/birdman0001"),
+        BGL.assets.get("KT-player/texture/birdman0002")
+    ]
     ComboSecs = 3.5
     STATE_DEFAULT = 0
     STATE_STUNNED = 1
@@ -394,6 +400,7 @@ class KPlayer(Player):
             return 1.5
 
     def receive_ranged_attack(self, attack):
+        self.snap_cooldown = 40
         self.hp = self.hp - attack.attack_str
         self.attack_object = attack
         self.attack_physics_timer = 25 
@@ -407,6 +414,7 @@ class KPlayer(Player):
         KSounds.play( KSounds.player_hurt )
  
     def attempt_snap_attack(self, snap = True):
+
         def se_priority(se):
             dx = se.p[0] - self.p[0]
             dy = se.p[1] - self.p[1]
@@ -491,7 +499,7 @@ class KPlayer(Player):
             self.snap_attack_frozen = True
             self.combo_reset_cooldown = 60*KPlayer.ComboSecs
             if( se.snap_type == 1 ):
-                self.snap_animation_buffer = max((1+self.combo_count)*3,15)
+                self.snap_animation_buffer = max((1+self.combo_count)*4,14)
                 self.combo_count = self.combo_count + 1
                 KSounds.play( KSounds.basic_hit )
             self.last_link = se.snap_type
@@ -676,6 +684,7 @@ class KPlayer(Player):
 
 
     def customize(self):
+        self.dch_cooldown = 0
         self.active_invslot = None
         self.sel_invslot = 0
         self.max_invslots = 5
@@ -714,7 +723,7 @@ class KPlayer(Player):
         if(self.snap_animation_buffer>0):
             #print(base_params)
             #print(self.display_p,self.p)
-            #base_params["texBuffer"] = BGL.assets.get("KT-player/texture/healthvial0000")
+            base_params["texBuffer"] = KPlayer.BirdmanTextures[ int(KPlayer.BirdmanTick/10)%3 ]
             base_params["translation_world"] = self.get_camera().translate_position( self.display_p )
 
         #if self.state == KPlayer.STATE_STUNNED:
@@ -861,11 +870,12 @@ class KPlayer(Player):
                 self.sel_invslot = 0
         PlayerInvSlot.tick()
         #player tick
+        KPlayer.BirdmanTick = KPlayer.BirdmanTick+1
 
         self.snap_animation_buffer -= 1
         if(self.snap_animation_buffer>0):
-            self.display_p[0] = (self.display_p[0]*0.8) + (self.p[0]*0.2)
-            self.display_p[1] = (self.display_p[1]*0.8) + (self.p[1]*0.2)
+            self.display_p[0] = (self.display_p[0]*0.87) + (self.p[0]*0.13)
+            self.display_p[1] = (self.display_p[1]*0.87) + (self.p[1]*0.13)
 
         if(self.combo_reset_cooldown>0):
             self.combo_reset_cooldown = self.combo_reset_cooldown - 1
@@ -896,8 +906,12 @@ class KPlayer(Player):
         pad = self.controllers.get_virtualized_pad( self.num )
         self.deal_with_buttons(pad)
 
-        if (self.X_PRESSED and self.link_count>0) or ( (self.sword.state == Sword.STATE_DISCHARGING) and (self.sword.stimer == 10)):
-            self.attempt_snap_attack()
+        self.dch_cooldown -= 1
+        if self.snap_cooldown < 0:
+        #if (self.X_PRESSED and self.link_count>0) or ( (self.sword.state == Sword.STATE_CHARGING) and (self.sword.stimer == 10)):
+            if (self.X_PRESSED) or ( (self.sword.state == Sword.STATE_CHARGING) and (self.sword.stimer == 10)) or (self.sword.state == Sword.STATE_DISCHARGING and self.dch_cooldown == 0):
+                self.dch_cooldown = 17
+                self.attempt_snap_attack()
 
         self.light_color = self.base_light_color
         
@@ -943,8 +957,8 @@ class KPlayer(Player):
                 self.lazer_beam.visible = True
                 self.lazer_beam.size[1] *= 1.15
 
-                if(self.fire_timer==20):
-                    self.attempt_snap_attack(False)
+                #if(self.fire_timer==20):
+                #    self.attempt_snap_attack(False)
             if(self.fire_timer>40):
                 self.lazer_beam.size[1] = 0.1
                 self.lazer_beam.visible = False
