@@ -79,7 +79,7 @@ class DFRenderer( FloorRenderer ):
 
         with BGL.context.render_target( self.hittable_buffer ):
             with BGL.blendmode.alpha_over:
-                uniform_fade.apply_fadeout( 1.0 / 16.0 )
+                uniform_fade.apply_fadeout( 1.0 / 8.0 )
                 renderable_objects = self.player.hittable_hilight
                 self.guppyRenderer.renderObjects( renderable_objects )
             

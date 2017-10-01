@@ -502,6 +502,9 @@ class KPlayer(Player):
                 self.snap_animation_buffer = max((1+self.combo_count)*4,14)
                 self.combo_count = self.combo_count + 1
                 KSounds.play( KSounds.basic_hit )
+            else:
+                self.snap_animation_buffer = 6
+
             self.last_link = se.snap_type
             self.link_count = self.link_count + 1
             KSounds.play( KSounds.snap_landed )
@@ -723,7 +726,7 @@ class KPlayer(Player):
         if(self.snap_animation_buffer>0):
             #print(base_params)
             #print(self.display_p,self.p)
-            base_params["texBuffer"] = KPlayer.BirdmanTextures[ int(KPlayer.BirdmanTick/10)%3 ]
+            base_params["texBuffer"] = KPlayer.BirdmanTextures[ int(KPlayer.BirdmanTick/5)%3 ]
             base_params["translation_world"] = self.get_camera().translate_position( self.display_p )
 
         #if self.state == KPlayer.STATE_STUNNED:
