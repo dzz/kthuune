@@ -327,17 +327,17 @@ class ERangedMagic(Object):
         self.size = [ 0.5,0.5 ]
         self.snapshot_fields = [ 'p' ]
 
-        spd = 0.83 + uniform(0.001, 0.01)
+        spd = 0.4 + uniform(0.001, 0.01)
         self.vx = cos( self.rad )*spd
         self.vy = sin( self.rad )*spd
         
-        self.attack_str = 10
+        self.attack_str = 8
         
     def tick(self):
 
         deadly = False
         if(self.size[0] < 1.5):
-            growth = 1.8
+            growth = 1.6
             self.size[0] *= growth
             self.size[1] *= growth
         else:
@@ -404,6 +404,7 @@ class Acolyte(SnapEnemy):
         BGL.assets.get("KT-forest/texture/acolyte0002")
     ] 
     def customize(self):
+        self.is_acolyte = True
         self.fire_count = 0
         self.triggered = False
         self.tick_type = Object.TickTypes.PURGING
@@ -722,11 +723,11 @@ class Skeline(SnapEnemy):
         self.widx = int(uniform(0.0,40.0))
         self.size = [ 2.5, 2.5 ]
         self.physics = { "radius" : 0.35, "mass"   : 0.0005, "friction" : 0.0 }
-        #self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
-        self.state = Skeline.STATE_SEEKING_RANDOM
+        self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
+        #self.state = Skeline.STATE_SEEKING_RANDOM
         self.stimer = 0
         self.rvx = None
-        self.speed = 3.0
+        self.speed = 3.2
         self.invert_seek = False
         self.flip_pxy = False
 
@@ -776,13 +777,26 @@ class Skeline(SnapEnemy):
             calc_speed = self.speed * 1.2
 
         if self.state == Skeline.STATE_SEEKING_PLAYER:
+
+            ### hack acolyte seek
+            p = self.floor.player.p
+            pscore = abs(p[0] - self.p[0]) + abs(p[1]-self.p[1])
+            for enemy in self.floor.snap_enemies:
+                if not self.invert_seek and "is_acolyte" in enemy.__dict__ and enemy.triggered:
+                    apscore = abs(enemy.p[0] - self.p[0]) + abs(enemy.p[1]-self.p[1])
+                    if apscore<pscore:
+                        p=enemy.p
+                        break
+        
+                        
+
             self.rvx = None
             if self.flip_pxy:
-                y = self.floor.player.p[0] - self.p[0]
-                x = self.floor.player.p[1] - self.p[1]
+                y = p[0] - self.p[0]
+                x = p[1] - self.p[1]
             else:
-                x = self.floor.player.p[0] - self.p[0]
-                y = self.floor.player.p[1] - self.p[1]
+                x = p[0] - self.p[0]
+                y = p[1] - self.p[1]
     
 
 
@@ -791,10 +805,10 @@ class Skeline(SnapEnemy):
             vy = sin(rad) * calc_speed
             self.v = [ vx,vy]
 
-            if(self.stimer > 4 ):
+            if(self.stimer > 12 ):
                 self.stimer = 0
                 self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER, Skeline.STATE_SEEKING_PLAYER ] )
-                self.invert_seek = choice( [ True, False ] )
+                self.invert_seek = choice( [ False, True, False ] )
                 if( self.state == Skeline.STATE_SEEKING_RANDOM ):
                     self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_CHARGING_SHOT ] )
                     self.flip_pxy = choice( [ True, True, True, False ] )
@@ -803,7 +817,7 @@ class Skeline(SnapEnemy):
                 self.rvx = [ uniform(-1.0,1.0), uniform(-1.0,1.0) ]
                 self.flip_pxy = choice( [ True, False ] )
             self.v = [ self.rvx[0] * calc_speed, self.rvx[1] * calc_speed ]
-            if(self.stimer > 20 ):
+            if(self.stimer > 5 ):
                 self.stimer = 0
                 self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER, Skeline.STATE_CHARGING_SHOT ] )
                 self.invert_seek = choice( [ True, False ] )

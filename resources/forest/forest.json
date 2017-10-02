@@ -49,7 +49,7 @@
             { "name" : "docks", "filename" : "{package_path}/docks.area" },
             { "name" : "tower", "filename" : "{package_path}/tower.area" },
             { "name" : "arena", "filename" : "{package_path}/arena.area" },
-            { "name" : "doortest", "filename" : "{package_path}/imported.area" }
+            { "name" : "doortest", "filename" : "{package_path}/gauntlet.area" }
         ]
     }
 }

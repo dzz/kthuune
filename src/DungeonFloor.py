@@ -235,7 +235,7 @@ class DungeonFloor( Floor ):
         self.vision_lightmap.update( geometry )
         self.dynamic_lightmap.update( geometry )
         if not KTState.paused:
-            if(self.player.snap_animation_buffer<=0):
+            if(self.player.snap_animation_buffer<=0) or (self.player.snap_animation_buffer%5==0):
                 Floor.tick(self)
             else:
                 for tickable in self.purging_tick_manager.tickables:
