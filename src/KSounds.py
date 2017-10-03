@@ -25,6 +25,8 @@ class KSounds:
     totem_restored = audio.baudy_load_sound(BGL.assets.get("KT-player/path/totem_restored")) 
     groovy = audio.baudy_load_sound(BGL.assets.get("KT-player/path/groovy")) 
     tubular = audio.baudy_load_sound(BGL.assets.get("KT-player/path/tubular")) 
+    walk1 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/walk1")) 
+    walk2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/walk2")) 
 
     def play(sound_id):
         audio.baudy_play_sound(sound_id)

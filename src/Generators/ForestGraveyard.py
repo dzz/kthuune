@@ -1167,6 +1167,7 @@ class Totem(Object):
         if(self.reset_timer==0):
             self.floor.snap_enemies.append(self)
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_radius = 17
             self.visible = True
         self.anim_index += 0.1
         self.light_radius = 7 + (3*sin(self.anim_index))

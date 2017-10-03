@@ -469,7 +469,9 @@ class KPlayer(Player):
                     se.receive_snap_attack(crit)
 
                     for se2 in self.floor.snap_enemies:
-                        if(s2count>3):
+                        if(crit and (s2count>4)):
+                            break
+                        elif s2count>2:
                             break
                         if se2 is se:
                             continue
@@ -480,7 +482,7 @@ class KPlayer(Player):
                                 ad = abs(dx)+abs(dy)
                                 if ad < 2:
                                     s2count += 1
-                                    se2.receive_snap_attack(False)
+                                    se2.receive_snap_attack(crit)
                         
                     if crit:
                         KSounds.play( KSounds.crit )
@@ -953,6 +955,8 @@ class KPlayer(Player):
         
         if(abs(pad.left_stick[0])>0.003) or (abs(pad.left_stick[1])>0.003):
             self.walk_tick = self.walk_tick+1
+            if(self.walk_tick%100==1):
+                KSounds.play(choice([KSounds.walk1,KSounds.walk2]))
             if(self.walk_tick>400):
                 self.walk_tick = 0
         else:

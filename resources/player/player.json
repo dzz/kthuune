@@ -91,7 +91,9 @@
             { "name" : "totem_hit", "path" : "{package_path}/sounds/totem_hit.wav" },
             { "name" : "totem_restored", "path" : "{package_path}/sounds/totem_raised.wav" },
             { "name" : "groovy", "path" : "{package_path}/sounds/groovy.wav" },
-            { "name" : "tubular", "path" : "{package_path}/sounds/tubular.wav" }
+            { "name" : "tubular", "path" : "{package_path}/sounds/tubular.wav" },
+            { "name" : "walk1", "path" : "{package_path}/sounds/walk1.wav" },
+            { "name" : "walk2", "path" : "{package_path}/sounds/walk2.wav" }
         ]
     }
 }
