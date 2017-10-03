@@ -75,11 +75,19 @@
             { "name" : "basic_hit", "path" : "{package_path}/sounds/basic_hit.wav" },
             { "name" : "crit", "path" : "{package_path}/sounds/crit.wav" },
             { "name" : "combo", "path" : "{package_path}/sounds/combo.wav" },
+            { "name" : "dash", "path" : "{package_path}/sounds/dash.wav" },
             { "name" : "enemy_killed", "path" : "{package_path}/sounds/enemy_killed.wav" },
+            { "name" : "enemy_killed2", "path" : "{package_path}/sounds/enemy_killed_2.wav" },
             { "name" : "player_hurt", "path" : "{package_path}/sounds/player_hurt.wav" },
             { "name" : "enemy_projectile", "path" : "{package_path}/sounds/enemy_projectile.wav" },
+            { "name" : "enemy_projectile2", "path" : "{package_path}/sounds/enemy_projectile2.wav" },
             { "name" : "health", "path" : "{package_path}/sounds/health.wav" },
-            { "name" : "pickup", "path" : "{package_path}/sounds/pickup.wav" }
+            { "name" : "pickup", "path" : "{package_path}/sounds/pickup.wav" },
+            { "name" : "charging_projectile", "path" : "{package_path}/sounds/charging_projectile.wav" },
+            { "name" : "taking_off", "path" : "{package_path}/sounds/taking_off.wav" },
+            { "name" : "taking_off2", "path" : "{package_path}/sounds/taking_off.wav" },
+            { "name" : "lifting_off", "path" : "{package_path}/sounds/lifting_off.wav" },
+            { "name" : "acolyte_hustle", "path" : "{package_path}/sounds/acolyte_hustle.wav" }
         ]
     }
 }

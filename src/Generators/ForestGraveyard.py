@@ -167,6 +167,8 @@ class SnapEnemy(Object):
     ENEMY = 1
 
 
+    def custom_die(self):
+        pass
     def can_see_player(self):
         test_segment = [ [ self.floor.player.p[0], self.floor.player.p[1] ], [self.p[0], self.p[1] ] ]
         for segment in self.floor.get_light_occluders():
@@ -183,8 +185,10 @@ class SnapEnemy(Object):
         self.floor.player.notify_enemy_killed()
         self.floor.freeze_frames = 3
         
-        if(uniform(0.0,1.0) > 0.95):
+        if(uniform(0.0,1.0) > 0.85):
             self.floor.create_object(HealthVial(p=[ self.p[0], self.p[1]]))
+
+        self.custom_die()
 
 
     def parse(od,df):
@@ -383,6 +387,9 @@ class ERangedMagic(Object):
         return False
 
 class Acolyte(SnapEnemy):
+    def custom_die(self):
+        wf_spec = [ self.p[0], self.p[1], 15 ]
+        self.floor.create_object( WormField( wf_spec = wf_spec) )
     def receive_snap_attack(self, was_crit):
         SnapEnemy.receive_snap_attack(self, was_crit)
         self.stimer = 0
@@ -470,6 +477,8 @@ class Acolyte(SnapEnemy):
         calc_speed = self.speed
 
         if self.state == Acolyte.STATE_SEEKING_PLAYER:
+            if(self.stimer == 1):
+                KSounds.play(KSounds.acolyte_hustle)
             self.fire_count = 0
             self.rvx = None
             if self.flip_pxy:
@@ -515,6 +524,8 @@ class Acolyte(SnapEnemy):
                 self.state = Acolyte.STATE_FIRING_SHOT
                 self.pickTarget()
         if self.state == Acolyte.STATE_FIRING_SHOT:
+            if(self.stimer==1):
+                KSounds.play_eproj()
             self.texture = Acolyte.textures[2]
             if( self.stimer > 8 ):
                 self.fireRanged()
@@ -542,7 +553,7 @@ class Acolyte(SnapEnemy):
         #y = self.floor.player.p[1] - self.p[1]
         #rad = atan2(y,x)
         self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = self.target_rad ) )
-        KSounds.play(KSounds.enemy_projectile)
+        KSounds.play_eproj()
 
     def get_shader_params(self):
         bp = Object.get_shader_params(self)
@@ -551,6 +562,11 @@ class Acolyte(SnapEnemy):
         return bp
 
 class Stork(SnapEnemy):
+
+    def custom_die(self):
+        wf_spec = [ self.p[0], self.p[1], 15 ]
+        self.floor.create_object( WormField( wf_spec = wf_spec) )
+
     def get_shader_params(self):
         bp = Object.get_shader_params(self)
         bp['translation_local'][0] = 0.1
@@ -630,11 +646,10 @@ class Stork(SnapEnemy):
         SnapEnemy.tick(self)
 
         if(self.state == Stork.STATE_WAITING):
+            if(self.stimer==100):
+                KSounds.play(KSounds.lifting_off)
+
             if self.stimer > 120:
-                if(self.stimer < 10):
-                    self.texture = Stork.textures[2]
-                if(self.stimer == 11):
-                    self.fire_circle()
                 self.target_p = list(self.floor.player.p)
                 self.stimer = 0
                 self.state = Stork.STATE_LEAPING
@@ -682,7 +697,7 @@ class Stork(SnapEnemy):
     def fire_circle(self):
         num_shots = 3
         rad = (pi*2)/num_shots
-        KSounds.play(KSounds.enemy_projectile)
+        KSounds.play_eproj()
         #for x in range(0,num_shots):
         #    self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = rad * x ) )
         x = self.fire_idx
@@ -734,6 +749,7 @@ class Skeline(SnapEnemy):
         self.snap_effect_emit = 0
         self.iframes = 0
         SnapEnemy.set_combat_vars(self)
+        self.hp = 50
         
 
     def tick(self):
@@ -810,7 +826,7 @@ class Skeline(SnapEnemy):
                 self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER, Skeline.STATE_SEEKING_PLAYER ] )
                 self.invert_seek = choice( [ False, True, False ] )
                 if( self.state == Skeline.STATE_SEEKING_RANDOM ):
-                    self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_CHARGING_SHOT ] )
+                    self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_CHARGING_SHOT, Skeline.STATE_SEEKING_PLAYER ] )
                     self.flip_pxy = choice( [ True, True, True, False ] )
         if self.state == Skeline.STATE_SEEKING_RANDOM:
             if not self.rvx:
@@ -822,6 +838,8 @@ class Skeline(SnapEnemy):
                 self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER, Skeline.STATE_CHARGING_SHOT ] )
                 self.invert_seek = choice( [ True, False ] )
         if self.state == Skeline.STATE_CHARGING_SHOT:
+            if(self.stimer==1):
+                KSounds.play(KSounds.charging_projectile)
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [9.0,0.4,0.1,1.0]
             self.light_radius = uniform(30.0,50.0)
@@ -855,7 +873,7 @@ class Skeline(SnapEnemy):
         #y = self.floor.player.p[1] - self.p[1]
         #rad = atan2(y,x)
         self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = self.target_rad ) )
-        KSounds.play(KSounds.enemy_projectile)
+        KSounds.play_eproj()
 
     def get_shader_params(self):
         bp = Object.get_shader_params(self)
@@ -927,7 +945,7 @@ class Splat(Object):
             self.texture = Splat.textures[int(floor((80-self.cooldown) / 80)) ]
             return True
 
-class Worm(Object):
+class Worm(SnapEnemy):
    
     textures = [
         BGL.assets.get("KT-forest/texture/worm0000"),
@@ -936,7 +954,8 @@ class Worm(Object):
         BGL.assets.get("KT-forest/texture/worm0003"),
     ] 
     def customize(self):
-        self.hp = 20 + choice(range(0,3))
+        self.triggered = True
+        self.hp = 5 + choice(range(0,30))
         self.dead = False
         self.tick_type = Object.TickTypes.PURGING
         self.fridx = choice(range(0,480))
@@ -949,6 +968,9 @@ class Worm(Object):
         self.attacking = False
         self.z_index = 1
         self.biting = False
+        self.snap_type = SnapEnemy.ENEMY
+        self.iframes = 0
+        self.defense = 3
         
     def pick_target(self):
         rad = None
@@ -1076,7 +1098,7 @@ class Worm(Object):
         
 class WormField(Object):
     def customize(self):
-        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.tick_type = Object.TickTypes.PURGING
         self.buftarget = "popup"
         self.visible = False
 
@@ -1086,10 +1108,14 @@ class WormField(Object):
         self.worms = []
 
     def tick(self):
-        if(len(self.worms)<13):
+        if(len(self.worms)<20):
             worm = Worm( p = [self.p[0],self.p[1] ] )
             self.worms.append(worm)
+            self.floor.snap_enemies.append(worm)
             self.floor.create_object(worm)
+            return True
+        return False
+
 
 class Elder(Object):
     #texture = BGL.assets.get('KT-player/texture/elder0000')
@@ -1133,10 +1159,22 @@ class Totem(Object):
         self.physics = None
         self.z_index = 1
         self.anim_index = 0
+        self.reset_timer = 0
 
     def tick(self):
+        self.reset_timer = self.reset_timer+1
+        if(self.reset_timer==0):
+            self.floor.snap_enemies.append(self)
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.visible = True
         self.anim_index += 0.1
         self.light_radius = 7 + (3*sin(self.anim_index))
+
+    def sleep_totem(self):
+        self.floor.snap_enemies.remove(self)
+        self.reset_timer = -120
+        self.visible = False
+        self.light_type = Object.LightTypes.NONE
 
 class SkullDeath(Object):
     texture = BGL.assets.get('KT-forest/texture/skull0000')

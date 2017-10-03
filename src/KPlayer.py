@@ -464,6 +464,18 @@ class KPlayer(Player):
                 ##ENEMY snaptype
                 if(se.snap_type == 1):
                     se.receive_snap_attack(crit)
+
+                    for se2 in self.floor.snap_enemies:
+                        if se2 is se:
+                            continue
+                        if se2.snap_type == 1:
+                            if se2.triggered:
+                                dx = se2.p[0] - se.p[0]
+                                dy = se2.p[1] - se.p[1]
+                                ad = abs(dx)+abs(dy)
+                                if ad < 5:
+                                    se2.receive_snap_attack(False)
+                        
                     if crit:
                         KSounds.play( KSounds.crit )
                 for x in range(0,15):
@@ -503,11 +515,14 @@ class KPlayer(Player):
                 self.combo_count = self.combo_count + 1
                 KSounds.play( KSounds.basic_hit )
             else:
+                se.sleep_totem()
                 self.snap_animation_buffer = 6
 
             self.last_link = se.snap_type
             self.link_count = self.link_count + 1
             KSounds.play( KSounds.snap_landed )
+            KSounds.play( choice( [ KSounds.taking_off, KSounds.taking_off2 ] ))
+                        
         else:
             self.combo_count = 0
             self.link_count = 0
@@ -785,7 +800,7 @@ class KPlayer(Player):
 
 
     def notify_enemy_killed(self):
-        KSounds.play( KSounds.enemy_killed )
+        KSounds.play( choice([ KSounds.enemy_killed, KSounds.enemy_killed2 ]) )
         self.kill_success = True
         pass
 
@@ -980,7 +995,9 @@ class KPlayer(Player):
                     self.set_state(KPlayer.STATE_DODGING)
                     #self.attempt_snap_attack()
                     self.combo_reset_cooldown = 60*KPlayer.ComboSecs
-                    self.link_count = 1
+                    if(self.link_count==0):
+                        self.link_count = 1
+                    KSounds.play( KSounds.dash )
                     
 
 

@@ -1,5 +1,6 @@
 import audio
 from Beagle import API as BGL
+from random import choice
 
 class KSounds:
     charge_initiated = audio.baudy_load_sound(BGL.assets.get("KT-player/path/charge_initiated")) 
@@ -8,10 +9,21 @@ class KSounds:
     basic_hit = audio.baudy_load_sound(BGL.assets.get("KT-player/path/basic_hit")) 
     crit = audio.baudy_load_sound(BGL.assets.get("KT-player/path/crit")) 
     enemy_killed = audio.baudy_load_sound(BGL.assets.get("KT-player/path/enemy_killed")) 
+    enemy_killed2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/enemy_killed2")) 
     player_hurt = audio.baudy_load_sound(BGL.assets.get("KT-player/path/player_hurt")) 
     enemy_projectile = audio.baudy_load_sound(BGL.assets.get("KT-player/path/enemy_projectile")) 
+    enemy_projectile2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/enemy_projectile2")) 
     health = audio.baudy_load_sound(BGL.assets.get("KT-player/path/health")) 
     pickup = audio.baudy_load_sound(BGL.assets.get("KT-player/path/pickup")) 
+    dash = audio.baudy_load_sound(BGL.assets.get("KT-player/path/dash")) 
+    charging_projectile = audio.baudy_load_sound(BGL.assets.get("KT-player/path/charging_projectile")) 
+    taking_off = audio.baudy_load_sound(BGL.assets.get("KT-player/path/taking_off")) 
+    taking_off2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/taking_off2")) 
+    lifting_off = audio.baudy_load_sound(BGL.assets.get("KT-player/path/lifting_off")) 
+    acolyte_hustle = audio.baudy_load_sound(BGL.assets.get("KT-player/path/acolyte_hustle")) 
 
     def play(sound_id):
         audio.baudy_play_sound(sound_id)
+
+    def play_eproj():
+        KSounds.play( choice([ KSounds.enemy_projectile, KSounds.enemy_projectile2]))
