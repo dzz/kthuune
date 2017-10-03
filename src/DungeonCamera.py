@@ -34,6 +34,8 @@ class DungeonCamera (Camera):
 
             calc_zoom = (self.base_zoom + (self.zoom*(-0.33)*isAiming) + sc)*0.6
 
+            if(self.player.snap_animation_buffer>0):
+                calc_zoom *= 2.7
             if(self.zoom < calc_zoom):
                 self.zoom = (self.zoom*0.999) + (calc_zoom*0.001)
             else:

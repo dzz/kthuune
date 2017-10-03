@@ -21,6 +21,10 @@ class KSounds:
     taking_off2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/taking_off2")) 
     lifting_off = audio.baudy_load_sound(BGL.assets.get("KT-player/path/lifting_off")) 
     acolyte_hustle = audio.baudy_load_sound(BGL.assets.get("KT-player/path/acolyte_hustle")) 
+    totem_hit = audio.baudy_load_sound(BGL.assets.get("KT-player/path/totem_hit")) 
+    totem_restored = audio.baudy_load_sound(BGL.assets.get("KT-player/path/totem_restored")) 
+    groovy = audio.baudy_load_sound(BGL.assets.get("KT-player/path/groovy")) 
+    tubular = audio.baudy_load_sound(BGL.assets.get("KT-player/path/tubular")) 
 
     def play(sound_id):
         audio.baudy_play_sound(sound_id)

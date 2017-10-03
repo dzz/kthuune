@@ -87,7 +87,11 @@
             { "name" : "taking_off", "path" : "{package_path}/sounds/taking_off.wav" },
             { "name" : "taking_off2", "path" : "{package_path}/sounds/taking_off.wav" },
             { "name" : "lifting_off", "path" : "{package_path}/sounds/lifting_off.wav" },
-            { "name" : "acolyte_hustle", "path" : "{package_path}/sounds/acolyte_hustle.wav" }
+            { "name" : "acolyte_hustle", "path" : "{package_path}/sounds/acolyte_hustle.wav" },
+            { "name" : "totem_hit", "path" : "{package_path}/sounds/totem_hit.wav" },
+            { "name" : "totem_restored", "path" : "{package_path}/sounds/totem_raised.wav" },
+            { "name" : "groovy", "path" : "{package_path}/sounds/groovy.wav" },
+            { "name" : "tubular", "path" : "{package_path}/sounds/tubular.wav" }
         ]
     }
 }

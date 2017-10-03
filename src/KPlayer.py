@@ -42,7 +42,7 @@ class PlayerPhantom(Object):
         self.tick_type = Object.TickTypes.PURGING
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
         self.light_radius = 8.0
-        self.light_color = [ 0.0,0.0,1.0,1.0 ]
+        self.light_color = [ uniform(0.1,0.4),uniform(0.0,0.2),uniform(0.7,1.0),1.0 ]
         self.animation_counter = 0
         self.size = [ 2.5,2.5]
 
@@ -400,6 +400,8 @@ class KPlayer(Player):
             return 1.5
 
     def receive_ranged_attack(self, attack):
+        if(self.invuln_frames>0):
+            return 
         self.snap_cooldown = 40
         self.hp = self.hp - attack.attack_str
         self.attack_object = attack
@@ -462,10 +464,13 @@ class KPlayer(Player):
                 self.floor.freeze_delay = 2
 
                 ##ENEMY snaptype
+                s2count = 0
                 if(se.snap_type == 1):
                     se.receive_snap_attack(crit)
 
                     for se2 in self.floor.snap_enemies:
+                        if(s2count>3):
+                            break
                         if se2 is se:
                             continue
                         if se2.snap_type == 1:
@@ -473,7 +478,8 @@ class KPlayer(Player):
                                 dx = se2.p[0] - se.p[0]
                                 dy = se2.p[1] - se.p[1]
                                 ad = abs(dx)+abs(dy)
-                                if ad < 5:
+                                if ad < 2:
+                                    s2count += 1
                                     se2.receive_snap_attack(False)
                         
                     if crit:
@@ -511,9 +517,19 @@ class KPlayer(Player):
             self.snap_attack_frozen = True
             self.combo_reset_cooldown = 60*KPlayer.ComboSecs
             if( se.snap_type == 1 ):
+                self.invuln_frames = 4
                 self.snap_animation_buffer = min((1+self.combo_count)*9,22)
                 self.combo_count = self.combo_count + 1
                 KSounds.play( KSounds.basic_hit )
+
+                if(self.combo_count == 2):
+                    KSounds.play( KSounds.groovy )
+                if(self.combo_count == 4):
+                    KSounds.play( KSounds.groovy )
+                if(self.combo_count == 5):
+                    KSounds.play( KSounds.tubular )
+                if(self.combo_count > 7):
+                    KSounds.play( KSounds.tubular )
             else:
                 se.sleep_totem()
                 self.snap_animation_buffer = 6
@@ -540,6 +556,7 @@ class KPlayer(Player):
         self.snap_cooldown = 0
         self.combo_reset_cooldown = 0
         self.link_count = 0
+        self.invuln_frames = 0
         self.X_PRESSED = False
         self.X_STATE = [ False, False ]
         self.A_PRESSED = False
@@ -888,6 +905,7 @@ class KPlayer(Player):
                 self.sel_invslot = 0
         PlayerInvSlot.tick()
         #player tick
+        self.invuln_frames -= 1
         KPlayer.BirdmanTick = KPlayer.BirdmanTick+1
 
         self.snap_animation_buffer -= 1

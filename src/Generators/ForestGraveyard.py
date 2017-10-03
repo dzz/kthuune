@@ -513,6 +513,8 @@ class Acolyte(SnapEnemy):
                 self.state = choice( [ Acolyte.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER, Skeline.STATE_CHARGING_SHOT ] )
                 self.invert_seek = choice( [ True, True,True, False ] )
         if self.state == Acolyte.STATE_CHARGING_SHOT:
+            if(self.stimer == 10):
+                KSounds.play(KSounds.acolyte_hustle)
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [9.0,0.4,0.1,1.0]
             self.light_radius = uniform(30.0,50.0)
@@ -1085,13 +1087,10 @@ class Worm(SnapEnemy):
                     self.floor.create_object( Splat( p = self.p ) )
 
         if(self.hp<0.0):
-            self.floor.player.pump_dashcombo()
-            self.floor.player.notify_enemy_killed()
-            self.dead = True
-            self.floor.objects.remove(self)
-
+            SnapEnemy.die(self)
             for fi in range(0,3):
                 self.floor.create_object( Flare( p = [ self.p[0], self.p[1] ] ) )
+            return False
 
         return True
     
@@ -1108,7 +1107,7 @@ class WormField(Object):
         self.worms = []
 
     def tick(self):
-        if(len(self.worms)<20):
+        if(len(self.worms)<10):
             worm = Worm( p = [self.p[0],self.p[1] ] )
             self.worms.append(worm)
             self.floor.snap_enemies.append(worm)
@@ -1163,6 +1162,8 @@ class Totem(Object):
 
     def tick(self):
         self.reset_timer = self.reset_timer+1
+        if(self.reset_timer == - 50):
+            KSounds.play(KSounds.totem_restored)
         if(self.reset_timer==0):
             self.floor.snap_enemies.append(self)
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
@@ -1171,8 +1172,9 @@ class Totem(Object):
         self.light_radius = 7 + (3*sin(self.anim_index))
 
     def sleep_totem(self):
+        KSounds.play(KSounds.totem_hit)
         self.floor.snap_enemies.remove(self)
-        self.reset_timer = -120
+        self.reset_timer = -170
         self.visible = False
         self.light_type = Object.LightTypes.NONE
 
