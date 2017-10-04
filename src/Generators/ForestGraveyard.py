@@ -32,7 +32,7 @@ class Blood(Object):
 
     def customize(self):
         self.rad = uniform(0.0,3.14*2)
-        self.size = [ 3.0,3.0]
+        self.size = [ 3.0+uniform(0.0,1.0),3.0+uniform(0.0,1.0)]
         self.buftarget = "floor"
         self.tick_type = Object.TickTypes.STATIC
         self.texture = choice(Blood.texture)
