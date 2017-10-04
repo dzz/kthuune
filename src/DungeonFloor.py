@@ -145,11 +145,10 @@ class DungeonFloor( Floor ):
         #self.light_occluders = []#self.generator.get_light_occluders()
         #self.photon_emitters = []#self.generator.get_photon_emitters()
 
-
-
         self.fog_level_real = 0.0
         self.fog_level_impulse = 0.0
         self.sound_tick = 0
+        self.recursive_snapper = None
         Floor.__init__(self,**floor_configuration)
 
     def reattach_player(self):

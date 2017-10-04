@@ -206,6 +206,12 @@ class SnapEnemy(Object):
 
         self.floor.create_object(Blood(p=[self.p[0],self.p[1]]))
         self.custom_die()
+        for x in range(0,55):
+            spltr = SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14))
+            spltr.color = [0.0,0.0,0.0,1.0]
+            spltr.light_color = [ 0.0,1.0,0.0,1.0]
+            spltr.size[0]*=uniform(1.0,1.5)
+            self.floor.create_object(spltr)
 
 
     def parse(od,df):
@@ -242,6 +248,13 @@ class SnapEnemy(Object):
 
         self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="{0}".format(attack_amt)))
         self.hp = self.hp - attack_amt
+
+        for x in range(0,15):
+            spltr = SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14))
+            spltr.color = [0.0,0.0,0.0,1.0]
+            spltr.light_color = [ 0.0,1.0,0.0,1.0]
+            spltr.size[0]*=uniform(1.0,1.5)
+            self.floor.create_object(spltr)
 
         if self.floor.player.snap_animation_buffer>0 and self.hp<=0:
             r = self.tick()
@@ -333,6 +346,40 @@ class Sword(Object):
 class vconf():
     visRad = 50
 
+class SplatterParticle(Object):
+    def __init__(self,**kwargs):
+        Object.__init__(self,**kwargs)
+        self.texture = ERangedMagic.arrow_texture
+        self.buftarget = "popup"
+        self.tick_type = Object.TickTypes.PURGING
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_radius = 5
+        self.lifespan = 90
+        self.light_color = [ 1.0,0.7,0.0,0.0 ]
+        self.color = [1.0,0.5,0.5,1.0]
+
+        self.size = [ 2.4,2.4 ]
+        self.snapshot_fields = [ 'p' ]
+
+        spd = 0.5 + uniform(0.2,0.4)
+        self.vx = cos( self.rad )*spd
+        self.vy = sin( self.rad )*spd
+        
+    def tick(self):
+        self.light_radius*=0.9
+        self.vx*=0.9
+        self.vy*=0.9
+        self.p[0] = self.p[0] + self.vx 
+        self.p[1] = self.p[1] + self.vy 
+
+        self.size[0]*=0.8
+        self.size[1]*=0.8
+        self.lifespan = self.lifespan-1
+        if(self.lifespan<0):
+            self.floor.objects.remove(self)
+            return False
+        return True
+
 class ERangedMagic(Object):
     arrow_texture = BGL.assets.get("KT-player/texture/flare")
     def __init__(self,**kwargs):
@@ -358,7 +405,7 @@ class ERangedMagic(Object):
 
         deadly = False
         if(self.size[0] < 1.5):
-            growth = 1.6
+            growth = 1.2
             self.size[0] *= growth
             self.size[1] *= growth
         else:
@@ -392,10 +439,14 @@ class ERangedMagic(Object):
 
         md = dx+dy
 
-        if md < 5:
+        if md < 3:
             self.floor.player.receive_ranged_attack(self)
             self.floor.create_object( Splat( p = self.p, color=[1.0,0.0,0.0,1.0] ) )
             self.floor.objects.remove(self)
+
+            for x in range(0,35):
+                self.floor.create_object(SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14)))
+            
             return False
 
         if(self.lifespan>0):
@@ -453,7 +504,7 @@ class Acolyte(SnapEnemy):
         self.iframes = 0
         SnapEnemy.set_combat_vars(self)
 
-        self.hp = 350
+        self.hp = 250
         
 
     def tick(self):
@@ -571,7 +622,7 @@ class Acolyte(SnapEnemy):
         #x = self.floor.player.p[0] - self.p[0]
         #y = self.floor.player.p[1] - self.p[1]
         #rad = atan2(y,x)
-        self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = self.target_rad ) )
+        self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = self.target_rad+uniform(-0.1,0.1) ) )
         KSounds.play_eproj()
 
     def get_shader_params(self):
@@ -724,6 +775,145 @@ class Stork(SnapEnemy):
         
 
 
+class Cleric(SnapEnemy):
+    textures = [
+        BGL.assets.get("KT-forest/texture/cleric0000"),
+        BGL.assets.get("KT-forest/texture/cleric0001"),
+        BGL.assets.get("KT-forest/texture/cleric0002")
+    ]
+
+    def receive_snap_attack(self, was_crit):
+        SnapEnemy.receive_snap_attack(self, was_crit)
+
+        if not was_crit:
+            if not choice([True,False,False]):
+                return                
+
+        secondaries = []
+        if self.floor.recursive_snapper is None:
+            self.floor.recursive_snapper = self #HACKKKKKK
+        for se2 in self.floor.snap_enemies:
+            if se2.snap_type == SnapEnemy.ENEMY and se2.triggered:
+                if(se2 is not self and se2 is not self.floor.recursive_snapper):
+                    secondaries.append(se2)
+
+        
+        for x in range(0,3):
+            if(len(secondaries))==0:
+                break
+            se2 = choice(secondaries)
+            se2.receive_snap_attack(True)
+            secondaries.remove(se2)
+
+        if self.floor.recursive_snapper is self:
+            self.floor.recursive_snapper = None
+                
+                
+
+    def parse(od,df):
+        o = Cleric( p = [ od["x"],od["y"] ] )
+        df.snap_enemies.append(o)
+        return o
+
+    def customize(self):
+        self.triggered = False
+        self.tick_type = Object.TickTypes.PURGING
+        self.light_type = Object.LightTypes.NONE
+        self.light_color = [0.0,1.0,0.0,1.0]
+        self.light_radius = 25.0
+        self.snap_type = SnapEnemy.ENEMY
+        self.visible = True
+        self.z_index = 1
+        self.buftarget = "popup"
+        self.texture = Cleric.textures[0]
+        self.widx = int(uniform(0.0,20.0))
+        self.size = [ 3.5, 3.5 ]
+        self.physics = { "radius" : 0.35, "mass"   : 0.05, "friction" : 0.0 }
+        #self.state = Skeline.STATE_SEEKING_RANDOM
+        self.stimer = 0
+        self.rvx = None
+        self.speed = 3.2
+        self.rejects_snap_attack = False#not used yet
+
+        self.snap_effect_emit = 0
+        self.iframes = 0
+        SnapEnemy.set_combat_vars(self)
+        self.hp = 95
+        self.player_samples = []
+
+    def tick(self):
+    
+        if self.hp<=0:
+            SnapEnemy.die(self)
+            return False
+            
+        p = self.floor.player.p
+        x = p[0] - self.p[0]
+        y = p[1] - self.p[1]
+    
+        md=(x*x)+(y*y)
+
+        if(md<250):
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            if not self.triggered:
+                KSounds.play(KSounds.cleric_triggered)
+            self.triggered = True 
+        if(md>300):
+            self.light_type = Object.LightTypes.NONE
+            self.triggered = False
+
+        self.widx = (self.widx + 1) % 20
+        self.texture = Cleric.textures[floor(self.widx/10)]
+
+        if self.triggered:
+            if (choice([True,False,False,False]) and (self.stimer%30==0)) or (len(self.player_samples)==0):
+                self.player_samples.append([self.floor.player.p[0],self.floor.player.p[1]])
+                self.player_samples = self.player_samples[-5:]
+                
+            self.stimer = self.stimer + 1
+
+            if(self.stimer>50):
+                self.texture = Cleric.textures[2]
+                self.light_color = [0.7+uniform(0.0,0.3),uniform(0.0,0.5),0.0,1.0]
+                self.light_radius *= 0.98
+                self.light_radius += uniform(0.1,0.6)
+                if(self.stimer==55):
+                    KSounds.play(KSounds.cleric_charge)
+                if(self.stimer==60):
+                    self.v = [ uniform(-2.0,2.0), uniform(-2.0,2.0) ]
+                self.rejects_snap_attack = True
+
+            if(self.stimer>100):
+                self.rejects_snap_attack = False
+                self.texture = Cleric.textures[2]
+                self.light_color = [0.7+uniform(0.0,0.3),uniform(0.0,0.5),0.0,1.0]
+                self.light_radius *= 1.1
+                self.pickTarget()
+                self.v = [0.0,0.0]
+            if(self.stimer>120):
+                if(self.stimer%8==1):
+                    if(choice([True,True,False])):
+                        self.fireRanged()
+                        self.target_rad += uniform(0.5,1.5)
+            if(self.stimer>160):
+                self.stimer = 0
+                self.light_color = [0.0,1.0,0.0,1.0]
+                self.light_radius = 25.0
+                self.v = [ uniform(-2.0,2.0), uniform(-2.0,2.0) ]
+
+        return True
+
+    def fireRanged(self):
+        self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = self.target_rad+uniform(-0.1,0.1) ) )
+        KSounds.play_eproj()
+
+    def pickTarget(self):
+        
+        x = self.floor.player.p[0] - self.p[0]
+        y = self.floor.player.p[1] - self.p[1]
+        rad = atan2(y,x)
+        self.target_rad = rad - uniform(0.0,1.0)
+    
 class Skeline(SnapEnemy):
     def receive_snap_attack(self, was_crit):
         SnapEnemy.receive_snap_attack(self, was_crit)
@@ -1657,6 +1847,9 @@ class ForestGraveyard():
 
             if od["key"] in [ "snap_enemy", "skeline"]:
                 self.objects.append(Skeline.parse(od,df ))
+
+            if od["key"] in [ "cleric"]:
+                self.objects.append(Cleric.parse(od,df ))
 
             if od["key"] in [ "acolyte" ]:
                 self.objects.append(Acolyte.parse(od,df ))

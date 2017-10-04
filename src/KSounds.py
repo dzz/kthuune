@@ -29,6 +29,8 @@ class KSounds:
     walk2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/walk2")) 
     rain_20sec = audio.baudy_load_sound(BGL.assets.get("KT-player/path/rain_20sec")) 
     rain_21sec = audio.baudy_load_sound(BGL.assets.get("KT-player/path/rain_21sec")) 
+    cleric_charge = audio.baudy_load_sound(BGL.assets.get("KT-player/path/cleric_charge")) 
+    cleric_triggered = audio.baudy_load_sound(BGL.assets.get("KT-player/path/cleric_triggered")) 
 
     def play(sound_id):
         audio.baudy_play_sound(sound_id)

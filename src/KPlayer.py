@@ -519,7 +519,7 @@ class KPlayer(Player):
             self.snap_attack_frozen = True
             self.combo_reset_cooldown = 60*KPlayer.ComboSecs
             if( se.snap_type == 1 ):
-                self.invuln_frames = 4
+                self.invuln_frames = 12
                 self.snap_animation_buffer = min((1+self.combo_count)*9,22)
                 self.combo_count = self.combo_count + 1
                 KSounds.play( KSounds.basic_hit )

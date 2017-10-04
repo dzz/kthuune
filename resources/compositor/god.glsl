@@ -7,5 +7,6 @@ uniform sampler2D scene;
 void main() {
     vec4 base = texture( scene, uv );
 
-    gl_FragColor = base*length(base*base);
+    float l = length(base.rgb);
+    gl_FragColor = base*(l*l);
 }
