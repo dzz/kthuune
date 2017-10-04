@@ -22,6 +22,22 @@ from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 
 from ..KSounds import KSounds
 
+class Blood(Object):
+    texture = [
+        BGL.assets.get("KT-forest/texture/blood0000"),
+        BGL.assets.get("KT-forest/texture/blood0001"),
+        BGL.assets.get("KT-forest/texture/blood0002"),
+        BGL.assets.get("KT-forest/texture/blood0003"),
+    ]
+
+    def customize(self):
+        self.rad = uniform(0.0,3.14*2)
+        self.size = [ 3.0,3.0]
+        self.buftarget = "floor"
+        self.tick_type = Object.TickTypes.STATIC
+        self.texture = choice(Blood.texture)
+        pass
+
 class HealthVial(Object):
     textures = [ 
         BGL.assets.get("KT-player/texture/healthvial0000"),
@@ -188,6 +204,7 @@ class SnapEnemy(Object):
         if(uniform(0.0,1.0) > 0.85):
             self.floor.create_object(HealthVial(p=[ self.p[0], self.p[1]]))
 
+        self.floor.create_object(Blood(p=[self.p[0],self.p[1]]))
         self.custom_die()
 
 
