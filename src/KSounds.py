@@ -27,6 +27,8 @@ class KSounds:
     tubular = audio.baudy_load_sound(BGL.assets.get("KT-player/path/tubular")) 
     walk1 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/walk1")) 
     walk2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/walk2")) 
+    rain_20sec = audio.baudy_load_sound(BGL.assets.get("KT-player/path/rain_20sec")) 
+    rain_21sec = audio.baudy_load_sound(BGL.assets.get("KT-player/path/rain_21sec")) 
 
     def play(sound_id):
         audio.baudy_play_sound(sound_id)

@@ -11,6 +11,7 @@ from math import sin,cos,hypot
 from .AimingBeam import AimingBeam
 from .AimingBeam import LazerBeam
 from .KTState import KTState
+from .KSounds import KSounds
 import client.system.keyboard as keyboard
 
 
@@ -148,6 +149,7 @@ class DungeonFloor( Floor ):
 
         self.fog_level_real = 0.0
         self.fog_level_impulse = 0.0
+        self.sound_tick = 0
         Floor.__init__(self,**floor_configuration)
 
     def reattach_player(self):
@@ -227,6 +229,11 @@ class DungeonFloor( Floor ):
 
     def tick(self):
         #dungeon floor
+
+
+        if(self.sound_tick==0):
+            KSounds.play(choice([KSounds.rain_20sec, KSounds.rain_21sec]))
+        self.sound_tick = (self.sound_tick +1)%(60*18)
 
         self.fog_level_impulse = 0.0
         geometry = self.get_light_occluders()[:]

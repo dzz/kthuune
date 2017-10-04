@@ -93,7 +93,9 @@
             { "name" : "groovy", "path" : "{package_path}/sounds/groovy.wav" },
             { "name" : "tubular", "path" : "{package_path}/sounds/tubular.wav" },
             { "name" : "walk1", "path" : "{package_path}/sounds/walk1.wav" },
-            { "name" : "walk2", "path" : "{package_path}/sounds/walk2.wav" }
+            { "name" : "walk2", "path" : "{package_path}/sounds/walk2.wav" },
+            { "name" : "rain_20sec", "path" : "{package_path}/sounds/rain_20sec.wav" },
+            { "name" : "rain_21sec", "path" : "{package_path}/sounds/rain_21sec.wav" }
         ]
     }
 }
