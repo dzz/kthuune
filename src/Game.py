@@ -18,6 +18,9 @@ from .Fog import Fog
 
 class Game( BaseGame ):
 
+    god_buffer = BGL.framebuffer.from_screen()
+    god_shader = BGL.assets.get("KT-compositor/shader/god")
+
     paused = False
     floor_cache = {}
     area_name = None
@@ -142,12 +145,15 @@ class Game( BaseGame ):
         self.camera.set_player(self.player)
 
     def render(self):
-        self.background.camera = self.camera
-        self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
-        #with BGL.blendmode.alpha_over:
-        self.floor.render()
-        self.fog.camera = self.camera
-        self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real) 
+        with BGL.context.render_target( Game.god_buffer):
+            self.background.camera = self.camera
+            self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
+            #with BGL.blendmode.alpha_over:
+            self.floor.render()
+            self.fog.camera = self.camera
+            self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real) 
+
+        Game.god_buffer.render_processed( Game.god_shader )
         self.player.render_hud()
 
     def tick(self):
