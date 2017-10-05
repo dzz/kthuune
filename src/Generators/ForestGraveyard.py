@@ -6,6 +6,7 @@
 #### BREAKCORE TEMPOS
 #### SIEZURES
 #### DARK SOULS
+#### X FILES
 
 from random import uniform, choice
 from math import hypot
@@ -193,7 +194,9 @@ class SnapEnemy(Object):
         return True
 
     def die(self):
-        self.floor.objects.remove(self)
+        if self in self.floor.objects:
+            #hack
+            self.floor.objects.remove(self)
         if(self in self.floor.snap_enemies):
             self.floor.snap_enemies.remove(self)
         self.floor.create_object( SkullDeath( p = [ self.p[0], self.p[1] ] ) )
@@ -206,7 +209,7 @@ class SnapEnemy(Object):
 
         self.floor.create_object(Blood(p=[self.p[0],self.p[1]]))
         self.custom_die()
-        for x in range(0,55):
+        for x in range(0,35):
             spltr = SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14))
             spltr.color = [0.0,0.0,0.0,1.0]
             spltr.light_color = [ 0.0,1.0,0.0,1.0]
@@ -249,7 +252,7 @@ class SnapEnemy(Object):
         self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="{0}".format(attack_amt)))
         self.hp = self.hp - attack_amt
 
-        for x in range(0,15):
+        for x in range(0,11):
             spltr = SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14))
             spltr.color = [0.0,0.0,0.0,1.0]
             spltr.light_color = [ 0.0,1.0,0.0,1.0]
@@ -349,31 +352,34 @@ class vconf():
 class SplatterParticle(Object):
     def __init__(self,**kwargs):
         Object.__init__(self,**kwargs)
-        self.texture = ERangedMagic.arrow_texture
+        self.texture = choice(Blood.texture)
         self.buftarget = "popup"
         self.tick_type = Object.TickTypes.PURGING
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_radius = 5
+        self.light_radius = 15
         self.lifespan = 90
         self.light_color = [ 1.0,0.7,0.0,0.0 ]
         self.color = [1.0,0.5,0.5,1.0]
 
-        self.size = [ 2.4,2.4 ]
+        self.size = [ 2.8,2.8 ]
         self.snapshot_fields = [ 'p' ]
 
-        spd = 0.5 + uniform(0.2,0.4)
+        spd = 0.3 + uniform(0.2,0.8)
         self.vx = cos( self.rad )*spd
         self.vy = sin( self.rad )*spd
+        self.rad = uniform(-3.14,3.14)
         
     def tick(self):
-        self.light_radius*=0.9
+        self.color[3]*=uniform(0.98,0.999)
+        self.light_radius*=0.95
         self.vx*=0.9
         self.vy*=0.9
+        self.vy+=0.02
         self.p[0] = self.p[0] + self.vx 
         self.p[1] = self.p[1] + self.vy 
 
-        self.size[0]*=0.8
-        self.size[1]*=0.8
+        self.size[0]*=0.94
+        self.size[1]*=0.94
         self.lifespan = self.lifespan-1
         if(self.lifespan<0):
             self.floor.objects.remove(self)
@@ -395,7 +401,7 @@ class ERangedMagic(Object):
         self.size = [ 0.5,0.5 ]
         self.snapshot_fields = [ 'p' ]
 
-        spd = 0.4 + uniform(0.001, 0.01)
+        spd = 0.55 + uniform(0.001, 0.01)
         self.vx = cos( self.rad )*spd
         self.vy = sin( self.rad )*spd
         
@@ -458,6 +464,11 @@ class Acolyte(SnapEnemy):
     def custom_die(self):
         wf_spec = [ self.p[0], self.p[1], 15 ]
         self.floor.create_object( WormField( wf_spec = wf_spec) )
+        for enemy in self.floor.snap_enemies:
+            if enemy.snap_type == SnapEnemy.ENEMY:
+                if enemy.triggered:
+                    enemy.receive_snap_attack(True)
+
     def receive_snap_attack(self, was_crit):
         SnapEnemy.receive_snap_attack(self, was_crit)
         self.stimer = 0
@@ -490,7 +501,7 @@ class Acolyte(SnapEnemy):
         self.texture = Acolyte.textures[0]
         self.widx = int(uniform(0.0,40.0))
         self.size = [ 4, 4 ]
-        self.physics = { "radius" : 0.35, "mass"   : 0.0005, "friction" : 0.0 }
+        self.physics = { "radius" : 0.35, "mass"   : 0.0005, "friction" : 0.3 }
         #self.state = choice( [ Acolyte.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
         self.state = Acolyte.STATE_SEEKING_RANDOM
         self.stimer = 0
@@ -828,7 +839,7 @@ class Cleric(SnapEnemy):
         self.texture = Cleric.textures[0]
         self.widx = int(uniform(0.0,20.0))
         self.size = [ 3.5, 3.5 ]
-        self.physics = { "radius" : 0.35, "mass"   : 0.05, "friction" : 0.0 }
+        self.physics = { "radius" : 0.35, "mass"   : 0.0005, "friction" : 0.0 }
         #self.state = Skeline.STATE_SEEKING_RANDOM
         self.stimer = 0
         self.rvx = None
@@ -951,7 +962,7 @@ class Skeline(SnapEnemy):
         #self.state = Skeline.STATE_SEEKING_RANDOM
         self.stimer = 0
         self.rvx = None
-        self.speed = 3.2
+        self.speed = 3.8
         self.invert_seek = False
         self.flip_pxy = False
 
@@ -1072,8 +1083,8 @@ class Skeline(SnapEnemy):
         return True
 
     def pickTarget(self):
-        x = self.floor.player.p[0] - self.p[0]
-        y = self.floor.player.p[1] - self.p[1]
+        x = (self.floor.player.p[0] - self.p[0])+self.floor.player.v[0]
+        y = (self.floor.player.p[1] - self.p[1])+self.floor.player.v[1]
         rad = atan2(y,x)
         self.target_rad = rad
         
@@ -1163,7 +1174,7 @@ class Worm(SnapEnemy):
         BGL.assets.get("KT-forest/texture/worm0003"),
     ] 
     def customize(self):
-        self.triggered = True
+        self.triggered = False
         self.hp = 5 + choice(range(0,30))
         self.dead = False
         self.tick_type = Object.TickTypes.PURGING
@@ -1180,6 +1191,7 @@ class Worm(SnapEnemy):
         self.snap_type = SnapEnemy.ENEMY
         self.iframes = 0
         self.defense = 3
+        self.lifetime = 0
         
     def pick_target(self):
         rad = None
@@ -1213,6 +1225,9 @@ class Worm(SnapEnemy):
 
     def tick(self):
 
+        self.lifetime+=1
+        if(self.lifetime>10):
+            self.triggered = True
         if(self.floor.player.kill_success):
             return True
 
@@ -1314,7 +1329,7 @@ class WormField(Object):
         self.worms = []
 
     def tick(self):
-        if(len(self.worms)<10):
+        if(len(self.worms)<13):
             worm = Worm( p = [self.p[0],self.p[1] ] )
             self.worms.append(worm)
             self.floor.snap_enemies.append(worm)

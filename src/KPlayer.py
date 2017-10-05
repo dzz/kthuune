@@ -975,8 +975,11 @@ class KPlayer(Player):
                 self.set_state( KPlayer.STATE_DEFAULT )
 
         if(self.state == KPlayer.STATE_DODGING ):
-            self.v[0] = self.dv[0] * 4
-            self.v[1] = self.dv[1] * 4
+            self.v[0] += self.dv[0]*0.8
+            self.v[1] += self.dv[1]*0.8
+            
+            self.dv[0]*=0.6
+            self.dv[1]*=0.6
 
             if(self.sword.state is not Sword.STATE_IDLE):
                 self.set_state(KPlayer.STATE_DEFAULT)
