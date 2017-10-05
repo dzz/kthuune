@@ -355,7 +355,7 @@ class SplatterParticle(Object):
         self.texture = choice(Blood.texture)
         self.buftarget = "popup"
         self.tick_type = Object.TickTypes.PURGING
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_type = Object.LightTypes.NONE
         self.light_radius = 15
         self.lifespan = 90
         self.light_color = [ 1.0,0.7,0.0,0.0 ]
@@ -1061,8 +1061,8 @@ class Skeline(SnapEnemy):
             if(self.stimer==1):
                 KSounds.play(KSounds.charging_projectile)
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-            self.light_color = [9.0,0.4,0.1,1.0]
-            self.light_radius = uniform(30.0,50.0)
+            self.light_color = [1.0,0.4,0.1,1.0]
+            self.light_radius = uniform(10.0,20.0)
             self.v = [0.0,0.0]
             self.texture = Skeline.textures[2]
             self.floor.create_object( Flare( p = [ self.p[0], self.p[1] ] ) )
@@ -1634,11 +1634,11 @@ class TreeTop(Object):
             params["translation_world" ] = tw
             params["filter_color"] = list(self.draw_color)
 
-            dx = self.p[0] - self.floor.player.p[0]
-            dy = self.p[1] - self.floor.player.p[1]
+            dx = self.p[0] - self.floor.camera.p[0]
+            dy = self.p[1] - self.floor.camera.p[1]
             md = (dx*dx)+(dy*dy)
             impulse_a = self.draw_color[3]
-            if(md < 140):
+            if(md < 190):
                 impulse_a = 0.0
 
             self.last_a = (self.last_a * 0.9) + (impulse_a*0.1)

@@ -12,6 +12,7 @@ class DFRenderer( FloorRenderer ):
 
     def __init__(self,**kwargs):
         self.guppyRenderer = DFRenderer.GR
+        DFRenderer.lbtick = 0
         FloorRenderer.__init__(self,**kwargs)
 
     def create_compositing_buffers(self):
@@ -29,9 +30,11 @@ class DFRenderer( FloorRenderer ):
     def precompute_frame(self):
         """ Pre-render compositing """
 
+        DFRenderer.lbtick +=1
         self.photon_map.compute_next()
-        self.compute_vision_lightmap()
-        self.compute_dynamic_lightmap()
+        if(DFRenderer.lbtick%2==0):
+            self.compute_vision_lightmap()
+            self.compute_dynamic_lightmap()
 
         with BGL.context.render_target( self.shadow_buffer ):
             BGL.context.clear(1.0,1.0,1.0,1.0)

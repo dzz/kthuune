@@ -49,8 +49,8 @@ class DungeonCamera (Camera):
 
             pad = self.player.controllers.get_virtualized_pad( self.player.num )
 
-            aim_offset_x = pad.right_stick[0]*6
-            aim_offset_y = pad.right_stick[1]*6
+            aim_offset_x = pad.right_stick[0]*12
+            aim_offset_y = pad.right_stick[1]*12
 
             self.p[0] = (self.player.p[0]+aim_offset_x)* rate + ((1.0-rate)*self.p[0])
             self.p[1] = (self.player.p[1]+aim_offset_y)* rate + ((1.0-rate)*self.p[1])
