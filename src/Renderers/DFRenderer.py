@@ -21,7 +21,7 @@ class DFRenderer( FloorRenderer ):
         self.floor_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.light_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.object_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
-        self.canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
+        self.canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.1)
         self.hittable_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.5)
 
     def encode_player_lights( self ):

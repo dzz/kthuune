@@ -470,6 +470,8 @@ void main(void) {
     float ambiance = 0.5;
 
     vec4 LitObject = object_texel * (light_texel * exposure);
+
+    LitObject.a = object_texel.a;
     ///
     //vec4 LitFloor = ( (photon_texel * floor_texel * light_texel) * exposure) + (ambiance*(photon_texel+((clouds(inv_parallaxed_UV)+(light_texel*light_texel))*vision_texel)));
     ///

@@ -577,8 +577,8 @@ class KPlayer(Player):
         self.hurt_flash_timer = 0
         overrides =  {
             "light_type" : Object.LightTypes.DYNAMIC_SHADOWCASTER,
-            "light_radius" : 5.0,
-            "light_color" : [ 0.65,0.45,0.3,0.3],
+            "light_radius" : 25.0,
+            "light_color" : [ 1.0,0.7,0.5,1.0],
             "walk_tick" : 0,
             "z_index" : 1,
             "sword_swing" : 0,
@@ -1061,7 +1061,7 @@ class KPlayer(Player):
             self.v[1] = self.v[1]*0.8+delta[1]*0.2
 
             self.rad = atan2( self.v[1], self.v[0] )
-            self.light_radius = 15.0
+            self.light_radius = 25.0
             self.light_color = self.base_light_color
             impulse = uniform(5.0,35.0)
             self.light_radius = (self.light_radius*0.96) + (impulse*0.04)

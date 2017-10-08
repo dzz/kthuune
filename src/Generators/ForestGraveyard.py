@@ -334,7 +334,8 @@ class Prop(Object):
         p.size[1] = pd["h"]
         p.r = pd["r"]
 
-        p.buftarget="floor"
+        p.z_index = 1
+        p.buftarget="popup"
         return p
 
 
@@ -355,7 +356,7 @@ class SplatterParticle(Object):
         self.texture = choice(Blood.texture)
         self.buftarget = "popup"
         self.tick_type = Object.TickTypes.PURGING
-        self.light_type = Object.LightTypes.NONE
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
         self.light_radius = 15
         self.lifespan = 90
         self.light_color = [ 1.0,0.7,0.0,0.0 ]
