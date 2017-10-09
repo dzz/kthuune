@@ -57,7 +57,7 @@ class DFRenderer( FloorRenderer ):
                 with BGL.blendmode.alpha_over:
                     uniform_fade.apply_fadeout( 1.0 / 24.0 )
             else:
-                BGL.context.clear(0.0,0.0,0.0,0.0)
+                uniform_fade.apply_fadeout( 1.0 / 48.0 )
             with BGL.blendmode.add:
                 self.render_static_lightmap()
                 self.dynamic_lightmap.get_lightmap_framebuffer().render_processed( FloorRenderer.pixel_copy_shader )

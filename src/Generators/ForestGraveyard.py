@@ -209,13 +209,16 @@ class SnapEnemy(Object):
 
         self.floor.create_object(Blood(p=[self.p[0],self.p[1]]))
         self.custom_die()
-        for x in range(0,35):
+        for x in range(0,self.get_kill_particles()):
             spltr = SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14))
             spltr.color = [0.0,0.0,0.0,1.0]
             spltr.light_color = [ 0.0,1.0,0.0,1.0]
             spltr.size[0]*=uniform(1.0,1.5)
             self.floor.create_object(spltr)
 
+
+    def get_kill_particles(self):
+        return 25
 
     def parse(od,df):
         o = SnapEnemy( p = [ od["x"],od["y"] ] )
@@ -369,6 +372,7 @@ class SplatterParticle(Object):
         self.vx = cos( self.rad )*spd
         self.vy = sin( self.rad )*spd
         self.rad = uniform(-3.14,3.14)
+
         
     def tick(self):
         self.color[3]*=uniform(0.98,0.999)
@@ -451,7 +455,7 @@ class ERangedMagic(Object):
             self.floor.create_object( Splat( p = self.p, color=[1.0,0.0,0.0,1.0] ) )
             self.floor.objects.remove(self)
 
-            for x in range(0,35):
+            for x in range(0,25):
                 self.floor.create_object(SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14)))
             
             return False
@@ -1174,6 +1178,9 @@ class Worm(SnapEnemy):
         BGL.assets.get("KT-forest/texture/worm0002"),
         BGL.assets.get("KT-forest/texture/worm0003"),
     ] 
+    def get_kill_particles(self):
+        return 5
+
     def customize(self):
         self.triggered = False
         self.hp = 5 + choice(range(0,30))

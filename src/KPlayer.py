@@ -19,6 +19,40 @@ from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 from .KSounds import KSounds
 
 
+class HealthBubble(Object):
+    texture = BGL.assets.get("KT-player/texture/flare")
+    def __init__(self,**kwargs):
+        Object.__init__(self,**kwargs)
+        self.texture = HealthBubble.texture
+        self.buftarget = "popup"
+        self.tick_type = Object.TickTypes.PURGING
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_radius = 25
+        self.lifespan = 1390
+        self.light_color = [ 1.0,0.0,0.0,0.0 ]
+        self.color = [1.0,0.0,0.0,1.0]
+
+        self.size = [ 2.8,2.8 ]
+        self.snapshot_fields = [ 'p' ]
+
+        self.vx = uniform(-0.05,0.05)
+        self.vy = uniform(-0.1,-0.2)
+
+    def tick(self):
+        self.color[3]*=uniform(0.98,0.999)
+        self.light_radius*=0.99
+        self.vx*=0.99
+        self.p[0] = self.p[0] + self.vx 
+        self.p[1] = self.p[1] + self.vy 
+
+        #self.size[0]*=0.99
+        #self.size[1]*=0.99
+        self.lifespan = self.lifespan-1
+        if(self.lifespan<0):
+            self.floor.objects.remove(self)
+            return False
+        return True
+
 def ur1():
     return uniform(0.0,1.0)
 
@@ -269,7 +303,7 @@ class Sword(Object):
         if self.state == Sword.STATE_IDLE:
             self.stamina = min(self.stamina * 1.008,1.0)
             self.stimer = 0
-            if pad.button_down( btns.RIGHT_BUMPER ):
+            if pad.button_down( btns.RIGHT_BUMPER ) and False:
                 if self.stamina > 0.04:
                     self.stamina = self.stamina * 0.83
                     self.state = Sword.STATE_CHARGING
@@ -384,6 +418,10 @@ class KPlayer(Player):
                 return
 
     def consume_hp(self):
+
+        self.ability_timeout = 65
+        self.active_ability = KPlayer.ABILITY_HP
+
         KSounds.play(KSounds.health)
         self.hp = self.hp + 15
         if(self.hp>100):
@@ -546,6 +584,8 @@ class KPlayer(Player):
             self.link_count = 0
 
         
+    ABILITY_HP = 0
+
     def set_state(self,state):
         self.stimer = 0
         self.state = state
@@ -575,6 +615,10 @@ class KPlayer(Player):
         self.state = KPlayer.STATE_DEFAULT
         self.last_link = None
         self.hurt_flash_timer = 0
+
+        self.ability_timeout = 0
+        self.active_ability = -1
+
         overrides =  {
             "light_type" : Object.LightTypes.DYNAMIC_SHADOWCASTER,
             "light_radius" : 25.0,
@@ -892,8 +936,20 @@ class KPlayer(Player):
         if(inv is "hp_vial"):
             self.consume_hp()
 
+    def handle_ability(self):
+        self.floor.create_object( HealthBubble( p = [ self.p[0], self.p[1]]))
+        self.v[0] *= 0.8
+        self.v[1] *= 0.8
+        self.floor.add_fog(self, 2.0)
+        pass
+
     def tick(self):
 
+
+        if(self.ability_timeout>0):
+            self.ability_timeout -= 1
+            self.handle_ability()
+            return True
 
         self.hittable_hint_real = (self.hittable_hint_real*0.99)+ (self.hittable_hint_impulse*0.01)
         self.hittable_hint_impulse *= 0.98

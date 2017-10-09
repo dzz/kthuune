@@ -66,6 +66,15 @@ class Game( BaseGame ):
         floor.game = self
         return floor
 
+    def build_area_oort_cloud(self):
+        area_raw = BGL.assets.get("KT-forest/textfile/oort_cloud")
+        area_def = get_area_data( area_raw )
+
+        floor = DungeonFloor( tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
+        floor.game = self
+        return floor
+
+
     ###############
 
     def load_floor( self, key ):
@@ -86,6 +95,8 @@ class Game( BaseGame ):
                 Game.floor_cache[key] = self.build_area_arena()
             if key == "doortest":
                 Game.floor_cache[key] = self.build_area_doortest()
+            if key == "oort_cloud":
+                Game.floor_cache[key] = self.build_area_oort_cloud()
         else:
             cache_hit = True
 
@@ -139,7 +150,7 @@ class Game( BaseGame ):
         ## self.load_floor("arena")
         ## self.load_floor("docks")
 
-        self.floor = self.create_tickable(self.load_floor("doortest"))
+        self.floor = self.create_tickable(self.load_floor("oort_cloud"))
 
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
         self.camera.set_player(self.player)
