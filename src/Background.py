@@ -9,14 +9,14 @@ class Background:
         Background.primitive.render_shaded( Background.shader, {
             "bg_texture" : Background.sky_texture,
             "camera_position" : self.camera.p,
-            "parallax" : [ 0.005 ],
+            "parallax" : [ 0.005/4 ],
             "vision_tex" : vision_tex
         } )
         with BGL.blendmode.alpha_over:
             Background.primitive.render_shaded( Background.shader, {
                 "bg_texture" : Background.bg_texture,
                 "camera_position" : self.camera.p,
-                "parallax" : [ 0.01 ],
+                "parallax" : [ 0.01/4 ],
                 "vision_tex" : vision_tex
             } )
         return True

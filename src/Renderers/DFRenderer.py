@@ -9,6 +9,7 @@ class DFRenderer( FloorRenderer ):
 
     GR = GuppyRenderer()
     HittableShader = BGL.assets.get("KT-compositor/shader/hittables")
+    canopy_shader = BGL.assets.get("KT-compositor/shader/canopy")
 
     def __init__(self,**kwargs):
         self.guppyRenderer = DFRenderer.GR
@@ -18,10 +19,10 @@ class DFRenderer( FloorRenderer ):
     def create_compositing_buffers(self):
         self.photon_buffer = BGL.framebuffer.from_screen()
         self.shadow_buffer = BGL.framebuffer.from_screen()
-        self.floor_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
+        self.floor_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.5)
         self.light_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.object_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
-        self.canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.1)
+        self.canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.hittable_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.5)
 
     def encode_player_lights( self ):
@@ -119,8 +120,12 @@ class DFRenderer( FloorRenderer ):
                 "target_width" : Platform.video.get_screen_width(),
                 "target_height" : Platform.video.get_screen_height() 
             })
+        with BGL.context.render_target( self.canopy_buffer):
+            BGL.context.clear(1.0,1.0,1.0,0.0)
+            with BGL.blendmode.alpha_over:
+                self.render_objects("canopy")
         with BGL.blendmode.alpha_over:
-            self.render_objects("canopy")
+            self.canopy_buffer.render_processed(DFRenderer.canopy_shader, { "light_buffer" : self.light_buffer })
 
     def configure_vision_lightmapper(self):
         class FadingLightMapper( LightMapper ):

@@ -13,6 +13,11 @@
                 "pixel_program" : "{package_path}/hittables"
             },
             {
+                "name" : "canopy",
+                "vertex_program" : "{beagle-2d}/vertex/no_transform",
+                "pixel_program" : "{package_path}/canopy"
+            },
+            {
                 "name" : "god",
                 "vertex_program" : "{beagle-2d}/vertex/no_transform",
                 "pixel_program" : "{package_path}/god"
