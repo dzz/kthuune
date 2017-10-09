@@ -23,6 +23,8 @@ from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 
 from ..KSounds import KSounds
 
+from ..GeneratorOptions import GeneratorOptions
+
 class Blood(Object):
     texture = [
         BGL.assets.get("KT-forest/texture/blood0000"),
@@ -1592,9 +1594,12 @@ class Fire(Object):
 
 class TreeTop(Object):
         def __init__(self,**kwargs):
+
+            tex_options =  GeneratorOptions.TreeTopTextures
+
             overrides = {
                     "num" : 0,
-                    "texture" : choice( [ BGL.assets.get("KT-forest/texture/treetop2"), BGL.assets.get('KT-forest/texture/treetop') ] ),
+                    "texture" : choice(tex_options),
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
                     'size' : [ 5.0,5.0],
                     'rad' : uniform(-3.14,3.14),
@@ -1610,7 +1615,7 @@ class TreeTop(Object):
             Object.__init__(self,**overrides)
             self.t = 0
             self.base_size = [ self.size[0], self.size[1] ]
-            self.draw_color = [0.5,uniform(0.6,1.0),0.5,0.6]
+            self.draw_color = [0.9,uniform(0.8,1.0),0.9,uniform(0.6,0.9)]
             self.last_a = self.draw_color[3]
             #if(self.texture == BGL.assets.get("KT-forest/texture/treetop2")):
             #    self.z_index = self.z_index + 1
@@ -1735,7 +1740,7 @@ class TreeShadow(Object):
             tt = kwargs['TreeTop']
             overrides = {
                     "num" : 0,
-                    "texture" : BGL.assets.get("KT-forest/texture/treetop"),
+                    "texture" : choice( GeneratorOptions.TreeShadowTextures ),
                     'tick_type' : Object.TickTypes.TICK_FOREVER,
                     'size' : [ self.scale*tt.size[0],self.scale*tt.size[1]],
                     'rad' : tt.rad,

@@ -2,6 +2,10 @@
     "preload": true,
     "resources" : {
         "texture" : [
+            { "name" : "crystal_1", "filename" : "{package_path}/crystal_1.png", "filtered" : true },
+            { "name" : "crystal_2", "filename" : "{package_path}/crystal_2.png", "filtered" : true },
+            { "name" : "crystal_3", "filename" : "{package_path}/crystal_3.png", "filtered" : true },
+            { "name" : "crystal_4", "filename" : "{package_path}/crystal_4.png", "filtered" : true },
             { "name" : "treetop", "filename" : "{package_path}/treetop.png", "filtered" : true },
             { "name" : "treetop2", "filename" : "{package_path}/treetop2.png", "filtered" : true },
             { "name" : "treeroots", "filename" : "{package_path}/roots.png", "filtered" : false },

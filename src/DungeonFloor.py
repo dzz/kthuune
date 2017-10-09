@@ -39,6 +39,8 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "god_shader" : None,
+            "fog_level_base" : 0,
             "freeze_frames" : 0,
             "freeze_delay" : 0,
             "doors" : [],
@@ -150,6 +152,9 @@ class DungeonFloor( Floor ):
         self.sound_tick = 0
         self.recursive_snapper = None
         Floor.__init__(self,**floor_configuration)
+
+    def tick_god_shader(self):
+        pass
 
     def reattach_player(self):
         self.player.aiming_beam = self.aiming_beam
@@ -273,3 +278,6 @@ class DungeonFloor( Floor ):
     def get_light_occluders(self):
         return self.light_occluders
 
+
+def get_DF():
+    return DungeonFloor
