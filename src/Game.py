@@ -148,6 +148,7 @@ class Game( BaseGame ):
 
     def initialize(self):
 
+        self.prebuffer = 0
         self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.28 ) )
         self.controllers    = self.create_tickable( Controllers() )
         self.player         = self.create_tickable( self.create_player() )
@@ -185,6 +186,10 @@ class Game( BaseGame ):
         self.player.render_hud()
 
     def tick(self):
+
+        if(self.prebuffer < 30):
+            self.prebuffer += 1
+            return
 
         if(self.floor.freeze_delay < 0):
             if(self.floor.freeze_frames > 0):

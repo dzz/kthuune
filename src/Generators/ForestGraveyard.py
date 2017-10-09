@@ -1652,7 +1652,7 @@ class TreeTop(Object):
             md = (dx*dx)+(dy*dy)
             impulse_a = self.draw_color[3]
             if(md < 190):
-                impulse_a = 0.0
+                impulse_a = 0.1
 
             self.last_a = (self.last_a * 0.95) + (impulse_a*0.05)
             params["filter_color"][3] = self.last_a

@@ -41,6 +41,11 @@
                 "name" : "fog",
                 "vertex_program" : "{beagle-2d}/vertex/no_transform",
                 "pixel_program" : "{package_path}/fog"
+            },
+            {
+                "name" : "title_card",
+                "vertex_program" : "{beagle-2d}/vertex/no_transform",
+                "pixel_program" : "{package_path}/title_card"
             }
         ]
     }

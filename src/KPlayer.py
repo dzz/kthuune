@@ -17,6 +17,7 @@ from math import floor,pi,atan2,sin, hypot
 from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 
 from .KSounds import KSounds
+from .TitleCard import TitleCard
 
 
 class HealthBubble(Object):
@@ -701,6 +702,8 @@ class KPlayer(Player):
         self.hud_message = ""
         self.critical_hit_display_counter = 0
 
+        self.title_card = TitleCard()
+
     def set_combat_vars(self):
         self.hp = 100
         self.attack_str = 40
@@ -762,6 +765,9 @@ class KPlayer(Player):
         #self.swordcard.render()
         #self.wandcard.render()
 
+        with BGL.blendmode.alpha_over:
+            self.title_card.render()
+
 
 
     def customize(self):
@@ -815,6 +821,9 @@ class KPlayer(Player):
         
 
     def determine_texture(self):
+
+        if self.title_card.displaying():
+            return KPlayer.textures[21]
 
         modamt = 1
         if self.dash_flash:
@@ -945,6 +954,8 @@ class KPlayer(Player):
 
     def tick(self):
 
+
+        self.title_card.tick()
 
         if(self.ability_timeout>0):
             self.ability_timeout -= 1
