@@ -137,6 +137,18 @@ class FactoryLight(Object):
             self.light_radius = 25.
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [ 0.5, 1.0,0.8,1.0 ]
+        if self.factory_def["meta"]["class"] == "shiplight":
+            self.light_radius = 45.
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_color = [ 1.0, 1.0,1.0,1.0 ]
+        if self.factory_def["meta"]["class"] == "medium_oort_guider":
+            self.light_radius = 40.
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_color = [ 1.0, 0.5,1.0,0.7 ]
+        if self.factory_def["meta"]["class"] == "large_oort_guider":
+            self.light_radius = 70.
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_color = [ 1.0, 1.0,1.0,0.7 ]
 
 class Door(Object):
     def customize(self):

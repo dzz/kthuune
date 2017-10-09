@@ -14210,22 +14210,6 @@ False
 True
 False
 LINE
--148
--172
--148
--172
-False
-False
-True
-LINE
--148
--172
--164
--160
-False
-False
-True
-LINE
 -164
 -160
 -158
@@ -14585,11 +14569,143 @@ LINE
 False
 False
 True
+LINE
+-160
+-176
+-160
+-176
+False
+False
+True
+LINE
+-160
+-176
+-140
+-188
+False
+False
+True
+LINE
+-140
+-188
+-112
+-180
+False
+False
+True
+LINE
+-46
+-86
+-46
+-86
+True
+True
+False
 OBJECT
 player_start
 -136
 -166
 {}
+OBJECT
+light
+-136
+-174
+{"class" : "shiplight"}
+OBJECT
+light
+-124
+-132
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+-46
+-86
+{ "class" : "large_oort_gider" }
+OBJECT
+light
+-76
+-120
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+-52
+-60
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+-20
+-44
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+-16
+-98
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+18
+-36
+{ "class" : "large_oort_gider" }
+OBJECT
+light
+0
+-6
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+-76
+8
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+-28
+40
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+20
+58
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+26
+126
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+-20
+124
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+-40
+102
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+12
+82
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+62
+62
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+78
+40
+{ "class" : "medium_oort_gider" }
+OBJECT
+light
+-48
+16
+{ "class" : "large_oort_gider" }
+OBJECT
+light
+34
+98
+{ "class" : "large_oort_gider" }
 PROP
 ship_idea3
 -136
