@@ -621,7 +621,7 @@ class KPlayer(Player):
         self.active_ability = -1
 
         overrides =  {
-            "light_type" : Object.LightTypes.DYNAMIC_SHADOWCASTER,
+            "light_type" : Object.LightTypes.NONE,
             "light_radius" : 25.0,
             "light_color" : [ 1.0,0.7,0.5,1.0],
             "walk_tick" : 0,
