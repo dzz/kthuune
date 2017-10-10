@@ -25,6 +25,94 @@ from ..KSounds import KSounds
 
 from ..GeneratorOptions import GeneratorOptions
 
+class SpeechBubble(Object):
+    instance = None
+
+    def customize(self):
+        self.buffer = BGL.framebuffer.from_dims( 8*20, 8*3)
+        self.texture = self.buffer
+        self.buftarget = "hud"
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.size = [ 8,-1.2 ]
+        self.visible = False
+        self.z_index = 9000
+        self.script = None
+        #self.render_string("Habooboo")
+
+        self.current_string = None
+        self.current_string_timer = 0
+        self.current_string_char = 0
+        self.current_char_timer = 7
+
+        self.script_queue = []
+        
+    def render_string(self, string):
+        self.buffer = BGL.framebuffer.from_dims( 8*len(string) + 2, 10, filtered=True )
+        self.texture = self.buffer
+        self.size = [ 0.3*len(string),-0.5 ]
+        with BGL.context.render_target( self.buffer ):
+            BGL.context.clear( 0.0,0.0,0.0,1.0)
+            with BGL.blendmode.alpha_over:
+                BGL.lotext.render_text_pixels(string,1,1,[ 1.0,0.5,0.8 ])
+
+    def set_script(self,script, p):
+
+        if(self.script is None):
+            self.script = script
+            self.current_string = script[0]
+            self.current_string_timer = 0
+
+            self.p[0] = p[0]
+            self.p[1] = p[1] + 5
+            self.visible = True
+            #self.message = msg
+            #self.lifetime = 0
+
+    
+    def next_char(self):
+        print(self.current_string_char)
+        if(self.current_string):
+            if(self.current_string_char<=len(self.current_string)):
+                renderable_string = self.current_string[0:self.current_string_char]
+                self.render_string( renderable_string )
+                self.current_string_char+=1
+                if(len(renderable_string)>=1):
+                    tchar = renderable_string[-1]
+                    if tchar == ",":
+                        self.current_char_timer = 6
+                    elif tchar == "?":
+                        self.current_char_timer = 8
+                    elif tchar in [".","!",":"]:
+                        self.current_char_timer = 11
+                    else:
+                        self.current_char_timer = 4
+            else:
+                self.current_string_char = 0
+                self.current_char_timer = 2*len(self.current_string)
+                if(len(self.script)>1):
+                    self.current_string = self.script[1]
+                    self.script = self.script[1:] 
+                else:
+                    self.script = None
+                    #self.visible = False
+
+
+    def tick(self):
+        if(self.script):
+            self.current_string_timer +=1
+            if(self.current_string_timer > self.current_char_timer):
+                self.current_string_timer = 0
+                self.next_char()
+        else:
+            if(self.current_string_timer > self.current_char_timer):
+                self.visible = False
+                with BGL.context.render_target( self.buffer ):
+                    BGL.context.clear( 0.0,0.0,0.0,0.0)
+
+        #if(self.script):
+        #    self.current_script_time += 1
+        #pass            
+
 class Blood(Object):
     texture = [
         BGL.assets.get("KT-forest/texture/blood0000"),
@@ -142,11 +230,11 @@ class FactoryLight(Object):
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [ 1.0, 1.0,1.0,1.0 ]
         if self.factory_def["meta"]["class"] == "medium_oort_guider":
-            self.light_radius = 30.
+            self.light_radius = 15.
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [ 1.0, 0.5,1.0,0.7 ]
         if self.factory_def["meta"]["class"] == "large_oort_guider":
-            self.light_radius = 50.
+            self.light_radius = 30.
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [ 1.0, 1.0,1.0,0.7 ]
         if self.factory_def["meta"]["class"] == "oort_level_guider":
@@ -377,7 +465,9 @@ class SplatterParticle(Object):
         self.texture = choice(Blood.texture)
         self.buftarget = "popup"
         self.tick_type = Object.TickTypes.PURGING
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+
+        
+        self.light_type = Object.LightTypes.NONE
         self.light_radius = 15
         self.lifespan = 90
         self.light_color = [ 1.0,0.7,0.0,0.0 ]
@@ -1365,30 +1455,38 @@ class WormField(Object):
 
 
 class Elder(Object):
-    #texture = BGL.assets.get('KT-player/texture/elder0000')
-    texture = BGL.assets.get('KT-forest/texture/cave_entrance')
+    texture = BGL.assets.get('KT-player/texture/elder0000')
+    #texture = BGL.assets.get('KT-forest/texture/cave_entrance')
+
+    def parse(od,df):
+        o = Elder( p = [ od["x"], od["y"] ] )
+        return o 
 
     def customize(self):
         self.texture = Elder.texture
         #self.buftarget = "popup"
-        self.buftarget = "floor"
-        self.size =  [ 20.0, 20.0 ]
-        self.light_type = Object.LightTypes.STATIC_SHADOWCASTER
-        self.light_color =  [ 0.0,0.0,1.0,1.0]
-        #self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
+        self.buftarget = "popup"
+        self.size =  [ 6.0, 6.0 ]
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_color =  [ 1.0,0.4,0.4,1.0]
+        self._t = 0.0 
+        self.physics = { "radius" : 2.0, "mass"   : 100.0, "friction" : 0.0 } 
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.z_index = 1
 
     def tick(self):
+        self._t += 0.01
+        self.light_radius = (sin(self._t)*85)+110
         dx = self.p[0] - self.floor.player.p[0]
         dy = self.p[1] - self.floor.player.p[1]
 
         dst = (dx*dx+dy*dy)
 
         if(dst<30):
-            self.floor.player.set_hud_message("{x} => talk")
-            if self.floor.player.get_pad().button_down( BGL.gamepads.buttons.X ):
-                pass
+            SpeechBubble.instance.set_script(["'Oh. It's you...'","'the Dead King'", "'In search of your soul? ...'","'... what IS that contraption you've arrived on?'","'Do you even remember how this all works?'", "'No matter.'", "'Find me around,'","'I'll explain it all to you.'"],  self.p)
+        #    self.floor.player.set_hud_message("HELLO I TALK")
+        #    if self.floor.player.get_pad().button_down( BGL.gamepads.buttons.X ):
+        #        pass
 
 class Totem(Object):
     texture = BGL.assets.get('KT-forest/texture/totem')
@@ -1663,14 +1761,14 @@ class TreeTop(Object):
             params["translation_world" ] = tw
             params["filter_color"] = list(self.draw_color)
 
-            dx = self.p[0] - self.floor.camera.p[0]
-            dy = self.p[1] - self.floor.camera.p[1]
+            dx = self.p[0] - (self.floor.camera.p[0]+(self.floor.player.v[0]*3))
+            dy = self.p[1] - (self.floor.camera.p[1]+(self.floor.player.v[1]*3))
             md = (dx*dx)+(dy*dy)
             impulse_a = self.draw_color[3]
-            if(md < 190):
+            if(md < 250):
                 impulse_a = 0.1
 
-            self.last_a = (self.last_a * 0.95) + (impulse_a*0.05)
+            self.last_a = (self.last_a * 0.98) + (impulse_a*0.02)
             params["filter_color"][3] = self.last_a
                 
             return params
@@ -1813,6 +1911,7 @@ class ForestGraveyard():
 
     def process_area_def( self, df, ad ):
 
+        SpeechBubble.instance = SpeechBubble()
         self.tree_pts = [ [-10,-10] ]
         self.guider_pts = [ [10,10] ]
         ######################################
@@ -1841,6 +1940,7 @@ class ForestGraveyard():
         self.ad = ad
         self.generate_tiledata(df)
         df.area_switches = []
+        self.objects.append(SpeechBubble.instance)
         for pd in ad["prop_defs"]:
             self.objects.append( Prop.parse(pd) )
 
@@ -1900,6 +2000,9 @@ class ForestGraveyard():
 
             if od["key"] in [ "stork" ]:
                 self.objects.append(Stork.parse(od,df ))
+            
+            if od["key"] in ["elder" ]:
+                self.objects.append(Elder.parse(od,df))
 
 
 

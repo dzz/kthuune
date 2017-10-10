@@ -19,7 +19,7 @@ class DFRenderer( FloorRenderer ):
     def create_compositing_buffers(self):
         self.photon_buffer = BGL.framebuffer.from_screen()
         self.shadow_buffer = BGL.framebuffer.from_screen()
-        self.floor_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.5)
+        self.floor_buffer = BGL.framebuffer.from_screen(filtered=False, scale = 2.0)
         self.light_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.object_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
@@ -31,10 +31,10 @@ class DFRenderer( FloorRenderer ):
     def precompute_frame(self):
         """ Pre-render compositing """
 
+        self.compute_vision_lightmap()
         DFRenderer.lbtick +=1
         self.photon_map.compute_next()
         if(DFRenderer.lbtick%2==0):
-            self.compute_vision_lightmap()
             self.compute_dynamic_lightmap()
 
         with BGL.context.render_target( self.shadow_buffer ):

@@ -76,13 +76,14 @@ class PlayerPhantom(Object):
         self.z_index = 900
         self.tick_type = Object.TickTypes.PURGING
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_radius = 8.0
+        self.light_radius = 20.0
         self.light_color = [ uniform(0.1,0.4),uniform(0.0,0.2),uniform(0.7,1.0),1.0 ]
         self.animation_counter = 0
         self.size = [ 2.5,2.5]
 
     
     def tick(self):
+        self.light_radius *= 0.9
         self.animation_counter = self.animation_counter + 1
         if(self.animation_counter-self.animation_threshold > 12 ):
             self.floor.objects.remove(self)
