@@ -27,8 +27,11 @@ class HealthBubble(Object):
         self.texture = HealthBubble.texture
         self.buftarget = "popup"
         self.tick_type = Object.TickTypes.PURGING
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_radius = 25
+        self.light_type = Object.LightTypes.NONE
+
+        if(uniform(0.0,1.0)>0.8):
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_radius = 5
         self.lifespan = 1390
         self.light_color = [ 1.0,0.0,0.0,0.0 ]
         self.color = [1.0,0.0,0.0,1.0]
@@ -800,6 +803,8 @@ class KPlayer(Player):
 
         self.snap_animation_buffer = 0
         self.display_p = [0.0,0.0]
+
+        self.run_stamina = 100.0
     
     def link_floor(self):
         self.floor.create_object( self.sword )
@@ -947,7 +952,8 @@ class KPlayer(Player):
             self.consume_hp()
 
     def handle_ability(self):
-        self.floor.create_object( HealthBubble( p = [ self.p[0], self.p[1]]))
+        if(uniform(0.0,1.0)>0.8):
+            self.floor.create_object( HealthBubble( p = [ self.p[0], self.p[1]]))
         self.v[0] *= 0.8
         self.v[1] *= 0.8
         self.floor.add_fog(self, 2.0)
@@ -1043,8 +1049,8 @@ class KPlayer(Player):
                 self.set_state( KPlayer.STATE_DEFAULT )
 
         if(self.state == KPlayer.STATE_DODGING ):
-            self.v[0] += self.dv[0]*0.8
-            self.v[1] += self.dv[1]*0.8
+            self.v[0] += self.dv[0]*1.8
+            self.v[1] += self.dv[1]*1.8
             
             self.dv[0]*=0.6
             self.dv[1]*=0.6
@@ -1094,7 +1100,21 @@ class KPlayer(Player):
                     
 
 
+                
+
             calc_speed = self.speed
+
+            if(pad.button_down( BGL.gamepads.buttons.RIGHT_BUMPER)):
+                if(self.run_stamina>0.0):
+                    self.run_stamina -= 0.5
+                    rs1 = self.run_stamina/100.0
+                    rs2 = rs1*rs1;
+                    mod1 = 0.5 * rs1 
+                    mod2 = 1.0 * rs2
+                    calc_speed *= 1.0+(mod1+mod2)
+            else:
+                if(self.run_stamina<100.0):
+                    self.run_stamina += 1.0
 
             self.dash_flash = False
             if(self.sword.state == Sword.STATE_CHARGING):
