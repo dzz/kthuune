@@ -212,7 +212,7 @@ class SwordCard(Card):
     def get_shader_params(self):
 
         return {
-            "statusamt" : [ self.player.sword.stamina ],
+            "statusamt" : [ self.player.run_stamina/100.0 ],
             "statuscolor" : [ 0.0,1.0,0.0,1.0 ],
             "tick" : [self.player.cardtick+10.0],
             "texBuffer"            : SwordCard.textures[int(self.fridx/90)],
@@ -766,7 +766,7 @@ class KPlayer(Player):
             if x is not self.sel_invslot:
                 PlayerInvSlot.render(x, self.inventory[x], False, x == self.active_invslot)
         PlayerInvSlot.render(self.sel_invslot, self.inventory[self.sel_invslot], True, self.sel_invslot == self.active_invslot)
-        #self.swordcard.render()
+        self.swordcard.render()
         #self.wandcard.render()
 
         with BGL.blendmode.alpha_over:
@@ -805,6 +805,7 @@ class KPlayer(Player):
         self.display_p = [0.0,0.0]
 
         self.run_stamina = 100.0
+        self.stamina_recharge_buffer = 0.0
     
     def link_floor(self):
         self.floor.create_object( self.sword )
@@ -1106,6 +1107,7 @@ class KPlayer(Player):
 
             if(pad.button_down( BGL.gamepads.buttons.RIGHT_BUMPER)):
                 if(self.run_stamina>0.0):
+                    self.stamina_recharge_buffer = 10.0
                     self.run_stamina -= 0.5
                     rs1 = self.run_stamina/100.0
                     rs2 = rs1*rs1;
@@ -1113,8 +1115,10 @@ class KPlayer(Player):
                     mod2 = 1.0 * rs2
                     calc_speed *= 1.0+(mod1+mod2)
             else:
-                if(self.run_stamina<100.0):
-                    self.run_stamina += 1.0
+                self.stamina_recharge_buffer -= 0.2
+                if(self.stamina_recharge_buffer<0.0):
+                    if(self.run_stamina<100.0):
+                        self.run_stamina += 1.0
 
             self.dash_flash = False
             if(self.sword.state == Sword.STATE_CHARGING):
