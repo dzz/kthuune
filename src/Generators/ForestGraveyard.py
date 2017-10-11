@@ -1490,7 +1490,7 @@ class Elder(Object):
         dst = (dx*dx+dy*dy)
 
         if(dst<30):
-            SpeechBubble.instance.set_script(["'Oh. It's you...'","'the Dead King'", "'In search of your soul? ...'","'... what IS that contraption you've arrived on?'","'Do you even remember how this all works?'", "'No matter.'", "'Find me around,'","'I'll explain it all to you.'"],  self.p)
+            SpeechBubble.instance.set_script(["Oh, it's you.", "Did you know that I talk?", "Yup... I talk.", "I write my text on the floor here, see?", "It's been... a while...","since I met youuuuuu","Ok bye."],  self.p)
         ###    self.floor.player.set_hud_message("HELLO I TALK")
         ###    if self.floor.player.get_pad().button_down( BGL.gamepads.buttons.X ):
         ###        pass
