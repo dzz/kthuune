@@ -97,7 +97,12 @@
             { "name" : "rain_20sec", "path" : "{package_path}/sounds/rain_20sec.wav" },
             { "name" : "rain_21sec", "path" : "{package_path}/sounds/rain_21sec.wav" },
             { "name" : "cleric_charge", "path" : "{package_path}/sounds/cleric_charge.wav" },
-            { "name" : "cleric_triggered", "path" : "{package_path}/sounds/cleric_triggered.wav" }
+            { "name" : "cleric_triggered", "path" : "{package_path}/sounds/cleric_triggered.wav" },
+            { "name" : "tkey1", "path" : "{package_path}/sounds/tkey1.wav" },
+            { "name" : "tkey2", "path" : "{package_path}/sounds/tkey2.wav" },
+            { "name" : "tkey3", "path" : "{package_path}/sounds/tkey3.wav" },
+            { "name" : "tkey4", "path" : "{package_path}/sounds/tkey4.wav" },
+            { "name" : "treturn", "path" : "{package_path}/sounds/treturn.wav" }
         ]
     }
 }

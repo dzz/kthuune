@@ -27,11 +27,17 @@ from ..GeneratorOptions import GeneratorOptions
 
 class SpeechBubble(Object):
     instance = None
+    MODE_PERSISTANT_TRIGGERED = 1
 
     def customize(self):
+        self.mode = 0
+        self.trigger_dist = 0
+        self.triggered = False
+        self.trigger_script = None
+
         self.buffer = BGL.framebuffer.from_dims( 8*20, 8*3)
         self.texture = self.buffer
-        self.buftarget = "hud"
+        self.buftarget = "floor"
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.size = [ 8,-1.2 ]
         self.visible = False
@@ -47,9 +53,9 @@ class SpeechBubble(Object):
         self.script_queue = []
         
     def render_string(self, string):
-        self.buffer = BGL.framebuffer.from_dims( 8*len(string) + 2, 10, filtered=True )
+        self.buffer = BGL.framebuffer.from_dims( 8*len(string) + 2, 10, filtered=False )
         self.texture = self.buffer
-        self.size = [ 0.3*len(string),-0.5 ]
+        self.size = [ 0.5*len(string),-0.8 ]
         with BGL.context.render_target( self.buffer ):
             BGL.context.clear( 0.0,0.0,0.0,1.0)
             with BGL.blendmode.alpha_over:
@@ -70,24 +76,25 @@ class SpeechBubble(Object):
 
     
     def next_char(self):
-        print(self.current_string_char)
         if(self.current_string):
             if(self.current_string_char<=len(self.current_string)):
+                KSounds.play(choice(KSounds.typewriter_keys))
                 renderable_string = self.current_string[0:self.current_string_char]
                 self.render_string( renderable_string )
                 self.current_string_char+=1
                 if(len(renderable_string)>=1):
                     tchar = renderable_string[-1]
                     if tchar == ",":
-                        self.current_char_timer = 6
+                        self.current_char_timer = choice([6,7])
                     elif tchar == "?":
-                        self.current_char_timer = 8
+                        self.current_char_timer = choice([8,9])
                     elif tchar in [".","!",":"]:
-                        self.current_char_timer = 11
+                        self.current_char_timer = choice([11,12])
                     else:
-                        self.current_char_timer = 4
+                        self.current_char_timer = choice([4,5,6])
             else:
                 self.current_string_char = 0
+                KSounds.play(KSounds.typewriter_return)
                 self.current_char_timer = 2*len(self.current_string)
                 if(len(self.script)>1):
                     self.current_string = self.script[1]
@@ -1484,9 +1491,9 @@ class Elder(Object):
 
         if(dst<30):
             SpeechBubble.instance.set_script(["'Oh. It's you...'","'the Dead King'", "'In search of your soul? ...'","'... what IS that contraption you've arrived on?'","'Do you even remember how this all works?'", "'No matter.'", "'Find me around,'","'I'll explain it all to you.'"],  self.p)
-        #    self.floor.player.set_hud_message("HELLO I TALK")
-        #    if self.floor.player.get_pad().button_down( BGL.gamepads.buttons.X ):
-        #        pass
+        ###    self.floor.player.set_hud_message("HELLO I TALK")
+        ###    if self.floor.player.get_pad().button_down( BGL.gamepads.buttons.X ):
+        ###        pass
 
 class Totem(Object):
     texture = BGL.assets.get('KT-forest/texture/totem')

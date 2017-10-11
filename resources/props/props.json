@@ -6,7 +6,8 @@
             { "name" : "staircase", "filename" : "{package_path}/staircase.png", "filtered" : false },
             { "name" : "entryfloor", "filename" : "{package_path}/entryfloor.png", "filtered" : false },
             { "name" : "docks", "filename" : "{package_path}/docks.png", "filtered" : false },
-            { "name" : "ship_idea3", "filename" : "{package_path}/ship_idea3.png", "filtered" : false }
+            { "name" : "ship_idea3", "filename" : "{package_path}/ship_idea3.png", "filtered" : false },
+            { "name" : "teleporter0000", "filename" : "{package_path}/teleporter0000.png", "filtered" : false }
         ]
     }
 }

@@ -32,6 +32,14 @@ class KSounds:
     cleric_charge = audio.baudy_load_sound(BGL.assets.get("KT-player/path/cleric_charge")) 
     cleric_triggered = audio.baudy_load_sound(BGL.assets.get("KT-player/path/cleric_triggered")) 
 
+    typewriter_keys = [
+        audio.baudy_load_sound(BGL.assets.get("KT-player/path/tkey1")) ,
+        audio.baudy_load_sound(BGL.assets.get("KT-player/path/tkey2")) ,
+        audio.baudy_load_sound(BGL.assets.get("KT-player/path/tkey3")) ,
+        audio.baudy_load_sound(BGL.assets.get("KT-player/path/tkey4")) 
+    ]
+    typewriter_return = audio.baudy_load_sound(BGL.assets.get("KT-player/path/treturn")) 
+
     def play(sound_id):
         audio.baudy_play_sound(sound_id)
 
