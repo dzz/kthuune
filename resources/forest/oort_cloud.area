@@ -29559,87 +29559,87 @@ OBJECT
 light
 -124
 -132
-{ "class" : "medium_oort_gider" }
+{ "class" : "medium_oort_guider" }
 OBJECT
 light
 -46
 -86
-{ "class" : "large_oort_gider" }
+{ "class" : "large_oort_guider" }
 OBJECT
 light
 -76
 -120
-{ "class" : "medium_oort_gider" }
+{ "class" : "medium_oort_guider" }
 OBJECT
 light
 -52
 -60
-{ "class" : "medium_oort_gider" }
+{ "class" : "medium_oort_guider" }
 OBJECT
 light
 -20
 -44
-{ "class" : "medium_oort_gider" }
+{ "class" : "medium_oort_guider" }
 OBJECT
 light
 18
 -36
-{ "class" : "large_oort_gider" }
+{ "class" : "large_oort_guider" }
 OBJECT
 light
 0
 -6
-{ "class" : "medium_oort_gider" }
+{ "class" : "medium_oort_guider" }
 OBJECT
 light
 -28
 40
-{ "class" : "medium_oort_gider" }
+{ "class" : "medium_oort_guider" }
 OBJECT
 light
 20
 58
-{ "class" : "medium_oort_gider" }
+{ "class" : "medium_oort_guider" }
 OBJECT
 light
 26
 126
-{ "class" : "medium_oort_gider" }
+{ "class" : "medium_oort_guider" }
 OBJECT
 light
 -20
 124
-{ "class" : "medium_oort_gider" }
+{ "class" : "medium_oort_guider" }
 OBJECT
 light
 -40
 102
-{ "class" : "medium_oort_gider" }
+{ "class" : "medium_oort_guider" }
 OBJECT
 light
 12
 82
-{ "class" : "medium_oort_gider" }
+{ "class" : "medium_oort_guider" }
 OBJECT
 light
 62
 62
-{ "class" : "medium_oort_gider" }
+{ "class" : "medium_oort_guider" }
 OBJECT
 light
 78
 40
-{ "class" : "medium_oort_gider" }
+{ "class" : "medium_oort_guider" }
 OBJECT
 light
 -48
 16
-{ "class" : "large_oort_gider" }
+{ "class" : "large_oort_guider" }
 OBJECT
 light
 34
 98
-{ "class" : "large_oort_gider" }
+{ "class" : "large_oort_guider" }
 OBJECT
 light
 103
@@ -29659,7 +29659,7 @@ OBJECT
 light
 72
 127
-{ "class" : "large_oort_gider" }
+{ "class" : "large_oort_guider" }
 OBJECT
 skeline
 94
@@ -29704,6 +29704,41 @@ OBJECT
 elder
 56
 -54
+{}
+OBJECT
+area_switch
+-137
+-164
+{"name" : "ship_entrance","target_area" : "ship","target_switch" : "ship_entrance"}
+OBJECT
+firepot
+-83
+-109
+{}
+OBJECT
+firepot
+-79
+-107
+{}
+OBJECT
+firepot
+-77
+-103
+{}
+OBJECT
+firepot
+-75
+-99
+{}
+OBJECT
+firepot
+-73
+-75
+{}
+OBJECT
+firepot
+-73
+-71
 {}
 PROP
 ship_idea3

@@ -454,6 +454,40 @@ class Prop(Object):
         p.buftarget="popup"
         return p
 
+class Firepot(Object):
+    textures = [
+        BGL.assets.get("KT-forest/texture/firepot0000"),
+        BGL.assets.get("KT-forest/texture/firepot0001"),
+        BGL.assets.get("KT-forest/texture/firepot0002"),
+        BGL.assets.get("KT-forest/texture/firepot0003"),
+        BGL.assets.get("KT-forest/texture/firepot0004"),
+        BGL.assets.get("KT-forest/texture/firepot0005"),
+    ]
+
+    def customize(self):
+        self.z_index = 1
+        self.buftarget = "popup"
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_color = [0.0,1.0,1.0,1.0]
+        self.light_radius = 1.5
+        self.texture = Firepot.textures[0]
+        self._fr = (0 - floor(self.p[1]*3))%60
+        self.size = [2.0,2.0]
+
+    def tick(self):
+        self._fr = (self._fr +1)%60
+        self.texture = Firepot.textures[self._fr//10]
+        self.light_radius *= 1.02
+        if(self._fr == 50):
+            self.light_radius = 1.5
+            self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = 0 ) )
+
+
+    def parse(od,df):
+        o = Firepot( p = [ od["x"], od["y"] ] )
+        return o
+
 
 class Sword(Object):
     STATE_IDLE = 0
@@ -2010,6 +2044,9 @@ class ForestGraveyard():
             
             if od["key"] in ["elder" ]:
                 self.objects.append(Elder.parse(od,df))
+
+            if od["key"] in ["firepot" ]:
+                self.objects.append(Firepot.parse(od,df))
 
 
 

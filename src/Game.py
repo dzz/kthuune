@@ -82,7 +82,26 @@ class Game( BaseGame ):
         area_def = get_area_data( area_raw )
 
         floor = DungeonFloor( 
-        god_shader = BGL.assets.get("KT-compositor/shader/oort_god"),
+        god_shader = BGL.assets.get("KT-compositor/shader/ship_god"),
+        fog_level_base=0.5, tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
+        floor.game = self
+        return floor
+
+    def build_area_ship(self):
+        GeneratorOptions.TreeTopTextures = [
+            BGL.assets.get("KT-forest/texture/crystal_1"),
+            BGL.assets.get("KT-forest/texture/crystal_2"),
+            BGL.assets.get("KT-forest/texture/crystal_3"),
+            BGL.assets.get("KT-forest/texture/crystal_4")
+        ]
+
+        GeneratorOptions.TreeShadowTextures = GeneratorOptions.TreeTopTextures
+
+        area_raw = BGL.assets.get("KT-forest/textfile/ship")
+        area_def = get_area_data( area_raw )
+
+        floor = DungeonFloor( 
+        god_shader = BGL.assets.get("KT-compositor/shader/ship"),
         fog_level_base=0.5, tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         floor.game = self
         return floor
@@ -110,6 +129,8 @@ class Game( BaseGame ):
                 Game.floor_cache[key] = self.build_area_doortest()
             if key == "oort_cloud":
                 Game.floor_cache[key] = self.build_area_oort_cloud()
+            if key == "ship":
+                Game.floor_cache[key] = self.build_area_ship()
         else:
             cache_hit = True
 
@@ -168,7 +189,7 @@ class Game( BaseGame ):
         ## self.load_floor("arena")
         ## self.load_floor("docks")
 
-        self.floor = self.create_tickable(self.load_floor("oort_cloud"))
+        self.floor = self.create_tickable(self.load_floor("ship"))
 
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
         self.camera.set_player(self.player)

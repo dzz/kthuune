@@ -10,6 +10,10 @@ class TitleCard():
         self.tval = 0
         self.title = "Oort Cloud"
 
+    def reset(self, title):
+        self.tval = 0
+        self.title = title
+
     def displaying(self):
         if(self.tval<700):
             return True
