@@ -11,6 +11,8 @@ class TitleCard():
         self.title = "Oort Cloud"
 
     def reset(self, title):
+        with BGL.context.render_target( self.hud_buffer ):
+            BGL.context.clear( 0.0,0.0,0.0,0.0 )
         self.tval = 0
         self.title = title
 

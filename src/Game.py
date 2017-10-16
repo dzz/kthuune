@@ -82,7 +82,8 @@ class Game( BaseGame ):
         area_def = get_area_data( area_raw )
 
         floor = DungeonFloor( 
-        god_shader = BGL.assets.get("KT-compositor/shader/ship_god"),
+        title = "The Oort Cloud",
+        god_shader = BGL.assets.get("KT-compositor/shader/oort_god"),
         fog_level_base=0.5, tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         floor.game = self
         return floor
@@ -101,7 +102,8 @@ class Game( BaseGame ):
         area_def = get_area_data( area_raw )
 
         floor = DungeonFloor( 
-        god_shader = BGL.assets.get("KT-compositor/shader/ship"),
+        title = "The Hunting Pilgrim",
+        god_shader = BGL.assets.get("KT-compositor/shader/ship_god"),
         fog_level_base=0.5, tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         floor.game = self
         return floor
@@ -150,6 +152,7 @@ class Game( BaseGame ):
         if self.area_name is not area_name:
             self.tickables.remove( self.floor )
             self.floor = self.create_tickable( self.load_floor(area_name) )
+            self.player.trigger_title( self.floor.title )
             self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
 
         self.player.set_hud_message( "{0} - {1}".format(area_name, target_switch))
@@ -161,6 +164,7 @@ class Game( BaseGame ):
                 switch.trigger_active = False
 
         self.camera.set_player(self.player)
+        Game.god_shader = self.floor.god_shader
         
 
 
@@ -189,7 +193,8 @@ class Game( BaseGame ):
         ## self.load_floor("arena")
         ## self.load_floor("docks")
 
-        self.floor = self.create_tickable(self.load_floor("ship"))
+        self.floor = self.create_tickable(self.load_floor("oort_cloud"))
+        self.player.trigger_title( self.floor.title )
 
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
         self.camera.set_player(self.player)

@@ -960,6 +960,9 @@ class KPlayer(Player):
         self.floor.add_fog(self, 2.0)
         pass
 
+    def trigger_title(self, title):
+        self.title_card.reset(title)
+        
     def tick(self):
 
 

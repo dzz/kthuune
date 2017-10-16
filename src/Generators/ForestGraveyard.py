@@ -2207,7 +2207,7 @@ class ForestGraveyard():
 
             for x in range(0,int(u_l+uniform(0.0,5.0))):
 
-                if uniform(0.0,1.0) < 0.8:
+                if uniform(0.0,1.0) < 0.85:
                     continue
                     
                 size = uniform(2.5,5.5)

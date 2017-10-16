@@ -92,15 +92,20 @@ class DFRenderer( FloorRenderer ):
         #    with BGL.blendmode.alpha_over:
         #        self.render_objects("canopy")
 
-    def render_objects(self, buftarget):
+    def render_objects(self, buftarget, texture_priority = False):
         """ Render floor objects """
         objects = []
         objects.extend( self.objects )
         objects.extend( self.get_player_objects() )
         renderable_objects = list(filter(lambda x: x.should_draw() and x.visible and x.buftarget == buftarget, objects))
-        self.guppyRenderer.renderObjects( renderable_objects )
+
+        if not texture_priority:
+            self.guppyRenderer.renderObjects( renderable_objects )
+        else:
+            self.guppyRenderer.renderTexturePriorityObjects( renderable_objects )
 
     def render_composite(self):
+        print("FRAMESTART")
         shader  = self.compositor_shader
         with BGL.context.render_target( self.object_buffer ):
             with BGL.blendmode.add:
@@ -123,7 +128,7 @@ class DFRenderer( FloorRenderer ):
         with BGL.context.render_target( self.canopy_buffer):
             BGL.context.clear(1.0,1.0,1.0,0.0)
             with BGL.blendmode.alpha_over:
-                self.render_objects("canopy")
+                self.render_objects("canopy", True)
         with BGL.blendmode.alpha_over:
             self.canopy_buffer.render_processed(DFRenderer.canopy_shader, { "light_buffer" : self.light_buffer })
 

@@ -39,6 +39,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "title" : "Who Knows!",
             "god_shader" : None,
             "fog_level_base" : 0,
             "freeze_frames" : 0,
@@ -54,14 +55,14 @@ class DungeonFloor( Floor ):
             #"generator" : BasicGenerator(),
             "area" : None,
             "renderer_config" : {
-                "vision_lightmap_width" : 960,
-                "vision_lightmap_height" : 540,
+                "vision_lightmap_width" : 960/2,
+                "vision_lightmap_height" : 540/2,
                 "photon_map_width" : 1024,
                 "photon_map_height" : 1024,
                 "static_lightmap_width" : 1024,
                 "static_lightmap_height" : 1024,
-                "dynamic_lightmap_width" : 960,
-                "dynamic_lightmap_height" : 540,
+                "dynamic_lightmap_width" : 960/2,
+                "dynamic_lightmap_height" : 540/2,
                 "photon_mapper_config" : {
                     'stream' : True,
                     'photon_radius' :70.0,
