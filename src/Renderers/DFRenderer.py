@@ -105,7 +105,7 @@ class DFRenderer( FloorRenderer ):
             self.guppyRenderer.renderTexturePriorityObjects( renderable_objects )
 
     def render_composite(self):
-        print("FRAMESTART")
+        #print("FRAMESTART")
         shader  = self.compositor_shader
         with BGL.context.render_target( self.object_buffer ):
             with BGL.blendmode.add:

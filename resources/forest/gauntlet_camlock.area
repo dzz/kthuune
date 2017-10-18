@@ -1806,7 +1806,7 @@ player_start
 -131
 239
 {}
-False
+True
 0
 0
 OBJECT
@@ -1814,7 +1814,7 @@ totem
 -126
 216
 {}
-False
+True
 0
 0
 OBJECT
@@ -1822,7 +1822,7 @@ totem
 -114
 204
 {}
-False
+True
 0
 0
 OBJECT
@@ -1830,7 +1830,7 @@ totem
 -100
 204
 {}
-False
+True
 0
 0
 OBJECT
@@ -1838,7 +1838,7 @@ totem
 -120
 170
 {}
-False
+True
 0
 0
 OBJECT
@@ -1846,7 +1846,7 @@ totem
 -132
 183
 {}
-False
+True
 0
 0
 OBJECT
@@ -1854,7 +1854,7 @@ totem
 -132
 170
 {}
-False
+True
 0
 0
 OBJECT
@@ -1862,7 +1862,7 @@ totem
 -120
 184
 {}
-False
+True
 0
 0
 OBJECT
@@ -1870,7 +1870,7 @@ totem
 -94
 124
 {}
-False
+True
 0
 0
 OBJECT
@@ -1878,7 +1878,7 @@ totem
 -104
 124
 {}
-False
+True
 0
 0
 OBJECT
@@ -1886,7 +1886,7 @@ totem
 -100
 72
 {}
-False
+True
 0
 0
 OBJECT
@@ -1894,7 +1894,7 @@ totem
 -90
 80
 {}
-False
+True
 0
 0
 OBJECT
@@ -1902,7 +1902,7 @@ totem
 -78
 72
 {}
-False
+True
 0
 0
 OBJECT
@@ -1910,7 +1910,7 @@ totem
 -82
 48
 {}
-False
+True
 0
 0
 OBJECT
@@ -1918,7 +1918,7 @@ totem
 -76
 30
 {}
-False
+True
 0
 0
 OBJECT
@@ -1926,7 +1926,7 @@ totem
 -90
 52
 {}
-False
+True
 0
 0
 OBJECT
@@ -1934,7 +1934,7 @@ totem
 -119
 -24
 {}
-False
+True
 0
 0
 OBJECT
@@ -1942,7 +1942,7 @@ totem
 -106
 -56
 {}
-False
+True
 0
 0
 OBJECT
@@ -1950,7 +1950,7 @@ totem
 -32
 -62
 {}
-False
+True
 0
 0
 OBJECT
@@ -1958,7 +1958,7 @@ totem
 -48
 -54
 {}
-False
+True
 0
 0
 OBJECT
@@ -1966,7 +1966,7 @@ totem
 -26
 -76
 {}
-False
+True
 0
 0
 OBJECT
@@ -1974,7 +1974,7 @@ totem
 -44
 -92
 {}
-False
+True
 0
 0
 OBJECT
@@ -1982,7 +1982,7 @@ totem
 -19
 -99
 {}
-False
+True
 0
 0
 OBJECT
@@ -1990,7 +1990,7 @@ totem
 -36
 -114
 {}
-False
+True
 0
 0
 OBJECT
@@ -1998,7 +1998,7 @@ totem
 -22
 -126
 {}
-False
+True
 0
 0
 OBJECT
@@ -2006,7 +2006,7 @@ totem
 -34
 -134
 {}
-False
+True
 0
 0
 OBJECT
@@ -2014,7 +2014,7 @@ totem
 -8
 -94
 {}
-False
+True
 0
 0
 OBJECT
@@ -2022,7 +2022,7 @@ totem
 -2
 -124
 {}
-False
+True
 0
 0
 OBJECT
@@ -2030,7 +2030,7 @@ totem
 -4
 -142
 {}
-False
+True
 0
 0
 OBJECT
@@ -2038,7 +2038,7 @@ totem
 -24
 -170
 {}
-False
+True
 0
 0
 OBJECT
@@ -2046,7 +2046,7 @@ totem
 -2
 -186
 {}
-False
+True
 0
 0
 OBJECT
@@ -2054,7 +2054,7 @@ totem
 8
 -186
 {}
-False
+True
 0
 0
 OBJECT
@@ -2062,7 +2062,7 @@ totem
 7
 -230
 {}
-False
+True
 0
 0
 OBJECT
@@ -2070,7 +2070,7 @@ totem
 7
 -241
 {}
-False
+True
 0
 0
 OBJECT
@@ -2078,7 +2078,7 @@ skeline
 -127
 205
 {}
-False
+True
 0
 0
 OBJECT
@@ -2086,7 +2086,7 @@ skeline
 -137
 205
 {}
-False
+True
 0
 0
 OBJECT
@@ -2094,7 +2094,7 @@ skeline
 -143
 201
 {}
-False
+True
 0
 0
 OBJECT
@@ -2102,7 +2102,7 @@ skeline
 -151
 196
 {}
-False
+True
 0
 0
 OBJECT
@@ -2110,7 +2110,7 @@ totem
 -136
 216
 {}
-False
+True
 0
 0
 OBJECT
@@ -2118,7 +2118,7 @@ skeline
 -96
 202
 {}
-False
+True
 0
 0
 OBJECT
@@ -2126,7 +2126,7 @@ skeline
 -111
 170
 {}
-False
+True
 0
 0
 OBJECT
@@ -2134,7 +2134,7 @@ skeline
 -144
 169
 {}
-False
+True
 0
 0
 OBJECT
@@ -2142,7 +2142,7 @@ skeline
 -125
 167
 {}
-False
+True
 0
 0
 OBJECT
@@ -2150,7 +2150,7 @@ skeline
 -111
 181
 {}
-False
+True
 0
 0
 OBJECT
@@ -2158,7 +2158,7 @@ skeline
 -111
 187
 {}
-False
+True
 0
 0
 OBJECT
@@ -2166,7 +2166,7 @@ skeline
 -101
 196
 {}
-False
+True
 0
 0
 OBJECT
@@ -2174,7 +2174,7 @@ skeline
 -96
 190
 {}
-False
+True
 0
 0
 OBJECT
@@ -2182,7 +2182,7 @@ skeline
 -149
 179
 {}
-False
+True
 0
 0
 OBJECT
@@ -2190,7 +2190,7 @@ skeline
 -153
 179
 {}
-False
+True
 0
 0
 OBJECT
@@ -2198,7 +2198,7 @@ skeline
 -89
 119
 {}
-False
+True
 0
 0
 OBJECT
@@ -2206,7 +2206,7 @@ skeline
 -89
 127
 {}
-False
+True
 0
 0
 OBJECT
@@ -2214,7 +2214,7 @@ skeline
 -104
 136
 {}
-False
+True
 0
 0
 OBJECT
@@ -2222,7 +2222,7 @@ skeline
 -104
 116
 {}
-False
+True
 0
 0
 OBJECT
@@ -2230,7 +2230,7 @@ skeline
 -106
 103
 {}
-False
+True
 0
 0
 OBJECT
@@ -2238,7 +2238,7 @@ skeline
 -91
 98
 {}
-False
+True
 0
 0
 OBJECT
@@ -2246,7 +2246,7 @@ skeline
 -74
 71
 {}
-False
+True
 0
 0
 OBJECT
@@ -2254,7 +2254,7 @@ skeline
 -103
 70
 {}
-False
+True
 0
 0
 OBJECT
@@ -2262,7 +2262,7 @@ skeline
 -97
 59
 {}
-False
+True
 0
 0
 OBJECT
@@ -2270,7 +2270,7 @@ skeline
 -103
 79
 {}
-False
+True
 0
 0
 OBJECT
@@ -2278,7 +2278,7 @@ skeline
 -75
 79
 {}
-False
+True
 0
 0
 OBJECT
@@ -2286,7 +2286,7 @@ skeline
 -115
 54
 {}
-False
+True
 0
 0
 OBJECT
@@ -2294,7 +2294,7 @@ skeline
 -112
 33
 {}
-False
+True
 0
 0
 OBJECT
@@ -2302,7 +2302,7 @@ skeline
 -120
 45
 {}
-False
+True
 0
 0
 OBJECT
@@ -2310,7 +2310,7 @@ skeline
 -120
 38
 {}
-False
+True
 0
 0
 OBJECT
@@ -2318,7 +2318,7 @@ skeline
 -101
 25
 {}
-False
+True
 0
 0
 OBJECT
@@ -2326,7 +2326,7 @@ skeline
 -78
 42
 {}
-False
+True
 0
 0
 OBJECT
@@ -2334,7 +2334,7 @@ skeline
 -73
 21
 {}
-False
+True
 0
 0
 OBJECT
@@ -2342,7 +2342,7 @@ skeline
 -78
 16
 {}
-False
+True
 0
 0
 OBJECT
@@ -2350,7 +2350,7 @@ skeline
 -81
 27
 {}
-False
+True
 0
 0
 OBJECT
@@ -2358,7 +2358,7 @@ skeline
 -109
 -22
 {}
-False
+True
 0
 0
 OBJECT
@@ -2366,7 +2366,7 @@ skeline
 -93
 -22
 {}
-False
+True
 0
 0
 OBJECT
@@ -2374,7 +2374,7 @@ skeline
 -119
 -29
 {}
-False
+True
 0
 0
 OBJECT
@@ -2382,7 +2382,7 @@ cleric
 -93
 -37
 {}
-False
+True
 0
 0
 OBJECT
@@ -2390,7 +2390,7 @@ skeline
 -119
 -35
 {}
-False
+True
 0
 0
 OBJECT
@@ -2398,7 +2398,7 @@ skeline
 -118
 -44
 {}
-False
+True
 0
 0
 OBJECT
@@ -2406,7 +2406,7 @@ cleric
 -107
 -37
 {}
-False
+True
 0
 0
 OBJECT
@@ -2414,7 +2414,7 @@ skeline
 -100
 -37
 {}
-False
+True
 0
 0
 OBJECT
@@ -2422,7 +2422,7 @@ skeline
 -101
 -48
 {}
-False
+True
 0
 0
 OBJECT
@@ -2430,7 +2430,7 @@ skeline
 -89
 -52
 {}
-False
+True
 0
 0
 OBJECT
@@ -2438,7 +2438,7 @@ skeline
 -90
 -57
 {}
-False
+True
 0
 0
 OBJECT
@@ -2446,7 +2446,7 @@ cleric
 -82
 -55
 {}
-False
+True
 0
 0
 OBJECT
@@ -2454,7 +2454,7 @@ skeline
 -55
 -57
 {}
-False
+True
 0
 0
 OBJECT
@@ -2462,7 +2462,7 @@ skeline
 -55
 -49
 {}
-False
+True
 0
 0
 OBJECT
@@ -2470,7 +2470,7 @@ skeline
 -61
 -49
 {}
-False
+True
 0
 0
 OBJECT
@@ -2478,7 +2478,7 @@ skeline
 -61
 -57
 {}
-False
+True
 0
 0
 OBJECT
@@ -2486,7 +2486,7 @@ skeline
 -31
 -83
 {}
-False
+True
 0
 0
 OBJECT
@@ -2494,7 +2494,7 @@ skeline
 -23
 -89
 {}
-False
+True
 0
 0
 OBJECT
@@ -2502,7 +2502,7 @@ skeline
 -31
 -99
 {}
-False
+True
 0
 0
 OBJECT
@@ -2510,7 +2510,7 @@ skeline
 -4
 -88
 {}
-False
+True
 0
 0
 OBJECT
@@ -2518,7 +2518,7 @@ skeline
 1
 -105
 {}
-False
+True
 0
 0
 OBJECT
@@ -2526,7 +2526,7 @@ skeline
 -5
 -105
 {}
-False
+True
 0
 0
 OBJECT
@@ -2534,7 +2534,7 @@ skeline
 -2
 -114
 {}
-False
+True
 0
 0
 OBJECT
@@ -2542,7 +2542,7 @@ cleric
 -22
 -116
 {}
-False
+True
 0
 0
 OBJECT
@@ -2550,7 +2550,7 @@ skeline
 -22
 -123
 {}
-False
+True
 0
 0
 OBJECT
@@ -2558,7 +2558,7 @@ skeline
 -15
 -118
 {}
-False
+True
 0
 0
 OBJECT
@@ -2566,7 +2566,7 @@ skeline
 -18
 -139
 {}
-False
+True
 0
 0
 OBJECT
@@ -2574,7 +2574,7 @@ skeline
 -47
 -128
 {}
-False
+True
 0
 0
 OBJECT
@@ -2582,7 +2582,7 @@ skeline
 -52
 -97
 {}
-False
+True
 0
 0
 OBJECT
@@ -2590,7 +2590,7 @@ skeline
 -16
 -159
 {}
-False
+True
 0
 0
 OBJECT
@@ -2598,7 +2598,7 @@ skeline
 -34
 -144
 {}
-False
+True
 0
 0
 OBJECT
@@ -2606,7 +2606,7 @@ skeline
 -27
 -189
 {}
-False
+True
 0
 0
 OBJECT
@@ -2614,7 +2614,7 @@ skeline
 -19
 -193
 {}
-False
+True
 0
 0
 OBJECT
@@ -2622,7 +2622,7 @@ skeline
 -34
 -189
 {}
-False
+True
 0
 0
 OBJECT
@@ -2630,7 +2630,7 @@ skeline
 -3
 -160
 {}
-False
+True
 0
 0
 OBJECT
@@ -2638,7 +2638,7 @@ skeline
 -3
 -173
 {}
-False
+True
 0
 0
 OBJECT
@@ -2646,7 +2646,7 @@ skeline
 -10
 -214
 {}
-False
+True
 0
 0
 OBJECT
@@ -2654,7 +2654,7 @@ skeline
 -5
 -220
 {}
-False
+True
 0
 0
 OBJECT
@@ -2662,7 +2662,7 @@ skeline
 26
 -214
 {}
-False
+True
 0
 0
 OBJECT
@@ -2670,7 +2670,7 @@ skeline
 20
 -220
 {}
-False
+True
 0
 0
 OBJECT
@@ -2678,7 +2678,7 @@ skeline
 -9
 -244
 {}
-False
+True
 0
 0
 OBJECT
@@ -2686,7 +2686,7 @@ skeline
 -3
 -239
 {}
-False
+True
 0
 0
 OBJECT
@@ -2694,7 +2694,7 @@ skeline
 26
 -244
 {}
-False
+True
 0
 0
 OBJECT
@@ -2702,7 +2702,7 @@ skeline
 19
 -239
 {}
-False
+True
 0
 0
 OBJECT
@@ -2710,7 +2710,7 @@ acolyte
 -101
 -31
 {}
-False
+True
 0
 0
 OBJECT
@@ -2718,7 +2718,7 @@ acolyte
 -57
 -53
 {}
-False
+True
 0
 0
 OBJECT
@@ -2726,7 +2726,7 @@ acolyte
 -26
 -94
 {}
-False
+True
 0
 0
 OBJECT
@@ -2734,7 +2734,7 @@ acolyte
 8
 -215
 {}
-False
+True
 0
 0
 OBJECT
@@ -2742,7 +2742,7 @@ stork
 -9
 -227
 {}
-False
+True
 0
 0
 OBJECT
@@ -2750,7 +2750,7 @@ stork
 23
 -227
 {}
-False
+True
 0
 0
 OBJECT
@@ -2758,7 +2758,7 @@ totem
 -98
 184
 {}
-False
+True
 0
 0
 OBJECT
@@ -2766,7 +2766,7 @@ totem
 -86
 176
 {}
-False
+True
 0
 0
 OBJECT
@@ -2774,7 +2774,7 @@ totem
 -86
 156
 {}
-False
+True
 0
 0
 OBJECT
@@ -2782,7 +2782,7 @@ totem
 -34
 -170
 {}
-False
+True
 0
 0
 OBJECT
@@ -2790,7 +2790,7 @@ stork
 -101
 11
 {}
-False
+True
 0
 0
 OBJECT
@@ -2798,7 +2798,7 @@ cleric
 -86
 146
 {}
-False
+True
 0
 0
 OBJECT
@@ -2806,7 +2806,7 @@ cleric
 -102
 38
 {}
-False
+True
 0
 0
 OBJECT
@@ -2814,7 +2814,7 @@ cleric
 -96
 46
 {}
-False
+True
 0
 0
 OBJECT
@@ -2822,7 +2822,7 @@ cleric
 -104
 2
 {}
-False
+True
 0
 0
 OBJECT
@@ -2830,7 +2830,7 @@ cleric
 -98
 2
 {}
-False
+True
 0
 0
 OBJECT
@@ -2838,7 +2838,7 @@ cleric
 -51
 -109
 {}
-False
+True
 0
 0
 OBJECT
@@ -2846,7 +2846,7 @@ cleric
 -18
 -173
 {}
-False
+True
 0
 0
 OBJECT
@@ -2857,6 +2857,46 @@ camlock_x
 True
 78
 36
+OBJECT
+camlock_y
+-124
+66
+{}
+True
+64
+96
+OBJECT
+camlock
+-128
+8
+{}
+True
+63
+58
+OBJECT
+camlock_y
+-114
+-14
+{}
+True
+26
+22
+OBJECT
+camlock
+-130
+-66
+{}
+True
+50
+52
+OBJECT
+camlock_x
+-80
+-70
+{}
+True
+60
+30
 TILE
 -78
 83

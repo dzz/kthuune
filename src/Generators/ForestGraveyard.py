@@ -2049,6 +2049,21 @@ class ForestGraveyard():
                 self.objects.append(Firepot.parse(od,df))
 
 
+            if od["key"] in ["camlock_x", "camlock_y", "camlock" ]:
+
+                if( od["key"] == "camlock_x" ):
+                    axes = 0
+                if( od["key"] == "camlock_y" ):
+                    axes = 1
+                if( od["key"] == "camlock" ):
+                    axes = 2
+                zoom = -1
+                if "zoom" in od["meta"]:
+                    zoom = float(od["meta"]["zoom"])
+                lock_region = ( od["x"], od["y"], od["x"]+od["w"], od["y"]+od["h"], axes, zoom )
+                df.camera_lock_regions.append( lock_region )
+
+
 
     def link_doors(self):
         for key in self.door_sensors:

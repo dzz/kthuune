@@ -116,6 +116,13 @@ def get_area_data(data):
                         o["meta"] = json.loads(txt)
                     except Exception as e:
                         o["meta"] = {}
+            if row == 4:
+                if(txt=="True"):
+                    o["region"] = True
+            if row == 5:
+                o["w"] = float(txt)
+            if row == 6:
+                o["h"] = float(txt)
 
         if mode == "TILE":
             t = parsed["tile_defs"][-1]

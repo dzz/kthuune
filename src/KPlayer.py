@@ -20,6 +20,18 @@ from .KSounds import KSounds
 from .TitleCard import TitleCard
 
 
+class SlashEffect(Object):
+    textures = [
+
+    ]
+    def customize(self):
+        self.buftarget = "popup"
+        self.size = [2.0,2.0]
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.fr = 0
+
+    def tick(self)
+    
 class HealthBubble(Object):
     texture = BGL.assets.get("KT-player/texture/flare")
     def __init__(self,**kwargs):
@@ -929,8 +941,8 @@ class KPlayer(Player):
             self.snap_attack_frozen = False
 
         if self.A_PRESSED:
-            print("a pressed")
-            self.state = KPlayer.STATE_FIRING
+            #print("a pressed")
+            #self.state = KPlayer.STATE_FIRING
 
         if self.Y_PRESSED:
 

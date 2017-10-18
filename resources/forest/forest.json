@@ -66,7 +66,7 @@
             { "name" : "docks", "filename" : "{package_path}/docks.area" },
             { "name" : "tower", "filename" : "{package_path}/tower.area" },
             { "name" : "arena", "filename" : "{package_path}/arena.area" },
-            { "name" : "doortest", "filename" : "{package_path}/trace_test.area" },
+            { "name" : "doortest", "filename" : "{package_path}/gauntlet_camlock.area" },
             { "name" : "oort_cloud", "filename" : "{package_path}/oort_cloud.area" },
             { "name" : "ship", "filename" : "{package_path}/ship.area" }
         ]
