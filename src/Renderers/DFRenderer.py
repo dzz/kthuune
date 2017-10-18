@@ -47,7 +47,7 @@ class DFRenderer( FloorRenderer ):
             if( self.using_tilemap):
                 self.render_tiles()
             with BGL.blendmode.alpha_over:
-                self.render_objects("floor")
+                self.render_objects("floor", True)
 
         #with BGL.context.render_target( self.photon_buffer ):
         #    BGL.context.clear(0.0,0.0,0.0,1.0)

@@ -814,7 +814,7 @@ class KPlayer(Player):
 
         with BGL.blendmode.alpha_over:
             self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
-            self.floor.render_objects("hud")
+            self.floor.render_objects("hud", True)
 
 
         self.heartcard.render()
