@@ -12,7 +12,7 @@ from Beagle import API as BGL
 from Newfoundland.Object import Object
 from Newfoundland.Player import Player
 from random import uniform,choice
-from math import floor,pi,atan2,sin, hypot
+from math import floor,pi,atan2,sin, hypot,cos
 
 from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 
@@ -22,15 +22,59 @@ from .TitleCard import TitleCard
 
 class SlashEffect(Object):
     textures = [
-
+        BGL.assets.get('KT-player/texture/slash0000'),
+        BGL.assets.get('KT-player/texture/slash0001'),
+        BGL.assets.get('KT-player/texture/slash0002'),
     ]
     def customize(self):
         self.buftarget = "popup"
-        self.size = [2.0,2.0]
+        self.size = [2.5,2.5]
         self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_radius = 7.0
+        self.light_color = [1.0,1.0,1.0,1.0]
         self.fr = 0
+        self.visible = False
+        self.texture = SlashEffect.textures[0]
+        self.z_index = -1
 
-    def tick(self)
+    def slash(self):
+        self.texture = SlashEffect.textures[0]
+        self.fr = 0
+        self.visible = True
+        self.rad = self.floor.player.rad
+        self.orig_rad = self.floor.player.rad
+        self.floor.player.sword.visible = False
+        self.attacked_enemies = []
+
+    def tick(self):
+
+        offsx = cos(self.rad)*1
+        offsy = sin(self.rad)*1
+
+        self.rad+=0.04
+
+        self.p[0] = self.floor.player.p[0] + offsx
+        self.p[1] = self.floor.player.p[1] + offsy
+
+        if self.visible:
+            if self.fr>5:
+                for enemy in self.floor.snap_enemies:
+                    if enemy.snap_type==1 and enemy not in self.attacked_enemies:
+                        dx = (self.p[0] - enemy.p[0]) 
+                        dy = (self.p[1] - enemy.p[1]) 
+                        md = (dx*dx) + (dy*dy)
+                        if md < 10:
+                            enemy.receive_snap_attack( True )
+                            self.attacked_enemies.append(enemy)
+            self.fr+=1 
+            if self.fr == 21:
+                self.visible = False
+                self.attacked_enemies = []
+                self.floor.player.sword.visible = True
+                return
+            self.texture = SlashEffect.textures[ self.fr//7 ]
+            
     
 class HealthBubble(Object):
     texture = BGL.assets.get("KT-player/texture/flare")
@@ -308,10 +352,11 @@ class Sword(Object):
     def tick(self):
         if(self.player.state == KPlayer.STATE_STUNNED ):
             self.state = Sword.STATE_IDLE
-            self.visible = False
+            #self.visible = False
             return True
         else:
-            self.visible = True
+            pass
+            #self.visible = True
 
         pad = self.player.controllers.get_virtualized_pad( self.player.num )
         btns = BGL.gamepads.buttons
@@ -818,9 +863,11 @@ class KPlayer(Player):
 
         self.run_stamina = 100.0
         self.stamina_recharge_buffer = 0.0
+        self.slash = SlashEffect()
     
     def link_floor(self):
         self.floor.create_object( self.sword )
+        self.floor.create_object( self.slash )
 
     def get_shader_params(self):
         base_params = Player.get_shader_params(self)
@@ -941,6 +988,7 @@ class KPlayer(Player):
             self.snap_attack_frozen = False
 
         if self.A_PRESSED:
+            self.slash.slash()
             #print("a pressed")
             #self.state = KPlayer.STATE_FIRING
 
