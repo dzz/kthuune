@@ -30,7 +30,7 @@ class SlashEffect(Object):
         self.buftarget = "popup"
         self.size = [2.5,2.5]
         self.tick_type = Object.TickTypes.TICK_FOREVER
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_type = Object.LightTypes.NONE
         self.light_radius = 7.0
         self.light_color = [1.0,1.0,1.0,1.0]
         self.fr = 0
@@ -57,7 +57,9 @@ class SlashEffect(Object):
         self.p[0] = self.floor.player.p[0] + offsx
         self.p[1] = self.floor.player.p[1] + offsy
 
+        Object.light_type = Object.LightTypes.NONE
         if self.visible:
+            Object.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             if self.fr>5:
                 for enemy in self.floor.snap_enemies:
                     if enemy.snap_type==1 and enemy not in self.attacked_enemies:

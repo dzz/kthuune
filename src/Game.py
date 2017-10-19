@@ -108,6 +108,22 @@ class Game( BaseGame ):
         floor.game = self
         return floor
 
+    def build_area_grey_world(self):
+        area_raw = BGL.assets.get("KT-forest/textfile/grey_world")
+        area_def = get_area_data( area_raw )
+
+        floor = DungeonFloor( 
+
+        bg_texture = BGL.assets.get("KT-forest/texture/grey_world_processed"),
+        sky_texture = BGL.assets.get("KT-forest/texture/grey_world_background"),
+        parallax_sky = -0.2,
+        parallax_bg = 0.005,
+        title = "Background Radiation...",
+        god_shader = BGL.assets.get("KT-compositor/shader/radiation_god"),
+        fog_level_base=0.9, tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
+        floor.game = self
+        return floor
+
 
     ###############
 
@@ -133,6 +149,8 @@ class Game( BaseGame ):
                 Game.floor_cache[key] = self.build_area_oort_cloud()
             if key == "ship":
                 Game.floor_cache[key] = self.build_area_ship()
+            if key == "grey_world":
+                Game.floor_cache[key] = self.build_area_grey_world()
         else:
             cache_hit = True
 
@@ -154,6 +172,13 @@ class Game( BaseGame ):
             self.floor = self.create_tickable( self.load_floor(area_name) )
             self.player.trigger_title( self.floor.title )
             self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
+            
+            if "bg_texture" in self.floor.__dict__:
+                Background.bg_texture = self.floor.bg_texture
+                Background.sky_texture = self.floor.sky_texture
+                Background.parallax_sky = self.floor.parallax_sky
+                Background.parallax_bg = self.floor.parallax_bg
+
 
         self.player.set_hud_message( "{0} - {1}".format(area_name, target_switch))
 
@@ -193,8 +218,13 @@ class Game( BaseGame ):
         ## self.load_floor("arena")
         ## self.load_floor("docks")
 
-        self.floor = self.create_tickable(self.load_floor("doortest"))
+        self.floor = self.create_tickable(self.load_floor("grey_world"))
         self.player.trigger_title( self.floor.title )
+        if "bg_texture" in self.floor.__dict__:
+            Background.bg_texture = self.floor.bg_texture
+            Background.sky_texture = self.floor.sky_texture
+            Background.parallax_sky = self.floor.parallax_sky
+            Background.parallax_bg = self.floor.parallax_bg
 
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
         self.camera.set_player(self.player)
