@@ -501,7 +501,10 @@ class Firepot(Object):
         self.light_radius *= 1.02
         if(self._fr == 50):
             self.light_radius = 1.5
-            self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = 0 ) )
+            bolt = ERangedMagic( p = [ self.p[0], self.p[1] ], rad = 0 ) 
+            self.floor.create_object( bolt )
+            bolt.lifespan = 30
+            bolt.rad += uniform(-0.01,0.01)
 
 
     def parse(od,df):
