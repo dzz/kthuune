@@ -37,17 +37,28 @@ class SlashEffect(Object):
         self.visible = False
         self.texture = SlashEffect.textures[0]
         self.z_index = -1
+        self.cooldown = 0
 
     def slash(self):
-        self.texture = SlashEffect.textures[0]
-        self.fr = 0
-        self.visible = True
-        self.rad = self.floor.player.rad
-        self.orig_rad = self.floor.player.rad
-        self.floor.player.sword.visible = False
-        self.attacked_enemies = []
+
+        if(self.floor.player.run_stamina>0):
+            if(self.cooldown>0):
+                return
+            self.texture = SlashEffect.textures[0]
+            self.fr = 0
+            self.visible = True
+            self.rad = self.floor.player.rad
+            self.orig_rad = self.floor.player.rad
+            self.floor.player.sword.visible = False
+            self.attacked_enemies = []
+            self.cooldown = 53 
+            KSounds.play( KSounds.slash )
+            self.floor.player.run_stamina -= 40
 
     def tick(self):
+
+        if(self.cooldown>0):
+            self.cooldown -= 1
 
         offsx = cos(self.rad)*1
         offsy = sin(self.rad)*1
@@ -67,6 +78,7 @@ class SlashEffect(Object):
                         dy = (self.p[1] - enemy.p[1]) 
                         md = (dx*dx) + (dy*dy)
                         if md < 10:
+                            KSounds.play( KSounds.slashhit )
                             enemy.receive_snap_attack( True )
                             self.attacked_enemies.append(enemy)
             self.fr+=1 
@@ -1027,6 +1039,8 @@ class KPlayer(Player):
         
     def tick(self):
 
+        if(self.run_stamina<0):
+            self.run_stamina = 0
 
         self.title_card.tick()
 

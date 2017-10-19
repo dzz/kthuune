@@ -31,6 +31,9 @@ class KSounds:
     rain_21sec = audio.baudy_load_sound(BGL.assets.get("KT-player/path/rain_21sec")) 
     cleric_charge = audio.baudy_load_sound(BGL.assets.get("KT-player/path/cleric_charge")) 
     cleric_triggered = audio.baudy_load_sound(BGL.assets.get("KT-player/path/cleric_triggered")) 
+    slash = audio.baudy_load_sound(BGL.assets.get("KT-player/path/slash")) 
+    slashhit = audio.baudy_load_sound(BGL.assets.get("KT-player/path/slashhit")) 
+    redirect = audio.baudy_load_sound(BGL.assets.get("KT-player/path/redirect")) 
 
     typewriter_keys = [
         audio.baudy_load_sound(BGL.assets.get("KT-player/path/tkey1")) ,

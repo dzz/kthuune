@@ -105,7 +105,10 @@
             { "name" : "tkey2", "path" : "{package_path}/sounds/tkey2.wav" },
             { "name" : "tkey3", "path" : "{package_path}/sounds/tkey3.wav" },
             { "name" : "tkey4", "path" : "{package_path}/sounds/tkey4.wav" },
-            { "name" : "treturn", "path" : "{package_path}/sounds/treturn.wav" }
+            { "name" : "treturn", "path" : "{package_path}/sounds/treturn.wav" },
+            { "name" : "slash", "path" : "{package_path}/sounds/slash.wav" },
+            { "name" : "slashhit", "path" : "{package_path}/sounds/slashhit.wav" },
+            { "name" : "redirect", "path" : "{package_path}/sounds/redirect.wav" }
         ]
     }
 }

@@ -578,7 +578,7 @@ class ERangedMagic(Object):
         self.size = [ 0.5,0.5 ]
         self.snapshot_fields = [ 'p' ]
 
-        spd = 0.55 + uniform(0.001, 0.01)
+        spd = 0.45 + uniform(0.001, 0.01)
         self.vx = cos( self.rad )*spd
         self.vy = sin( self.rad )*spd
         
@@ -586,12 +586,14 @@ class ERangedMagic(Object):
         self.player_touch_frames = 0
         
     def reorient(self):
+        KSounds.play( KSounds.redirect )
         self.lifespan = 80
-        spd = 0.55 + uniform(0.001, 0.01)*3
+        spd = (0.55 + uniform(0.001, 0.01))*1.7
         self.vx = cos( self.rad )*spd
         self.vy = sin( self.rad )*spd
 
     def tick(self):
+
 
         deadly = False
         if(self.size[0] < 1.5):
@@ -629,10 +631,10 @@ class ERangedMagic(Object):
 
         md = dx+dy
 
-        if md < 4.5:
+        if md < 6.5:
             self.player_touch_frames += 1
 
-            if(self.player_touch_frames>4):
+            if(self.player_touch_frames>7):
                 self.floor.player.receive_ranged_attack(self)
                 self.floor.create_object( Splat( p = self.p, color=[1.0,0.0,0.0,1.0] ) )
                 self.floor.objects.remove(self)
