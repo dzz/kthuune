@@ -218,7 +218,7 @@ class Game( BaseGame ):
         ## self.load_floor("arena")
         ## self.load_floor("docks")
 
-        self.floor = self.create_tickable(self.load_floor("doortest"))
+        self.floor = self.create_tickable(self.load_floor("grey_world"))
         self.player.trigger_title( self.floor.title )
         if "bg_texture" in self.floor.__dict__:
             Background.bg_texture = self.floor.bg_texture
