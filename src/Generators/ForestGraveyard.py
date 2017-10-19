@@ -29,9 +29,16 @@ class SpeechBubble(Object):
     instance = None
     MODE_PERSISTANT_TRIGGERED = 1
 
+
+    def parse(od,df):
+        sb = SpeechBubble( p = [ od['x'], od['y'] ] )
+        sb.trigger_script = [ od['meta']['text'] ]
+        sb.mode = 1
+        return sb
+
     def customize(self):
         self.mode = 0
-        self.trigger_dist = 0
+        self.trigger_dist = 35
         self.triggered = False
         self.trigger_script = None
 
@@ -105,6 +112,19 @@ class SpeechBubble(Object):
 
 
     def tick(self):
+
+        if(self.floor.player.title_card.displaying()):
+            return
+
+        if(self.mode == 1):
+            if not self.triggered:
+                dx = self.p[0] - self.floor.player.p[0]
+                dy = self.p[1] - self.floor.player.p[1]
+                md = (dx*dx)+(dy*dy)
+                if(md<self.trigger_dist):
+                    self.set_script( self.trigger_script, self.p )
+                    self.triggered = True
+
         if(self.script):
             self.current_string_timer +=1
             if(self.current_string_timer > self.current_char_timer):
@@ -2047,6 +2067,9 @@ class ForestGraveyard():
 
             if od["key"] in ["firepot" ]:
                 self.objects.append(Firepot.parse(od,df))
+
+            if od["key"] in ["text" ]:
+                self.objects.append(SpeechBubble.parse(od,df))
 
 
             if od["key"] in ["camlock_x", "camlock_y", "camlock" ]:

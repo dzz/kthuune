@@ -17,7 +17,7 @@ class TitleCard():
         self.title = title
 
     def displaying(self):
-        if(self.tval<700):
+        if(self.tval<450):
             return True
         return False
 
