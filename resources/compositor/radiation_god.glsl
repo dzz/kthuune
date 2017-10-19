@@ -14,6 +14,9 @@ void main() {
 
     l=smoothstep(0.0,1.0,l*l*1.7);
 
+
+    if(l<0.5) l*=0.8; else l*=1.2;
+
     gl_FragColor = vec4(l,l,l,1.0);
     
 }

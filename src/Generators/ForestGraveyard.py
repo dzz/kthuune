@@ -583,7 +583,14 @@ class ERangedMagic(Object):
         self.vy = sin( self.rad )*spd
         
         self.attack_str = 8
+        self.player_touch_frames = 0
         
+    def reorient(self):
+        self.lifespan = 80
+        spd = 0.55 + uniform(0.001, 0.01)*3
+        self.vx = cos( self.rad )*spd
+        self.vy = sin( self.rad )*spd
+
     def tick(self):
 
         deadly = False
@@ -622,15 +629,23 @@ class ERangedMagic(Object):
 
         md = dx+dy
 
-        if md < 3:
-            self.floor.player.receive_ranged_attack(self)
-            self.floor.create_object( Splat( p = self.p, color=[1.0,0.0,0.0,1.0] ) )
-            self.floor.objects.remove(self)
+        if md < 4.5:
+            self.player_touch_frames += 1
 
-            for x in range(0,25):
-                self.floor.create_object(SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14)))
-            
-            return False
+            if(self.player_touch_frames>4):
+                self.floor.player.receive_ranged_attack(self)
+                self.floor.create_object( Splat( p = self.p, color=[1.0,0.0,0.0,1.0] ) )
+                self.floor.objects.remove(self)
+
+                for x in range(0,25):
+                    self.floor.create_object(SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14)))
+                return False
+            else:
+                if self.floor.player.slash.visible:
+                    self.rad = self.floor.player.slash.rad
+                    self.reorient()
+                    self.player_touch_frames = 0
+                return True
 
         if(self.lifespan>0):
             return True
