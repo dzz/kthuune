@@ -492,8 +492,9 @@ class Firepot(Object):
         self.light_color = [0.0,1.0,1.0,1.0]
         self.light_radius = 1.5
         self.texture = Firepot.textures[0]
-        self._fr = (0 - floor(self.p[1]*3))%60
+        self._fr = (0 - floor((self.p[1]+self.p[0])*3))%60
         self.size = [2.0,2.0]
+        self.fire_rad = 0
 
     def tick(self):
         self._fr = (self._fr +1)%60
@@ -501,10 +502,10 @@ class Firepot(Object):
         self.light_radius *= 1.02
         if(self._fr == 50):
             self.light_radius = 1.5
-            bolt = ERangedMagic( p = [ self.p[0], self.p[1] ], rad = 0 ) 
+            bolt = ERangedMagic( p = [ self.p[0], self.p[1] ], rad = self.fire_rad ) 
             self.floor.create_object( bolt )
             bolt.lifespan = 30
-            bolt.rad += uniform(-0.01,0.01)
+            bolt.rad += uniform(-0.04,0.04)
 
 
     def parse(od,df):
@@ -2103,6 +2104,12 @@ class ForestGraveyard():
 
             if od["key"] in ["firepot" ]:
                 self.objects.append(Firepot.parse(od,df))
+
+            if od["key"] in ["firepot_up" ]:
+                fp = Firepot.parse(od,df)
+                fp.fire_rad = -3.14/2
+                self.objects.append(fp)
+
 
             if od["key"] in ["text" ]:
                 self.objects.append(SpeechBubble.parse(od,df))
