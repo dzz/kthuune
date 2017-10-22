@@ -584,8 +584,11 @@ class ERangedMagic(Object):
         
         self.attack_str = 8
         self.player_touch_frames = 0
+
+        self.vs_enemy = False
         
     def reorient(self):
+        self.vs_enemy = True
         KSounds.play( KSounds.redirect )
         self.lifespan = 80
         spd = (0.55 + uniform(0.001, 0.01))*1.7
@@ -623,31 +626,44 @@ class ERangedMagic(Object):
         if not deadly:
             return True
 
-        dx = self.p[0] - self.floor.player.p[0]
-        dy = self.p[1] - self.floor.player.p[1]
+        if self.vs_enemy:
+            for enemy in self.floor.snap_enemies:
+                if(enemy.snap_type == 1):
+                    dx = self.p[0] - enemy.p[0]
+                    dy = self.p[1] - enemy.p[1]
+                    dx = dx * dx
+                    dy = dy * dy
+                    md = dx+dy
+                    if md < 5:
+                        enemy.receive_snap_attack(False)
+                        self.floor.objects.remove(self)
+                        return False
+        else:
+            dx = self.p[0] - self.floor.player.p[0]
+            dy = self.p[1] - self.floor.player.p[1]
     
-        dx = dx * dx
-        dy = dy * dy
+            dx = dx * dx
+            dy = dy * dy
 
-        md = dx+dy
+            md = dx+dy
 
-        if md < 6.5:
-            self.player_touch_frames += 1
+            if md < 6.5:
+                self.player_touch_frames += 1
 
-            if(self.player_touch_frames>7):
-                self.floor.player.receive_ranged_attack(self)
-                self.floor.create_object( Splat( p = self.p, color=[1.0,0.0,0.0,1.0] ) )
-                self.floor.objects.remove(self)
+                if(self.player_touch_frames>7):
+                    self.floor.player.receive_ranged_attack(self)
+                    self.floor.create_object( Splat( p = self.p, color=[1.0,0.0,0.0,1.0] ) )
+                    self.floor.objects.remove(self)
 
-                for x in range(0,25):
-                    self.floor.create_object(SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14)))
-                return False
-            else:
-                if self.floor.player.slash.visible:
-                    self.rad = self.floor.player.slash.rad
-                    self.reorient()
-                    self.player_touch_frames = 0
-                return True
+                    for x in range(0,25):
+                        self.floor.create_object(SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14)))
+                    return False
+                else:
+                    if self.floor.player.slash.visible:
+                        self.rad = self.floor.player.slash.rad
+                        self.reorient()
+                        self.player_touch_frames = 0
+                    return True
 
         if(self.lifespan>0):
             return True
