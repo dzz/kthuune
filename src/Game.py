@@ -218,7 +218,7 @@ class Game( BaseGame ):
         ## self.load_floor("arena")
         ## self.load_floor("docks")
 
-        self.floor = self.create_tickable(self.load_floor("grey_world"))
+        self.floor = self.create_tickable(self.load_floor("doortest"))
         self.player.trigger_title( self.floor.title )
         if "bg_texture" in self.floor.__dict__:
             Background.bg_texture = self.floor.bg_texture
@@ -231,6 +231,8 @@ class Game( BaseGame ):
 
     def render(self):
         with BGL.context.render_target( Game.god_buffer):
+
+            BGL.context.clear( 1.0,1.0,1.0,1.0);
             self.background.camera = self.camera
             self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
             #with BGL.blendmode.alpha_over:

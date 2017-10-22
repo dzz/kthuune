@@ -62,8 +62,8 @@ class DungeonFloor( Floor ):
                 "photon_map_height" : 1024,
                 "static_lightmap_width" : 1024,
                 "static_lightmap_height" : 1024,
-                "dynamic_lightmap_width" : 960/2,
-                "dynamic_lightmap_height" : 540/2,
+                "dynamic_lightmap_width" : 960/3,
+                "dynamic_lightmap_height" : 540/3,
                 "photon_mapper_config" : {
                     'stream' : True,
                     'photon_radius' :70.0,

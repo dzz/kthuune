@@ -1,5 +1,7 @@
 #version 330
 
+// @load "includes/uvs.glsl"
+
 in vec2 uv;
 uniform float parallax;
 uniform float fog_level;
@@ -104,18 +106,26 @@ void main(void) {
     float warp = 0.25+(0.8*l);
     vec2 shifted = shift(uv + scp)*-1*warp;
     
-    vec4 vision_texel = texture( vision_tex, uv);
+    vec2 floor_uv = get_floor_uv(uv);
+    vec4 vision_texel = texture( vision_tex, floor_uv);
 
-    vec2 light_uv = vec2( uv.x-0.5,uv.y-0.5);
-    light_uv *= 1.0 - (parallax/10.0);
-    light_uv += vec2(0.5,0.5);
+    vec2 light_uv = get_parallax_uv(uv);
 
     vec4 light_texel = texture( light_buffer, light_uv) * smoothstep(0.0,1.0,vision_texel*24);
 
 
-    vec4 computed = vec4(1.0,1.0,1.0,length(shift(uv))) * light_texel * clouds(uv);
+    vec2 cloud_uv = get_fisheye_uv( uv, 0.9,2.5);
+    vec2 icloud_uv = get_fisheye_uv( uv, 1.2,3.0);
+    vec4 base = (clouds( cloud_uv ) + clouds(icloud_uv))/2;
+
+    vec4 computed = base;
+
+    computed.a = 0.5+(computed.r*0.5);
+
+    computed.a = computed.a * (1.0-vision_texel.r);
     
 
+    computed.rgb *= vec3(0.6,0.5,0.8)+light_texel.rgb;
     
         //computed.r *= (1.0 - vision_texel.r);
         //computed.g *= (1.0 - vision_texel.r);
