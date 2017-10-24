@@ -282,8 +282,8 @@ class Door(Object):
         self.closed_ratio = 1.0
         self.effective_closed_ratio = 1.0
         self.sensrad2 = 30
-        self.open_speed = 0.1
-        self.close_speed = 0.2
+        self.open_speed = 0.06
+        self.close_speed = 0.1
     
     def tick(self):
         self.effective_closed_ratio = (self.effective_closed_ratio * 0.8) + (self.closed_ratio*0.2)

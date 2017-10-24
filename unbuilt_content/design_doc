@@ -1,0 +1,81 @@
+[ GENRE ]
+==========
+COSMIC HORROR 
+FANTASY ACTION 
+ARCADE RPG
+
+[ THE PLOT ]
+=============
+
+You are one of the last VECTORLORDs infused with a KTHUNIAN TELEKINE, 
+
+The BELLBIRD is dying and is losing its ability to hold back the BAKAZOURIA who are invading KTHUNIA, and consuming the flesh of the KTHUNIANS.
+
+As the KTHUNIAN HIVEMIND writhes in its last moment, you, the VECTORLORD has been resurrected to fight the
+GALAMESH and the CORRUPTED KTHUUNES
+
+[ THE CREATURES ]
+=================
+
+VECTORLORDS are non KTHUNIAN, may also be slaves like the BELLBIRD. They protect KTHUNIA when summoned by chaotic ruptures to the KTHUNIAN HIVEMIND.
+
+The ELDERs are echoes of KTHUUNEs 
+
+The  BELLBIRD is a cosmic beast, enslaved by the KTHUNIANS to hold shut the PHASE VORTEX. Its death is visualized like a bacteria being attacked by bacteriophages. 
+
+The BAKAZORA are an all consuming demonic force arising from decayed quantum states in neighboring universes
+
+A TELEKINE is a juvenile KTHUNIAN 
+
+A CORRUPTED KTHUNIAN has had its genetic code rewritten by the phase shift, though white and red faced like regular kthunes, their visages and bodies show BAKAZOURIAN features.
+
+The BAKAZOURIAN are a dark force which manifests physically in the forms of wraiths, zombies, spiders, witches. In other dimensions they may be merely dark matter, but when passing through a PHASE VORTEX they manifest as a corrupting physical presence been on destruction and consumption.
+
+[ THE SETTING ]
+===============
+
+KTHUNIANs live on a foggy, wet planet. They use a mix of technologies familiar to the human dimension and fantastical. Space ships, Radio towers, etc.  Their world is a mix of fantasy and technology
+
+VECTORLORDs orbit in CHEMEOSTASIS tanks, but they have a ship which is capable of travelling the Kthunian solar system. They are a last effort 'insurance policy' against the BAKAZOURIAN.
+
+[ THE PLAYER EXPERIENCE ]
+=========================
+
+The player attacks with a magic sword, and its TELEKINE. The sword is a nanosword which can be upgraded through research.
+
+Research is done on the player's ship, THE HAUNTED PILGRIM.
+
+Research is paid for by collecting NEON(Ne), THORIUM (Th), CARBON (C), which may be dropped by enemies, or mined by attacking CRYSTALLINE STRUCTURES in the OORT CLOUD.
+
+The TELEKINE is held in a vat on THE HAUNTED PILGRIM. It can be upgraded and works something like a Tamigotchi, showing side effects of the upgrades (generally growing more grotesque) while in the vat. Upgrading the TELEKINE requires PROKARYOTES, and EUKARYOTES. These will be dropped by CORRUPTED KTHUNIANs.
+
+[ WEAPON TECH ]
+===============
+
+SWORD
+-----
+    Base Power +1, +2, +3, +4, +5
+
+ - Slash:                       your basic slash
+ - Redirect:                    sword can redirect fireballs
+ - Homing Redirect:             redirected fireballs can home
+ - Spawning Redirect:           redirected fireballs spawn homing fireballs
+ - Lightning Bolt (1,2,3):      lightning bolt attack will chain to 1,2 or 3 nearby targets (dependent on level unlocked)      
+
+TELEKINE
+--------
+    Base Power +1, +2, +3, +4, +5
+
+ - Telekine:                     teleport attack to enemy 
+ - Explosive Telekine:           teleport to primary, spawn short range circular explosive attack
+ - Sword Chain Telekine (1,2,3)  a properly timed slash immediately after a Telekine attack will not break combo and will send a PHANTOM SWORD which is directionally snapped
+ - Radiant Telekine (3,4,5)      holding the TELEKINE button for a short period after landing a telekine attack will send magical energy out to up to 5 (depending on level) 
+ - Crystaline Telekine           holding the TELEKINE button for a short period after landing a telekine attack will launch a CRYSTAL RAIN attack
+
+[ LEVEL DESIGN ]
+================
+
+The world should be a series of interconnected levels with checkpoints, at a checkpoint you can either continue on or go back to your ship and use level up with collected items.
+
+Other "off-mainline" levels can be invoked from the main play area. These will have some 'gimmick', e.g. forced progression, or a time limit.
+

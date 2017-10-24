@@ -47,7 +47,8 @@ float fbm ( in vec2 _st) {
     }
     return v;
 }
-vec4 clouds(vec2 _coord) {
+vec4 clouds(vec2 _coord, float l) {
+
     float ti = tick*0.1;
     vec4 tcol = texture(light_buffer,_coord);
     vec2 coord = _coord;
@@ -59,6 +60,8 @@ vec4 clouds(vec2 _coord) {
     //coord*=(1.0+(damt*2));
 
     float u_time = tick/65.0;
+
+    u_time *= 1.0+(l*0.2);
 
     vec2 st = coord*4+(camera_position*(vec2(0.1,-0.1)));
     //st += st * abs(sin(u_time*0.1)*3.0);
@@ -116,7 +119,7 @@ void main(void) {
 
     vec2 cloud_uv = get_fisheye_uv( uv, 0.9,2.5);
     vec2 icloud_uv = get_fisheye_uv( uv, 1.2,3.0);
-    vec4 base = (clouds( cloud_uv ) + clouds(icloud_uv))/2;
+    vec4 base = (clouds( cloud_uv, l ) + clouds(icloud_uv, l))/2;
 
     vec4 computed = base;
 

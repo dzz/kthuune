@@ -42,6 +42,7 @@ class SlashEffect(Object):
     def slash(self):
 
         if(self.floor.player.run_stamina>0):
+            self.floor.player.sword_swing = self.floor.player.sword_swing_cooldown
             if(self.cooldown>0):
                 return
             self.texture = SlashEffect.textures[0]
@@ -909,7 +910,7 @@ class KPlayer(Player):
         if self.dash_flash:
             modamt = modamt*3
 
-        if self.sword_swing == 0:
+        if self.sword_swing <= 0:
             tex = KPlayer.textures[4]
 
             yidx = 0
@@ -1039,6 +1040,7 @@ class KPlayer(Player):
         
     def tick(self):
 
+        self.sword_swing -= 1
         if(self.run_stamina<0):
             self.run_stamina = 0
 

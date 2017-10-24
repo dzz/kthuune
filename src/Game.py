@@ -117,7 +117,7 @@ class Game( BaseGame ):
         bg_texture = BGL.assets.get("KT-forest/texture/grey_world_processed"),
         sky_texture = BGL.assets.get("KT-forest/texture/grey_world_background"),
         parallax_sky = -0.2,
-        parallax_bg = 0.005,
+        parallax_bg = 0.04,
         title = "Background Radiation...",
         god_shader = BGL.assets.get("KT-compositor/shader/radiation_god"),
         fog_level_base=0.9, tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
@@ -218,7 +218,7 @@ class Game( BaseGame ):
         ## self.load_floor("arena")
         ## self.load_floor("docks")
 
-        self.floor = self.create_tickable(self.load_floor("grey_world"))
+        self.floor = self.create_tickable(self.load_floor("doortest"))
         self.player.trigger_title( self.floor.title )
         if "bg_texture" in self.floor.__dict__:
             Background.bg_texture = self.floor.bg_texture
