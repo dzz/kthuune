@@ -38,6 +38,7 @@ class SlashEffect(Object):
         self.texture = SlashEffect.textures[0]
         self.z_index = -1
         self.cooldown = 0
+        self.stagger_cooldown = 0
 
     def slash(self):
 
@@ -52,7 +53,8 @@ class SlashEffect(Object):
             self.orig_rad = self.floor.player.rad
             self.floor.player.sword.visible = False
             self.attacked_enemies = []
-            self.cooldown = 53 
+            self.cooldown = 51 
+            self.stagger_cooldown = 0
             KSounds.play( KSounds.slash )
             self.floor.player.run_stamina -= 40
 
@@ -64,7 +66,8 @@ class SlashEffect(Object):
         offsx = cos(self.rad)*1
         offsy = sin(self.rad)*1
 
-        self.rad+=0.04
+        if self.stagger_cooldown==0:
+            self.rad+=0.04
 
         self.p[0] = self.floor.player.p[0] + offsx
         self.p[1] = self.floor.player.p[1] + offsy
@@ -72,18 +75,23 @@ class SlashEffect(Object):
         Object.light_type = Object.LightTypes.NONE
         if self.visible:
             Object.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-            if self.fr>5:
+            if self.fr>15 and self.fr < 19 and (self.stagger_cooldown==0):
                 for enemy in self.floor.snap_enemies:
-                    if enemy.snap_type==1 and enemy not in self.attacked_enemies:
+                    if enemy.snap_type==1 and enemy not in self.attacked_enemies and len(self.attacked_enemies)<3:
                         dx = (self.p[0] - enemy.p[0]) 
                         dy = (self.p[1] - enemy.p[1]) 
                         md = (dx*dx) + (dy*dy)
                         if md < 10:
                             KSounds.play( KSounds.slashhit )
-                            enemy.receive_snap_attack( True )
+                            enemy.receive_snap_attack( choice([False, False, True]) )
                             self.attacked_enemies.append(enemy)
-            self.fr+=1 
+                            self.stagger_cooldown += 25
+            if self.stagger_cooldown==0:
+                self.fr+=1 
+            else: 
+                self.stagger_cooldown -=1
             if self.fr == 21:
+                self.stagger_cooldown = 0
                 self.visible = False
                 self.attacked_enemies = []
                 self.floor.player.sword.visible = True
@@ -1284,5 +1292,9 @@ class KPlayer(Player):
             else:
                 self.color = [1.0,1.0,1.0,1.0]
         
+            if(self.slash.visible):
+                self.v[0] *= 0.2
+                self.v[1] *= 0.2
+
             Object.tick(self)
 
