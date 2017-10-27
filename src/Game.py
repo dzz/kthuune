@@ -104,7 +104,7 @@ class Game( BaseGame ):
         floor = DungeonFloor( 
         title = "The Hunting Pilgrim",
         god_shader = BGL.assets.get("KT-compositor/shader/ship_god"),
-        fog_level_base=0.5, tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
+        fog_level_base=0.5, tilescale =2, uses_vision=False, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         floor.game = self
         return floor
 

@@ -32,7 +32,12 @@ class DFRenderer( FloorRenderer ):
         """ Pre-render compositing """
 
         self.vision_lightmap.clear()
-        self.compute_vision_lightmap()
+
+        if self.uses_vision:
+            self.compute_vision_lightmap()
+        else:
+            self.vision_lightmap.white_out()
+                
         DFRenderer.lbtick +=1
         self.photon_map.compute_next()
         if(DFRenderer.lbtick%2==1):

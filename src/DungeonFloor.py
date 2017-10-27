@@ -39,6 +39,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "uses_vision" : True,
             "camera_lock_regions" : [],
             "title" : "Who Knows!",
             "god_shader" : None,
