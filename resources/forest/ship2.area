@@ -965,7 +965,7 @@ OBJECT
 terminal
 14
 -24.5
-{"title" : "System Config"}
+{"title" : "CENTRAL COMMAND"}
 False
 0
 0
@@ -973,7 +973,7 @@ OBJECT
 terminal
 -23.5
 -15.5
-{"title" : "Telekine Biometrics"}
+{"title" : "TELEKINE BIOMETRICS"}
 False
 0
 0
@@ -981,7 +981,7 @@ OBJECT
 terminal
 -31.5
 4.5
-{"title": "Weapon Research"}
+{"title": "SWORD TECH"}
 False
 0
 0
@@ -989,7 +989,7 @@ OBJECT
 terminal
 25.5
 7.5
-{"title" : "Door Control"}
+{"title" : "EXIT SHIP"}
 False
 0
 0

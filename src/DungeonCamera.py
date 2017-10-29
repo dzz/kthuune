@@ -49,8 +49,12 @@ class DungeonCamera (Camera):
             aim_offset_y = (pad.right_stick[1]*12) + (self.player.v[1]*0.5)
 
 
+
             pX = self.player.p[0]
             pY = self.player.p[1]
+
+            if(self.player.active_terminal):
+                pX += 15
 
             activeRegion = None
             for region in self.player.floor.camera_lock_regions:

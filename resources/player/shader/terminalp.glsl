@@ -17,8 +17,8 @@ void main(void) {
     if((smpl_base.r+smpl_base.g+smpl_base.g)==0)
         gl_FragColor = smpl_base*(1.0-l);
     else
-        gl_FragColor = texture(texBuffer, uv+noisey_offset);
+        gl_FragColor = texture(texBuffer, uv+noisey_offset)*(0.7+(l*0.3));
 
-    gl_FragColor.rgb *= vec3(1.0,0.7,0.2);
+    gl_FragColor.rgb *= vec3(1.0,0.8,0.2);
 
 }
