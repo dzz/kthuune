@@ -827,8 +827,8 @@ False
 0
 OBJECT
 light
-25.5
-8.5
+27
+17.5
 {"class":"iact"}
 False
 0
@@ -947,8 +947,8 @@ False
 0
 OBJECT
 light
--17.5
--43
+-24
+-35.5
 {"class":"shortwave"}
 False
 0
@@ -965,7 +965,7 @@ OBJECT
 terminal
 14
 -24.5
-{}
+{"title" : "System Config"}
 False
 0
 0
@@ -973,7 +973,7 @@ OBJECT
 terminal
 -23.5
 -15.5
-{}
+{"title" : "Telekine Biometrics"}
 False
 0
 0
@@ -981,7 +981,7 @@ OBJECT
 terminal
 -31.5
 4.5
-{}
+{"title": "Weapon Research"}
 False
 0
 0
@@ -989,7 +989,7 @@ OBJECT
 terminal
 25.5
 7.5
-{}
+{"title" : "Door Control"}
 False
 0
 0

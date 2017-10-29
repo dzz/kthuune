@@ -25,6 +25,25 @@ from ..KSounds import KSounds
 
 from ..GeneratorOptions import GeneratorOptions
 
+class Terminal(Object):
+    def parse(od,df):
+        return Terminal( title=od['meta']['title'], p = [ od['x'], od['y'] ] )
+
+    def customize(self):
+        self.visible = False
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+
+    def tick(self):
+        if(self.mdist(self.floor.player)<6.5): 
+            if(self.floor.player.active_terminal != self):
+                self.floor.player.active_terminal = self
+                print("SHOWING",self)
+        else:
+            if self.floor.player.active_terminal == self:
+                self.floor.player.active_terminal = None
+                print("HIDING",self)
+        
+
 class SpeechBubble(Object):
     instance = None
     MODE_PERSISTANT_TRIGGERED = 1
@@ -2161,6 +2180,9 @@ class ForestGraveyard():
                     zoom = float(od["meta"]["zoom"])
                 lock_region = ( od["x"], od["y"], od["x"]+od["w"], od["y"]+od["h"], axes, zoom )
                 df.camera_lock_regions.append( lock_region )
+
+            if od["key"] in ["terminal"]:
+                self.objects.append(Terminal.parse(od,df))
 
 
 

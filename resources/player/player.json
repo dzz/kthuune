@@ -65,11 +65,13 @@
             { "name" : "wandcard0000", "filename" : "{package_path}/wandcard0000.png", "filtered" : false },
             { "name" : "wandcard0001", "filename" : "{package_path}/wandcard0001.png", "filtered" : false },
             { "name" : "healthvial0000", "filename" : "{package_path}/healthvial0000.png", "filtered" : false },
-            { "name" : "healthvial0001", "filename" : "{package_path}/healthvial0001.png", "filtered" : false }
+            { "name" : "healthvial0001", "filename" : "{package_path}/healthvial0001.png", "filtered" : false },
+            { "name" : "terminal0000", "filename" : "{package_path}/terminal0000.png", "filtered" : false }
         ],
         "shader" :  [
             { "name" : "card", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/cardp" },
-            { "name" : "islot", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/islotp" }
+            { "name" : "islot", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/islotp" },
+            { "name" : "terminal", "vertex_program" : "{package_path}/shader/terminalv", "pixel_program" : "{package_path}/shader/terminalp" }
         ],
         "path" : [
             { "name" : "charge_initiated", "path" : "{package_path}/sounds/charge_initiated.wav" },

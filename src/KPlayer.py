@@ -239,6 +239,38 @@ class PlayerInvSlot():
             "filter_color"         : filter_color,
             "uv_translate"         : [ 0,0 ] }
     
+class TerminalRenderer():
+    shader = BGL.assets.get("KT-player/shader/terminal")
+    primitive = BGL.primitive.unit_uv_square
+    texbuffer = BGL.framebuffer.from_dims(320,240)
+    windowtex = BGL.assets.get("KT-player/texture/terminal0000")
+    window_shader = BGL.assets.get("beagle-2d/shader/passthru_inv")
+
+    def render(size, tick, terminal):
+        with BGL.context.render_target( TerminalRenderer.texbuffer ):
+            BGL.context.clear(0.0,0.0,0.0,1.0)
+            TerminalRenderer.primitive.render_shaded(
+                TerminalRenderer.window_shader,
+                { "texBuffer" : TerminalRenderer.windowtex }
+            )
+            if(terminal):
+                BGL.lotext.render_text_pixels( terminal.title, 6,9, [0.0,0.0,0.0] )
+        TerminalRenderer.primitive.render_shaded(TerminalRenderer.shader, TerminalRenderer.get_shader_params(size,tick))
+
+
+    def get_shader_params(size, tick):
+        return {
+            "tick" : [ tick ],
+            "texBuffer"            : TerminalRenderer.texbuffer,
+            "translation_local"    : [ 0, 0 ],
+            "scale_local"          : [ 3.2,-2.4*size ],
+            "translation_world"    : [ 0, 0 ],
+            "scale_world"          : [1.0,1.0],
+            "view"                 : Hud.view,
+            "rotation_local"       : 0.0,
+            "filter_color"         : [1.0,1.0,1.0,size*0.5],
+            "uv_translate"         : [ 0,0 ] }
+
 class Card():
     shader = BGL.assets.get("KT-player/shader/card")
     primitive = BGL.primitive.unit_uv_square
@@ -705,9 +737,9 @@ class KPlayer(Player):
         self.active_ability = -1
 
         overrides =  {
-            "light_type" : Object.LightTypes.NONE,
-            "light_radius" : 25.0,
-            "light_color" : [ 1.0,0.7,0.5,1.0],
+            "light_type" : Object.LightTypes.DYNAMIC_SHADOWCASTER,
+            "light_radius" : 15.0,
+            "light_color" : [ 1.0,1.0,1.0,1.0],
             "walk_tick" : 0,
             "z_index" : 1,
             "sword_swing" : 0,
@@ -835,6 +867,7 @@ class KPlayer(Player):
                     BGL.lotext.render_text_pixels(self.hud_message, mx-1, 240-11, urc )
                     BGL.lotext.render_text_pixels(self.hud_message, mx, 240-10, urc1 )
 
+
         with BGL.blendmode.alpha_over:
             self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
             self.floor.render_objects("hud", True)
@@ -849,7 +882,11 @@ class KPlayer(Player):
         self.swordcard.render()
         #self.wandcard.render()
 
+
+        
         with BGL.blendmode.alpha_over:
+            if(self.terminal_size>0):
+                TerminalRenderer.render(self.terminal_size, self.cardtick,self.active_terminal)
             self.title_card.render()
 
 
@@ -861,6 +898,8 @@ class KPlayer(Player):
         self.max_invslots = 5
 
         self.active_terminal = None
+        self.terminal_size = 0.0
+
         self.inventory = [None] * self.max_invslots
         self.inventory[0] = "hp_vial"
         self.inventory[1] = "hp_vial"
@@ -1049,6 +1088,17 @@ class KPlayer(Player):
         
     def tick(self):
 
+        if(self.active_terminal):
+            if( self.terminal_size<1.0):
+                self.terminal_size = (self.terminal_size*0.9) + 0.1
+                if self.terminal_size > 0.99:
+                    self.terminal_size = 1.0
+        else:
+            if(self.terminal_size>0):
+                self.terminal_size = (self.terminal_size*0.78)
+                if(self.terminal_size<0.01):
+                    self.terminal_size = 0.0
+
         self.sword_swing -= 1
         if(self.run_stamina<0):
             self.run_stamina = 0
@@ -1116,7 +1166,6 @@ class KPlayer(Player):
                 self.dch_cooldown = 17
                 self.attempt_snap_attack()
 
-        self.light_color = self.base_light_color
         
         if(abs(pad.left_stick[0])>0.003) or (abs(pad.left_stick[1])>0.003):
             self.walk_tick = self.walk_tick+1
@@ -1243,25 +1292,8 @@ class KPlayer(Player):
             self.v[1] = self.v[1]*0.8+delta[1]*0.2
 
             self.rad = atan2( self.v[1], self.v[0] )
-            self.light_radius = 25.0
-            self.light_color = self.base_light_color
-            impulse = uniform(5.0,35.0)
-            self.light_radius = (self.light_radius*0.96) + (impulse*0.04)
             self.texture = self.determine_texture()
 
-            if(self.dash_flash):
-                rc = uniform(0.0,1.0)
-                self.light_color= [rc,rc,rc,1.0]
-    
-            if(self.sword.state == Sword.STATE_CHARGING):
-                self.light_color = [ 1.0,1.0,1.0,1.0 ]
-                self.light_radius = uniform(0.0,100.0)
-            if(self.sword.state == Sword.STATE_ATTACK_PENDING):
-                self.light_color = [ uniform(0.0,1.0),uniform(0.0,1.0),0.0,1.0 ]
-                self.light_radius = uniform(1.0,250.0)
-            if(self.sword.state == Sword.STATE_DISCHARGING):
-                self.light_color = [ 0.0,uniform(0.0,1.0),uniform(0.0,1.0),1.0]
-                self.light_radius = uniform(40.0,50.0)
 
 
             if(self.snap_cooldown>0):
