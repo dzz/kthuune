@@ -104,6 +104,7 @@ class Game( BaseGame ):
         floor = DungeonFloor( 
             title = "The Haunted Pilgrim",
             god_shader = BGL.assets.get("KT-compositor/shader/ship_god"),
+            fuzz_amt = 0.8,
             fog_level_base=0.5, 
             tilescale =2, 
             uses_vision=True, 

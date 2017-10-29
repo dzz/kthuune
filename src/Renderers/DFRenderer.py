@@ -125,6 +125,7 @@ class DFRenderer( FloorRenderer ):
             BGL.compositor.render_composite( shader, {
                 "tick"              : self._tick,
                 "camera_position" : self.camera.p,
+                "fuzz_amt"  : self.fuzz_amt,
                 "floor_buffer" : self.floor_buffer,
                 "shadow_buffer" : self.shadow_buffer,
                 "light_buffer" : self.light_buffer,

@@ -5,8 +5,10 @@
 // @load "includes/uvs.glsl"
 // @load "includes/blend.glsl"
 // @load "includes/lighting.glsl"
+// @load "includes/noise.glsl"
 
 uniform float tick;
+uniform float fuzz_amt;
 uniform float target_width;
 uniform float target_height;
 
@@ -25,12 +27,19 @@ in vec2 uv;
 
 void main() {
 
-    vec2 floor_uv = get_floor_uv(uv);
+    vec2 noisey_offset = vec2(0.0,0.0);
+    if(fuzz_amt>0.0001) {
+        float d_amt = get_uv_len(uv)*fuzz_amt;
+        noisey_offset = vec2( random(uv*1000), random(uv*-3000))*(d_amt*d_amt*d_amt*0.3);
+    } 
+
+
+    vec2 floor_uv = get_floor_uv(uv+noisey_offset);
     vec4 floor_texel = texture( floor_buffer, floor_uv );
     vec4 vision_texel = texture( vision_buffer, floor_uv); 
     vec4 light_texel = texture( light_buffer, floor_uv );
 
-    vec2 object_uv = get_parallax_uv(uv);
+    vec2 object_uv = get_parallax_uv(uv+noisey_offset);
     vec4 object_texel = texture( object_buffer, object_uv );
     vec4 object_light_texel = texture( light_buffer, object_uv );
 

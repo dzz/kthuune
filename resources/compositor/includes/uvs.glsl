@@ -27,3 +27,10 @@ vec2 get_parallax_uv( vec2 uv ) {
     return (l*floor_uv)+((1.0-l)*inv_fisheye);
 }
 
+vec2 get_centered_uv( vec2 uv) {
+    return uv-vec2(0.5,0.5);
+}
+
+float get_uv_len( vec2 uv) {
+    return length(get_centered_uv(uv));
+}
