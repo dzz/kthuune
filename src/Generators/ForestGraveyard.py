@@ -289,11 +289,11 @@ class FactoryLight(Object):
 
     def tick(self):
         if(self.animation_type==0): #shortwave
-            self.light_radius = (uniform(10.0,40.0)*0.4)+self.light_radius*0.6
+            self.light_radius = (uniform(10.0,40.0)*0.1)+self.light_radius*0.9
             self.light_color = [
-                                (uniform(0.2,0.6)*0.3) + self.light_color[0]*0.7,
-                                (uniform(0.0,0.4)*0.3) + self.light_color[1]*0.7,
-                                (uniform(0.5,1.0)*0.3) + self.light_color[2]*0.7,
+                                (uniform(0.2,0.6)*0.1) + self.light_color[0]*0.9,
+                                (uniform(0.0,0.4)*0.1) + self.light_color[1]*0.9,
+                                (uniform(0.5,1.0)*0.1) + self.light_color[2]*0.9,
                                 1.0 ]
             
 

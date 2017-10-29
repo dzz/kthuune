@@ -860,6 +860,7 @@ class KPlayer(Player):
         self.sel_invslot = 0
         self.max_invslots = 5
 
+        self.active_terminal = None
         self.inventory = [None] * self.max_invslots
         self.inventory[0] = "hp_vial"
         self.inventory[1] = "hp_vial"

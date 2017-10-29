@@ -39,7 +39,7 @@ class LazerBeam(Object):
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.size = [30.0,0.1]
         self.light_color = [ 0.5,0.5,0.5,0.5]
-        self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
+        self.light_type = Object.LightTypes.NONE
         self.visible = False
         self.buftarget = "popup"
         self.fired = False
@@ -50,6 +50,7 @@ class LazerBeam(Object):
         print("KABOOM!")
 
     def tick(self):
+        self.visible = False
         offs = 30
         #self.size[1] = 0.5
         offsx = cos(self.floor.player.rad) * offs
