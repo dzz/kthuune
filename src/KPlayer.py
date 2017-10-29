@@ -263,7 +263,7 @@ class TerminalRenderer():
             "tick" : [ tick ],
             "texBuffer"            : TerminalRenderer.texbuffer,
             "translation_local"    : [ 0, 0 ],
-            "scale_local"          : [ 3.2,-2.4*size ],
+            "scale_local"          : [ 3.2*1.25,-2.4*size*1.25 ],
             "translation_world"    : [ 0, 0 ],
             "scale_world"          : [1.0,1.0],
             "view"                 : Hud.view,

@@ -279,6 +279,10 @@ class FactoryLight(Object):
             self.light_radius = 25.
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [ 0.5, 0.6,1.0,1.0 ]
+        if self.factory_def["meta"]["class"] == "shipfillred":
+            self.light_radius = 35.
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_color = [ 0.6, 0.3,0.2,1.0 ]
         if self.factory_def["meta"]["class"] == "iact":
             self.light_radius = 18.
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
@@ -1632,8 +1636,8 @@ class Elder(Object):
 
         dst = (dx*dx+dy*dy)
 
-        if(dst<30):
-            SpeechBubble.instance.set_script(["Oh, it's you.", "Did you know that I talk?", "Yup... I talk.", "I write my text on the floor here, see?", "It's been... a while...","since I met youuuuuu","Ok bye."],  self.p)
+        #if(dst<30):
+        #    SpeechBubble.instance.set_script(["Oh, it's you.", "Did you know that I talk?", "Yup... I talk.", "I write my text on the floor here, see?", "It's been... a while...","since I met youuuuuu","Ok bye."],  self.p)
         ###    self.floor.player.set_hud_message("HELLO I TALK")
         ###    if self.floor.player.get_pad().button_down( BGL.gamepads.buttons.X ):
         ###        pass
