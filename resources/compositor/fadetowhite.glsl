@@ -2,7 +2,10 @@
 
 in vec2 uv;
 uniform float amt;
+uniform vec3 color;
 
 void main(void) {
-    gl_FragColor = vec4(0.0,0.0,0.0,amt);
+        
+    gl_FragColor.rgb = color;
+    gl_FragColor.a = amt;
 }

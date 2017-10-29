@@ -102,9 +102,40 @@ class Game( BaseGame ):
         area_def = get_area_data( area_raw )
 
         floor = DungeonFloor( 
-        title = "The Hunting Pilgrim",
-        god_shader = BGL.assets.get("KT-compositor/shader/ship_god"),
-        fog_level_base=0.5, tilescale =2, uses_vision=False, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
+            title = "The Haunted Pilgrim",
+            god_shader = BGL.assets.get("KT-compositor/shader/ship_god"),
+            fog_level_base=0.5, 
+            tilescale =2, 
+            uses_vision=True, 
+            fade_vision_amt=0.62, 
+            width = area_def["width"]*2, 
+            height = area_def["height"]*2, 
+            camera = self.camera, 
+            player = self.player, 
+            objects = [], 
+            area_def = area_def, 
+            renderer_config = { 
+                "vision_lightmap_width" : 960,
+                "vision_lightmap_height" : 540,
+                "photon_map_width" : 1024,
+                "photon_map_height" : 1024,
+                "static_lightmap_width" : 1024,
+                "static_lightmap_height" : 1024,
+                "dynamic_lightmap_width" : 960,
+                "dynamic_lightmap_height" : 540,
+                "photon_mapper_config" : {
+                    'stream' : True,
+                    'photon_radius' :70.0,
+                    'photon_emitter_power' : 0.01,
+                    'photon_decay' : 0.9,
+                    'photon_decay_jitter' : 0.4,
+                    'photon_max_bounces' : 9,
+                    'num_photons' : 8,
+                    'photon_observe_chance' : 0.8
+                },
+                }
+            )
+
         floor.game = self
         return floor
 
@@ -218,7 +249,7 @@ class Game( BaseGame ):
         ## self.load_floor("arena")
         ## self.load_floor("docks")
 
-        self.floor = self.create_tickable(self.load_floor("doortest"))
+        self.floor = self.create_tickable(self.load_floor("ship"))
         self.player.trigger_title( self.floor.title )
         if "bg_texture" in self.floor.__dict__:
             Background.bg_texture = self.floor.bg_texture

@@ -109,7 +109,8 @@ class AimingBeam(Object):
         self.floor.create_object( RangedMagic( p = [ self.floor.player.p[0], self.floor.player.p[1] ], rad = self.floor.player.rad ) )
         print("KABOOM!")
 
-    def tick(self):
+    def _tick(self):
+        
         offs = 28
         #self.size[1] = 30
         offsx = cos(self.floor.player.rad) * offs
@@ -119,7 +120,7 @@ class AimingBeam(Object):
         self.p[1] = self.floor.player.p[1] + offsy
         self.rad = self.floor.player.rad
 
-    def _tick(self):
+    def tick(self):
         offs = 30
 
         pad = self.floor.player.controllers.get_virtualized_pad(self.floor.player.num)

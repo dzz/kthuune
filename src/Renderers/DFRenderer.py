@@ -20,7 +20,7 @@ class DFRenderer( FloorRenderer ):
         self.photon_buffer = BGL.framebuffer.from_screen()
         self.shadow_buffer = BGL.framebuffer.from_screen()
         self.floor_buffer = BGL.framebuffer.from_screen(filtered=False, scale = 1.0)
-        self.light_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 2.0)
+        self.light_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.object_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
         self.hittable_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.5)
@@ -35,13 +35,18 @@ class DFRenderer( FloorRenderer ):
 
         if self.uses_vision:
             self.compute_vision_lightmap()
+
+            if self.fade_vision_amt > 0.0:
+                with BGL.context.render_target( self.vision_lightmap.target_buffer):
+                    with BGL.blendmode.alpha_over:
+                        uniform_fade.apply_fadeout( self.fade_vision_amt, [1.0,1.0,1.0] )
         else:
             self.vision_lightmap.white_out()
                 
         DFRenderer.lbtick +=1
         self.photon_map.compute_next()
-        if(DFRenderer.lbtick%2==1):
-            self.compute_dynamic_lightmap()
+        #if(DFRenderer.lbtick%0==1):
+        self.compute_dynamic_lightmap()
 
         with BGL.context.render_target( self.shadow_buffer ):
             BGL.context.clear(1.0,1.0,1.0,1.0)
@@ -71,7 +76,7 @@ class DFRenderer( FloorRenderer ):
 
         with BGL.context.render_target( self.object_buffer ):
 
-            if(self.player.dash_flash):
+            if(self.player.dash_flash) or self.player.slash.visible:
                 with BGL.blendmode.alpha_over:
                     uniform_fade.apply_fadeout( 1.0 / 8.0 )
             elif (self.player.hp < 0.0):

@@ -470,8 +470,13 @@ class Prop(Object):
         p.size[1] = pd["h"]
         p.r = pd["r"]
 
-        p.z_index = 1
-        p.buftarget="popup"
+
+        if "layer" in pd and pd["layer"]==0:
+            p.z_index = -1000
+            p.buftarget="floor"
+        else:
+            p.z_index = 1
+
         return p
 
 class Firepot(Object):

@@ -71,7 +71,7 @@
             { "name" : "arena", "filename" : "{package_path}/arena.area" },
             { "name" : "doortest", "filename" : "{package_path}/gauntlet_camlock.area" },
             { "name" : "oort_cloud", "filename" : "{package_path}/oort_cloud.area" },
-            { "name" : "ship", "filename" : "{package_path}/ship.area" },
+            { "name" : "ship", "filename" : "{package_path}/ship2.area" },
             { "name" : "grey_world", "filename" : "{package_path}/grey_world.area" }
         ]
     }

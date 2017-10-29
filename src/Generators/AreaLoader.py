@@ -147,6 +147,8 @@ def get_area_data(data):
                 p["h"] = float(txt)
             if row == 5:
                 p["r"] = float(txt)
+            if row == 6:
+                p["layer"] = float(txt)
                     
         row = row + 1
 
