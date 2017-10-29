@@ -255,6 +255,7 @@ class TerminalRenderer():
             )
             if(terminal):
                 BGL.lotext.render_text_pixels( terminal.title, 6,9, [0.0,0.0,0.0] )
+                terminal.render_ui()
         TerminalRenderer.primitive.render_shaded(TerminalRenderer.shader, TerminalRenderer.get_shader_params(size,tick))
 
 
@@ -720,6 +721,8 @@ class KPlayer(Player):
         self.X_STATE = [ False, False ]
         self.A_PRESSED = False
         self.A_STATE = [ False, False ]
+        self.B_PRESSED = False
+        self.B_STATE = [ False, False ]
         self.Y_PRESSED = False
         self.Y_STATE = [ False, False ]
 
@@ -727,6 +730,10 @@ class KPlayer(Player):
         self.LEFT_PRESSED = False
         self.RIGHT_STATE = [ False, False ]
         self.RIGHT_PRESSED = False
+        self.UP_STATE = [ False, False ]
+        self.UP_PRESSED = False
+        self.DOWN_STATE = [ False, False ]
+        self.DOWN_PRESSED = False
 
         self.stimer = 0
         self.state = KPlayer.STATE_DEFAULT
@@ -1039,6 +1046,22 @@ class KPlayer(Player):
         else:
             self.RIGHT_PRESSED = False
 
+        self.UP_STATE[0] = self.UP_STATE[1]
+        self.UP_STATE[1] = pad.button_down( BGL.gamepads.buttons.DPAD_UP )
+    
+        if self.UP_STATE[1] is True and self.UP_STATE[0] is False:
+            self.UP_PRESSED = True
+        else:
+            self.UP_PRESSED = False
+
+        self.DOWN_STATE[0] = self.DOWN_STATE[1]
+        self.DOWN_STATE[1] = pad.button_down( BGL.gamepads.buttons.DPAD_DOWN )
+    
+        if self.DOWN_STATE[1] is True and self.DOWN_STATE[0] is False:
+            self.DOWN_PRESSED = True
+        else:
+            self.DOWN_PRESSED = False
+
         self.A_STATE[0] = self.A_STATE[1]
         self.A_STATE[1] = pad.button_down( BGL.gamepads.buttons.A )
     
@@ -1047,13 +1070,17 @@ class KPlayer(Player):
         else:
             self.A_PRESSED = False
 
+        self.B_STATE[0] = self.B_STATE[1]
+        self.B_STATE[1] = pad.button_down( BGL.gamepads.buttons.B )
+    
+        if self.B_STATE[1] is True and self.B_STATE[0] is False:
+            self.B_PRESSED = True
+        else:
+            self.B_PRESSED = False
+
         if self.X_STATE[1] is False:
             self.snap_attack_frozen = False
 
-        if self.A_PRESSED:
-            self.slash.slash()
-            #print("a pressed")
-            #self.state = KPlayer.STATE_FIRING
 
         if self.Y_PRESSED:
 
@@ -1069,6 +1096,32 @@ class KPlayer(Player):
                     self.active_invslot = self.sel_invslot
 
 
+    def route_terminal_input(self):
+        if self.active_terminal:
+            t = self.active_terminal.get_ui()
+            if(self.UP_PRESSED):
+                t.key_up()
+                return True
+            if(self.DOWN_PRESSED):
+                t.key_down()
+                return True
+            if(self.LEFT_PRESSED):
+                t.key_left()
+                return True
+            if(self.RIGHT_PRESSED):
+                t.key_right()
+                return True
+            if(self.A_PRESSED):
+                t.key_select()
+                return True
+            if(self.B_PRESSED):
+                t.key_back()
+                return True
+            return False
+        return False
+
+                
+            
     def consume_inventory(self):
         inv = self.inventory[ self.sel_invslot]
         self.inventory[self.sel_invslot] = None
@@ -1158,6 +1211,20 @@ class KPlayer(Player):
             return True
         pad = self.controllers.get_virtualized_pad( self.num )
         self.deal_with_buttons(pad)
+        used_term = self.route_terminal_input()
+        if used_term:
+            print("USED TERMINAL")
+            self.A_PRESSED = False
+            self.B_PRESSED = False
+            self.UP_PRESSED = False
+            self.DOWN_PRESSED = False
+            self.LEFT_PRESSED = False
+            self.RIGHT_PRESSED = False
+        if self.A_PRESSED:
+            self.slash.slash()
+            #print("a pressed")
+            #self.state = KPlayer.STATE_FIRING
+
 
         self.dch_cooldown -= 1
         if self.snap_cooldown < 0:

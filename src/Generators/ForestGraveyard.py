@@ -20,6 +20,7 @@ from math import floor
 from .magic_lines import vscan_line, fill_scanline
 import random
 from client.beagle.Newfoundland.GeometryUtils import segments_intersect
+from .ShipComputer import ShipComputer
 
 from ..KSounds import KSounds
 
@@ -29,9 +30,16 @@ class Terminal(Object):
     def parse(od,df):
         return Terminal( title=od['meta']['title'], p = [ od['x'], od['y'] ] )
 
+    def get_ui(self):
+        return self.ui
+
     def customize(self):
         self.visible = False
         self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.ui = ShipComputer(self)
+
+    def render_ui(self):
+        self.ui.render()
 
     def tick(self):
         if(self.mdist(self.floor.player)<6.5): 

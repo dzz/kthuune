@@ -45,6 +45,9 @@ class DungeonCamera (Camera):
 
             pad = self.player.controllers.get_virtualized_pad( self.player.num )
 
+            if(abs(pad.right_stick[0]) < 0.3): pad.right_stick[0] = 0.0
+            if(abs(pad.right_stick[1]) < 0.3): pad.right_stick[1] = 0.0
+
             aim_offset_x = (pad.right_stick[0]*12) + (self.player.v[0]*0.5)
             aim_offset_y = (pad.right_stick[1]*12) + (self.player.v[1]*0.5)
 
