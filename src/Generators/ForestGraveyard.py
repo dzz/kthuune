@@ -256,6 +256,14 @@ class FactoryLight(Object):
             self.light_radius = 45.
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [ 1.0, 1.0,1.0,1.0 ]
+        if self.factory_def["meta"]["class"] == "shipfill":
+            self.light_radius = 25.
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_color = [ 0.5, 0.6,1.0,1.0 ]
+        if self.factory_def["meta"]["class"] == "iact":
+            self.light_radius = 18.
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_color = [ 0.3, 0.6,0.8,1.0 ]
         if self.factory_def["meta"]["class"] == "medium_oort_guider":
             self.light_radius = 15.
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
@@ -268,6 +276,26 @@ class FactoryLight(Object):
             self.light_radius = 90.
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [ 0.6, 1.0,0.0,0.5 ]
+        if self.factory_def["meta"]["class"] == "shortwave":
+            self.tick_type = Object.TickTypes.TICK_FOREVER
+            self.animation_type = 0
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_radius = uniform(10.0,40.0)
+            self.light_color = [
+                                uniform(0.2,0.6),
+                                uniform(0.0,0.4),
+                                uniform(0.5,1.0),
+                                1.0 ]
+
+    def tick(self):
+        if(self.animation_type==0): #shortwave
+            self.light_radius = (uniform(10.0,40.0)*0.4)+self.light_radius*0.6
+            self.light_color = [
+                                (uniform(0.2,0.6)*0.3) + self.light_color[0]*0.7,
+                                (uniform(0.0,0.4)*0.3) + self.light_color[1]*0.7,
+                                (uniform(0.5,1.0)*0.3) + self.light_color[2]*0.7,
+                                1.0 ]
+            
 
 class Door(Object):
     def customize(self):
