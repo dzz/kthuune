@@ -20,7 +20,7 @@ from math import floor
 from .magic_lines import vscan_line, fill_scanline
 import random
 from client.beagle.Newfoundland.GeometryUtils import segments_intersect
-from .ShipComputer import ShipComputer
+from .ShipComputer import ShipComputer, TeleportControl, TelekineControl, SwordControl
 
 from ..KSounds import KSounds
 
@@ -36,7 +36,15 @@ class Terminal(Object):
     def customize(self):
         self.visible = False
         self.tick_type = Object.TickTypes.TICK_FOREVER
-        self.ui = ShipComputer(self)
+
+        if self.title == "Teleport Control":
+            self.ui = TeleportControl(self)
+        elif self.title == "Telekine Biometrics":
+            self.ui = TelekineControl(self)
+        elif self.title == "Sword Technology":
+            self.ui = SwordControl(self)
+        else:
+            self.ui = ShipComputer(self)
 
     def render_ui(self):
         self.ui.render()

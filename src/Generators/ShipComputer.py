@@ -1,13 +1,8 @@
 from Beagle import API as BGL
 
-class ShipComputer:
-    def __init__(self, owner):
-        self.owner = owner
-
+class MenuTerminal:
+    def setup_options(self):
         self.top_level_items = [ "navigation", "neurophagy" ]
-        self.top_level_item = 0
-        self.second_level_item = 0
-
         self.second_level_items_map = {
             "navigation" : [
                 "Prologue II.",
@@ -19,14 +14,17 @@ class ShipComputer:
             ]
         }
 
+    def __init__(self, owner):
+        self.owner = owner
+        self.top_level_item = 0
+        self.second_level_item = 0
+        self.setup_options()
         self.synch_secondary_items()
-
 
     def synch_secondary_items(self):
         self.second_level_items = self.second_level_items_map[self.top_level_items[self.top_level_item]]
 
     def render(self):
-
         header = ""
         for idx,item in enumerate(self.top_level_items):
             option = item
@@ -61,8 +59,43 @@ class ShipComputer:
 
     def key_select(self):
         print("CHOICE")
-        pass
 
     def key_back(self):
         print("BACK")
-        pass
+
+class ShipComputer(MenuTerminal):
+    pass
+
+class TeleportControl(MenuTerminal):
+    def setup_options(self):
+        self.top_level_items = [ "link point" ]
+        self.second_level_items_map = {
+            "link point" : [
+                "alpha i."
+            ],
+        }
+
+class TelekineControl(MenuTerminal):
+    def setup_options(self):
+        self.top_level_items = [ "activate gene", "organism" ]
+        self.second_level_items_map = {
+            "activate gene" : [
+                "Basic Telekine"
+            ],
+            "organism" : [
+                "Status",
+                "Feed"
+            ]
+        }
+
+class SwordControl(MenuTerminal):
+    def setup_options(self):
+        self.top_level_items = [ "infusion", "materials" ]
+        self.second_level_items_map = {
+            "infusion" : [
+                "slash tech"
+            ],
+            "materials" : [
+                "process"
+            ]
+        }

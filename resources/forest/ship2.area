@@ -981,7 +981,7 @@ OBJECT
 terminal
 -31.5
 4.5
-{"title": "Weapon Research"}
+{"title": "Sword Technology"}
 True
 0
 0
@@ -989,7 +989,7 @@ OBJECT
 terminal
 25.5
 7.5
-{"title" : "Door Control"}
+{"title" : "Teleport Control"}
 True
 0
 0
