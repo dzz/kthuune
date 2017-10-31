@@ -1,4 +1,5 @@
 from Beagle import API as BGL
+from ..KSounds import KSounds
 
 class MenuTerminal:
     def setup_options(self):
@@ -43,19 +44,23 @@ class MenuTerminal:
 
     def key_up(self):
         self.second_level_item = (self.second_level_item-1) % len(self.second_level_items)
+        KSounds.play(KSounds.term_updown)
 
     def key_down(self):
         self.second_level_item = (self.second_level_item-1) % len(self.second_level_items)
+        KSounds.play(KSounds.term_updown)
 
     def key_left(self):
         self.second_level_item = 0
         self.top_level_item = (self.top_level_item-1) % len(self.top_level_items)
         self.synch_secondary_items()
+        KSounds.play(KSounds.term_leftright)
 
     def key_right(self):
         self.second_level_item = 0
         self.top_level_item = (self.top_level_item+1) % len(self.top_level_items)
         self.synch_secondary_items()
+        KSounds.play(KSounds.term_leftright)
 
     def key_select(self):
         print("CHOICE")
