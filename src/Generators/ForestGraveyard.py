@@ -53,6 +53,7 @@ class Terminal(Object):
         if(self.mdist(self.floor.player)<6.5): 
             if(self.floor.player.active_terminal != self):
                 self.floor.player.active_terminal = self
+                self.ui.setup_options()
                 print("SHOWING",self)
                 KSounds.play(KSounds.terminal_open)
         else:

@@ -38,6 +38,8 @@ class KSounds:
     terminal_close = audio.baudy_load_sound(BGL.assets.get("KT-player/path/terminal_close")) 
     term_leftright = audio.baudy_load_sound(BGL.assets.get("KT-player/path/term_leftright")) 
     term_updown = audio.baudy_load_sound(BGL.assets.get("KT-player/path/term_updown")) 
+    term_select = audio.baudy_load_sound(BGL.assets.get("KT-player/path/term_select")) 
+    term_back = audio.baudy_load_sound(BGL.assets.get("KT-player/path/term_back")) 
 
     typewriter_keys = [
         audio.baudy_load_sound(BGL.assets.get("KT-player/path/tkey1")) ,

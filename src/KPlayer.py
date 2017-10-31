@@ -19,6 +19,7 @@ from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 from .KSounds import KSounds
 from .TitleCard import TitleCard
 
+from .WorldMap import WorldMap
 
 class SlashEffect(Object):
     textures = [
@@ -712,6 +713,8 @@ class KPlayer(Player):
     def __init__(self, **kwargs):
         #playerinit
 
+        self.current_system = "Oort Cloud"
+        self.world_map = WorldMap
         self.snap_attack_frozen = False
         self.attack_physics_timer = 0
         self.snap_cooldown = 0

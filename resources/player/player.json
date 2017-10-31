@@ -115,7 +115,9 @@
             { "name" : "terminal_open", "path" : "{package_path}/sounds/terminal_open.wav" },
             { "name" : "terminal_close", "path" : "{package_path}/sounds/terminal_close.wav" },
             { "name" : "term_updown", "path" : "{package_path}/sounds/term_updown.wav" },
-            { "name" : "term_leftright", "path" : "{package_path}/sounds/term_leftright.wav" }
+            { "name" : "term_leftright", "path" : "{package_path}/sounds/term_leftright.wav" },
+            { "name" : "term_select", "path" : "{package_path}/sounds/term_select.wav" },
+            { "name" : "term_back", "path" : "{package_path}/sounds/term_back.wav" }
         ]
     }
 }
