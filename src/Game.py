@@ -47,7 +47,7 @@ class Game( BaseGame ):
         area_raw = BGL.assets.get("KT-forest/textfile/doortest")
         area_def = get_area_data( area_raw )
 
-        floor = DungeonFloor( tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
+        floor = DungeonFloor( music=BGL.assets.get('KT-player/path/polydrone'),tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         floor.game = self
         return floor
 
@@ -214,7 +214,7 @@ class Game( BaseGame ):
                 Background.parallax_bg = self.floor.parallax_bg
 
 
-        self.player.set_hud_message( "{0} - {1}".format(area_name, target_switch))
+        #self.player.set_hud_message( "{0} - {1}".format(area_name, target_switch))
 
         for switch in self.floor.area_switches:
             if switch.switch_name == target_switch:
@@ -223,12 +223,15 @@ class Game( BaseGame ):
                 switch.trigger_active = False
 
         self.camera.set_player(self.player)
-        Game.god_shader = self.floor.god_shader
+
+        self.player.active_terminal = None
+        if(self.floor.god_shader):
+            Game.god_shader = self.floor.god_shader
         
 
 
     def create_player(self):
-        return KPlayer( sight_radius = 90.0, speed = 7.00, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) 
+        return KPlayer( game = self, sight_radius = 90.0, speed = 7.00, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) 
 
     def initialize(self):
 

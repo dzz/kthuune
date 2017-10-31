@@ -4,7 +4,7 @@ class WorldMap:
         "Oort Cloud" : {
             "unlocked" : True,
             "destinations" : {
-                "Crystaline Structure I." : { "unlocked" : True }
+                "Crystaline Structure I." : { "unlocked" : True, "area_name" : "doortest", "pin_name" : None }
             }
         }
     }

@@ -119,6 +119,10 @@ class TeleportControl(MenuTerminal):
             self.in_menu = False
             self.selected_destination = self.second_level_items_map["destination"][self.second_level_item]
             KSounds.play( KSounds.term_select )
+        else:
+            player = self.owner.floor.player
+            dest = player.world_map.systems[ player.current_system ]["destinations"][self.selected_destination]
+            player.game.next_area( dest["area_name"], None )
 
     def key_back(self):
         if not (self.in_menu):

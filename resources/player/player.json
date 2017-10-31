@@ -112,6 +112,7 @@
             { "name" : "slashhit", "path" : "{package_path}/sounds/slashhit.wav" },
             { "name" : "redirect", "path" : "{package_path}/sounds/redirect.wav" },
             { "name" : "ship_music", "path" : "{package_path}/music/space_station.ogg" },
+            { "name" : "polydrone", "path" : "{package_path}/music/polydrone.ogg" },
             { "name" : "terminal_open", "path" : "{package_path}/sounds/terminal_open.wav" },
             { "name" : "terminal_close", "path" : "{package_path}/sounds/terminal_close.wav" },
             { "name" : "term_updown", "path" : "{package_path}/sounds/term_updown.wav" },
