@@ -34,6 +34,8 @@ class KSounds:
     slash = audio.baudy_load_sound(BGL.assets.get("KT-player/path/slash")) 
     slashhit = audio.baudy_load_sound(BGL.assets.get("KT-player/path/slashhit")) 
     redirect = audio.baudy_load_sound(BGL.assets.get("KT-player/path/redirect")) 
+    terminal_open = audio.baudy_load_sound(BGL.assets.get("KT-player/path/terminal_open")) 
+    terminal_close = audio.baudy_load_sound(BGL.assets.get("KT-player/path/terminal_close")) 
 
     typewriter_keys = [
         audio.baudy_load_sound(BGL.assets.get("KT-player/path/tkey1")) ,
@@ -48,3 +50,4 @@ class KSounds:
 
     def play_eproj():
         KSounds.play( choice([ KSounds.enemy_projectile, KSounds.enemy_projectile2]))
+    

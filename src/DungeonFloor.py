@@ -1,3 +1,4 @@
+import audio
 from Beagle import API as BGL
 from Newfoundland.Floor import createFloorClass
 from Newfoundland.Tilemap import Tilemap
@@ -39,6 +40,8 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "music" : None,
+            "music_playing" : False,
             "fuzz_amt" : 0.0,
             "uses_vision" : True,
             "fade_vision_amt" : 0.0,
@@ -239,7 +242,10 @@ class DungeonFloor( Floor ):
     def tick(self):
         #dungeon floor
 
-
+        if(self.music is not None):
+            if not self.music_playing:
+                audio.baudy_play_music(self.music)
+                self.music_playing = True
         if(self.sound_tick==0):
             KSounds.play(choice([KSounds.rain_20sec, KSounds.rain_21sec]))
         self.sound_tick = (self.sound_tick +1)%(60*18)

@@ -262,11 +262,12 @@ class TerminalRenderer():
     def get_shader_params(size, tick):
         return {
             "tick" : [ tick ],
+            "size" : size,
             "texBuffer"            : TerminalRenderer.texbuffer,
             "translation_local"    : [ 0, 0 ],
             "scale_local"          : [ 3.2*1.25,-2.4*size*1.25 ],
             "translation_world"    : [ 0, 0 ],
-            "scale_world"          : [1.0,1.0],
+            "scale_world"          : [1.0+(2.0*(1.0-size)),1.0],
             "view"                 : Hud.view,
             "rotation_local"       : 0.0,
             "filter_color"         : [1.0,1.0,1.0,size*0.5],

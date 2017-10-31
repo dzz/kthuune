@@ -1,6 +1,7 @@
 #version 330
 
 uniform float tick;
+uniform float size;
 uniform sampler2D texBuffer;
 uniform vec4 filter_color;
 in vec2 uv;
@@ -17,6 +18,8 @@ void main(void) {
     else
         gl_FragColor = smpl_base;
 
+    gl_FragColor.rgba*= size;
+    gl_FragColor.rgba+= (vec4(1.0,1.0,1.0,1.0)*(1.0-size));
     //gl_FragColor.rgb *= vec3(1.0,0.8,0.2);
 
 }

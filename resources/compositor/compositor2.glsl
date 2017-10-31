@@ -30,7 +30,7 @@ void main() {
     vec2 noisey_offset = vec2(0.0,0.0);
     if(fuzz_amt>0.0001) {
         float d_amt = get_uv_len(uv)*fuzz_amt;
-        noisey_offset = vec2( random(uv*1000), random(uv*-3000))*(d_amt*d_amt*d_amt*0.3)*(1.0+(sin(uv.y*200)*cos(uv.x*200)*0.1));
+        noisey_offset = vec2( random(uv*1000+tick), random(uv*-3000+tick))*(d_amt*d_amt*d_amt*0.3)*(1.0+(sin(uv.y*200)*cos(uv.x*200)*0.1));
     } 
 
 

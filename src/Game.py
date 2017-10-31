@@ -17,6 +17,7 @@ from .GeneratorOptions import GeneratorOptions
 from .Background import Background
 from .Fog import Fog
 
+import audio
 class Game( BaseGame ):
 
     god_buffer = BGL.framebuffer.from_screen()
@@ -102,7 +103,8 @@ class Game( BaseGame ):
         area_def = get_area_data( area_raw )
 
         floor = DungeonFloor( 
-            title = "The Haunted Pilgrim",
+            music = BGL.assets.get("KT-player/path/ship_music"),
+            title = "The Xeoliex",
             god_shader = BGL.assets.get("KT-compositor/shader/ship_god"),
             fuzz_amt = 0.8,
             fog_level_base=0.5, 

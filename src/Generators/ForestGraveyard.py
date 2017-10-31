@@ -54,8 +54,10 @@ class Terminal(Object):
             if(self.floor.player.active_terminal != self):
                 self.floor.player.active_terminal = self
                 print("SHOWING",self)
+                KSounds.play(KSounds.terminal_open)
         else:
             if self.floor.player.active_terminal == self:
+                KSounds.play(KSounds.terminal_close)
                 self.floor.player.active_terminal = None
                 print("HIDING",self)
         
