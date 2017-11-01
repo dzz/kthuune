@@ -6,6 +6,13 @@ from .uniform_fade import uniform_fade
 from Newfoundland.Object import GuppyRenderer
 
 class DFRenderer( FloorRenderer ):
+    photon_buffer = BGL.framebuffer.from_screen()
+    shadow_buffer = BGL.framebuffer.from_screen()
+    floor_buffer = BGL.framebuffer.from_screen(filtered=False, scale = 1.0)
+    light_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
+    object_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
+    canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
+    hittable_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.5)
 
     GR = GuppyRenderer()
     HittableShader = BGL.assets.get("KT-compositor/shader/hittables")
@@ -17,13 +24,13 @@ class DFRenderer( FloorRenderer ):
         FloorRenderer.__init__(self,**kwargs)
 
     def create_compositing_buffers(self):
-        self.photon_buffer = BGL.framebuffer.from_screen()
-        self.shadow_buffer = BGL.framebuffer.from_screen()
-        self.floor_buffer = BGL.framebuffer.from_screen(filtered=False, scale = 1.0)
-        self.light_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
-        self.object_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
-        self.canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
-        self.hittable_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.5)
+        self.photon_buffer = DFRenderer.photon_buffer
+        self.shadow_buffer = DFRenderer.shadow_buffer
+        self.floor_buffer = DFRenderer.floor_buffer
+        self.light_buffer = DFRenderer.light_buffer
+        self.object_buffer = DFRenderer.object_buffer
+        self.canopy_buffer = DFRenderer.canopy_buffer
+        self.hittable_buffer = DFRenderer.hittable_buffer
 
     def encode_player_lights( self ):
         return list(map(lambda player: { "position": player.p, "color" : [0.34,0.34,0.42,1.0], "radius" : player.sight_radius },self.get_player_objects()))
