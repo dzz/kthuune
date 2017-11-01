@@ -89,6 +89,27 @@ class Game( BaseGame ):
         floor.game = self
         return floor
 
+    def build_area_crystals1(self):
+
+        GeneratorOptions.TreeTopTextures = [
+            BGL.assets.get("KT-forest/texture/crystal_1"),
+            BGL.assets.get("KT-forest/texture/crystal_2"),
+            BGL.assets.get("KT-forest/texture/crystal_3"),
+            BGL.assets.get("KT-forest/texture/crystal_4")
+        ]
+
+        GeneratorOptions.TreeShadowTextures = GeneratorOptions.TreeTopTextures
+
+        area_raw = BGL.assets.get("KT-forest/textfile/crystals1")
+        area_def = get_area_data( area_raw )
+
+        floor = DungeonFloor( 
+        title = "Crystaline Structure I.",
+        god_shader = BGL.assets.get("KT-compositor/shader/oort_god"),
+        fog_level_base=0.5, tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
+        floor.game = self
+        return floor
+
     def build_area_ship(self):
         GeneratorOptions.TreeTopTextures = [
             BGL.assets.get("KT-forest/texture/crystal_1"),
@@ -165,38 +186,31 @@ class Game( BaseGame ):
 
         self.background = Background()
         self.fog = Fog()
-        Game.floor_cache = {}
-        cache_hit = False
         self.area_name = key
-        if not key in Game.floor_cache:
-            if key == "area_test":
-                Game.floor_cache[key] = self.build_area_test()
-            if key == "docks":
-                Game.floor_cache[key] = self.build_area_docks()
-            if key == "tower":
-                Game.floor_cache[key] = self.build_area_tower()
-            if key == "arena":
-                Game.floor_cache[key] = self.build_area_arena()
-            if key == "doortest":
-                Game.floor_cache[key] = self.build_area_doortest()
-            if key == "oort_cloud":
-                Game.floor_cache[key] = self.build_area_oort_cloud()
-            if key == "ship":
-                Game.floor_cache[key] = self.build_area_ship()
-            if key == "grey_world":
-                Game.floor_cache[key] = self.build_area_grey_world()
-        else:
-            cache_hit = True
+        floor = None
+        if key == "area_test":
+            floor = self.build_area_test()
+        if key == "docks":
+            floor = self.build_area_docks()
+        if key == "tower":
+            floor = self.build_area_tower()
+        if key == "arena":
+            floor = self.build_area_arena()
+        if key == "doortest":
+            floor = self.build_area_doortest()
+        if key == "oort_cloud":
+            floor = self.build_area_oort_cloud()
+        if key == "ship":
+            floor = self.build_area_ship()
+        if key == "grey_world":
+            floor = self.build_area_grey_world()
+        if key == "crystals1":
+            floor = self.build_area_crystals1()
 
-        Game.floor_cache[key].reattach_player()
+        if(floor.god_shader):
+            Game.god_shader = floor.god_shader
 
-        if cache_hit:
-            Game.floor_cache[key].reinitialize_physics()
-
-        if(Game.floor_cache[key].god_shader):
-            Game.god_shader = Game.floor_cache[key].god_shader
-
-        return Game.floor_cache[key]            
+        return floor
 
     def next_area( self, area_name, target_switch ):
         if area_name == "self":

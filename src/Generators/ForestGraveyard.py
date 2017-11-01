@@ -8,6 +8,7 @@
 #### DARK SOULS
 #### X FILES
 
+import gc
 from random import uniform, choice
 from math import hypot
 from Newfoundland.Object import Object
@@ -25,6 +26,60 @@ from .ShipComputer import ShipComputer, TeleportControl, TelekineControl, SwordC
 from ..KSounds import KSounds
 
 from ..GeneratorOptions import GeneratorOptions
+
+class Crystal(Object):
+    def parse(od,df):
+        ret = []
+        for x in range(0,3):
+            o = Crystal( rad = uniform(0.0,6.5), p = [ od["x"], od["y"] ] )
+            ret.append(o)
+        return ret
+
+    textures = [
+        BGL.assets.get('KT-forest/texture/crystal_1'),
+        BGL.assets.get('KT-forest/texture/crystal_2'),
+        BGL.assets.get('KT-forest/texture/crystal_3'),
+        BGL.assets.get('KT-forest/texture/crystal_4'),
+    ]
+
+    def customize(self):
+        self.tick_type = Object.TickTypes.PURGING
+        self.buftarget = "popup"
+        self.visible = True
+        self.texture = choice ( Crystal.textures )
+        sz = uniform(4.0,8.0)
+        self._sz = sz
+        self.size = [ sz,sz ]
+        self.physics = { "radius" : sz/3, "mass"   : 900000, "friction" : 0.3 }
+        self.hitFr = 0
+        self.hp = 3
+
+    def tick(self):
+
+        if(self.hitFr>0):
+            self.hitFr-=1
+            self.rad+=uniform(-0.02,0.02)
+
+        if(self.hitFr==0):
+            if self.floor.player.slash.visible:
+                d = self.mdist( self.floor.player )
+                if d < self._sz*2:
+                    self.hitFr = 30
+                    self.hp-=1
+
+        if(self.hp==0):
+            self.floor.remove_object(self)
+            return False
+        return True
+
+    def get_shader_params(self):
+        bp = Object.get_shader_params(self)
+
+        if self.hitFr > 0:
+            bp['translation_local'][0] += uniform(-0.2,0.2)
+            bp['filter_color'] = [ 10.0,10.0,10.0,1.0]
+        return bp
+
 
 class Terminal(Object):
     def parse(od,df):
@@ -2185,6 +2240,9 @@ class ForestGraveyard():
                 fp.fire_rad = -3.14/2
                 self.objects.append(fp)
 
+            if od["key"] in ["crystals" ]:
+                cs = Crystal.parse(od,df)
+                self.objects.extend(cs)
 
             if od["key"] in ["text" ]:
                 self.objects.append(SpeechBubble.parse(od,df))

@@ -113,6 +113,8 @@ class DungeonFloor( Floor ):
         else:
             self.generator.compile( self, []  )
 
+
+
         beagle_tilemap = BGL.tilemap(
             tileset = beagle_tileset,
             configuration = {
@@ -160,6 +162,7 @@ class DungeonFloor( Floor ):
         self.sound_tick = 0
         self.recursive_snapper = None
         Floor.__init__(self,**floor_configuration)
+
 
     def tick_god_shader(self):
         pass
