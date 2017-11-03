@@ -27,6 +27,53 @@ from ..KSounds import KSounds
 
 from ..GeneratorOptions import GeneratorOptions
 
+class CrystalChunk(Object):
+    textures = [
+        BGL.assets.get('KT-forest/texture/crystal_1'),
+        BGL.assets.get('KT-forest/texture/crystal_2'),
+        BGL.assets.get('KT-forest/texture/crystal_3'),
+        BGL.assets.get('KT-forest/texture/crystal_4'),
+    ]
+    def __init__(self,**kwargs):
+        Object.__init__(self,**kwargs)
+        self.rad = uniform(-3.14,3.14)
+        self.texture = choice(CrystalChunk.textures)
+        self.buftarget = "popup"
+        self.tick_type = Object.TickTypes.PURGING
+
+        
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_radius = 15
+        self.lifespan = 90
+        self.light_color = [ 1.0,0.7,0.0,0.0 ]
+        self.color = [1.0,1.0,1.0,1.0]
+
+        sz = uniform(2.0,4.0)
+        self.size = [ sz,sz ]
+        self.snapshot_fields = [ 'p' ]
+
+        spd = 0.3 + uniform(0.2,0.8)
+        self.vx = cos( self.rad )*spd
+        self.vy = sin( self.rad )*spd
+        self.rad = uniform(-3.14,3.14)
+
+        
+    def tick(self):
+        self.color[3]*=uniform(0.98,0.999)
+        self.light_radius*=0.95
+        self.vx*=0.9
+        self.vy*=0.9
+        self.vy+=0.02
+        self.p[0] = self.p[0] + self.vx 
+        self.p[1] = self.p[1] + self.vy 
+
+        self.size[0]*=0.94
+        self.size[1]*=0.94
+        self.lifespan = self.lifespan-1
+        if(self.lifespan<0):
+            self.floor.objects.remove(self)
+            return False
+        return True
 class Crystal(Object):
     def parse(od,df):
         ret = []
@@ -49,10 +96,10 @@ class Crystal(Object):
         self.texture = choice ( Crystal.textures )
         sz = uniform(4.0,8.0)
         self._sz = sz
-        self.size = [ sz,sz ]
+        self.size = [ sz*0.7,sz*0.7 ]
         self.physics = { "radius" : sz/3, "mass"   : 900000, "friction" : 0.3 }
         self.hitFr = 0
-        self.hp = 3
+        self.hp = choice([2,3])
 
     def tick(self):
 
@@ -63,12 +110,16 @@ class Crystal(Object):
         if(self.hitFr==0):
             if self.floor.player.slash.visible:
                 d = self.mdist( self.floor.player )
-                if d < self._sz*2:
+                if d < self._sz*1.2:
+                    for x in range(0,5):
+                        self.floor.create_object( CrystalChunk( p = [ self.p[0], self.p[1]]))
                     self.hitFr = 30
                     self.hp-=1
 
         if(self.hp==0):
             self.floor.remove_object(self)
+            for x in range(0,15):
+                self.floor.create_object( CrystalChunk( p = [ self.p[0], self.p[1]]))
             return False
         return True
 

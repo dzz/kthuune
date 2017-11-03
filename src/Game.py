@@ -105,7 +105,7 @@ class Game( BaseGame ):
 
         floor = DungeonFloor( 
         title = "Crystaline Structure I.",
-        god_shader = BGL.assets.get("KT-compositor/shader/oort_god"),
+        god_shader = BGL.assets.get("KT-compositor/shader/ship"),
         fog_level_base=0.5, tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         floor.game = self
         return floor
