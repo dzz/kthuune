@@ -115,7 +115,7 @@ class Crystal(Object):
             if self.floor.player.slash.visible:
                 d = self.mdist( self.floor.player )
                 if d < self._sz*1.2:
-                    self.floor.player.add_dm_message("You hit a crystal with your sword")
+                    #self.floor.player.add_dm_message("You hit a crystal with your sword")
                     for x in range(0,5):
                         self.floor.create_object( CrystalChunk( p = [ self.p[0], self.p[1]]))
                     KSounds.play(KSounds.mining1)
@@ -173,6 +173,7 @@ class Terminal(Object):
                 self.floor.player.active_terminal = self
                 self.ui.setup_options()
                 print("SHOWING",self)
+                self.floor.player.add_dm_message("You opened the {0} terminal".format(self.title))
                 KSounds.play(KSounds.terminal_open)
         else:
             if self.floor.player.active_terminal == self:
@@ -612,6 +613,8 @@ class SnapEnemy(Object):
         return True
 
     def die(self):
+
+        self.floor.player.add_dm_message("You killed an enemy")
         if self in self.floor.objects:
             #hack
             self.floor.objects.remove(self)

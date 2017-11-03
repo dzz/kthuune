@@ -220,6 +220,7 @@ class Game( BaseGame ):
             self.floor = self.create_tickable( self.load_floor(area_name) )
             self.player.trigger_title( self.floor.title )
             self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
+            self.player.add_dm_message("You teleported")
             
             if "bg_texture" in self.floor.__dict__:
                 Background.bg_texture = self.floor.bg_texture

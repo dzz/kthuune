@@ -115,6 +115,7 @@ class SlashEffect(Object):
                         md = (dx*dx) + (dy*dy)
                         if md < 10:
                             KSounds.play( KSounds.slashhit )
+                            enemy.floor.player.add_dm_message("You slashed an enemy")
                             enemy.receive_snap_attack( choice([False, False, True]) )
                             self.attacked_enemies.append(enemy)
                             self.stagger_cooldown += 25
@@ -595,7 +596,7 @@ class KPlayer(Player):
         self.hp = self.hp - attack.attack_str
         self.attack_object = attack
         self.attack_physics_timer = 25 
-        self.set_hud_message("YOU GOT HIT!")
+        self.add_dm_message("You were injured")
         self.link_count = 0
         self.combo_count = 0
         self.combo_reset_cooldown = 0
@@ -708,7 +709,9 @@ class KPlayer(Player):
             self.snap_attack_frozen = True
             self.combo_reset_cooldown = 60*KPlayer.ComboSecs
             if( se.snap_type == 1 ):
-                self.invuln_frames = 12
+
+                self.add_dm_message("You executed a violent Telekine") 
+                self.invuln_frames = 9
                 self.snap_animation_buffer = min((1+self.combo_count)*9,22)
                 self.combo_count = self.combo_count + 1
                 KSounds.play( KSounds.basic_hit )
@@ -722,6 +725,7 @@ class KPlayer(Player):
                 if(self.combo_count > 7):
                     KSounds.play( KSounds.tubular )
             else:
+                self.add_dm_message("You executed a passive Telekine") 
                 se.sleep_totem()
                 self.snap_animation_buffer = 6
 
@@ -865,7 +869,7 @@ class KPlayer(Player):
 
     def add_dm_message(self, message):
         self.dm_messages.append( DMMessage(message))
-        self.dm_messages = self.dm_messages[-8:]
+        self.dm_messages = self.dm_messages[-9:]
         self.dm_msg_cooldown = 0
 
 
@@ -1223,12 +1227,16 @@ class KPlayer(Player):
         PlayerInvSlot.tick()
 
         self.dm_msg_cooldown += 1
-        if self.dm_msg_cooldown > 200:
+        if self.dm_msg_cooldown > 300:
             self.deq_dm_message()
             self.dm_msg_cooldown = 0
             
 
         #player tick
+
+        if(self.run_stamina<=1.0):
+            self.add_dm_message("You over exerted yourself")
+
         self.invuln_frames -= 1
         KPlayer.BirdmanTick = KPlayer.BirdmanTick+1
 
@@ -1276,7 +1284,7 @@ class KPlayer(Player):
             self.RIGHT_PRESSED = False
         if self.A_PRESSED:
             self.slash.slash()
-            self.add_dm_message("You swung your sword")
+            #self.add_dm_message("You swung your sword")
             #print("a pressed")
             #self.state = KPlayer.STATE_FIRING
 
