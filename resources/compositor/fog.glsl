@@ -61,7 +61,7 @@ vec4 clouds(vec2 _coord, float l) {
 
     float u_time = tick/65.0;
 
-    u_time *= 1.0+(l*0.2);
+    u_time += (l*0.4);
 
     vec2 st = coord*4+(camera_position*(vec2(0.1,-0.1)));
     //st += st * abs(sin(u_time*0.1)*3.0);
