@@ -115,6 +115,7 @@ class Crystal(Object):
             if self.floor.player.slash.visible:
                 d = self.mdist( self.floor.player )
                 if d < self._sz*1.2:
+                    self.floor.player.add_dm_message("You hit a crystal with your sword")
                     for x in range(0,5):
                         self.floor.create_object( CrystalChunk( p = [ self.p[0], self.p[1]]))
                     KSounds.play(KSounds.mining1)
@@ -125,6 +126,7 @@ class Crystal(Object):
             KSounds.play(KSounds.mining2)
             self.floor.remove_object(self)
 
+            self.floor.player.add_dm_message("You smashed a crystal with your sword")
             if uniform(0.0,1.0)>0.78:
                 self.floor.create_object(ResourcePickup(p=[ self.p[0], self.p[1]]))
             
@@ -350,6 +352,7 @@ class SoftwarePickup(Object):
         if (md<1.6):
             self.floor.objects.remove(self)
             KSounds.play( KSounds.pickup )
+            self.floor.player.add_dm_message("You found some software")
             return False
         return True
 
@@ -359,8 +362,14 @@ class ResourcePickup(Object):
         BGL.assets.get("KT-player/texture/neon"),
         BGL.assets.get("KT-player/texture/carbon"),
     ]
+    names = [
+        "Thorium",
+        "Iridium",
+        "Carbon"
+    ]
    
     def customize(self):
+        self.names = ResourcePickup.names
         self.fridx = 0
         self.pickup_type = choice([0,0,0,0,1,1,1,2,2])
         self.texture = ResourcePickup.textures[self.pickup_type]
@@ -395,6 +404,7 @@ class ResourcePickup(Object):
 
         if (md<1.6):
             self.floor.objects.remove(self)
+            self.floor.player.add_dm_message("You found some {0}".format(self.names[self.pickup_type]))
             KSounds.play( KSounds.pickup )
             return False
         return True

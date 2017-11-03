@@ -21,6 +21,37 @@ from .TitleCard import TitleCard
 
 from .WorldMap import WorldMap
 
+class DMMessage():
+
+    primitive = BGL.primitive.unit_uv_square
+    shader = BGL.assets.get("beagle-2d/shader/beagle-2d")
+
+    def __init__(self,message):
+        self.buffer = BGL.framebuffer.from_dims( 8*len(message)+2,10)
+        with BGL.context.render_target( self.buffer ):
+            BGL.context.clear(0.0,0.0,0.0,1.0)
+            with BGL.blendmode.alpha_over:
+                BGL.lotext.render_text_pixels(message,1,1,[ 1.0,1.0,1.0 ])
+        self.width = len(message)
+        self.char_s = 0.08
+            
+    def render(self, index, log_size):
+
+        fpi = (index+1) / log_size
+        shader_params = {
+            "texBuffer"            : self.buffer,
+            "translation_local"    : [ 0, 0 - float(index)*1.5 ],
+            "scale_local"          : [ (self.width*self.char_s)+(fpi*0.2),-1*self.char_s ],
+            "translation_world"    : [ 0.0,-4.5+(fpi*0.2) ],
+            "scale_world"          : [ 1.0,1.0],
+            "view"                 : Hud.view,
+            "rotation_local"       : 0.0,
+            "filter_color"         : [ fpi ,1.0-fpi,fpi,fpi],
+            "uv_translate"         : [ 0,0 ] }
+        DMMessage.primitive.render_shaded( DMMessage.shader, shader_params )
+        
+
+        
 class SlashEffect(Object):
     textures = [
         BGL.assets.get('KT-player/texture/slash0000'),
@@ -818,7 +849,7 @@ class KPlayer(Player):
         self.attacked = False
         self.dash_flash = False
         self.dash_combo = False
-        self.hud_buffer = BGL.framebuffer.from_dims(320,240)
+        self.hud_buffer = BGL.framebuffer.from_dims(1920,1080)
         self.combo_count = 0
         self.link_count = 0
         self.can_combo = False
@@ -828,8 +859,18 @@ class KPlayer(Player):
         self.hud_message_timeout = 0.0
         self.hud_message = ""
         self.critical_hit_display_counter = 0
-
         self.title_card = TitleCard()
+        self.dm_messages = []
+        self.dm_msg_cooldown = 0
+
+    def add_dm_message(self, message):
+        self.dm_messages.append( DMMessage(message))
+        self.dm_messages = self.dm_messages[-8:]
+        self.dm_msg_cooldown = 0
+
+
+    def deq_dm_message(self):
+        self.dm_messages = self.dm_messages[1:] 
 
     def set_combat_vars(self):
         self.hp = 100
@@ -864,7 +905,7 @@ class KPlayer(Player):
                 if(self.combo_count>1):
                     offsx = choice(range(-1,1))
                     offsy = choice(range(-1,1))
-                    BGL.lotext.render_text_pixels("COMBO:{0}".format(self.combo_count-1), 4+offsx,4+offsy, [1.0,uniform(0.0,1.0),1.0] )
+                    #BGL.lotext.render_text_pixels("COMBO:{0}".format(self.combo_count-1), 4+offsx,4+offsy, [1.0,uniform(0.0,1.0),1.0] )
 
                 if(self.hud_message_timeout>0):
                     mx = 160 - floor(len(self.hud_message)*4)
@@ -877,7 +918,9 @@ class KPlayer(Player):
                     urc1 = [ ur1()*0.5*f,ur1()*0.5,ur1()*0.5*f,1.0 ]
                     BGL.lotext.render_text_pixels(self.hud_message, mx-1, 240-11, urc )
                     BGL.lotext.render_text_pixels(self.hud_message, mx, 240-10, urc1 )
-
+                
+                for idx, message in enumerate(self.dm_messages):
+                    message.render(idx, len(self.dm_messages))
 
         with BGL.blendmode.alpha_over:
             self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
@@ -1178,6 +1221,13 @@ class KPlayer(Player):
             if(self.sel_invslot == self.max_invslots):
                 self.sel_invslot = 0
         PlayerInvSlot.tick()
+
+        self.dm_msg_cooldown += 1
+        if self.dm_msg_cooldown > 200:
+            self.deq_dm_message()
+            self.dm_msg_cooldown = 0
+            
+
         #player tick
         self.invuln_frames -= 1
         KPlayer.BirdmanTick = KPlayer.BirdmanTick+1
@@ -1226,6 +1276,7 @@ class KPlayer(Player):
             self.RIGHT_PRESSED = False
         if self.A_PRESSED:
             self.slash.slash()
+            self.add_dm_message("You swung your sword")
             #print("a pressed")
             #self.state = KPlayer.STATE_FIRING
 
