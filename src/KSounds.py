@@ -40,6 +40,8 @@ class KSounds:
     term_updown = audio.baudy_load_sound(BGL.assets.get("KT-player/path/term_updown")) 
     term_select = audio.baudy_load_sound(BGL.assets.get("KT-player/path/term_select")) 
     term_back = audio.baudy_load_sound(BGL.assets.get("KT-player/path/term_back")) 
+    mining1 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/mining1")) 
+    mining2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/mining2")) 
 
     typewriter_keys = [
         audio.baudy_load_sound(BGL.assets.get("KT-player/path/tkey1")) ,

@@ -66,7 +66,10 @@
             { "name" : "wandcard0001", "filename" : "{package_path}/wandcard0001.png", "filtered" : false },
             { "name" : "healthvial0000", "filename" : "{package_path}/healthvial0000.png", "filtered" : false },
             { "name" : "healthvial0001", "filename" : "{package_path}/healthvial0001.png", "filtered" : false },
-            { "name" : "terminal0000", "filename" : "{package_path}/terminal0000.png", "filtered" : false }
+            { "name" : "terminal0000", "filename" : "{package_path}/terminal0000.png", "filtered" : false },
+            { "name" : "neon", "filename" : "{package_path}/neon.png", "filtered" : false },
+            { "name" : "thorium", "filename" : "{package_path}/thorium.png", "filtered" : false },
+            { "name" : "carbon", "filename" : "{package_path}/carbon.png", "filtered" : false }
         ],
         "shader" :  [
             { "name" : "card", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/cardp" },
@@ -118,7 +121,9 @@
             { "name" : "term_updown", "path" : "{package_path}/sounds/term_updown.wav" },
             { "name" : "term_leftright", "path" : "{package_path}/sounds/term_leftright.wav" },
             { "name" : "term_select", "path" : "{package_path}/sounds/term_select.wav" },
-            { "name" : "term_back", "path" : "{package_path}/sounds/term_back.wav" }
+            { "name" : "term_back", "path" : "{package_path}/sounds/term_back.wav" },
+            { "name" : "mining1", "path" : "{package_path}/sounds/mining1.wav" },
+            { "name" : "mining2", "path" : "{package_path}/sounds/mining2.wav" }
         ]
     }
 }

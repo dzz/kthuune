@@ -61,6 +61,7 @@ class CrystalChunk(Object):
     def tick(self):
         self.color[3]*=uniform(0.98,0.999)
         self.light_radius*=0.95
+        self.rad+=0.01
         self.vx*=0.9
         self.vy*=0.9
         self.vy+=0.02
@@ -69,11 +70,14 @@ class CrystalChunk(Object):
 
         self.size[0]*=0.94
         self.size[1]*=0.94
+
+        self.color[3]*=0.99
         self.lifespan = self.lifespan-1
         if(self.lifespan<0):
             self.floor.objects.remove(self)
             return False
         return True
+
 class Crystal(Object):
     def parse(od,df):
         ret = []
@@ -113,11 +117,17 @@ class Crystal(Object):
                 if d < self._sz*1.2:
                     for x in range(0,5):
                         self.floor.create_object( CrystalChunk( p = [ self.p[0], self.p[1]]))
+                    KSounds.play(KSounds.mining1)
                     self.hitFr = 30
                     self.hp-=1
 
         if(self.hp==0):
+            KSounds.play(KSounds.mining2)
             self.floor.remove_object(self)
+
+            if uniform(0.0,1.0)>0.78:
+                self.floor.create_object(ResourcePickup(p=[ self.p[0], self.p[1]]))
+            
             for x in range(0,15):
                 self.floor.create_object( CrystalChunk( p = [ self.p[0], self.p[1]]))
             return False
@@ -299,6 +309,52 @@ class Blood(Object):
         self.tick_type = Object.TickTypes.STATIC
         self.texture = choice(Blood.texture)
         pass
+
+class ResourcePickup(Object):
+    textures = [ 
+        BGL.assets.get("KT-player/texture/thorium"),
+        BGL.assets.get("KT-player/texture/neon"),
+        BGL.assets.get("KT-player/texture/carbon"),
+    ]
+   
+    def customize(self):
+        self.fridx = 0
+        self.pickup_type = choice([0,0,0,0,1,1,1,2,2])
+        self.texture = ResourcePickup.textures[self.pickup_type]
+        self.buftarget = "popup"
+        self.base_p = list(self.p)
+        self.tick_type = Object.TickTypes.PURGING
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_color = [ 1.0, 1.0, 1.0, 1.0 ]
+        self.light_radius = 25.
+        self.trigger_timer = 0
+        self.visible = True
+
+    def tick(self):
+        self.trigger_timer = self.trigger_timer + 1
+       
+        if self.trigger_timer<30:
+            return True 
+
+        self.visible = True
+
+        self.fridx = (self.fridx + 1) % 40
+ 
+        y_offs = sin(self.fridx*(3.14/40.0))
+        self.light_radius = 25. + y_offs
+
+        self.p[1] = self.base_p[1] + (y_offs*0.15)
+
+        dx = self.p[0] - self.floor.player.p[0]
+        dy = self.p[1] - self.floor.player.p[1]
+
+        md = (dx*dx) + (dy*dy)
+
+        if (md<1.6):
+            self.floor.objects.remove(self)
+            KSounds.play( KSounds.pickup )
+            return False
+        return True
 
 class HealthVial(Object):
     textures = [ 
