@@ -69,7 +69,8 @@
             { "name" : "terminal0000", "filename" : "{package_path}/terminal0000.png", "filtered" : false },
             { "name" : "neon", "filename" : "{package_path}/neon.png", "filtered" : false },
             { "name" : "thorium", "filename" : "{package_path}/thorium.png", "filtered" : false },
-            { "name" : "carbon", "filename" : "{package_path}/carbon.png", "filtered" : false }
+            { "name" : "carbon", "filename" : "{package_path}/carbon.png", "filtered" : false },
+            { "name" : "software", "filename" : "{package_path}/software.png", "filtered" : false }
         ],
         "shader" :  [
             { "name" : "card", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/cardp" },

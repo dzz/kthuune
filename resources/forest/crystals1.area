@@ -1350,7 +1350,7 @@ player_start
 -32
 -34
 {}
-False
+True
 0
 0
 OBJECT
@@ -1358,7 +1358,7 @@ crystals
 0
 -8
 {}
-False
+True
 0
 0
 OBJECT
@@ -1366,7 +1366,7 @@ crystals
 1
 -14
 {}
-False
+True
 0
 0
 OBJECT
@@ -1374,7 +1374,7 @@ crystals
 5
 -19
 {}
-False
+True
 0
 0
 OBJECT
@@ -1382,7 +1382,7 @@ crystals
 9
 -22
 {}
-False
+True
 0
 0
 OBJECT
@@ -1390,7 +1390,7 @@ crystals
 19
 -22
 {}
-False
+True
 0
 0
 OBJECT
@@ -1398,7 +1398,7 @@ crystals
 24
 -16
 {}
-False
+True
 0
 0
 OBJECT
@@ -1406,7 +1406,7 @@ crystals
 26
 -8
 {}
-False
+True
 0
 0
 OBJECT
@@ -1414,7 +1414,7 @@ crystals
 24
 0
 {}
-False
+True
 0
 0
 OBJECT
@@ -1422,7 +1422,7 @@ crystals
 21
 6
 {}
-False
+True
 0
 0
 OBJECT
@@ -1430,7 +1430,7 @@ crystals
 15
 10
 {}
-False
+True
 0
 0
 OBJECT
@@ -1438,7 +1438,7 @@ crystals
 8
 8
 {}
-False
+True
 0
 0
 OBJECT
@@ -1446,7 +1446,7 @@ crystals
 2
 4
 {}
-False
+True
 0
 0
 OBJECT
@@ -1454,7 +1454,7 @@ crystals
 1
 -1
 {}
-False
+True
 0
 0
 OBJECT
@@ -1462,7 +1462,7 @@ crystals
 -3
 7
 {}
-False
+True
 0
 0
 OBJECT
@@ -1470,7 +1470,7 @@ crystals
 1
 -23
 {}
-False
+True
 0
 0
 OBJECT
@@ -1478,7 +1478,7 @@ crystals
 -4
 -17
 {}
-False
+True
 0
 0
 OBJECT
@@ -1486,7 +1486,7 @@ crystals
 -4
 -21
 {}
-False
+True
 0
 0
 OBJECT
@@ -1494,7 +1494,7 @@ crystals
 17
 5
 {}
-False
+True
 0
 0
 OBJECT
@@ -1502,7 +1502,7 @@ crystals
 21
 -4
 {}
-False
+True
 0
 0
 OBJECT
@@ -1510,7 +1510,7 @@ crystals
 13
 -23
 {}
-False
+True
 0
 0
 OBJECT
@@ -1518,7 +1518,7 @@ crystals
 17
 -26
 {}
-False
+True
 0
 0
 OBJECT
@@ -1526,7 +1526,7 @@ light
 9.5
 -34.25
 {"class" : "shortwave" }
-False
+True
 0
 0
 OBJECT
@@ -1534,7 +1534,7 @@ light
 -8
 -27.25
 {"class" : "shortwave" }
-False
+True
 0
 0
 OBJECT
@@ -1542,7 +1542,7 @@ light
 -16.75
 -13.25
 {"class" : "shortwave" }
-False
+True
 0
 0
 OBJECT
@@ -1550,7 +1550,7 @@ light
 16.5
 -15
 {"class" : "shortwave" }
-False
+True
 0
 0
 OBJECT
@@ -1558,7 +1558,7 @@ light
 7.75
 -2.75
 {"class" : "shortwave" }
-False
+True
 0
 0
 OBJECT
@@ -1566,7 +1566,7 @@ light
 -16.75
 -57
 {"class" : "shipfill" }
-False
+True
 0
 0
 OBJECT
@@ -1574,7 +1574,7 @@ light
 -46.5
 -44.75
 {"class" : "shipfill" }
-False
+True
 0
 0
 OBJECT
@@ -1582,6 +1582,14 @@ text
 -23.75
 -36
 {"text" : "Push A to SLASH"}
+True
+0
+0
+OBJECT
+software
+13
+-6
+{}
 False
 0
 0
