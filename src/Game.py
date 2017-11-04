@@ -47,7 +47,10 @@ class Game( BaseGame ):
         area_raw = BGL.assets.get("KT-forest/textfile/doortest")
         area_def = get_area_data( area_raw )
 
-        floor = DungeonFloor( music=BGL.assets.get('KT-player/path/polydrone'),tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
+        floor = DungeonFloor( music=BGL.assets.get('KT-player/path/polydrone'),
+
+        god_shader = BGL.assets.get("KT-compositor/shader/ship"),
+tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         floor.game = self
         return floor
 
@@ -63,7 +66,10 @@ class Game( BaseGame ):
         area_raw = BGL.assets.get("KT-forest/textfile/docks")
         area_def = get_area_data( area_raw )
 
-        floor = DungeonFloor( tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
+        floor = DungeonFloor( tilescale =2,
+        god_shader = BGL.assets.get("KT-compositor/shader/ship"),
+
+         width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         floor.using_tilemap = False
         floor.game = self
         return floor

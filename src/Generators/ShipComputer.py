@@ -58,7 +58,7 @@ class MenuTerminal:
 
     def key_down(self):
         if(self.in_menu):
-            self.second_level_item = (self.second_level_item-1) % len(self.second_level_items)
+            self.second_level_item = (self.second_level_item+1) % len(self.second_level_items)
             KSounds.play(KSounds.term_updown)
 
     def key_left(self):

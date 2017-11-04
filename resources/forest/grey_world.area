@@ -1502,7 +1502,7 @@ totem
 22
 -130
 {}
-False
+True
 0
 0
 OBJECT
@@ -1510,7 +1510,7 @@ totem
 28
 -112
 {}
-False
+True
 0
 0
 OBJECT
@@ -1518,7 +1518,7 @@ firepot
 22.5
 -105
 {}
-False
+True
 0
 0
 OBJECT
@@ -1526,7 +1526,7 @@ firepot
 22.5
 -103
 {}
-False
+True
 0
 0
 OBJECT
@@ -1534,7 +1534,7 @@ firepot
 22.5
 -107
 {}
-False
+True
 0
 0
 OBJECT
@@ -1542,7 +1542,7 @@ firepot
 22.5
 -109
 {}
-False
+True
 0
 0
 OBJECT
@@ -1550,7 +1550,7 @@ firepot_up
 35
 -97
 {}
-False
+True
 0
 0
 OBJECT
@@ -1558,7 +1558,7 @@ firepot_up
 39
 -97
 {}
-False
+True
 0
 0
 OBJECT
@@ -1566,7 +1566,7 @@ firepot_up
 43
 -97
 {}
-False
+True
 0
 0
 OBJECT
@@ -1574,7 +1574,7 @@ text
 31
 -113
 {"text" : "RB to RUN"}
-False
+True
 0
 0
 OBJECT
@@ -1582,7 +1582,7 @@ text
 46
 -106
 {"text" : "RUNNING uses STAMINA" }
-False
+True
 0
 0
 OBJECT
@@ -1598,7 +1598,7 @@ light
 57
 -113.5
 {"class" : "shiplight"}
-False
+True
 0
 0
 OBJECT
@@ -1606,7 +1606,7 @@ light
 69
 -70.5
 {"class": "shiplight"}
-False
+True
 0
 0
 OBJECT
@@ -1614,7 +1614,7 @@ totem
 69
 -78
 {}
-False
+True
 0
 0
 OBJECT
@@ -1622,7 +1622,7 @@ skeline
 53
 -75
 {}
-False
+True
 0
 0
 OBJECT
@@ -1630,7 +1630,7 @@ skeline
 85
 -75
 {}
-False
+True
 0
 0
 OBJECT
@@ -1646,7 +1646,7 @@ text
 69
 -75
 {"text" : "TELEKINE to ATTACK"}
-False
+True
 0
 0
 OBJECT
@@ -1654,7 +1654,7 @@ door_pin
 64
 -60
 A
-False
+True
 0
 0
 OBJECT
@@ -1662,7 +1662,7 @@ door_end
 74
 -60
 A
-False
+True
 0
 0
 OBJECT
@@ -1670,7 +1670,7 @@ door_sensor
 69
 -63
 A
-False
+True
 0
 0
 OBJECT
@@ -1678,7 +1678,7 @@ light
 69
 -52
 {"class": "shiplight"}
-False
+True
 0
 0
 OBJECT
@@ -1686,7 +1686,7 @@ light
 53
 -42
 {"class": "shiplight"}
-False
+True
 0
 0
 OBJECT
@@ -1694,7 +1694,7 @@ light
 85
 -42
 {"class": "shiplight"}
-False
+True
 0
 0
 OBJECT
@@ -1702,7 +1702,7 @@ totem
 69
 -41
 {}
-False
+True
 0
 0
 OBJECT
@@ -1710,7 +1710,7 @@ skeline
 55
 -45
 {}
-False
+True
 0
 0
 OBJECT
@@ -1718,7 +1718,7 @@ skeline
 83
 -45
 {}
-False
+True
 0
 0
 OBJECT
@@ -1726,7 +1726,7 @@ skeline
 69
 -43
 {}
-False
+True
 0
 0
 OBJECT
@@ -1734,7 +1734,7 @@ skeline
 81
 -33
 {}
-False
+True
 0
 0
 OBJECT
@@ -1742,7 +1742,7 @@ skeline
 57
 -33
 {}
-False
+True
 0
 0
 OBJECT
@@ -1750,7 +1750,7 @@ totem
 69
 -25
 {}
-False
+True
 0
 0
 OBJECT
@@ -1758,7 +1758,7 @@ door_pin
 64
 -18
 B
-False
+True
 0
 0
 OBJECT
@@ -1766,7 +1766,7 @@ door_end
 74
 -18
 B
-False
+True
 0
 0
 OBJECT
@@ -1774,7 +1774,7 @@ door_sensor
 69
 -20
 B
-False
+True
 0
 0
 OBJECT
@@ -1790,7 +1790,7 @@ light
 -20
 -93
 {"class": "shiplight"}
-False
+True
 0
 0
 OBJECT
@@ -1798,7 +1798,7 @@ light
 85
 4
 {"class":"shiplight"}
-False
+True
 0
 0
 OBJECT
@@ -1806,7 +1806,7 @@ light
 43
 -17
 {"class": "shiplight"}
-False
+True
 0
 0
 OBJECT
@@ -1814,7 +1814,7 @@ light
 25
 -17
 {"class": "shiplight"}
-False
+True
 0
 0
 OBJECT
@@ -1822,7 +1822,7 @@ light
 4
 -17
 {"class": "shiplight"}
-False
+True
 0
 0
 OBJECT
@@ -1830,6 +1830,14 @@ light
 -20
 4
 {"class": "shiplight"}
+True
+0
+0
+OBJECT
+terminal
+-22
+8
+{"title":"Teleport Control"}
 False
 0
 0

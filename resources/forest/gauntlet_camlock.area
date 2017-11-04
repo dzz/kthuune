@@ -2897,6 +2897,14 @@ camlock_x
 True
 60
 30
+OBJECT
+terminal
+-118
+-56
+{"title":"Teleport Control"}
+False
+0
+0
 TILE
 -78
 83
