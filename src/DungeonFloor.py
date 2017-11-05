@@ -164,6 +164,19 @@ class DungeonFloor( Floor ):
         Floor.__init__(self,**floor_configuration)
 
 
+
+    def destroy(self):
+        for obj in self.objects:
+            if "body" in obj.__dict__:
+                if(obj.body):
+                    obj.body.destroy()
+                    obj.body = None
+
+        self.objects = []
+        self.physics_space.destroy()
+        self.physics_space = None
+        self.player = None
+
     def tick_god_shader(self):
         pass
 

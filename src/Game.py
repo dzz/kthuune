@@ -1,3 +1,5 @@
+import gc
+from random import uniform, choice
 from Beagle import API as BGL
 from Newfoundland.Camera import Camera
 from Newfoundland.Controllers import Controllers
@@ -223,6 +225,9 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             area_name = self.area_name
         if self.area_name is not area_name:
             self.tickables.remove( self.floor )
+            self.floor.destroy()
+            result = gc.collect()
+            print("GC result",result)
             self.floor = self.create_tickable( self.load_floor(area_name) )
             self.player.trigger_title( self.floor.title )
             self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
@@ -306,6 +311,14 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         if(self.prebuffer < 30):
             self.prebuffer += 1
             return
+        ### 
+        ### can uncomment this to test rapid area switching
+        ###
+
+        ### else:
+        ###     if(uniform(0.0,1.0)<0.005):
+        ###         area = choice ( [ "ship","grey_world","doortest"] )
+        ###         self.next_area( area, None )
 
         if(self.floor.freeze_delay < 0):
             if(self.floor.freeze_frames > 0):
