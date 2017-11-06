@@ -50,7 +50,7 @@ class Game( BaseGame ):
 
         floor = DungeonFloor( music=BGL.assets.get('KT-player/path/polydrone'),
 
-        god_shader = BGL.assets.get("KT-compositor/shader/ship"),
+        god_shader = BGL.assets.get("KT-compositor/shader/ship_god"),
 tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         floor.game = self
         return floor
@@ -263,6 +263,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
     def initialize(self):
 
+        self.doing_random_test = False
         self.prebuffer = 0
         self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.28 ) )
         self.controllers    = self.create_tickable( Controllers() )
@@ -317,10 +318,14 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         ### can uncomment this to test rapid area switching
         ###
 
-        ### else:
-        ###     if(uniform(0.0,1.0)<0.005):
-        ###         area = choice ( [ "ship","grey_world","doortest"] )
-        ###         self.next_area( area, None )
+        else:
+            if self.doing_random_test:
+                if(uniform(0.0,1.0)<0.005):
+                    area = choice ( [ "ship","grey_world","doortest"] )
+                    self.next_area( area, None )
+                if(uniform(0.0,1.0)<0.05):
+                    self.player.p[0] = uniform( -1*self.floor.width, self.floor.width)
+                    self.player.p[1] = uniform( -1*self.floor.height, self.floor.height)
 
         if(self.floor.freeze_delay < 0):
             if(self.floor.freeze_frames > 0):
