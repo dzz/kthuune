@@ -14,6 +14,9 @@ class DFRenderer( FloorRenderer ):
     canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
     hittable_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.5)
 
+    dynamic_lightmapper = None
+    vision_lightmapper = None
+
     GR = GuppyRenderer()
     HittableShader = BGL.assets.get("KT-compositor/shader/hittables")
     canopy_shader = BGL.assets.get("KT-compositor/shader/canopy")
@@ -22,6 +25,26 @@ class DFRenderer( FloorRenderer ):
         self.guppyRenderer = DFRenderer.GR
         DFRenderer.lbtick = 0
         FloorRenderer.__init__(self,**kwargs)
+
+    def configure_lightmaps(self):
+        self.photon_map = None
+        self.static_lightmap = self.compute_static_lightmap()
+        self.static_lightmap.get_lightmap_texture().debugger_attach("static-lightmap")
+        self.player_lights = []
+        self.dynamic_lights = []
+
+        if not DFRenderer.dynamic_lightmapper:
+            DFRenderer.dynamic_lightmapper = self.configure_dynamic_lightmapper()
+
+        self.dynamic_lightmap = DFRenderer.dynamic_lightmapper
+        self.dynamic_lightmap.lights = self.dynamic_lights
+
+        if not DFRenderer.vision_lightmapper:
+            DFRenderer.vision_lightmapper = self.configure_vision_lightmapper()
+
+        self.vision_lightmap = DFRenderer.vision_lightmapper
+        self.vision_lightmap.lights = self.player_lights
+            
 
     def create_compositing_buffers(self):
         self.photon_buffer = DFRenderer.photon_buffer
@@ -32,11 +55,24 @@ class DFRenderer( FloorRenderer ):
         self.canopy_buffer = DFRenderer.canopy_buffer
         self.hittable_buffer = DFRenderer.hittable_buffer
 
+    def render(self):
+        """ Perform final composite to active target """
+        if(self.destroyed):
+            print("trying to render a previously destroyed floor!!!")
+            return
+            
+        self.precompute_frame()
+        self.render_composite()
+
     def encode_player_lights( self ):
         return list(map(lambda player: { "position": player.p, "color" : [0.34,0.34,0.42,1.0], "radius" : player.sight_radius },self.get_player_objects()))
 
     def precompute_frame(self):
         """ Pre-render compositing """
+
+        if(self.destroyed):
+            print("Trying to render a destroyed floor!!!")
+            return
 
         self.vision_lightmap.clear()
 
@@ -51,7 +87,9 @@ class DFRenderer( FloorRenderer ):
             self.vision_lightmap.white_out()
                 
         DFRenderer.lbtick +=1
-        self.photon_map.compute_next()
+
+        if(self.photon_map):
+            self.photon_map.compute_next()
         #if(DFRenderer.lbtick%0==1):
         self.compute_dynamic_lightmap()
 

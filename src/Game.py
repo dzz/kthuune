@@ -26,7 +26,6 @@ class Game( BaseGame ):
     god_shader = BGL.assets.get("KT-compositor/shader/god")
 
     paused = False
-    floor_cache = {}
     area_name = None
     ###############
     def build_area_test(self):
@@ -69,7 +68,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         area_def = get_area_data( area_raw )
 
         floor = DungeonFloor( tilescale =2,
-        god_shader = BGL.assets.get("KT-compositor/shader/ship"),
+        god_shader = BGL.assets.get("KT-compositor/shader/ship_god"),
 
          width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         floor.using_tilemap = False
@@ -224,10 +223,13 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         if area_name == "self":
             area_name = self.area_name
         if self.area_name is not area_name:
-            self.tickables.remove( self.floor )
+            #self.tickables.remove( self.floor )
+            print("DESTROYING FLOOR")
             self.floor.destroy()
+            print("FLOOR IS NONE")
             result = gc.collect()
             print("GC result",result)
+
             self.floor = self.create_tickable( self.load_floor(area_name) )
             self.player.trigger_title( self.floor.title )
             self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")

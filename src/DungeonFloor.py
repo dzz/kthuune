@@ -161,21 +161,30 @@ class DungeonFloor( Floor ):
         self.fog_level_impulse = 0.0
         self.sound_tick = 0
         self.recursive_snapper = None
+        self.destroyed = False
         Floor.__init__(self,**floor_configuration)
 
 
 
     def destroy(self):
+        self.game.tickables.remove(self)
+        self.game.floor = None
+        self.game = None
         for obj in self.objects:
             if "body" in obj.__dict__:
                 if(obj.body):
                     obj.body.destroy()
                     obj.body = None
+                    obj.floor = None
 
         self.objects = []
         self.physics_space.destroy()
         self.physics_space = None
+        self.player.floor = None
+        self.player.hittable_hilight = []
+        self.camera = None
         self.player = None
+        self.destroyed = True
 
     def tick_god_shader(self):
         pass
@@ -258,10 +267,10 @@ class DungeonFloor( Floor ):
     def tick(self):
         #dungeon floor
 
-        if(self.music is not None):
-            if not self.music_playing:
-                audio.baudy_play_music(self.music)
-                self.music_playing = True
+        #if(self.music is not None):
+        #    if not self.music_playing:
+        #        audio.baudy_play_music(self.music)
+        #        self.music_playing = True
         if(self.sound_tick==0):
             KSounds.play(choice([KSounds.rain_20sec, KSounds.rain_21sec]))
         self.sound_tick = (self.sound_tick +1)%(60*18)
