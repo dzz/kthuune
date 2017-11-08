@@ -320,10 +320,10 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         else:
             if self.doing_random_test:
-                if(uniform(0.0,1.0)<0.005):
+                if(uniform(0.0,1.0)<0.003):
                     area = choice ( [ "ship","grey_world","doortest"] )
                     self.next_area( area, None )
-                if(uniform(0.0,1.0)<0.05):
+                if(uniform(0.0,1.0)<0.01):
                     self.player.p[0] = uniform( -1*self.floor.width, self.floor.width)
                     self.player.p[1] = uniform( -1*self.floor.height, self.floor.height)
 

@@ -26,24 +26,24 @@ class DFRenderer( FloorRenderer ):
         DFRenderer.lbtick = 0
         FloorRenderer.__init__(self,**kwargs)
 
-    def configure_lightmaps(self):
-        self.photon_map = None
-        self.static_lightmap = self.compute_static_lightmap()
-        self.static_lightmap.get_lightmap_texture().debugger_attach("static-lightmap")
-        self.player_lights = []
-        self.dynamic_lights = []
+    #def configure_lightmaps(self):
+    #    self.photon_map = None
+    #    self.static_lightmap = self.compute_static_lightmap()
+    #    self.static_lightmap.get_lightmap_texture().debugger_attach("static-lightmap")
+    #    self.player_lights = []
+    #    self.dynamic_lights = []
 
-        if not DFRenderer.dynamic_lightmapper:
-            DFRenderer.dynamic_lightmapper = self.configure_dynamic_lightmapper()
+    #    if not DFRenderer.dynamic_lightmapper:
+    #        DFRenderer.dynamic_lightmapper = self.configure_dynamic_lightmapper()
 
-        self.dynamic_lightmap = DFRenderer.dynamic_lightmapper
-        self.dynamic_lightmap.lights = self.dynamic_lights
+    #    self.dynamic_lightmap = DFRenderer.dynamic_lightmapper
+    #    self.dynamic_lightmap.lights = self.dynamic_lights
 
-        if not DFRenderer.vision_lightmapper:
-            DFRenderer.vision_lightmapper = self.configure_vision_lightmapper()
+    #    if not DFRenderer.vision_lightmapper:
+    #        DFRenderer.vision_lightmapper = self.configure_vision_lightmapper()
 
-        self.vision_lightmap = DFRenderer.vision_lightmapper
-        self.vision_lightmap.lights = self.player_lights
+    #    self.vision_lightmap = DFRenderer.vision_lightmapper
+    #    self.vision_lightmap.lights = self.player_lights
             
 
     def create_compositing_buffers(self):
