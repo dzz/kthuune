@@ -43,7 +43,9 @@ class Firefly(Object):
         self.tick_type = Object.TickTypes.PURGING
         self.life = 0
         self.trigger_life = uniform( 30.0,60.0 )
-        self.size = [1.0,1.0]
+
+        
+        self.size = [1.0+uniform(0.0,0.5),1.0+uniform(0.0,0.5)]
         self.visible = True
         self.offs = uniform(0.0,3.14)
 
@@ -53,8 +55,8 @@ class Firefly(Object):
         self.vy = sin(d)*spd
 
     def tick(self):
+        self.life += 1
         if(self.life < self.trigger_life ):
-            self.life += 1
             self.p[0] += self.vx
             self.p[1] += self.vy
         
@@ -75,7 +77,7 @@ class Firefly(Object):
                 self.floor.player.add_firefly()
                 return False
 
-        self.rad = atan2( self.vx, self.vy )
+        self.rad = atan2( self.vx, self.vy ) + (self.life/10.0)
         return True
     
 
@@ -654,7 +656,7 @@ class SnapEnemy(Object):
 
 
     def get_firefly_count(self):
-        return 3
+        return 5
 
     def custom_die(self):
         pass
@@ -743,7 +745,8 @@ class SnapEnemy(Object):
         if self.floor.player.snap_animation_buffer>0 and self.hp<=0:
             r = self.tick()
             if not r:
-                self.floor.purging_tick_manager.tickables.remove(self)
+                if self in self.floor.purging_tick_manager.tickables:
+                    self.floor.purging_tick_manager.tickables.remove(self)
 
     def tick(self):
 
