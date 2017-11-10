@@ -1,4 +1,7 @@
+import cProfile
 from .src.Game import Game
+
+pr = cProfile.Profile()
 
 class glb:
     tick = 0
@@ -6,6 +9,7 @@ class glb:
     ini = None
 
 def init():
+    #pr.enable()
     glb.game.init()
 
 def tick():
@@ -15,6 +19,8 @@ def render():
     glb.game.render()
 
 def finalize():
+    #pr.disable()
+    #pr.print_stats()
     glb.game.finalize()
 
 def configure( application_ini ):

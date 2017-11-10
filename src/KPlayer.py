@@ -873,12 +873,12 @@ class KPlayer(Player):
         self.dm_msg_cooldown = 0
 
     def impulse_hittables(self):
-        self.hittable_hint_impulse = 1.0
-        self.hittable_hint_real += 0.25
+        self.hittable_hint_impulse = 0.5
+        self.hittable_hint_real += 0.2
 
     def add_firefly(self):
-        self.hittable_hint_real += 0.33
-        self.hittable_hint_impulse = 1.0
+        self.hittable_hint_real += 0.01
+        self.hittable_hint_impulse = 0.7
         KSounds.play( KSounds.firefly )
 
 
