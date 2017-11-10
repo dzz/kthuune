@@ -692,6 +692,7 @@ class SnapEnemy(Object):
 
         for x in range(0, self.get_firefly_count()):
             self.floor.create_object( Firefly( p = [ self.p[0], self.p[1] ] ))
+        self.floor.player.impulse_hittables()
 
 
     def get_kill_particles(self):
@@ -2458,12 +2459,22 @@ class ForestGraveyard():
             if od["key"] in ["software" ]:
                 self.objects.append(SoftwarePickup.parse(od,df))
 
-            if od["key"] in ["firepot" ]:
+            if od["key"] in ["firepot", "firepot_right" ]:
                 self.objects.append(Firepot.parse(od,df))
 
             if od["key"] in ["firepot_up" ]:
                 fp = Firepot.parse(od,df)
                 fp.fire_rad = -3.14/2
+                self.objects.append(fp)
+
+            if od["key"] in ["firepot_down" ]:
+                fp = Firepot.parse(od,df)
+                fp.fire_rad = 3.14/2
+                self.objects.append(fp)
+
+            if od["key"] in ["firepot_left" ]:
+                fp = Firepot.parse(od,df)
+                fp.fire_rad = 3.14
                 self.objects.append(fp)
 
             if od["key"] in ["crystals" ]:

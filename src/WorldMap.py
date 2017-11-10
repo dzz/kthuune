@@ -5,10 +5,10 @@ class WorldMap:
             "unlocked" : True,
             "destinations" : {
                 "Crystaline Structure I." : { "unlocked" : True, "area_name" : "crystals1", "pin_name" : None },
-                "The Gauntlet" : { "unlocked" : True, "area_name" : "doortest", "pin_name" : None },
-                "Docks" : { "unlocked" : True, "area_name" : "docks", "pin_name" : None },
-                "Grey World" : { "unlocked" : True, "area_name" : "grey_world", "pin_name" : None },
-                "Your Ship" : { "unlocked" : True, "area_name" : "ship", "pin_name" : None },
+                "The Gauntlet" : { "unlocked" : False, "area_name" : "doortest", "pin_name" : None },
+                "Docks" : { "unlocked" : False, "area_name" : "docks", "pin_name" : None },
+                "Grey World" : { "unlocked" : False, "area_name" : "grey_world", "pin_name" : None },
+                "Your Ship" : { "unlocked" : False, "area_name" : "ship", "pin_name" : None },
             }
         }
     }

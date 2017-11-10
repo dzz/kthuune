@@ -1,0 +1,2 @@
+class Abilities:
+    Telekine = False

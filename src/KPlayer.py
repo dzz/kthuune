@@ -853,7 +853,7 @@ class KPlayer(Player):
         self.attacked = False
         self.dash_flash = False
         self.dash_combo = False
-        self.hud_buffer = BGL.framebuffer.from_dims(1920,1080)
+        self.hud_buffer = BGL.framebuffer.from_dims(320,240)
         self.combo_count = 0
         self.link_count = 0
         self.can_combo = False
@@ -872,7 +872,13 @@ class KPlayer(Player):
         self.dm_messages = self.dm_messages[-9:]
         self.dm_msg_cooldown = 0
 
+    def impulse_hittables(self):
+        self.hittable_hint_impulse = 1.0
+        self.hittable_hint_real += 0.25
+
     def add_firefly(self):
+        self.hittable_hint_real += 0.33
+        self.hittable_hint_impulse = 1.0
         KSounds.play( KSounds.firefly )
 
 
@@ -926,8 +932,8 @@ class KPlayer(Player):
                     BGL.lotext.render_text_pixels(self.hud_message, mx-1, 240-11, urc )
                     BGL.lotext.render_text_pixels(self.hud_message, mx, 240-10, urc1 )
                 
-                for idx, message in enumerate(self.dm_messages):
-                    message.render(idx, len(self.dm_messages))
+                #for idx, message in enumerate(self.dm_messages):
+                #    message.render(idx, len(self.dm_messages))
 
         with BGL.blendmode.alpha_over:
             self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )

@@ -165,6 +165,7 @@ class DFRenderer( FloorRenderer ):
                 uniform_fade.apply_fadeout( 1.0 / 8.0 )
                 renderable_objects = self.player.hittable_hilight
                 self.guppyRenderer.renderObjects( renderable_objects )
+                self.render_objects( "additive" )
 
             
         #with BGL.context.render_target( self.canopy_buffer ):
