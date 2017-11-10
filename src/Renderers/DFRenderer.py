@@ -156,8 +156,6 @@ class DFRenderer( FloorRenderer ):
                     BGL.context.clear(0.0,0.0,0.0,0.0)
             with BGL.blendmode.alpha_over:
                 self.render_objects("popup")
-            with BGL.blendmode.add:
-                self.render_objects( "additive" )
 
 
         with BGL.context.render_target( self.hittable_buffer ):
@@ -213,6 +211,8 @@ class DFRenderer( FloorRenderer ):
                 self.render_objects("canopy", True)
         with BGL.blendmode.alpha_over:
             self.canopy_buffer.render_processed(DFRenderer.canopy_shader, { "light_buffer" : self.light_buffer })
+        with BGL.blendmode.add:
+            self.render_objects( "additive" )
 
     def configure_vision_lightmapper(self):
         class FadingLightMapper( LightMapper ):
