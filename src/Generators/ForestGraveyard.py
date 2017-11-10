@@ -27,6 +27,58 @@ from ..KSounds import KSounds
 
 from ..GeneratorOptions import GeneratorOptions
 
+class Firefly(Object):
+    
+    texture = BGL.assets.get('KT-player/texture/firefly')
+
+    def __init__(self,**kwargs):
+        Object.__init__(self,**kwargs)
+        self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
+        self.light_texture = BGL.assets.get('NL-lights/texture/radial')
+        self.texture = Firefly.texture
+        self.buftarget = "additive"
+        self.light_color = [ 1.0,0.6,0.3,1.0 ]
+        self.color = [ 1.0,0.8,0.2,1.0]
+        self.light_radius = 15
+        self.tick_type = Object.TickTypes.PURGING
+        self.life = 0
+        self.trigger_life = uniform( 30.0,60.0 )
+        self.size = [1.0,1.0]
+        self.visible = True
+        self.offs = uniform(0.0,3.14)
+
+        spd = 0.8
+        d = uniform(-3.14,3.14)
+        self.vx = cos(d)*spd
+        self.vy = sin(d)*spd
+
+    def tick(self):
+        if(self.life < self.trigger_life ):
+            self.life += 1
+            self.p[0] += self.vx
+            self.p[1] += self.vy
+        
+            self.vx *= 0.93
+            self.vy *= 0.97
+
+            self.vx += sin(self.offs+(self.life*0.1))*0.03
+            self.vy += cos(self.offs+(self.life*0.2))*0.03
+        else:
+            dx = self.floor.player.p[0] - self.p[0]
+            dy = self.floor.player.p[1] - self.p[1]
+
+            self.p[0] += dx/7.0
+            self.p[1] += dy/7.0
+
+            if self.mdist(self.floor.player)<2.0:
+                self.floor.remove_object(self)
+                self.floor.player.add_firefly()
+                return False
+
+        self.rad = atan2( self.vx, self.vy )
+        return True
+    
+
 class CrystalChunk(Object):
     textures = [
         BGL.assets.get('KT-forest/texture/crystal_1'),
@@ -40,8 +92,6 @@ class CrystalChunk(Object):
         self.texture = choice(CrystalChunk.textures)
         self.buftarget = "popup"
         self.tick_type = Object.TickTypes.PURGING
-
-        
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
         self.light_radius = 15
         self.lifespan = 90
@@ -195,7 +245,7 @@ class SpeechBubble(Object):
 
     def customize(self):
         self.mode = 0
-        self.trigger_dist = 35
+        self.trigger_dist = 100
         self.triggered = False
         self.trigger_script = None
 
@@ -603,6 +653,9 @@ class SnapEnemy(Object):
     ENEMY = 1
 
 
+    def get_firefly_count(self):
+        return 3
+
     def custom_die(self):
         pass
     def can_see_player(self):
@@ -620,7 +673,7 @@ class SnapEnemy(Object):
             self.floor.objects.remove(self)
         if(self in self.floor.snap_enemies):
             self.floor.snap_enemies.remove(self)
-        self.floor.create_object( SkullDeath( p = [ self.p[0], self.p[1] ] ) )
+        #self.floor.create_object( SkullDeath( p = [ self.p[0], self.p[1] ] ) )
         self.floor.player.set_hud_message("KILL!", 60)
         self.floor.player.notify_enemy_killed()
         self.floor.freeze_frames = 3
@@ -637,9 +690,12 @@ class SnapEnemy(Object):
             spltr.size[0]*=uniform(1.0,1.5)
             self.floor.create_object(spltr)
 
+        for x in range(0, self.get_firefly_count()):
+            self.floor.create_object( Firefly( p = [ self.p[0], self.p[1] ] ))
+
 
     def get_kill_particles(self):
-        return 25
+        return 15
 
     def parse(od,df):
         o = SnapEnemy( p = [ od["x"],od["y"] ] )
@@ -676,7 +732,7 @@ class SnapEnemy(Object):
         self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="{0}".format(attack_amt)))
         self.hp = self.hp - attack_amt
 
-        for x in range(0,11):
+        for x in range(0,5):
             spltr = SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14))
             spltr.color = [0.0,0.0,0.0,1.0]
             spltr.light_color = [ 0.0,1.0,0.0,1.0]
@@ -824,14 +880,14 @@ class SplatterParticle(Object):
         self.buftarget = "popup"
         self.tick_type = Object.TickTypes.PURGING
 
-        
-        self.light_type = Object.LightTypes.NONE
+        self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
+        self.light_texture = BGL.assets.get('NL-lights/texture/radial')
         self.light_radius = 15
         self.lifespan = 90
         self.light_color = [ 1.0,0.7,0.0,0.0 ]
         self.color = [1.0,0.5,0.5,1.0]
 
-        self.size = [ 2.8,2.8 ]
+        self.size = [ 3.8,3.8 ]
         self.snapshot_fields = [ 'p' ]
 
         spd = 0.3 + uniform(0.2,0.8)
@@ -1677,8 +1733,12 @@ class Worm(SnapEnemy):
         BGL.assets.get("KT-forest/texture/worm0002"),
         BGL.assets.get("KT-forest/texture/worm0003"),
     ] 
+
+    def get_firefly_count(self):
+        return 1
+
     def get_kill_particles(self):
-        return 5
+        return 2
 
     def customize(self):
         self.triggered = False

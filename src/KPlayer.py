@@ -872,6 +872,9 @@ class KPlayer(Player):
         self.dm_messages = self.dm_messages[-9:]
         self.dm_msg_cooldown = 0
 
+    def add_firefly(self):
+        KSounds.play( KSounds.firefly )
+
 
     def deq_dm_message(self):
         self.dm_messages = self.dm_messages[1:] 

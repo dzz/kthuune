@@ -2,6 +2,7 @@
     "preload": true,
     "resources" : {
         "texture" : [
+            { "name" : "firefly", "filename" : "{package_path}/firefly.png", "filtered" : true },
             { "name" : "player", "filename" : "{package_path}/player.png", "filtered" : true },
             { "name" : "arrow", "filename" : "{package_path}/arrow.png", "filtered" : true },
             { "name" : "elder0000", "filename" : "{package_path}/elder0000.png", "filtered" : false },
@@ -124,7 +125,8 @@
             { "name" : "term_select", "path" : "{package_path}/sounds/term_select.wav" },
             { "name" : "term_back", "path" : "{package_path}/sounds/term_back.wav" },
             { "name" : "mining1", "path" : "{package_path}/sounds/mining1.wav" },
-            { "name" : "mining2", "path" : "{package_path}/sounds/mining2.wav" }
+            { "name" : "mining2", "path" : "{package_path}/sounds/mining2.wav" },
+            { "name" : "firefly", "path" : "{package_path}/sounds/firefly.wav" }
         ]
     }
 }

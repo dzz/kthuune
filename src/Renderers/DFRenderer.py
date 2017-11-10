@@ -3,7 +3,8 @@ from Beagle import Platform
 from Newfoundland.Renderers.FloorRenderer import FloorRenderer
 from Newfoundland.Renderers.LightMapper import LightMapper
 from .uniform_fade import uniform_fade
-from Newfoundland.Object import GuppyRenderer
+from Newfoundland.Object import GuppyRenderer, Object
+from random import sample
 
 class DFRenderer( FloorRenderer ):
     photon_buffer = BGL.framebuffer.from_screen()
@@ -64,6 +65,26 @@ class DFRenderer( FloorRenderer ):
         self.precompute_frame()
         self.render_composite()
 
+    max_lights = 60
+    def visible_light(self,obj):
+        if obj.mdist(self.player) < 200:
+            return True
+        else:
+            return False
+
+    def encode_light_objects(self, light_type):
+        """ Converts Objects to LightMapper compatible lights if appropriate
+        """
+        baselights = list(map( lambda obj : { "position" : obj.p, "color" : obj.light_color, "radius" : obj.light_radius }, 
+                         filter(lambda obj : obj.light_type == light_type and self.visible_light(obj), self.objects)))
+
+
+        if light_type == Object.LightTypes.DYNAMIC_SHADOWCASTER and len(baselights)> DFRenderer.max_lights:
+            return sample( baselights, DFRenderer.max_lights )
+        return baselights
+
+
+        
     def encode_player_lights( self ):
         return list(map(lambda player: { "position": player.p, "color" : [0.34,0.34,0.42,1.0], "radius" : player.sight_radius },self.get_player_objects()))
 
@@ -135,6 +156,8 @@ class DFRenderer( FloorRenderer ):
                     BGL.context.clear(0.0,0.0,0.0,0.0)
             with BGL.blendmode.alpha_over:
                 self.render_objects("popup")
+            with BGL.blendmode.add:
+                self.render_objects( "additive" )
 
 
         with BGL.context.render_target( self.hittable_buffer ):
@@ -142,6 +165,7 @@ class DFRenderer( FloorRenderer ):
                 uniform_fade.apply_fadeout( 1.0 / 8.0 )
                 renderable_objects = self.player.hittable_hilight
                 self.guppyRenderer.renderObjects( renderable_objects )
+
             
         #with BGL.context.render_target( self.canopy_buffer ):
         #    BGL.context.clear(0.0,0.0,0.0,0.0)

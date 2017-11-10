@@ -8,6 +8,7 @@ class KSounds:
     snap_landed = audio.baudy_load_sound(BGL.assets.get("KT-player/path/snap_landed")) 
     basic_hit = audio.baudy_load_sound(BGL.assets.get("KT-player/path/basic_hit")) 
     crit = audio.baudy_load_sound(BGL.assets.get("KT-player/path/crit")) 
+    firefly = audio.baudy_load_sound(BGL.assets.get("KT-player/path/firefly")) 
     enemy_killed = audio.baudy_load_sound(BGL.assets.get("KT-player/path/enemy_killed")) 
     enemy_killed2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/enemy_killed2")) 
     player_hurt = audio.baudy_load_sound(BGL.assets.get("KT-player/path/player_hurt")) 

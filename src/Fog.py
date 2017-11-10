@@ -13,14 +13,14 @@ class Fog:
                 "vision_tex" : vision_tex,
                 "fog_level" : fog_level
             } )
-            Fog.primitive.render_shaded( Fog.shader, {
-                "light_buffer" : floor.light_buffer,
-                "camera_position" : self.camera.p,
-                "parallax" : [ 2.2 ],
-                "tick" : floor._tick,
-                "vision_tex" : vision_tex,
-                "fog_level" : fog_level
-            } )
+            #Fog.primitive.render_shaded( Fog.shader, {
+            #    "light_buffer" : floor.light_buffer,
+            #    "camera_position" : self.camera.p,
+            #    "parallax" : [ 2.2 ],
+            #    "tick" : floor._tick,
+            #    "vision_tex" : vision_tex,
+            #    "fog_level" : fog_level
+            #} )
             #Fog.primitive.render_shaded( Fog.shader, {
             #    "light_buffer" : floor.light_buffer,
             #    "camera_position" : self.camera.p,
