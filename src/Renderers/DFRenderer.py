@@ -65,9 +65,9 @@ class DFRenderer( FloorRenderer ):
         self.precompute_frame()
         self.render_composite()
 
-    max_lights = 60
+    max_lights = 90
     def visible_light(self,obj):
-        if obj.mdist(self.player) < 200:
+        if obj.mdist(self.player) < 150:
             return True
         else:
             return False

@@ -43,36 +43,48 @@ class Firefly(Object):
         self.tick_type = Object.TickTypes.PURGING
         self.life = 0
         self.trigger_life = uniform( 30.0,60.0 )
+        self.base_p = self.p
 
         
-        self.size = [1.0+uniform(0.0,0.5),1.0+uniform(0.0,0.5)]
+        self.size = [0.7+uniform(0.0,0.3),0.7+uniform(0.0,0.3)]
         self.visible = True
         self.offs = uniform(0.0,3.14)
 
-        spd = 0.8
+        spd = uniform(0.5,0.9)
         d = uniform(-3.14,3.14)
         self.vx = cos(d)*spd
         self.vy = sin(d)*spd
 
     def tick(self):
         self.life += 1
+
+        self.p[0] = (self.p[0] *0.6) + (self.base_p[0]*0.4)
+        self.p[1] = (self.p[1] *0.6) + (self.base_p[1]*0.4)
+        self.p[0] = self.base_p[0]
+        self.p[1] = self.base_p[1]
+
         if(self.life < self.trigger_life ):
-            self.p[0] += self.vx
-            self.p[1] += self.vy
+            self.base_p[0] += self.vx
+            self.base_p[1] += self.vy
         
             self.vx *= 0.93
             self.vy *= 0.97
 
+            self.size[0]*=1.01
+            self.size[1]*=1.01
+
             self.vx += sin(self.offs+(self.life*0.1))*0.03
             self.vy += cos(self.offs+(self.life*0.2))*0.03
         else:
-            dx = self.floor.player.p[0] - self.p[0]
-            dy = self.floor.player.p[1] - self.p[1]
+            self.size[0]*=0.96
+            self.size[1]*=0.96
+            dx = self.floor.player.p[0] - self.base_p[0]
+            dy = self.floor.player.p[1] - self.base_p[1]
 
-            self.p[0] += dx/7.0
-            self.p[1] += dy/7.0
+            self.base_p[0] += dx/5.0
+            self.base_p[1] += dy/5.0
 
-            if self.mdist(self.floor.player)<2.0:
+            if self.mdist(self.floor.player)<1.0:
                 self.floor.remove_object(self)
                 self.floor.player.add_firefly()
                 return False
