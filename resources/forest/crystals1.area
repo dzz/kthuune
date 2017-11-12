@@ -2939,8 +2939,8 @@ True
 0
 OBJECT
 text
--14
--30
+-20
+-33
 {"text" : "A = SLASH"}
 True
 0
@@ -2949,7 +2949,7 @@ OBJECT
 software
 11
 -10
-{}
+{"key" : "telekine"}
 True
 0
 0
@@ -2988,9 +2988,9 @@ True
 OBJECT
 text
 11
--13
+-12
 {"text" : "software?"}
-False
+True
 0
 0
 OBJECT
@@ -2998,7 +2998,7 @@ text
 -28
 16
 {"text" : "B = DASH" }
-False
+True
 0
 0
 OBJECT
@@ -3006,7 +3006,7 @@ crystals
 -28
 32
 {}
-False
+True
 0
 0
 OBJECT
@@ -3014,7 +3014,7 @@ text
 -21
 38
 {"text" : "R1 = RUN"}
-False
+True
 0
 0
 OBJECT
@@ -3022,7 +3022,7 @@ skeline
 -11
 46
 {}
-False
+True
 0
 0
 OBJECT
@@ -3030,7 +3030,7 @@ skeline
 5
 46
 {}
-False
+True
 0
 0
 OBJECT
@@ -3038,7 +3038,7 @@ firepot_down
 -14
 40
 {}
-False
+True
 0
 0
 OBJECT
@@ -3046,7 +3046,7 @@ firepot_down
 -6
 40
 {}
-False
+True
 0
 0
 OBJECT
@@ -3054,7 +3054,7 @@ firepot_down
 2
 40
 {}
-False
+True
 0
 0
 OBJECT
@@ -3062,7 +3062,7 @@ door_pin
 16
 42
 a
-False
+True
 0
 0
 OBJECT
@@ -3070,7 +3070,7 @@ door_end
 16
 50
 a
-False
+True
 0
 0
 OBJECT
@@ -3078,7 +3078,7 @@ door_sensor
 16
 46
 a
-False
+True
 0
 0
 OBJECT
@@ -3086,7 +3086,7 @@ door_pin
 46
 54
 b
-False
+True
 0
 0
 OBJECT
@@ -3094,7 +3094,7 @@ door_end
 46
 60
 b
-False
+True
 0
 0
 OBJECT
@@ -3102,7 +3102,7 @@ door_sensor
 46
 56
 b
-False
+True
 0
 0
 OBJECT
@@ -3110,7 +3110,7 @@ light
 -32
 16
 {"class" : "shortwave" }
-False
+True
 0
 0
 OBJECT
@@ -3118,7 +3118,7 @@ light
 -16
 68
 {"class" : "shipfill" }
-False
+True
 0
 0
 OBJECT
@@ -3126,7 +3126,7 @@ light
 30
 46
 {"class" : "shipfill" }
-False
+True
 0
 0
 OBJECT
@@ -3134,7 +3134,7 @@ crystals
 2
 50
 {}
-False
+True
 0
 0
 OBJECT
@@ -3142,7 +3142,7 @@ crystals
 44
 56
 {}
-False
+True
 0
 0
 OBJECT
@@ -3150,7 +3150,7 @@ firepot_left
 36
 42
 {}
-False
+True
 0
 0
 OBJECT
@@ -3158,7 +3158,7 @@ firepot_left
 36
 50
 {}
-False
+True
 0
 0
 OBJECT
@@ -3166,7 +3166,7 @@ skeline
 20
 56
 {}
-False
+True
 0
 0
 OBJECT
@@ -3174,7 +3174,7 @@ skeline
 18
 34
 {}
-False
+True
 0
 0
 OBJECT
@@ -3182,7 +3182,7 @@ skeline
 42
 36
 {}
-False
+True
 0
 0
 OBJECT
@@ -3190,7 +3190,7 @@ firepot_left
 76
 34
 {}
-False
+True
 0
 0
 OBJECT
@@ -3198,7 +3198,7 @@ firepot_left
 74
 42
 {}
-False
+True
 0
 0
 OBJECT
@@ -3206,7 +3206,7 @@ firepot_right
 60
 38
 {}
-False
+True
 0
 0
 OBJECT
@@ -3214,7 +3214,7 @@ skeline
 60
 58
 {}
-False
+True
 0
 0
 OBJECT
@@ -3222,7 +3222,7 @@ skeline
 70
 58
 {}
-False
+True
 0
 0
 OBJECT
@@ -3230,7 +3230,7 @@ skeline
 70
 28
 {}
-False
+True
 0
 0
 OBJECT
@@ -3238,7 +3238,7 @@ crystals
 66
 48
 {}
-False
+True
 0
 0
 OBJECT
@@ -3246,7 +3246,7 @@ crystals
 70
 22
 {}
-False
+True
 0
 0
 OBJECT
@@ -3254,7 +3254,7 @@ crystals
 64
 20
 {}
-False
+True
 0
 0
 OBJECT
@@ -3262,7 +3262,7 @@ crystals
 72
 -2
 {}
-False
+True
 0
 0
 OBJECT
@@ -3270,7 +3270,7 @@ crystals
 80
 -2
 {}
-False
+True
 0
 0
 OBJECT
@@ -3278,7 +3278,7 @@ crystals
 82
 16
 {}
-False
+True
 0
 0
 OBJECT
@@ -3286,7 +3286,7 @@ crystals
 62
 6
 {}
-False
+True
 0
 0
 OBJECT
@@ -3294,7 +3294,7 @@ light
 64
 -10
 {"class" : "shipfill" }
-False
+True
 0
 0
 OBJECT
@@ -3302,7 +3302,7 @@ light
 66
 58
 {"class" : "shipfill" }
-False
+True
 0
 0
 OBJECT
@@ -3310,7 +3310,7 @@ totem
 64
 86
 {}
-False
+True
 0
 0
 OBJECT
@@ -3318,7 +3318,7 @@ skeline
 51
 85
 {}
-False
+True
 0
 0
 OBJECT
@@ -3326,7 +3326,7 @@ skeline
 77
 85
 {}
-False
+True
 0
 0
 OBJECT
@@ -3334,7 +3334,7 @@ totem
 74
 107
 {}
-False
+True
 0
 0
 OBJECT
@@ -3342,15 +3342,15 @@ totem
 84
 107
 {}
-False
+True
 0
 0
 OBJECT
 software
 110
 107
-{}
-False
+{"key" : "starmap"}
+True
 0
 0
 OBJECT
@@ -3358,7 +3358,7 @@ light
 65
 82
 {"class" : "shortwave" }
-False
+True
 0
 0
 OBJECT
@@ -3366,7 +3366,7 @@ crystals
 61
 105
 {}
-False
+True
 0
 0
 OBJECT
@@ -3374,7 +3374,7 @@ door_pin
 106
 102
 c
-False
+True
 0
 0
 OBJECT
@@ -3382,7 +3382,7 @@ door_end
 106
 112
 c
-False
+True
 0
 0
 OBJECT
@@ -3390,7 +3390,31 @@ door_sensor
 106
 107
 c
-False
+True
+0
+0
+OBJECT
+fterm
+76
+-10
+{}
+True
+0
+0
+OBJECT
+crystals
+-22
+-23
+{}
+True
+0
+0
+OBJECT
+crystals
+-12
+-36
+{}
+True
 0
 0
 TILE

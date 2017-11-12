@@ -13,6 +13,7 @@ from Newfoundland.Object import Object
 from Newfoundland.Player import Player
 from random import uniform,choice
 from math import floor,pi,atan2,sin, hypot,cos
+from .Abilities import Abilities
 
 from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 
@@ -115,7 +116,7 @@ class SlashEffect(Object):
                         md = (dx*dx) + (dy*dy)
                         if md < 10:
                             KSounds.play( KSounds.slashhit )
-                            enemy.floor.player.add_dm_message("You slashed an enemy")
+                            #enemy.floor.player.add_dm_message("You slashed an enemy")
                             enemy.receive_snap_attack( choice([False, False, True]) )
                             self.attacked_enemies.append(enemy)
                             self.stagger_cooldown += 25
@@ -594,9 +595,10 @@ class KPlayer(Player):
             return 
         self.snap_cooldown = 40
         self.hp = self.hp - attack.attack_str
+        self.flash_color = [ 1.0,0.0,0.0,1.0 ]
         self.attack_object = attack
         self.attack_physics_timer = 25 
-        self.add_dm_message("You were injured")
+        #self.add_dm_message("You were injured")
         self.link_count = 0
         self.combo_count = 0
         self.combo_reset_cooldown = 0
@@ -606,6 +608,9 @@ class KPlayer(Player):
         KSounds.play( KSounds.player_hurt )
  
     def attempt_snap_attack(self, snap = True):
+
+        if not Abilities.Telekine:
+            return
 
         def se_priority(se):
             dx = se.p[0] - self.p[0]
@@ -710,7 +715,7 @@ class KPlayer(Player):
             self.combo_reset_cooldown = 60*KPlayer.ComboSecs
             if( se.snap_type == 1 ):
 
-                self.add_dm_message("You executed a violent Telekine") 
+                #self.add_dm_message("You executed a violent Telekine") 
                 self.invuln_frames = 9
                 self.snap_animation_buffer = min((1+self.combo_count)*9,22)
                 self.combo_count = self.combo_count + 1
@@ -725,7 +730,7 @@ class KPlayer(Player):
                 if(self.combo_count > 7):
                     KSounds.play( KSounds.tubular )
             else:
-                self.add_dm_message("You executed a passive Telekine") 
+                #self.add_dm_message("You executed a passive Telekine") 
                 se.sleep_totem()
                 self.snap_animation_buffer = 6
 
@@ -778,6 +783,7 @@ class KPlayer(Player):
         self.state = KPlayer.STATE_DEFAULT
         self.last_link = None
         self.hurt_flash_timer = 0
+        self.flash_color = [ 0.0,0.0,0.0,0.0 ]
 
         self.ability_timeout = 0
         self.active_ability = -1
@@ -853,7 +859,7 @@ class KPlayer(Player):
         self.attacked = False
         self.dash_flash = False
         self.dash_combo = False
-        self.hud_buffer = BGL.framebuffer.from_dims(320,240)
+        self.hud_buffer = BGL.framebuffer.from_dims(1920,1080)
         self.combo_count = 0
         self.link_count = 0
         self.can_combo = False
@@ -879,6 +885,7 @@ class KPlayer(Player):
     def add_firefly(self):
         self.hittable_hint_real += 0.01
         self.hittable_hint_impulse = 0.7
+        self.flash_color = [ 0.0,0.8,1.0,1.0]
         KSounds.play( KSounds.firefly )
 
 
@@ -932,8 +939,8 @@ class KPlayer(Player):
                     BGL.lotext.render_text_pixels(self.hud_message, mx-1, 240-11, urc )
                     BGL.lotext.render_text_pixels(self.hud_message, mx, 240-10, urc1 )
                 
-                #for idx, message in enumerate(self.dm_messages):
-                #    message.render(idx, len(self.dm_messages))
+                for idx, message in enumerate(self.dm_messages):
+                    message.render(idx, len(self.dm_messages))
 
         with BGL.blendmode.alpha_over:
             self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
@@ -1001,6 +1008,7 @@ class KPlayer(Player):
 
     def get_shader_params(self):
         base_params = Player.get_shader_params(self)
+        base_params["flash_color"] = self.flash_color
         if self.hp > 0:
             base_params["rotation_local"] = 0.0
         if(self.snap_animation_buffer>0):
@@ -1201,6 +1209,11 @@ class KPlayer(Player):
         
     def tick(self):
 
+        if(self.flash_color[3]>0.1):
+            self.flash_color[3] *= 0.95
+        else:
+            self.flash_color[3] = 0.0
+
         if(self.active_terminal):
             if( self.terminal_size<1.0):
                 self.terminal_size = (self.terminal_size*0.9) + 0.1
@@ -1243,8 +1256,8 @@ class KPlayer(Player):
 
         #player tick
 
-        if(self.run_stamina<=1.0):
-            self.add_dm_message("You over exerted yourself")
+        #if(self.run_stamina<=1.0):
+        #    self.add_dm_message("You over exerted yourself")
 
         self.invuln_frames -= 1
         KPlayer.BirdmanTick = KPlayer.BirdmanTick+1

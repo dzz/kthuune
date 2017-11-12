@@ -21,11 +21,54 @@ from math import floor
 from .magic_lines import vscan_line, fill_scanline
 import random
 from client.beagle.Newfoundland.GeometryUtils import segments_intersect
-from .ShipComputer import ShipComputer, TeleportControl, TelekineControl, SwordControl
+from .ShipComputer import ShipComputer, TeleportControl, TelekineControl, SwordControl, ReturnToShip
 
 from ..KSounds import KSounds
 
 from ..GeneratorOptions import GeneratorOptions
+from ..Abilities import Abilities
+
+class FTerm(Object):
+
+    def parse(od,df):
+        ret = []
+        ret.append(FTerm(p=[od["x"],od["y"]]))
+        ret.append(FTermStand(p=[od["x"],od["y"]]))
+        ret.append(Terminal(title="Teleport to Ship", p=[od["x"],od["y"]]))
+        return ret
+
+    textures = [
+        BGL.assets.get('KT-forest/texture/term0000'),
+        BGL.assets.get('KT-forest/texture/term0001')
+    ]
+
+    def __init__(self,**kwargs):
+        Object.__init__(self,**kwargs)
+        self.buftarget = "popup"
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_color = [ 0.8,0.0,1.0,1.0 ]
+        self.light_radius = 25
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.size = [2.0,2.0]
+        self.fr = 0 
+
+    def tick(self):
+        self.fr += 1
+        if(self.fr==90):
+            self.fr = 0
+        self.texture = FTerm.textures[ int(self.fr)//45 ]
+
+class FTermStand(Object):
+
+    texture = BGL.assets.get('KT-forest/texture/termstand')
+
+    def __init__(self,**kwargs):
+        Object.__init__(self,**kwargs)
+        self.p[1] += 1.5
+        self.size = [3.0,3.0]
+        self.buftarget = "floor"
+        self.texture = FTermStand.texture
+        self.tick_type = Object.TickTypes.STATIC
 
 class Firefly(Object):
     
@@ -37,6 +80,7 @@ class Firefly(Object):
         self.light_texture = BGL.assets.get('NL-lights/texture/radial')
         self.texture = Firefly.texture
         self.buftarget = "additive"
+        self.is_pixie = False
         self.light_color = [ 1.0,0.6,0.3,1.0 ]
         self.color = [ 1.0,0.8,0.2,1.0]
         self.light_radius = 15
@@ -86,11 +130,28 @@ class Firefly(Object):
 
             if self.mdist(self.floor.player)<1.0:
                 self.floor.remove_object(self)
-                self.floor.player.add_firefly()
+                if not self.is_pixie:
+                    self.floor.player.add_firefly()
+                    for x in range(0,3):
+                        self.floor.create_object(PixieDust( p = [ self.p[0], self.p[1] ]))
                 return False
 
         self.rad = atan2( self.vx, self.vy ) + (self.life/10.0)
         return True
+
+class PixieDust(Firefly):
+    def __init__(self,**kwargs):
+        Firefly.__init__(self, **kwargs)
+        self.texture = BGL.assets.get('NL-lights/texture/flare')
+        self.color = [ 0.0,0.8,1.0,0.5]
+        self.size[0] *=2
+        self.size[1] *=2
+        self.is_pixie = True
+        spd = uniform(0.1,0.2)
+        d = uniform(-3.14,3.14)
+        self.vx = cos(d)*spd
+        self.vy = sin(d)*spd
+        self.trigger_life = uniform(20.0,30.0)
     
 
 class CrystalChunk(Object):
@@ -190,7 +251,7 @@ class Crystal(Object):
             KSounds.play(KSounds.mining2)
             self.floor.remove_object(self)
 
-            self.floor.player.add_dm_message("You smashed a crystal with your sword")
+            #self.floor.player.add_dm_message("You smashed a crystal with your sword")
             if uniform(0.0,1.0)>0.78:
                 self.floor.create_object(ResourcePickup(p=[ self.p[0], self.p[1]]))
             
@@ -219,25 +280,46 @@ class Terminal(Object):
         self.visible = False
         self.tick_type = Object.TickTypes.TICK_FOREVER
 
-        if self.title == "Teleport Control":
+        self.install_percent = 0
+
+        if self.title == "Teleport to Ship":
+            self.ui = ReturnToShip(self)
+            self.term_installed = True
+            self.install_percent = 100
+        elif self.title == "Teleport Control":
             self.ui = TeleportControl(self)
+            self.term_installed = True
+            self.install_percent = 100
         elif self.title == "Telekine Biometrics":
             self.ui = TelekineControl(self)
+            self.term_installed = Abilities.InstallTelekine
+            self.install_percent = 0
+            if Abilities.TelekineInstalled:
+                self.install_percent = 100
         elif self.title == "Sword Technology":
             self.ui = SwordControl(self)
+            self.term_installed = False
+            self.install_percent = 0
         else:
             self.ui = ShipComputer(self)
+            self.term_installed = False
+            self.install_percent = 0
 
     def render_ui(self):
         self.ui.render()
 
     def tick(self):
         if(self.mdist(self.floor.player)<6.5): 
+
+            if(self.install_percent<100) and self.term_installed:
+                self.install_percent += choice([0.1,0.5,0.25])
+                if self.install_percent > 100:
+                    if self.title == "Telekine Biometrics":
+                        Abilities.Telekine = True
             if(self.floor.player.active_terminal != self):
                 self.floor.player.active_terminal = self
                 self.ui.setup_options()
-                print("SHOWING",self)
-                self.floor.player.add_dm_message("You opened the {0} terminal".format(self.title))
+                #self.floor.player.add_dm_message("You opened the {0} terminal".format(self.title))
                 KSounds.play(KSounds.terminal_open)
         else:
             if self.floor.player.active_terminal == self:
@@ -383,7 +465,7 @@ class SoftwarePickup(Object):
     ]
    
     def parse(od,df):
-        o = SoftwarePickup( p = [ od["x"], od["y"] ] )
+        o = SoftwarePickup( p = [ od["x"], od["y"] ], software_key = od["meta"]["key"] )
         return o
         
     def customize(self):
@@ -397,6 +479,9 @@ class SoftwarePickup(Object):
         self.light_radius = 25.
         self.visible = True
         self.size = [ 2.5,2.5 ]
+
+        if self.software_key == "telekine":
+            self.label = "TELEKINE BIOMETRICS"
 
     def tick(self):
         self.visible = True
@@ -417,7 +502,10 @@ class SoftwarePickup(Object):
         if (md<1.6):
             self.floor.objects.remove(self)
             KSounds.play( KSounds.pickup )
-            self.floor.player.add_dm_message("You found some software")
+            self.floor.player.add_dm_message("You found a disk labelled: " + self.label)
+
+            if self.software_key == "telekine":
+                Abilities.InstallTelekine = True
             return False
         return True
 
@@ -666,7 +754,6 @@ class SnapEnemy(Object):
     TOTEM = 0
     ENEMY = 1
 
-
     def get_firefly_count(self):
         return 5
 
@@ -722,7 +809,11 @@ class SnapEnemy(Object):
         self.floor.player.notify_crit()
         self.floor.create_object( SwordCrit( p = [ self.p[0], self.p[1]-30 ]))
 
+    def flash(self,r,g,b):
+        self.flash_color = [ r,g,b,1.0 ]
+
     def receive_snap_attack(self, was_crit):
+
         self.iframes = 20
         self.snap_effect_emit = 10
 
@@ -744,6 +835,7 @@ class SnapEnemy(Object):
         attack_amt = floor(attack_amt)
         print("ATTACK -> {0}".format(attack_amt))
 
+        self.flash(1.0,0.0,0.0)
         self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="{0}".format(attack_amt)))
         self.hp = self.hp - attack_amt
 
@@ -760,7 +852,14 @@ class SnapEnemy(Object):
                 if self in self.floor.purging_tick_manager.tickables:
                     self.floor.purging_tick_manager.tickables.remove(self)
 
+    def fade_flash(self):
+        if(self.flash_color[3]>0.1):
+            self.flash_color[3] *= 0.935
+        else:
+            self.flash_color[3] = 0.0
+
     def tick(self):
+        self.fade_flash()
 
         if(self.iframes>0):
             self.iframes -=1
@@ -772,6 +871,7 @@ class SnapEnemy(Object):
         return True
 
     def customize(self):
+        self.flash_color = [ 1.0,0.0,0.0,1.0 ]
         self.snap_type = SnapEnemy.ENEMY
         self.snap_effect_emit = 0
         self.tick_type = Object.TickTypes.PURGING
@@ -1206,6 +1306,7 @@ class Acolyte(SnapEnemy):
         self.target_rad = rad
         
     def fireRanged(self):
+        self.flash(1.0,0.8,0.0)
         #x = self.floor.player.p[0] - self.p[0]
         #y = self.floor.player.p[1] - self.p[1]
         #rad = atan2(y,x)
@@ -1213,7 +1314,7 @@ class Acolyte(SnapEnemy):
         KSounds.play_eproj()
 
     def get_shader_params(self):
-        bp = Object.get_shader_params(self)
+        bp = SnapEnemy.get_shader_params(self)
         bp['translation_local'][0] = 0.1
         bp['translation_local'][1] = -0.4 + (sin( self.wavidx )*0.2)
         return bp
@@ -1225,7 +1326,7 @@ class Stork(SnapEnemy):
         self.floor.create_object( WormField( wf_spec = wf_spec) )
 
     def get_shader_params(self):
-        bp = Object.get_shader_params(self)
+        bp = SnapEnemy.get_shader_params(self)
         bp['translation_local'][0] = 0.1
         bp['translation_local'][1] = -0.4
         return bp
@@ -1430,6 +1531,8 @@ class Cleric(SnapEnemy):
 
     def tick(self):
     
+        self.fade_flash()
+
         if self.hp<=0:
             SnapEnemy.die(self)
             return False
@@ -1491,6 +1594,7 @@ class Cleric(SnapEnemy):
         return True
 
     def fireRanged(self):
+        self.flash(1.0,0.8,0.0)
         self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = self.target_rad+uniform(-0.1,0.1) ) )
         KSounds.play_eproj()
 
@@ -1665,6 +1769,7 @@ class Skeline(SnapEnemy):
         self.target_rad = rad
         
     def fireRanged(self):
+        self.flash(1.0,0.8,0.0)
         #x = self.floor.player.p[0] - self.p[0]
         #y = self.floor.player.p[1] - self.p[1]
         #rad = atan2(y,x)
@@ -1672,7 +1777,7 @@ class Skeline(SnapEnemy):
         KSounds.play_eproj()
 
     def get_shader_params(self):
-        bp = Object.get_shader_params(self)
+        bp = SnapEnemy.get_shader_params(self)
         bp['translation_local'][0] = 0.1
         bp['translation_local'][1] = -0.4
         return bp
@@ -2472,7 +2577,11 @@ class ForestGraveyard():
                 self.objects.append(Elder.parse(od,df))
 
             if od["key"] in ["software" ]:
-                self.objects.append(SoftwarePickup.parse(od,df))
+                if od["meta"]["key"] == "telekine": 
+                    if not Abilities.InstallTelekine:
+                        self.objects.append(SoftwarePickup.parse(od,df))
+                else:
+                    self.objects.append(SoftwarePickup.parse(od,df))
 
             if od["key"] in ["firepot", "firepot_right" ]:
                 self.objects.append(Firepot.parse(od,df))
@@ -2516,6 +2625,9 @@ class ForestGraveyard():
 
             if od["key"] in ["terminal"]:
                 self.objects.append(Terminal.parse(od,df))
+
+            if od["key"] in ["fterm"]:
+                self.objects.extend(FTerm.parse(od,df))
 
 
 

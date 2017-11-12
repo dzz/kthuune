@@ -19,6 +19,8 @@ from .GeneratorOptions import GeneratorOptions
 from .Background import Background
 from .Fog import Fog
 
+from .Abilities import Abilities
+
 import audio
 class Game( BaseGame ):
 
@@ -263,6 +265,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
     def initialize(self):
 
+        self.abilities = Abilities
         self.doing_random_test = False
         self.prebuffer = 0
         self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.28 ) )

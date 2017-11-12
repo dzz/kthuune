@@ -1,5 +1,6 @@
 from Beagle import API as BGL
 from ..KSounds import KSounds
+from ..Abilities import Abilities
 
 class MenuTerminal:
     def setup_options(self):
@@ -25,11 +26,24 @@ class MenuTerminal:
         #self.synch_secondary_items()
 
     def synch_secondary_items(self):
-
-        print("SNCHING")
         self.second_level_items = self.second_level_items_map[self.top_level_items[self.top_level_item]]
 
+    def render_uninstalled(self):
+        BGL.lotext.render_text_pixels("SYSTEM ERROR: NO SOFTWARE",60,120,[ 1.0,1.0,1.0 ])
+
+    def render_installing(self):
+        BGL.lotext.render_text_pixels("{0}%".format(self.owner.install_percent),90,120,[ 1.0,1.0,1.0 ])
+
     def render(self):
+
+        if not self.owner.term_installed:
+            self.render_uninstalled()
+            return
+
+        if self.owner.install_percent<100:
+            self.render_installing()
+            return
+
         if(self.in_menu):
             header = ""
             for idx,item in enumerate(self.top_level_items):
@@ -101,9 +115,11 @@ class ShipComputer(MenuTerminal):
 class TeleportControl(MenuTerminal):
     def setup_options(self):
         self.top_level_items = [ "destination" ]
+
         self.second_level_items_map = {
             "destination" : self.owner.floor.player.world_map.get_available_destinations( self.owner.floor.player.current_system )
         }
+
         self.in_menu = True
         self.synch_secondary_items()
         self.selected_destination = None
@@ -128,6 +144,18 @@ class TeleportControl(MenuTerminal):
         if not (self.in_menu):
             self.in_menu = True
             KSounds.play( KSounds.term_back )
+
+class ReturnToShip(TeleportControl):
+    def setup_options(self):
+        self.top_level_items = [ "destination" ]
+
+        self.second_level_items_map = {
+            "destination" : [ "The Xeoliex" ]
+        }
+
+        self.in_menu = True
+        self.synch_secondary_items()
+        self.selected_destination = None
 
 
 class TelekineControl(MenuTerminal):
@@ -156,3 +184,4 @@ class SwordControl(MenuTerminal):
             ]
         }
         self.synch_secondary_items()
+

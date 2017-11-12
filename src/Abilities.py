@@ -1,2 +1,4 @@
 class Abilities:
-    Telekine = False
+    Telekine = True
+    InstallTelekine = False
+    TelekineInstalled = False

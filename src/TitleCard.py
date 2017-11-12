@@ -6,7 +6,7 @@ class TitleCard():
     shader = BGL.assets.get("KT-compositor/shader/title_card")
 
     def __init__(self):
-        self.hud_buffer = BGL.framebuffer.from_dims(320,240)
+        self.hud_buffer = BGL.framebuffer.from_dims(426,240)
         self.tval = 0
         self.title = "Oort Cloud"
 

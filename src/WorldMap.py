@@ -8,7 +8,7 @@ class WorldMap:
                 "The Gauntlet" : { "unlocked" : True, "area_name" : "doortest", "pin_name" : None },
                 "Docks" : { "unlocked" : False, "area_name" : "docks", "pin_name" : None },
                 "Grey World" : { "unlocked" : False, "area_name" : "grey_world", "pin_name" : None },
-                "Your Ship" : { "unlocked" : False, "area_name" : "ship", "pin_name" : None },
+                "The Xeoliex" : { "unlocked" : False, "area_name" : "ship", "pin_name" : None },
             }
         }
     }
