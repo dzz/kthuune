@@ -46,14 +46,20 @@ class Telekine(Object):
         self.size = [2.0,2.0]
         self.color = [ 1.0,1.0,1.0,0.0]
         self.fr = 0 
+        self.light_color = [ 0.0,0.6,0.9,1.0 ]
+        self.light_radius = 1
         self.visible = False
+
+        if Abilities.TelekineInstalled:
+            self.visible = True
+            self.light_radius = 25
+            self.color[3] = 1.0
 
     def enable(self):
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_color = [ 0.0,0.6,0.9,1.0 ]
-        self.light_radius = 1
         self.visible = True
         self.get_camera().grab_cinematic(self, 200)
+        Abilities.TelekineInstalled = True
 
     def tick(self):
 

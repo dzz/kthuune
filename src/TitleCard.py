@@ -22,7 +22,7 @@ class TitleCard():
         return False
 
     def center_x(self):
-        return (320/2) - (len(self.title)*8/2)
+        return 64
 
     def render(self):
 
