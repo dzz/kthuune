@@ -28,8 +28,48 @@ from ..KSounds import KSounds
 from ..GeneratorOptions import GeneratorOptions
 from ..Abilities import Abilities
 
-class FTerm(Object):
+class Telekine(Object):
+    instance = None
+    BirdmanTextures = [
+        BGL.assets.get("KT-player/texture/birdman0000"),
+        BGL.assets.get("KT-player/texture/birdman0001"),
+        BGL.assets.get("KT-player/texture/birdman0002")
+    ]
+    def parse(od,df):
+        Telekine.instance = Telekine(p=[od["x"],od["y"]])
+        return Telekine.instance
 
+    def customize(self):
+        self.buftarget = "floor"
+        self.texture = Telekine.BirdmanTextures[0]
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.size = [2.0,2.0]
+        self.color = [ 1.0,1.0,1.0,0.0]
+        self.fr = 0 
+        self.visible = False
+
+    def enable(self):
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_color = [ 0.0,0.6,0.9,1.0 ]
+        self.light_radius = 1
+        self.visible = True
+        self.get_camera().grab_cinematic(self, 200)
+
+    def tick(self):
+
+        if(self.visible):
+            if(self.color[3]<1.0):
+                self.color[3] += 0.01
+            if(self.light_radius < 25 ):
+                self.light_radius += 0.2
+
+        self.fr += 1
+        if(self.fr == 90):
+            self.fr = 0
+        self.texture = Telekine.BirdmanTextures[ self.fr // 30 ]
+
+
+class FTerm(Object):
     def parse(od,df):
         ret = []
         ret.append(FTerm(p=[od["x"],od["y"]]))
@@ -44,7 +84,8 @@ class FTerm(Object):
 
     def __init__(self,**kwargs):
         Object.__init__(self,**kwargs)
-        self.buftarget = "popup"
+        self.buftarget = "floor"
+        self.z_index = 2
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
         self.light_color = [ 0.8,0.0,1.0,1.0 ]
         self.light_radius = 25
@@ -316,6 +357,7 @@ class Terminal(Object):
                 if self.install_percent > 100:
                     if self.title == "Telekine Biometrics":
                         Abilities.Telekine = True
+                        Telekine.instance.enable()
             if(self.floor.player.active_terminal != self):
                 self.floor.player.active_terminal = self
                 self.ui.setup_options()
@@ -480,6 +522,7 @@ class SoftwarePickup(Object):
         self.visible = True
         self.size = [ 2.5,2.5 ]
 
+        self.label = "UNKNOWN SOFTWARE"
         if self.software_key == "telekine":
             self.label = "TELEKINE BIOMETRICS"
 
@@ -2560,6 +2603,9 @@ class ForestGraveyard():
                 for i in range(0,8):
                     emitter_def = [ od["x"]-5.0,od["y"]-5.0, 10.0,10.0, [ 0.3,1.0,0.5,1.0] ]    
                     self.photon_emitters.append(emitter_def)
+
+            if od["key"] in [ "telekine" ]:
+                self.objects.append(Telekine.parse(od,df ))
 
             if od["key"] in [ "snap_enemy", "skeline"]:
                 self.objects.append(Skeline.parse(od,df ))

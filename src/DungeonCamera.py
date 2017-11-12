@@ -15,6 +15,13 @@ class DungeonCamera (Camera):
         Camera.__init__(self,**kwargs)
         self.base_zoom = self.zoom
         self.filtered_zoom = self.zoom
+        self.cinema_target = None
+        self.cinema_timeout = 0
+        
+
+    def grab_cinematic(self, obj, timeout):
+        self.cinema_target = obj
+        self.cinema_timeout = timeout
 
     def set_player(self, player):
         self.player = player
@@ -53,11 +60,19 @@ class DungeonCamera (Camera):
 
 
 
-            pX = self.player.p[0]
-            pY = self.player.p[1]
+            if not self.cinema_target:
+                pX = self.player.p[0]
+                pY = self.player.p[1]
+            else:
+                pX = self.cinema_target.p[0]
+                pY = self.cinema_target.p[1]
+                self.cinema_timeout -= 1
+                if self.cinema_timeout == 0:
+                    self.cinema_target = None
 
-            if(self.player.active_terminal):
-                pX += 15
+            if not self.cinema_target:
+                if(self.player.active_terminal):
+                    pX += 15
 
             activeRegion = None
             for region in self.player.floor.camera_lock_regions:
@@ -86,10 +101,11 @@ class DungeonCamera (Camera):
             if activeRegion:
                 calc_zoom *= 0.8
 
-            if(self.zoom < calc_zoom):
-                self.zoom = (self.zoom*0.999) + (calc_zoom*0.001)
-            else:
-                self.zoom = (self.zoom*0.99) + (calc_zoom*0.01)
+            if not self.cinema_target:
+                if(self.zoom < calc_zoom):
+                    self.zoom = (self.zoom*0.999) + (calc_zoom*0.001)
+                else:
+                    self.zoom = (self.zoom*0.99) + (calc_zoom*0.01)
 
 
         else:

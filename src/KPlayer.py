@@ -949,10 +949,10 @@ class KPlayer(Player):
 
         self.heartcard.render()
 
-        for x in reversed(range(0,self.max_invslots)):
-            if x is not self.sel_invslot:
-                PlayerInvSlot.render(x, self.inventory[x], False, x == self.active_invslot)
-        PlayerInvSlot.render(self.sel_invslot, self.inventory[self.sel_invslot], True, self.sel_invslot == self.active_invslot)
+        #for x in reversed(range(0,self.max_invslots)):
+        #    if x is not self.sel_invslot:
+        #        PlayerInvSlot.render(x, self.inventory[x], False, x == self.active_invslot)
+        #PlayerInvSlot.render(self.sel_invslot, self.inventory[self.sel_invslot], True, self.sel_invslot == self.active_invslot)
         self.swordcard.render()
         #self.wandcard.render()
 
@@ -960,7 +960,8 @@ class KPlayer(Player):
         
         with BGL.blendmode.alpha_over:
             if(self.terminal_size>0):
-                TerminalRenderer.render(self.terminal_size, self.cardtick,self.active_terminal)
+                if self.get_camera().cinema_target is None:
+                    TerminalRenderer.render(self.terminal_size, self.cardtick,self.active_terminal)
             self.title_card.render()
 
 
@@ -1008,7 +1009,6 @@ class KPlayer(Player):
 
     def get_shader_params(self):
         base_params = Player.get_shader_params(self)
-        base_params["flash_color"] = self.flash_color
         if self.hp > 0:
             base_params["rotation_local"] = 0.0
         if(self.snap_animation_buffer>0):
@@ -1212,7 +1212,7 @@ class KPlayer(Player):
         if(self.flash_color[3]>0.1):
             self.flash_color[3] *= 0.95
         else:
-            self.flash_color[3] = 0.0
+            self.flash_color[3] *= 0.0
 
         if(self.active_terminal):
             if( self.terminal_size<1.0):
@@ -1396,6 +1396,10 @@ class KPlayer(Player):
 
             calc_speed = self.speed
 
+            
+            if(self.run_stamina<1.0):
+                self.flash_color = [ 1.0,0.6,0.6,1.0 ]
+                calc_speed *= 0.2
             if(pad.button_down( BGL.gamepads.buttons.RIGHT_BUMPER)):
                 if(self.run_stamina>0.0):
                     self.stamina_recharge_buffer = 10.0

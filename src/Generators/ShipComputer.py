@@ -32,7 +32,7 @@ class MenuTerminal:
         BGL.lotext.render_text_pixels("SYSTEM ERROR: NO SOFTWARE",60,120,[ 1.0,1.0,1.0 ])
 
     def render_installing(self):
-        BGL.lotext.render_text_pixels("{0}%".format(self.owner.install_percent),90,120,[ 1.0,1.0,1.0 ])
+        BGL.lotext.render_text_pixels("INSTALLING... {0:.2f}%".format(self.owner.install_percent),90,120,[ 1.0,1.0,1.0 ])
 
     def render(self):
 
