@@ -441,6 +441,12 @@ class Sword(Object):
 
 
     def tick(self):
+
+        self.visible = Abilities.Sword
+
+        if not self.visible:
+            return True
+
         if(self.player.state == KPlayer.STATE_STUNNED ):
             self.state = Sword.STATE_IDLE
             #self.visible = False
@@ -1305,7 +1311,8 @@ class KPlayer(Player):
             self.LEFT_PRESSED = False
             self.RIGHT_PRESSED = False
         if self.A_PRESSED:
-            self.slash.slash()
+            if Abilities.Sword:
+                self.slash.slash()
             #self.add_dm_message("You swung your sword")
             #print("a pressed")
             #self.state = KPlayer.STATE_FIRING

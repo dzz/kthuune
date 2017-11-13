@@ -60,7 +60,9 @@
             { "name" : "totem", "filename" : "{package_path}/totem0000.png", "filtered" : false },
             { "name" : "cave_entrance", "filename" : "{package_path}/cave_entrance.png", "filtered" : false },
             { "name" : "grey_world_background", "filename" : "{package_path}/grey_world_background.png", "filtered" : true },
-            { "name" : "grey_world_processed", "filename" : "{package_path}/grey_world_processed.png", "filtered" : true }
+            { "name" : "grey_world_processed", "filename" : "{package_path}/grey_world_processed.png", "filtered" : true },
+            { "name" : "starfield1", "filename" : "{package_path}/starfield1.png", "filtered" : true },
+            { "name" : "nebula", "filename" : "{package_path}/nebula.png", "filtered" : true }
 
         ],
         "textfile" : [
@@ -77,7 +79,8 @@
             { "name" : "oort_cloud", "filename" : "{package_path}/oort_cloud.area" },
             { "name" : "ship", "filename" : "{package_path}/ship2.area" },
             { "name" : "grey_world", "filename" : "{package_path}/grey_world.area" },
-            { "name" : "crystals1", "filename" : "{package_path}/crystals1.area" }
+            { "name" : "crystals1", "filename" : "{package_path}/crystals1.area" },
+            { "name" : "lacuna_canal", "filename" : "{package_path}/lacuna_canal.area" }
         ]
     }
 }

@@ -715,6 +715,10 @@ class FactoryLight(Object):
             self.light_radius = 25.
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [ 0.5, 0.6,1.0,1.0 ]
+        if self.factory_def["meta"]["class"] == "green_afterbirth":
+            self.light_radius = 25.
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_color = [ 0.1, 0.8,0.3,1.0 ]
         if self.factory_def["meta"]["class"] == "shipfillred":
             self.light_radius = 35.
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
@@ -1018,7 +1022,7 @@ class Firepot(Object):
             self.light_radius = 1.5
             bolt = ERangedMagic( p = [ self.p[0], self.p[1] ], rad = self.fire_rad ) 
             self.floor.create_object( bolt )
-            bolt.lifespan = 30
+            bolt.lifespan = 40
             bolt.rad += uniform(-0.04,0.04)
 
 

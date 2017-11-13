@@ -119,7 +119,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         floor.game = self
         return floor
 
-    def build_area_ship(self):
+    def build_area_ship_type(self, key):
+        # a generic level template with good settings for smaller areas without a lot of lighting requirements 
         GeneratorOptions.TreeTopTextures = [
             BGL.assets.get("KT-forest/texture/crystal_1"),
             BGL.assets.get("KT-forest/texture/crystal_2"),
@@ -129,7 +130,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         GeneratorOptions.TreeShadowTextures = GeneratorOptions.TreeTopTextures
 
-        area_raw = BGL.assets.get("KT-forest/textfile/ship")
+        area_raw = BGL.assets.get("KT-forest/textfile/"+key)
         area_def = get_area_data( area_raw )
 
         floor = DungeonFloor( 
@@ -172,6 +173,20 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         floor.game = self
         return floor
 
+    def build_area_ship(self):
+        return self.build_area_ship_type("ship")
+
+    def build_area_lacuna_canal(self):
+        floor = self.build_area_ship_type("lacuna_canal")
+        floor.title = "Lacuna Canal"
+
+        floor.sky_texture = BGL.assets.get("KT-forest/texture/starfield1")
+        floor.bg_texture = BGL.assets.get("KT-forest/texture/nebula")
+        floor.bg_mode = "add"
+        floor.parallax_sky = 0.01
+        floor.parallax_bg = 0.04
+        return floor
+
     def build_area_grey_world(self):
         area_raw = BGL.assets.get("KT-forest/textfile/grey_world")
         area_def = get_area_data( area_raw )
@@ -211,6 +226,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             floor = self.build_area_oort_cloud()
         if key == "ship":
             floor = self.build_area_ship()
+        if key == "lacuna_canal":
+            floor = self.build_area_lacuna_canal()
         if key == "grey_world":
             floor = self.build_area_grey_world()
         if key == "crystals1":
@@ -242,6 +259,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                 Background.sky_texture = self.floor.sky_texture
                 Background.parallax_sky = self.floor.parallax_sky
                 Background.parallax_bg = self.floor.parallax_bg
+                if "bg_mode" in self.floor.__dict__:
+                    Background.add_blending = True
 
 
         #self.player.set_hud_message( "{0} - {1}".format(area_name, target_switch))
@@ -287,13 +306,15 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         ## self.load_floor("arena")
         ## self.load_floor("docks")
 
-        self.floor = self.create_tickable(self.load_floor("ship"))
+        self.floor = self.create_tickable(self.load_floor("lacuna_canal"))
         self.player.trigger_title( self.floor.title )
         if "bg_texture" in self.floor.__dict__:
             Background.bg_texture = self.floor.bg_texture
             Background.sky_texture = self.floor.sky_texture
             Background.parallax_sky = self.floor.parallax_sky
             Background.parallax_bg = self.floor.parallax_bg
+            if "bg_mode" in self.floor.__dict__:
+                Background.add_blending = True
 
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
         self.camera.set_player(self.player)
