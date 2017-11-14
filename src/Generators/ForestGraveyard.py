@@ -671,8 +671,10 @@ class SwordPickup(Object):
 
         if (md<1.6):
             self.floor.objects.remove(self)
-            KSounds.play( KSounds.pickup )
+            KSounds.play( KSounds.crit )
             self.floor.player.add_dm_message("You found a SWORD")
+
+            self.floor.player.flash_color = [ 1.0,1.0,1.0,1.0]
             Abilities.Sword = True
             return False
         return True
