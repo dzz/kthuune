@@ -715,6 +715,10 @@ class FactoryLight(Object):
             self.light_radius = 25.
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [ 0.5, 0.6,1.0,1.0 ]
+        if self.factory_def["meta"]["class"] == "spacefill":
+            self.light_radius = 45.
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            self.light_color = [ 0.7, 0.9,1.0,1.0 ]
         if self.factory_def["meta"]["class"] == "green_afterbirth":
             self.light_radius = 25.
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
@@ -973,6 +977,39 @@ class AreaSwitch(Object):
 
     def trigger(self):
         self.floor.game.next_area( self.target_area, self.target_switch )
+
+class ShipExterior(Object):
+    texture = BGL.assets.get("KT-player/texture/ship_exterior")
+
+    def parse(od,df):
+        return ShipExterior( p=[ od['x'],od['y'] ] )
+
+    def customize(self):
+        self.texture = ShipExterior.texture
+        self.visible = True
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_radius = 100
+        self.light_color = [1.0,1.0,1.0,1.0]
+        self.fridx = 0
+        self.base_p = [ self.p[0], self.p[1] ]
+        self.buftarget = "floor"
+        self.size = [ 50.0,50.0 ]
+        self.z_index = -1100
+        self.parallax = 0.9
+
+    def tick(self):
+        self.fridx += 0.004
+        self.p[1] = self.base_p[1] + (sin(self.fridx)*2)
+        return True
+
+    def get_shader_params(self):
+        params = Object.get_shader_params(self)
+        tw = params["translation_world"]
+        tw[0] = tw[0]*self.parallax
+        tw[1] = tw[1]*self.parallax
+        params["translation_world" ] = tw
+        return params
 
 class Prop(Object):
     def parse(pd):
@@ -2613,6 +2650,9 @@ class ForestGraveyard():
                 for i in range(0,8):
                     emitter_def = [ od["x"]-5.0,od["y"]-5.0, 10.0,10.0, [ 0.3,1.0,0.5,1.0] ]    
                     self.photon_emitters.append(emitter_def)
+
+            if od["key"] in [ "ship_exterior" ]:
+                self.objects.append(ShipExterior.parse(od,df ))
 
             if od["key"] in [ "telekine" ]:
                 self.objects.append(Telekine.parse(od,df ))

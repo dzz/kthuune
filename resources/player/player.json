@@ -2,6 +2,7 @@
     "preload": true,
     "resources" : {
         "texture" : [
+            { "name" : "ship_exterior", "filename" : "{package_path}/ship_exterior.png", "filtered" : false },
             { "name" : "firefly", "filename" : "{package_path}/firefly.png", "filtered" : true },
             { "name" : "player", "filename" : "{package_path}/player.png", "filtered" : true },
             { "name" : "arrow", "filename" : "{package_path}/arrow.png", "filtered" : true },
