@@ -2,6 +2,8 @@
     "preload": true,
     "resources" : {
         "texture" : [
+            { "name" : "slime0big", "filename" : "{package_path}/slime0big.png", "filtered" : true },
+            { "name" : "slime0small", "filename" : "{package_path}/slime0small.png", "filtered" : true },
             { "name" : "crystal_1", "filename" : "{package_path}/crystal_1.png", "filtered" : true },
             { "name" : "crystal_2", "filename" : "{package_path}/crystal_2.png", "filtered" : true },
             { "name" : "crystal_3", "filename" : "{package_path}/crystal_3.png", "filtered" : true },
