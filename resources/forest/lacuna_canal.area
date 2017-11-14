@@ -649,6 +649,14 @@ ship_exterior
 False
 0
 0
+OBJECT
+sword_pickup
+-12.25
+-74.25
+{}
+False
+0
+0
 PROP
 lacuna_canal
 0
