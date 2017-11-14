@@ -277,6 +277,9 @@ class Slime(Object):
         self.hp = 2
         self.fridx = 0.0
         self.offs = uniform(0.0,3.14)
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_radius = 30
+        self.light_color = [ -0.3,0.3,-0.3,1.0]
 
     def tick(self):
         self.fridx += 0.01
@@ -946,7 +949,7 @@ class SnapEnemy(Object):
 
     def die(self):
 
-        self.floor.player.add_dm_message("You killed an enemy")
+        #self.floor.player.add_dm_message("You killed an enemy")
         if self in self.floor.objects:
             #hack
             self.floor.objects.remove(self)

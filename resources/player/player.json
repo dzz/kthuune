@@ -125,7 +125,7 @@
             { "name" : "term_leftright", "path" : "{package_path}/sounds/term_leftright.wav" },
             { "name" : "term_select", "path" : "{package_path}/sounds/term_select.wav" },
             { "name" : "term_back", "path" : "{package_path}/sounds/term_back.wav" },
-            { "name" : "mining1", "path" : "{package_path}/sounds/mining1.wav" },
+            { "name" : "mining1", "path" : "{package_path}/sounds/mining1_1.wav" },
             { "name" : "mining2", "path" : "{package_path}/sounds/mining2.wav" },
             { "name" : "firefly", "path" : "{package_path}/sounds/firefly.wav" },
             { "name" : "slimecrush", "path" : "{package_path}/sounds/slimecrush.wav" },
