@@ -7,7 +7,7 @@ class Fog:
         with BGL.blendmode.alpha_over:
             Fog.primitive.render_shaded( Fog.shader, {
                 "light_buffer" : floor.light_buffer,
-                "camera_position" : self.camera.p,
+                "camera_position" : [ self.camera.p[0], self.camera.p[1] ],
                 "parallax" : [ 2.0 ],
                 "tick" : floor._tick,
                 "vision_tex" : vision_tex,
@@ -15,7 +15,7 @@ class Fog:
             } )
             Fog.primitive.render_shaded( Fog.shader, {
                 "light_buffer" : floor.light_buffer,
-                "camera_position" : self.camera.p,
+                "camera_position" : [ self.camera.p[0], self.camera.p[1] ],
                 "parallax" : [ 2.2 ],
                 "tick" : floor._tick,
                 "vision_tex" : vision_tex,
