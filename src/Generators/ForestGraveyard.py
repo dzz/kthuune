@@ -313,6 +313,8 @@ class Slime(Object):
             #if uniform(0.0,1.0)>0.78:
             #    self.floor.create_object(ResourcePickup(p=[ self.p[0], self.p[1]]))
             
+            for x in range(0,3):
+                self.floor.create_object(Blood(p=[self.p[0]+uniform(-3.0,3.0),self.p[1]+uniform(-3.0,3.0)]))
             for x in range(0,15):
                 self.floor.create_object( SplatterParticle( size = [ 5.0,5.0], ptexture = Slime.textures[0], rad= uniform(0.0,6.5), p = [ self.p[0], self.p[1]]))
             return False
@@ -2228,6 +2230,9 @@ class Worm(SnapEnemy):
     
         
 class WormField(Object):
+    def parse(od,df):
+        return WormField( wf_spec = [ od['x'],od['y'],10.0] )
+
     def customize(self):
         self.tick_type = Object.TickTypes.PURGING
         self.buftarget = "popup"
@@ -2785,6 +2790,9 @@ class ForestGraveyard():
 
             if od["key"] in [ "ship_exterior" ]:
                 self.objects.append(ShipExterior.parse(od,df ))
+
+            if od["key"] in [ "wormfield" ]:
+                self.objects.append(WormField.parse(od,df ))
 
             if od["key"] in [ "telekine" ]:
                 self.objects.append(Telekine.parse(od,df ))
