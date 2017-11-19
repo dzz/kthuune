@@ -108,7 +108,7 @@ class SlashEffect(Object):
         Object.light_type = Object.LightTypes.NONE
         if self.visible:
             Object.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-            if self.fr>15 and self.fr < 19 and (self.stagger_cooldown==0):
+            if self.fr>13 and self.fr < 19 and (self.stagger_cooldown==0):
                 for enemy in self.floor.snap_enemies:
                     if enemy.snap_type==1 and enemy not in self.attacked_enemies and len(self.attacked_enemies)<3:
                         dx = (self.p[0] - enemy.p[0]) 
@@ -125,6 +125,11 @@ class SlashEffect(Object):
                             self.stagger_cooldown += 25
             if self.stagger_cooldown==0:
                 self.fr+=1 
+
+                if self.fr >14:
+                    if self.floor.player.A_STATE[1] == False:
+                        self.fr = 20
+                        self.visible = False
             else: 
                 self.stagger_cooldown -=1
             if self.fr == 21:
@@ -562,7 +567,7 @@ class KPlayer(Player):
         BGL.assets.get("KT-player/texture/birdman0001"),
         BGL.assets.get("KT-player/texture/birdman0002")
     ]
-    ComboSecs = 3.5
+    ComboSecs = 1.5
     STATE_DEFAULT = 0
     STATE_STUNNED = 1
     STATE_DODGING = 2

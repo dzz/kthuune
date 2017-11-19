@@ -90,8 +90,10 @@ class DungeonCamera (Camera):
                     pX = (region[0]+region[2])/2
                     pY = (region[1]+region[3])/2
 
-            self.p[0] = (pX+aim_offset_x)* rate + ((1.0-rate)*self.p[0])
-            self.p[1] = (pY+aim_offset_y)* rate + ((1.0-rate)*self.p[1])
+
+            if not self.player.floor.blurring:
+                self.p[0] = (pX+aim_offset_x)* rate + ((1.0-rate)*self.p[0])
+                self.p[1] = (pY+aim_offset_y)* rate + ((1.0-rate)*self.p[1])
 
             calc_zoom = (self.base_zoom + (self.zoom*(-0.33)*isAiming) + sc)*0.6
 

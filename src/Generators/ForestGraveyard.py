@@ -292,7 +292,7 @@ class Slime(Object):
         self.texture = choice ( Slime.textures )
         sz = uniform(5.0,9.0)
         self._sz = sz
-        self.size = [ sz*0.7,sz*0.7 ]
+        self.size = [ sz*4.7,sz*4.7 ]
         self.base_size = [ self.size[0], self.size[1] ]
         self.physics = { "radius" : sz/3, "mass"   : 900000, "friction" : 0.3 }
         self.hitFr = 0
@@ -305,8 +305,8 @@ class Slime(Object):
 
     def tick(self):
         self.fridx += 0.01
-        self.size[0] = (self.base_size[0] + (sin(self.fridx+self.offs)*2.0))*1.3
-        self.size[1] = (self.base_size[1] + (cos(self.fridx+self.offs*0.8)*2.0))*1.3
+        self.size[0] = (self.base_size[0] + (sin(self.fridx+self.offs)*2.0))*0.4
+        self.size[1] = (self.base_size[1] + (cos(self.fridx+self.offs*0.8)*2.0))*0.4
         if self.hp>0:
             self.texture = Slime.textures[self.hp-1]
         if(self.hitFr>0):

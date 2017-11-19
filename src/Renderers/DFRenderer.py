@@ -143,6 +143,7 @@ class DFRenderer( FloorRenderer ):
 
         with BGL.context.render_target( self.object_buffer ):
 
+            self.blurring = True
             if(self.player.dash_flash) or self.player.slash.visible:
                 with BGL.blendmode.alpha_over:
                     uniform_fade.apply_fadeout( 1.0 / 8.0 )
@@ -154,6 +155,7 @@ class DFRenderer( FloorRenderer ):
                         uniform_fade.apply_fadeout( 1.0 / 16.0 )
             else:
                 with BGL.blendmode.alpha_over:
+                    self.blurring = False
                     BGL.context.clear(0.0,0.0,0.0,0.0)
             with BGL.blendmode.alpha_over:
                 self.render_objects("popup")
