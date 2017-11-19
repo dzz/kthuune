@@ -78,9 +78,27 @@ class Telekine(Object):
             self.color[3] = 1.0
 
     def enable(self):
+        def spawn_objects():
+            t = None
+            for x in range(0,3):
+                t = Totem( p = [ self.p[0]+7.5+23 + (x*10), self.p[1] + 4.5 ])
+                self.floor.snap_enemies.append(t)
+                self.floor.create_object(t)
+                t.sleep_totem()
+                t.reset_timer -= x*45
+                self.floor.camera.grab_cinematic( t, 170+(45*3) )
+
+            sb = SpeechBubble( p = list(self.p) )
+            sb.trigger_script = [ "HEY! BASTARD!", "PUSH (X) TO TELEKINE" ]
+            sb.mode = 1
+            self.floor.create_object( sb )
+            sb.tick()
+            sb.p[0] = self.p[0] + 17.5+23
+            sb.p[1] = self.p[1] + 6.5
+
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
         self.visible = True
-        self.get_camera().grab_cinematic(self, 200)
+        self.get_camera().grab_cinematic(self, 200, spawn_objects )
         Abilities.TelekineInstalled = True
 
     def tick(self):
@@ -292,7 +310,7 @@ class Slime(Object):
         self.texture = choice ( Slime.textures )
         sz = uniform(5.0,9.0)
         self._sz = sz
-        self.size = [ sz*4.7,sz*4.7 ]
+        self.size = [ sz*2.7,sz*2.7 ]
         self.base_size = [ self.size[0], self.size[1] ]
         self.physics = { "radius" : sz/3, "mass"   : 900000, "friction" : 0.3 }
         self.hitFr = 0
@@ -703,7 +721,7 @@ class SwordPickup(Object):
 
         if (md<1.6):
             sb = SpeechBubble( p = list(self.floor.player.p) )
-            sb.trigger_script = [ "HEY, YOU BASTARD", "PUSH (A) TO SLASH" ]
+            sb.trigger_script = [ "HEY! BASTARD!", "PUSH (A) TO SLASH" ]
             sb.mode = 1
             self.floor.create_object( sb )
             self.floor.objects.remove(self)

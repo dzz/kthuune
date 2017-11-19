@@ -1,5 +1,5 @@
 class Abilities:
     Telekine = False
-    InstallTelekine = False
+    InstallTelekine = True
     TelekineInstalled = False
-    Sword = False
+    Sword = True

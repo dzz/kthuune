@@ -179,7 +179,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
     def build_area_lacuna_canal(self):
         floor = self.build_area_ship_type("lacuna_canal")
         floor.title = "Lacuna Canal"
-        floor.uses_vision = False
+        #floor.uses_vision = False
 
         floor.sky_texture = BGL.assets.get("KT-forest/texture/starfield1")
         floor.bg_texture = BGL.assets.get("KT-forest/texture/nebula")
@@ -308,7 +308,10 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         ## self.load_floor("arena")
         ## self.load_floor("docks")
 
-        self.floor = self.create_tickable(self.load_floor("lacuna_canal"))
+
+        ### ENTRY POINT
+###########################
+        self.floor = self.create_tickable(self.load_floor("ship"))
         self.player.trigger_title( self.floor.title )
         if "bg_texture" in self.floor.__dict__:
             Background.bg_texture = self.floor.bg_texture

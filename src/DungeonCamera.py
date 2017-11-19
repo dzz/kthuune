@@ -17,11 +17,13 @@ class DungeonCamera (Camera):
         self.filtered_zoom = self.zoom
         self.cinema_target = None
         self.cinema_timeout = 0
+        self.cinema_callback = None
         
 
-    def grab_cinematic(self, obj, timeout):
+    def grab_cinematic(self, obj, timeout, callback = None ):
         self.cinema_target = obj
         self.cinema_timeout = timeout
+        self.cinema_callback = callback
 
     def set_player(self, player):
         self.player = player
@@ -69,6 +71,8 @@ class DungeonCamera (Camera):
                 self.cinema_timeout -= 1
                 if self.cinema_timeout == 0:
                     self.cinema_target = None
+                    if(self.cinema_callback):
+                        self.cinema_callback()
 
             if not self.cinema_target:
                 if(self.player.active_terminal):
