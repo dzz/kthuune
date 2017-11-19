@@ -115,6 +115,9 @@ class SlashEffect(Object):
                         dy = (self.p[1] - enemy.p[1]) 
                         md = (dx*dx) + (dy*dy)
                         if md < 10:
+
+                            self.floor.player.p[0] = enemy.p[0]
+                            self.floor.player.p[1] = enemy.p[1]
                             KSounds.play( KSounds.slashhit )
                             #enemy.floor.player.add_dm_message("You slashed an enemy")
                             enemy.receive_snap_attack( choice([False, False, True]) )
@@ -1032,8 +1035,8 @@ class KPlayer(Player):
 
     def determine_texture(self):
 
-        if self.title_card.displaying():
-            return KPlayer.textures[21]
+        #if self.title_card.displaying():
+        #    return KPlayer.textures[21]
 
         modamt = 1
         if self.dash_flash:
@@ -1395,7 +1398,9 @@ class KPlayer(Player):
                     self.combo_reset_cooldown = 60*KPlayer.ComboSecs
                     if(self.link_count==0):
                         self.link_count = 1
-                    KSounds.play( KSounds.dash )
+
+                    self.flash_color = [1.0,1.0,1.0,1.0]
+                    #KSounds.play( KSounds.dash )
                     
 
 

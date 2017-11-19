@@ -179,12 +179,14 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
     def build_area_lacuna_canal(self):
         floor = self.build_area_ship_type("lacuna_canal")
         floor.title = "Lacuna Canal"
+        floor.uses_vision = False
 
         floor.sky_texture = BGL.assets.get("KT-forest/texture/starfield1")
         floor.bg_texture = BGL.assets.get("KT-forest/texture/nebula")
         floor.bg_mode = "add"
         floor.parallax_sky = 0.01
         floor.parallax_bg = 0.04
+        floor.fog_level_base = 0.1
         return floor
 
     def build_area_grey_world(self):
@@ -325,10 +327,9 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             BGL.context.clear( 1.0,1.0,1.0,1.0);
             self.background.camera = self.camera
             self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
-            #with BGL.blendmode.alpha_over:
             self.floor.render()
             self.fog.camera = self.camera
-            self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
+            #self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
 
         Game.god_buffer.render_processed( Game.god_shader )
         self.player.render_hud()

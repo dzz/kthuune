@@ -31,6 +31,6 @@ void main(void) {
     vec4 texel = texture( bg_texture, unshift(shifted*0.2) );
 
 
-    texel.rgb *= smoothstep(0.0,1.0,vision_texel.r*7);
+    //texel.rgb *= smoothstep(0.0,1.0,vision_texel.r*7);
     gl_FragColor = texel;
 }

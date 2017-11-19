@@ -86,7 +86,7 @@ class DFRenderer( FloorRenderer ):
 
         
     def encode_player_lights( self ):
-        return list(map(lambda player: { "position": player.p, "color" : [0.34,0.34,0.42,1.0], "radius" : player.sight_radius },self.get_player_objects()))
+        return list(map(lambda player: { "position": player.p, "color" : [1.0,1.0,1.0,1.0], "radius" : player.sight_radius },self.get_player_objects()))
 
     def precompute_frame(self):
         """ Pre-render compositing """
@@ -95,18 +95,19 @@ class DFRenderer( FloorRenderer ):
             print("Trying to render a destroyed floor!!!")
             return
 
-        self.vision_lightmap.clear()
+        #self.vision_lightmap.clear()
+        self.vision_lightmap.white_out()
 
-        if self.uses_vision:
-            self.compute_vision_lightmap()
+        #if self.uses_vision:
+        #    self.compute_vision_lightmap()
 
-            if self.fade_vision_amt > 0.0:
-                with BGL.context.render_target( self.vision_lightmap.target_buffer):
-                    with BGL.blendmode.alpha_over:
-                        uniform_fade.apply_fadeout( self.fade_vision_amt, [1.0,1.0,1.0] )
-        else:
-            self.vision_lightmap.white_out()
-                
+        #    if self.fade_vision_amt > 0.0:
+        #        with BGL.context.render_target( self.vision_lightmap.target_buffer):
+        #            with BGL.blendmode.alpha_over:
+        #                uniform_fade.apply_fadeout( self.fade_vision_amt, [1.0,1.0,1.0] )
+        #else:
+        #    self.vision_lightmap.white_out()
+        #        
         DFRenderer.lbtick +=1
 
         if(self.photon_map):
