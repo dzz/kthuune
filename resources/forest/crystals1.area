@@ -3441,6 +3441,14 @@ LINE
 False
 True
 False
+LINE
+110
+108
+110
+108
+True
+True
+False
 OBJECT
 player_start
 -32
@@ -3973,7 +3981,7 @@ OBJECT
 software
 110
 107
-{"key" : "starmap"}
+{"key" : "central"}
 True
 0
 0

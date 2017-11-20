@@ -417,6 +417,8 @@ class Crystal(Object):
 
         if(self.hp==0):
             KSounds.play(KSounds.mining2)
+            self.floor.player.p[0] = self.p[0]
+            self.floor.player.p[1] = self.p[1]
             self.floor.remove_object(self)
 
             #self.floor.player.add_dm_message("You smashed a crystal with your sword")
@@ -470,8 +472,10 @@ class Terminal(Object):
             self.install_percent = 0
         else:
             self.ui = ShipComputer(self)
-            self.term_installed = False
+            self.term_installed = Abilities.InstallCentral
             self.install_percent = 0
+            if Abilities.CentralInstalled:
+                self.install_percent = 100
 
     def render_ui(self):
         self.ui.render()
@@ -481,10 +485,12 @@ class Terminal(Object):
 
             if(self.install_percent<100) and self.term_installed:
                 self.install_percent += choice([0.1,0.5,0.25])
-                if self.install_percent > 100:
+                if self.install_percent >= 100:
                     if self.title == "Telekine Biometrics":
                         Abilities.Telekine = True
                         Telekine.instance.enable()
+                    if self.title == "Central Processing":
+                        Abilities.CentralInstalled = True
             if(self.floor.player.active_terminal != self):
                 self.floor.player.active_terminal = self
                 self.ui.setup_options()
@@ -654,6 +660,8 @@ class SoftwarePickup(Object):
         self.label = "UNKNOWN SOFTWARE"
         if self.software_key == "telekine":
             self.label = "TELEKINE BIOMETRICS"
+        if self.software_key == "central":
+            self.label = "CENTRAL PROCESSING"
 
     def tick(self):
         self.visible = True
@@ -678,6 +686,8 @@ class SoftwarePickup(Object):
 
             if self.software_key == "telekine":
                 Abilities.InstallTelekine = True
+            if self.software_key == "central":
+                Abilities.InstallCentral = True
             return False
         return True
 
@@ -1939,7 +1949,7 @@ class Skeline(SnapEnemy):
         x = self.floor.player.p[1] - self.p[1]
 
         md = (x*x)+(y*y)
-        if( md < 250 ):
+        if( md < 300 ):
             if not self.triggered:
                 self.triggered = True
                 test_segment = [ [ self.floor.player.p[0], self.floor.player.p[1] ], [self.p[0], self.p[1] ] ]
@@ -2877,6 +2887,12 @@ class ForestGraveyard():
                     else:
                         for x in range(0,3):
                             self.objects.append(Skeline.parse(od,df))
+                elif od["meta"]["key"] == "central": 
+                    if not Abilities.InstallCentral:
+                        self.objects.append(SoftwarePickup.parse(od,df))
+                    else:
+                        for x in range(0,2):
+                            self.objects.append(Skeline.parse(od,df))
 
                 else:
                     self.objects.append(SoftwarePickup.parse(od,df))
@@ -2884,6 +2900,10 @@ class ForestGraveyard():
             if od["key"] in ["sword_pickup" ]:
                 if not Abilities.Sword:
                     self.objects.append(SwordPickup.parse(od,df))
+                else:
+                    for x in range(0,3):
+                        self.objects.append(Skeline.parse(od,df))
+
 
             if od["key"] in ["firepot", "firepot_right" ]:
                 self.objects.append(Firepot.parse(od,df))

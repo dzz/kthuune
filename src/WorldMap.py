@@ -4,12 +4,17 @@ class WorldMap:
         "Oort Cloud" : {
             "unlocked" : True,
             "destinations" : {
-                "Crystaline Structure I." : { "unlocked" : True, "area_name" : "crystals1", "pin_name" : None },
-                "The Gauntlet" : { "unlocked" : True, "area_name" : "doortest", "pin_name" : None },
+                "Unknown Origins" : { "unlocked" : True, "area_name" : "lacuna_canal", "pin_name" : None },
+                "Crystal Formation" : { "unlocked" : True, "area_name" : "crystals1", "pin_name" : None },
+                "The Gauntlet" : { "unlocked" : False, "area_name" : "doortest", "pin_name" : None },
                 "Docks" : { "unlocked" : False, "area_name" : "docks", "pin_name" : None },
                 "Grey World" : { "unlocked" : False, "area_name" : "grey_world", "pin_name" : None },
                 "The Xeoliex" : { "unlocked" : False, "area_name" : "ship", "pin_name" : None },
             }
+        },
+        "Saisei II" : {
+            "unlocked" : True,
+            "destinations" : { }
         }
     }
 
