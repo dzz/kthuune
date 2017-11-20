@@ -1244,6 +1244,8 @@ class KPlayer(Player):
             self.run_stamina = 0
 
         self.title_card.tick()
+        if self.get_camera().cinema_target is not None:
+            return
 
         if(self.ability_timeout>0):
             self.ability_timeout -= 1

@@ -2,6 +2,14 @@
     "preload": true,
     "resources" : {
         "texture" : [
+            { "name" : "egg1", "filename" : "{package_path}/egg1.png", "filtered" : false },
+            { "name" : "egg2", "filename" : "{package_path}/egg2.png", "filtered" : false },
+            { "name" : "egg3", "filename" : "{package_path}/egg3.png", "filtered" : false },
+            { "name" : "egg4", "filename" : "{package_path}/egg4.png", "filtered" : false },
+            { "name" : "egg5", "filename" : "{package_path}/egg5.png", "filtered" : false },
+            { "name" : "egg6", "filename" : "{package_path}/egg6.png", "filtered" : false },
+            { "name" : "egg7", "filename" : "{package_path}/egg7.png", "filtered" : false },
+            { "name" : "egg8", "filename" : "{package_path}/egg8.png", "filtered" : false },
             { "name" : "deadk1", "filename" : "{package_path}/deadk1.png", "filtered" : false },
             { "name" : "slime0big", "filename" : "{package_path}/slime0big.png", "filtered" : true },
             { "name" : "slime0small", "filename" : "{package_path}/slime0small.png", "filtered" : true },

@@ -932,7 +932,7 @@ True
 OBJECT
 player_start
 -105.75
--65.75
+-63.75
 {}
 True
 0
@@ -1342,6 +1342,14 @@ text
 24
 8
 {"text" : "TOO LATE FOR HIM."}
+True
+0
+0
+OBJECT
+egg
+-105.75
+-66.75
+{}
 False
 0
 0
