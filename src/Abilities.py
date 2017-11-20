@@ -1,6 +1,6 @@
 class Abilities:
     Born = False
-    Telekine = False
+    Telekine = True
     InstallTelekine = False
     TelekineInstalled = False
     Sword = False

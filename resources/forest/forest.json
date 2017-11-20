@@ -2,6 +2,13 @@
     "preload": true,
     "resources" : {
         "texture" : [
+            { "name" : "eglanblob1", "filename" : "{package_path}/eglanblob1.png", "filtered" : false },
+            { "name" : "eglanblob2", "filename" : "{package_path}/eglanblob2.png", "filtered" : false },
+            { "name" : "eglanblob3", "filename" : "{package_path}/eglanblob3.png", "filtered" : false },
+            { "name" : "eglanblob4", "filename" : "{package_path}/eglanblob4.png", "filtered" : false },
+            { "name" : "eglanblob5", "filename" : "{package_path}/eglanblob5.png", "filtered" : false },
+            { "name" : "eglanblob6", "filename" : "{package_path}/eglanblob6.png", "filtered" : false },
+            { "name" : "eglanblob7", "filename" : "{package_path}/eglanblob7.png", "filtered" : false },
             { "name" : "egg1", "filename" : "{package_path}/egg1.png", "filtered" : false },
             { "name" : "egg2", "filename" : "{package_path}/egg2.png", "filtered" : false },
             { "name" : "egg3", "filename" : "{package_path}/egg3.png", "filtered" : false },

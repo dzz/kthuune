@@ -1396,18 +1396,21 @@ class KPlayer(Player):
                 self.can_backstep = True
 
             if(pad.button_down( BGL.gamepads.buttons.B ) and self.can_backstep and self.sword.state == Sword.STATE_IDLE):
-                if(self.stimer > 30 ):
-                    delta = [ pad.left_stick[0] , pad.left_stick[1]  ]
-                    self.dv = [ delta[0] * self.speed, delta[1] * self.speed ]
-                    self.can_backstep = False
-                    self.set_state(KPlayer.STATE_DODGING)
-                    #self.attempt_snap_attack()
-                    self.combo_reset_cooldown = 60*KPlayer.ComboSecs
-                    if(self.link_count==0):
-                        self.link_count = 1
 
-                    self.flash_color = [1.0,1.0,1.0,1.0]
-                    #KSounds.play( KSounds.dash )
+                if(self.stimer > 30 ):
+                    if(self.run_stamina>5):
+                        self.run_stamina -= 5
+                        delta = [ pad.left_stick[0] , pad.left_stick[1]  ]
+                        self.dv = [ delta[0] * self.speed, delta[1] * self.speed ]
+                        self.can_backstep = False
+                        self.set_state(KPlayer.STATE_DODGING)
+                        #self.attempt_snap_attack()
+                        self.combo_reset_cooldown = 60*KPlayer.ComboSecs
+                        if(self.link_count==0):
+                            self.link_count = 1
+
+                        self.flash_color = [1.0,1.0,1.0,1.0]
+                        #KSounds.play( KSounds.dash )
                     
 
 

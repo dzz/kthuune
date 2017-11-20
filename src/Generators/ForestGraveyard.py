@@ -41,6 +41,7 @@ class FloatingPlayer(Object):
         self.fridx = 0.0
         self.texture = BGL.assets.get('KT-player/texture/knight0018')
         self.size = [ 2.0,2.0 ]
+        self.color = [ 0.0,1.0,0.0,0.7 ]
         self.base_p = list(self.p)
         self.z_index = 9000
 
@@ -2220,6 +2221,78 @@ class Splat(Object):
             self.texture = Splat.textures[int(floor((80-self.cooldown) / 80)) ]
             return True
 
+class EglanBlob(SnapEnemy):
+
+    def parse(od,df):
+        eb = EglanBlob( p = [ od['x'],od['y'] ] )        
+        df.snap_enemies.append(eb)
+        return eb
+
+    textures = [
+        BGL.assets.get("KT-forest/texture/eglanblob1"),
+        BGL.assets.get("KT-forest/texture/eglanblob2"),
+        BGL.assets.get("KT-forest/texture/eglanblob3"),
+        BGL.assets.get("KT-forest/texture/eglanblob4"),
+        BGL.assets.get("KT-forest/texture/eglanblob5"),
+        BGL.assets.get("KT-forest/texture/eglanblob6"),
+        BGL.assets.get("KT-forest/texture/eglanblob7"),
+    ] 
+
+    def customize(self):
+        self.snap_type = SnapEnemy.ENEMY
+        self.triggered = False
+        self.hp = 160
+        self.dead = False
+        self.tick_type = Object.TickTypes.PURGING
+        self.physics = { "radius" : 1.5, "mass"   : 0.03, "friction" : 0.0 }
+        self.buftarget = "popup"
+        self.visible = True
+        self.texture = EglanBlob.textures[0]
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_radius = 25
+        self.defense = 1
+        self.size = [ 7.0,7.0]
+        self.iframes = 0
+        self.fridx = uniform(0.0,100.0)
+        self.snap_effect_emit = 0
+        SnapEnemy.set_combat_vars(self)
+
+    def tick(self):
+        self.fade_flash()
+        SnapEnemy.tick(self)
+        self.fridx += 1
+        self.texture = EglanBlob.textures[ int(self.fridx/20) % 7 ]
+
+        if self.texture == EglanBlob.textures[3]: 
+            self.flash_color = [ 0.0,0.0,0.0,1.0 ]
+            if choice([True,False,False]):
+                self.v[0] = uniform(-8.0,8.0)
+                self.v[1] = uniform(-8.0,8.0)
+                if(self.v[1] >0 ):
+                    self.size[0] = -7.0
+                else:
+                    self.size[0] = 7.0
+
+        if self.texture == EglanBlob.textures[4]: 
+            if choice([True,False,False]):
+                dx = (self.floor.player.p[0] - self.p[0])
+                dy = (self.floor.player.p[1] - self.p[1])
+                self.v[0] = dx*0.25
+                self.v[1] = dy*0.25
+
+        self.light_color = [ abs(sin(self.fridx*0.03)),0.0,abs(cos(self.fridx*0.02)),1.0]
+
+        if(self.hp < 0):
+            SnapEnemy.die(self)
+            return False
+        return True
+
+    def get_shader_params(self):
+        sp = Object.get_shader_params(self)
+        sp["translation_local"][1] += sin( self.fridx*0.03)*0.08
+        return sp
+
+    
 class Worm(SnapEnemy):
    
     textures = [
@@ -2359,6 +2432,10 @@ class Worm(SnapEnemy):
 
             if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 2.0:
                 self.floor.player.enemy_attack(3)
+                self.attack_str = 2
+                self.vx = self.v[0] * 0.4
+                self.vy = self.v[1] * 0.4
+                self.floor.player.receive_ranged_attack(self)
 
         if (not self.biting):
             if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 7.0:
@@ -2961,6 +3038,10 @@ class ForestGraveyard():
 
             if od["key"] in [ "snap_enemy", "skeline"]:
                 self.objects.append(Skeline.parse(od,df ))
+
+            if od["key"] in [ "eglans" ]:
+                for x in range(0,5):
+                    self.objects.append(EglanBlob.parse(od,df ))
 
             if od["key"] in [ "cleric"]:
                 self.objects.append(Cleric.parse(od,df ))

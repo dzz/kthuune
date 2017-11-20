@@ -270,7 +270,7 @@ class DungeonFloor( Floor ):
 
         if(self.music is not None):
             if not self.music_playing:
-                #audio.baudy_play_music(self.music)
+                audio.baudy_play_music(self.music)
                 self.music_playing = True
         if(self.sound_tick==0):
             KSounds.play(choice([KSounds.rain_20sec, KSounds.rain_21sec]))

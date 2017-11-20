@@ -117,6 +117,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         god_shader = BGL.assets.get("KT-compositor/shader/ship"),
         fog_level_base=0.5, tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         floor.game = self
+        floor.music = BGL.assets.get("KT-player/path/lacuna_canal")
         return floor
 
     def build_area_ship_type(self, key):
@@ -181,6 +182,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         floor.title = "Unknown Origins"
         #floor.uses_vision = False
 
+        floor.music = BGL.assets.get("KT-player/path/lacuna_canal")
         floor.sky_texture = BGL.assets.get("KT-forest/texture/starfield1")
         floor.bg_texture = BGL.assets.get("KT-forest/texture/nebula")
         floor.bg_mode = "add"
