@@ -28,6 +28,13 @@ from ..KSounds import KSounds
 from ..GeneratorOptions import GeneratorOptions
 from ..Abilities import Abilities
 
+class Breakable(Object):
+    def handle_pull(self):
+        dx = self.p[0] - self.floor.player.p[0]
+        dy = self.p[1] - self.floor.player.p[1]
+        self.floor.player.v[0] += dx * 2.2
+        self.floor.player.v[1] += dy * 2.2
+
 class FloatingPlayer(Object):
     def parse(od,df):
         FloatingPlayer.instance = FloatingPlayer(p=[od["x"],od["y"]])
@@ -381,7 +388,7 @@ class CrystalChunk(Object):
             return False
         return True
 
-class Slime(Object):
+class Slime(Breakable):
     def parse(od,df):
         ret = []
         for x in range(0,3):
@@ -439,8 +446,7 @@ class Slime(Object):
 
         if(self.hp==0):
             KSounds.play(KSounds.slimekill)
-            self.floor.player.p[0] = self.p[0]
-            self.floor.player.p[1] = self.p[1]
+            self.handle_pull()
             self.floor.remove_object(self)
 
             #self.floor.player.add_dm_message("You smashed a crystal with your sword")
@@ -462,7 +468,8 @@ class Slime(Object):
             bp['filter_color'] = [ 10.0,10.0,10.0,1.0]
         return bp
 
-class Crystal(Object):
+
+class Crystal(Breakable):
     def parse(od,df):
         ret = []
         for x in range(0,3):
@@ -508,8 +515,7 @@ class Crystal(Object):
 
         if(self.hp==0):
             KSounds.play(KSounds.mining2)
-            self.floor.player.p[0] = self.p[0]
-            self.floor.player.p[1] = self.p[1]
+            self.handle_pull()
             self.floor.remove_object(self)
 
             #self.floor.player.add_dm_message("You smashed a crystal with your sword")
@@ -3111,7 +3117,6 @@ class ForestGraveyard():
 
 
             if od["key"] in ["camlock_x", "camlock_y", "camlock" ]:
-
                 if( od["key"] == "camlock_x" ):
                     axes = 0
                 if( od["key"] == "camlock_y" ):
@@ -3123,6 +3128,11 @@ class ForestGraveyard():
                     zoom = float(od["meta"]["zoom"])
                 lock_region = ( od["x"], od["y"], od["x"]+od["w"], od["y"]+od["h"], axes, zoom )
                 df.camera_lock_regions.append( lock_region )
+
+            if od["key"] in ["vision_region"]:
+                vision_region = ( od["x"], od["y"], od["x"]+od["w"], od["y"]+od["h"] )
+                df.vision_regions.append( vision_region )
+                
 
             if od["key"] in ["terminal"]:
                 self.objects.append(Terminal.parse(od,df))

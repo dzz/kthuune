@@ -6,6 +6,7 @@
 // @load "includes/blend.glsl"
 // @load "includes/lighting.glsl"
 // @load "includes/noise.glsl"
+// @load "includes/vision.glsl"
 
 uniform float tick;
 uniform float fuzz_amt;
@@ -28,10 +29,10 @@ in vec2 uv;
 void main() {
 
     vec2 noisey_offset = vec2(0.0,0.0);
-    //if(fuzz_amt>0.0001) {
-    //    float d_amt = get_uv_len(uv)*fuzz_amt;
-    //    noisey_offset = vec2( random(uv*1000+tick), random(uv*-3000+tick))*(d_amt*d_amt*d_amt*0.3)*(1.0+(sin(uv.y*200)*cos(uv.x*200)*0.1));
-    //} 
+    if(fuzz_amt>0.0001) {
+        float d_amt = get_uv_len(uv)*fuzz_amt;
+        noisey_offset = vec2( random(uv*1000+tick), random(uv*-3000+tick))*(d_amt*d_amt*d_amt*0.3)*(1.0+(sin(uv.y*200)*cos(uv.x*200)*0.1));
+    } 
 
 /*
         float r_amt = 0.01*(2.0-get_uv_len(uv));
@@ -41,8 +42,9 @@ void main() {
     vec4 floor_texel = texture( floor_buffer, floor_uv );
     //vec4 reflect_texel = texture( reflect_map, (floor_uv+(camera_position*3))+refl_offset );
 
-    vec4 vision_texel = texture( vision_buffer, floor_uv); 
-    vec4 light_texel = texture( light_buffer, floor_uv );
+    vec4 vision_texel = correct_vision( texture( vision_buffer, floor_uv)); 
+
+    vec4 light_texel = texture( light_buffer, floor_uv )*vision_texel;
 
 
 /*

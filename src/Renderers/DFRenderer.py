@@ -86,7 +86,7 @@ class DFRenderer( FloorRenderer ):
 
         
     def encode_player_lights( self ):
-        return list(map(lambda player: { "position": player.p, "color" : [0.5,0.5,0.5,0.5], "radius" : player.sight_radius },self.get_player_objects()))
+        return list(map(lambda player: { "position": player.p, "color" : [1.0,1.0,1.0,1.0], "radius" : player.sight_radius },self.get_player_objects()))
 
     def precompute_frame(self):
         """ Pre-render compositing """
@@ -96,11 +96,15 @@ class DFRenderer( FloorRenderer ):
             return
 
         #self.vision_lightmap.clear()
-        self.vision_lightmap.white_out()
+        #self.vision_lightmap.white_out()
 
         if self.uses_vision:
             self.vision_lightmap.clear()
             self.compute_vision_lightmap()
+            if self.active_vision_mute > 0.0:
+                self.vision_lightmap.fade_out( self.active_vision_mute )
+        else:
+            self.vision_lightmap.white_out()
 
         #    if self.fade_vision_amt > 0.0:
         #        with BGL.context.render_target( self.vision_lightmap.target_buffer):
@@ -221,9 +225,15 @@ class DFRenderer( FloorRenderer ):
     def configure_vision_lightmapper(self):
         class FadingLightMapper( LightMapper ):
             def clear(self):
-                with BGL.blendmode.alpha_over:
-                    #BGL.context.clear(0.0,0.0,0.0,1.0)
-                    uniform_fade.apply_fadeout( 0.4 )
+                with BGL.context.render_target( self.target_buffer):
+                    with BGL.blendmode.alpha_over:
+                        #BGL.context.clear(0.0,0.0,0.0,1.0)
+                        uniform_fade.apply_fadeout( 0.2, [0.0,0.0,0.0] )
+
+            def fade_out(self,amt):
+                with BGL.context.render_target( self.target_buffer):
+                    with BGL.blendmode.alpha_over:
+                        uniform_fade.apply_fadeout( amt, [1.0,1.0,1.0] )
 
         self.player_lights = []
         vision_lightmapper = FadingLightMapper( 

@@ -45,6 +45,9 @@ class DungeonFloor( Floor ):
             "music_playing" : False,
             "fuzz_amt" : 0.0,
             "uses_vision" : True,
+            "vision_mute" : 0.0,
+            "vision_regions" : [],
+            "active_vision_mute" : 0.0,
             "fade_vision_amt" : 0.0,
             "camera_lock_regions" : [],
             "title" : "Who Knows!",
@@ -164,6 +167,7 @@ class DungeonFloor( Floor ):
         self.recursive_snapper = None
         self.destroyed = False
         Floor.__init__(self,**floor_configuration)
+        self.active_vision_mute = self.vision_mute
 
 
 
@@ -266,12 +270,23 @@ class DungeonFloor( Floor ):
             self.fog_level_impulse = self.fog_level_impulse + amt
 
     def tick(self):
+        pX = self.player.p[0]
+        pY = self.player.p[1]
+        target_vision_mute = self.vision_mute
+        for region in self.vision_regions:
+            if pX > region[0] and pX < region[2] and pY > region[1] and pY < region[3]:
+                target_vision_mute = 0.0
+                break
+
+        self.active_vision_mute = (self.active_vision_mute * 0.9) + (target_vision_mute*0.1)
+
+            
         #dungeon floor
 
-        if(self.music is not None):
-            if not self.music_playing:
-                audio.baudy_play_music(self.music)
-                self.music_playing = True
+        ### if(self.music is not None):
+        ###     if not self.music_playing:
+        ###         audio.baudy_play_music(self.music)
+        ###         self.music_playing = True
         if(self.sound_tick==0):
             KSounds.play(choice([KSounds.rain_20sec, KSounds.rain_21sec]))
         self.sound_tick = (self.sound_tick +1)%(60*18)

@@ -116,8 +116,10 @@ class SlashEffect(Object):
                         md = (dx*dx) + (dy*dy)
                         if md < 10:
 
-                            self.floor.player.p[0] = enemy.p[0]
-                            self.floor.player.p[1] = enemy.p[1]
+                            self.floor.player.v[0] = -1*dx*0.3
+                            self.floor.player.v[1] = -1*dy*0.3
+                            #self.floor.player.p[0] = enemy.p[0]
+                            #self.floor.player.p[1] = enemy.p[1]
                             KSounds.play( KSounds.slashhit )
                             #enemy.floor.player.add_dm_message("You slashed an enemy")
                             enemy.receive_snap_attack( choice([False, False, True]) )
@@ -450,7 +452,7 @@ class Sword(Object):
 
     def tick(self):
 
-        self.visible = Abilities.Sword
+        self.visible = Abilities.Sword and not self.floor.player.slash.visible
 
         if not self.visible:
             return True
@@ -1504,8 +1506,8 @@ class KPlayer(Player):
                 self.color = [1.0,1.0,1.0,1.0]
         
             if(self.slash.visible):
-                self.v[0] *= 0.2
-                self.v[1] *= 0.2
+                self.v[0] *= 1.05
+                self.v[1] *= 1.05
 
             Object.tick(self)
 

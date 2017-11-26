@@ -1,6 +1,7 @@
 #version 330
 
 // @load "includes/uvs.glsl"
+// @load "includes/vision.glsl"
 
 in vec2 uv;
 uniform float parallax;
@@ -28,9 +29,8 @@ void main(void) {
     vec4 vision_texel = texture( vision_tex, get_floor_uv(uv) );
     vision_texel.a = 1.0;
 
-    vec4 texel = texture( bg_texture, unshift(shifted*0.2) );
+    vec4 texel = correct_vision(texture( bg_texture, unshift(shifted*0.2) ));
 
 
-    //texel.rgb *= smoothstep(0.0,1.0,vision_texel.r*7);
-    gl_FragColor = texel;
+    gl_FragColor = texel * vision_texel;
 }

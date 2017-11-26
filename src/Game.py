@@ -118,6 +118,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         fog_level_base=0.5, tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = self.camera, player = self.player, objects = [], area_def = area_def )
         floor.game = self
         floor.music = BGL.assets.get("KT-player/path/lacuna_canal")
+
+        floor.vision_mute = 0.7
         return floor
 
     def build_area_ship_type(self, key):
@@ -149,6 +151,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             player = self.player, 
             objects = [], 
             area_def = area_def, 
+            vision_mute = 0.7,
             renderer_config = { 
                 "vision_lightmap_width" : 960,
                 "vision_lightmap_height" : 540,
@@ -180,7 +183,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
     def build_area_lacuna_canal(self):
         floor = self.build_area_ship_type("lacuna_canal")
         floor.title = "Unknown Origins"
-        #floor.uses_vision = False
+        floor.uses_vision = True
 
         floor.music = BGL.assets.get("KT-player/path/lacuna_canal")
         floor.sky_texture = BGL.assets.get("KT-forest/texture/starfield1")
@@ -189,6 +192,23 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         floor.parallax_sky = 0.01
         floor.parallax_bg = 0.04
         floor.fog_level_base = 0.1
+        floor.fuzz_amt = 0.3
+        floor.vision_mute = 0.6
+        return floor
+
+    def build_area_chase(self):
+        floor = self.build_area_ship_type("chase")
+        floor.title = "..."
+        #floor.uses_vision = False
+
+        floor.music = None
+        floor.sky_texture = BGL.assets.get("KT-forest/texture/electrotrash")
+        floor.bg_texture = BGL.assets.get("KT-forest/texture/electrofore")
+        floor.parallax_sky = 0.01
+        floor.parallax_bg = 0.04
+        floor.fog_level_base = 1.0
+
+        floor.uses_vision = True
         return floor
 
     def build_area_grey_world(self):
@@ -232,6 +252,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             floor = self.build_area_ship()
         if key == "lacuna_canal":
             floor = self.build_area_lacuna_canal()
+        if key == "chase":
+            floor = self.build_area_chase()
         if key == "grey_world":
             floor = self.build_area_grey_world()
         if key == "crystals1":

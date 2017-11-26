@@ -95,7 +95,8 @@ class DungeonCamera (Camera):
                     pY = (region[1]+region[3])/2
 
 
-            if not self.player.floor.blurring:
+            #if not self.player.floor.blurring:
+            if True:
                 self.p[0] = (pX+aim_offset_x)* rate + ((1.0-rate)*self.p[0])
                 self.p[1] = (pY+aim_offset_y)* rate + ((1.0-rate)*self.p[1])
 
