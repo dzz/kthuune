@@ -28,6 +28,77 @@ from ..KSounds import KSounds
 from ..GeneratorOptions import GeneratorOptions
 from ..Abilities import Abilities
 
+class TumorCrab(Object):
+    textures = BGL.assets.get('KT-forest/animation/tumorcrab')
+
+    def parse(od,df):
+        tc = TumorCrab(p=[od["x"],od["y"]])
+        return tc
+
+    def customize(self):
+        self.visible = True
+        self.buftarget = "popup"
+        self.z_index = 500
+        self.size = [20,20]
+        self.texture = TumorCrab.textures[0]
+        self.tick_type = Object.TickTypes.PURGING
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.light_color = [ 1.0,0.5,0.5,1.0 ]
+        self.light_radius = 200
+        self.fr = 0.0
+        self.color = [ 1.0,1.0,1.0,0.0 ]
+        self.active = False
+
+    def tick(self):
+
+        if self.active:
+            self.light_color = [ 1.0,uniform(0.5,0.9),uniform(0.3,0.7),1.0 ]
+            self.light_radius = uniform(200,300)
+            self.fr += 0.7
+            if self.color[3] < 1.0:
+                self.color[3] += 0.01
+            if(self.fr> len(TumorCrab.textures)):
+                self.fr = 0.0
+
+            self.texture = TumorCrab.textures[ int(self.fr) ]
+
+            self.p[1] -= 0.13
+            if self.fr < 37:
+                self.vy = 0.038
+            if( self.fr > 37 ):
+                self.p[1] -= self.vy
+                self.vy*=1.047
+
+            dy = self.floor.player.p[1] - self.p[1]
+            dx = self.floor.player.p[0] - self.p[0]
+
+            self.flash_color= [ 1.0,1.0,1.0,0.0]
+            if(abs(dx)<8):
+                if dy>0 and dy <10:
+                    if uniform(0.0,1.0) > 0.4:
+                        self.attack_str = 30
+                        self.vx = 0
+                        self.vy = 0
+                        if self.floor.player.hp >0:
+                            self.floor.player.receive_ranged_attack(self)
+
+                if (self.fr>39 and self.fr<47) or (self.fr>80 or self.fr< 5):
+                    self.flash_color= [ 1.0,1.0,0.0,1.0]
+                    if dy> -17 and dy<-11:
+                        self.attack_str = 30
+                        self.vx = 0
+                        self.vy = 0
+                        if self.floor.player.hp >0:
+                            self.floor.player.receive_ranged_attack(self)
+            
+        else:
+            if(self.floor.player.p[1] - self.p[1] < -50 ):
+                self.active = True
+                self.floor.camera.grab_cinematic( self, 120 )
+            return True
+    
+        return True
+
 class Breakable(Object):
     def handle_pull(self):
         dx = self.p[0] - self.floor.player.p[0]
@@ -345,6 +416,8 @@ class CrystalChunk(Object):
         BGL.assets.get('KT-forest/texture/crystal_2'),
         BGL.assets.get('KT-forest/texture/crystal_3'),
         BGL.assets.get('KT-forest/texture/crystal_4'),
+        BGL.assets.get('KT-forest/texture/blocker1'),
+        BGL.assets.get('KT-forest/texture/blocker2'),
     ]
     def __init__(self,**kwargs):
         Object.__init__(self,**kwargs)
@@ -482,6 +555,8 @@ class Crystal(Breakable):
         BGL.assets.get('KT-forest/texture/crystal_2'),
         BGL.assets.get('KT-forest/texture/crystal_3'),
         BGL.assets.get('KT-forest/texture/crystal_4'),
+        BGL.assets.get('KT-forest/texture/blocker1'),
+        BGL.assets.get('KT-forest/texture/blocker2'),
     ]
 
     def customize(self):
@@ -1306,7 +1381,7 @@ class Prop(Object):
 
         if "layer" in pd and pd["layer"]==0:
             p.z_index = -1000
-            p.buftarget="floor"
+            p.buftarget="underfloor"
         else:
             p.z_index = 1
 
@@ -3060,6 +3135,9 @@ class ForestGraveyard():
             
             if od["key"] in ["elder" ]:
                 self.objects.append(Elder.parse(od,df))
+
+            if od["key"] in ["tumorcrab"]:
+                self.objects.append(TumorCrab.parse(od,df))
 
             if od["key"] in ["software" ]:
                 if od["meta"]["key"] == "telekine": 

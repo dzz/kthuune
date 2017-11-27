@@ -1,6 +1,9 @@
 {
     "preload": true,
     "resources" : {
+        "animation" : [
+            { "name" : "tumorcrab", "directory" : "{package_path}/tumorcrab/", "filtered" : true }
+        ],
         "texture" : [
             { "name" : "eglanblob1", "filename" : "{package_path}/eglanblob1.png", "filtered" : false },
             { "name" : "eglanblob2", "filename" : "{package_path}/eglanblob2.png", "filtered" : false },
@@ -20,6 +23,8 @@
             { "name" : "deadk1", "filename" : "{package_path}/deadk1.png", "filtered" : false },
             { "name" : "slime0big", "filename" : "{package_path}/slime0big.png", "filtered" : true },
             { "name" : "slime0small", "filename" : "{package_path}/slime0small.png", "filtered" : true },
+            { "name" : "blocker1", "filename" : "{package_path}/blocker1.png", "filtered" : true },
+            { "name" : "blocker2", "filename" : "{package_path}/blocker2.png", "filtered" : true },
             { "name" : "crystal_1", "filename" : "{package_path}/crystal_1.png", "filtered" : true },
             { "name" : "crystal_2", "filename" : "{package_path}/crystal_2.png", "filtered" : true },
             { "name" : "crystal_3", "filename" : "{package_path}/crystal_3.png", "filtered" : true },

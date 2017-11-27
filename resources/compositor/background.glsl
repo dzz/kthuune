@@ -26,11 +26,11 @@ void main(void) {
     float warp = 0.25+(0.8*l);
     vec2 shifted = shift(get_floor_uv(uv) + scp)*warp;
 
-    vec4 vision_texel = texture( vision_tex, get_floor_uv(uv) );
+    vec4 vision_texel = correct_vision(texture( vision_tex, get_floor_uv(uv) ));
     vision_texel.a = 1.0;
 
-    vec4 texel = correct_vision(texture( bg_texture, unshift(shifted*0.2) ));
+    vec4 texel = texture( bg_texture, unshift(shifted*0.2) );
 
 
-    gl_FragColor = texel * vision_texel;
+    gl_FragColor = texel*vision_texel;
 }

@@ -607,6 +607,10 @@ class KPlayer(Player):
             return 1.5
 
     def receive_ranged_attack(self, attack):
+
+        if self.floor.camera.cinema_target:
+            return
+
         if(self.invuln_frames>0):
             return 
         self.snap_cooldown = 40
@@ -1427,11 +1431,11 @@ class KPlayer(Player):
             if(pad.button_down( BGL.gamepads.buttons.RIGHT_BUMPER)):
                 if(self.run_stamina>0.0):
                     self.stamina_recharge_buffer = 10.0
-                    self.run_stamina -= 0.5
-                    rs1 = self.run_stamina/100.0
+                    self.run_stamina -= 0.45
+                    rs1 = self.run_stamina/75.0
                     rs2 = rs1*rs1;
-                    mod1 = 0.5 * rs1 
-                    mod2 = 1.0 * rs2
+                    mod1 = 0.8 * rs1 
+                    mod2 = 1.1 * rs2
                     calc_speed *= 1.0+(mod1+mod2)
             else:
                 self.stamina_recharge_buffer -= 0.2

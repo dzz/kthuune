@@ -120,6 +120,11 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         floor.music = BGL.assets.get("KT-player/path/lacuna_canal")
 
         floor.vision_mute = 0.7
+        floor.bg_texture = BGL.assets.get("KT-forest/texture/lightmap")
+        floor.sky_texture = BGL.assets.get("KT-forest/texture/background")
+        floor.parallax_sky = 0.005
+        floor.parallax_bg = 0.01
+
         return floor
 
     def build_area_ship_type(self, key):
@@ -199,7 +204,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
     def build_area_chase(self):
         floor = self.build_area_ship_type("chase")
         floor.title = "..."
-        #floor.uses_vision = False
+        floor.uses_vision = True
 
         floor.music = None
         floor.sky_texture = BGL.assets.get("KT-forest/texture/electrotrash")
@@ -335,7 +340,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         ### ENTRY POINT
 ###########################
-        self.floor = self.create_tickable(self.load_floor("lacuna_canal"))
+        self.floor = self.create_tickable(self.load_floor("chase"))
         self.player.trigger_title( self.floor.title )
         if "bg_texture" in self.floor.__dict__:
             Background.bg_texture = self.floor.bg_texture
