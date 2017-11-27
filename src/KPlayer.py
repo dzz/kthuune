@@ -89,7 +89,7 @@ class SlashEffect(Object):
             self.cooldown = 51 
             self.stagger_cooldown = 0
             KSounds.play( KSounds.slash )
-            self.floor.player.run_stamina -= 40
+            self.floor.player.run_stamina -= 20
 
     def tick(self):
 
@@ -1229,6 +1229,9 @@ class KPlayer(Player):
         
     def tick(self):
 
+        if self.floor.camera.cinema_target:
+            return True
+
         if(self.flash_color[3]>0.1):
             self.flash_color[3] *= 0.95
         else:
@@ -1308,13 +1311,17 @@ class KPlayer(Player):
 
         self.pumped_dashcombo = False
         if(self.hp < 0 ):
-            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-            self.light_color = [ 1.0,0.0,0.0,1.0]
-            self.light_radius = 100
+            #self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+            #self.light_color = [ 1.0,0.0,0.0,1.0]
+            #self.light_radius = 100
             self.texture = BGL.assets.get('KT-player/texture/skeleton')
             self.size = [2.0,2.0]
             self.rad = atan2(self.p[0]-self.snapshot['p'][0],self.p[1]-self.snapshot['p'][1])
             return True
+        else:
+            pass
+            #self.light_color = [ 1.0,0.8,0.8,1.0 ]
+            #self.light_radius = 15
         pad = self.controllers.get_virtualized_pad( self.num )
         self.deal_with_buttons(pad)
         used_term = self.route_terminal_input()
@@ -1364,15 +1371,15 @@ class KPlayer(Player):
                 self.set_state( KPlayer.STATE_DEFAULT )
 
         if(self.state == KPlayer.STATE_DODGING ):
-            self.v[0] += self.dv[0]*1.8
-            self.v[1] += self.dv[1]*1.8
+            self.v[0] += self.dv[0]*2.8
+            self.v[1] += self.dv[1]*2.8
             
             self.dv[0]*=0.6
             self.dv[1]*=0.6
 
             if(self.sword.state is not Sword.STATE_IDLE):
-                self.set_state(KPlayer.STATE_DEFAULT)
-            if(self.stimer > 9 ):
+                self.set_statj(KPlayer.STATE_DEFAULT)
+            if(self.stimer > 6 ):
                 self.set_state(KPlayer.STATE_DEFAULT)
 
         if(self.state == KPlayer.STATE_FIRING):

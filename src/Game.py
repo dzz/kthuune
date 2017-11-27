@@ -269,10 +269,13 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         return floor
 
-    def next_area( self, area_name, target_switch ):
+    def next_area( self, area_name, target_switch = None, reset = False ):
+
+        self.current_floor_key = area_name
+        self.current_floor_target = target_switch
         if area_name == "self":
             area_name = self.area_name
-        if self.area_name is not area_name:
+        if (self.area_name is not area_name) or reset:
             #self.tickables.remove( self.floor )
             print("DESTROYING FLOOR")
             self.floor.destroy()
@@ -340,7 +343,10 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         ### ENTRY POINT
 ###########################
+        loading_floor = "chase"
         self.floor = self.create_tickable(self.load_floor("chase"))
+        self.current_floor_key = loading_floor
+        self.current_floor_target = None
         self.player.trigger_title( self.floor.title )
         if "bg_texture" in self.floor.__dict__:
             Background.bg_texture = self.floor.bg_texture
@@ -352,6 +358,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
         self.camera.set_player(self.player)
+        self.player_dead_frames = 0
 
     def render(self):
         with BGL.context.render_target( Game.god_buffer):
@@ -399,3 +406,10 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             KTState.paused = not KTState.paused
                 
         BaseGame.tick(self)
+
+        if self.player.hp <= 0:
+            self.player_dead_frames += 1
+            if self.player_dead_frames > 220:
+                self.player.hp = 100
+                self.next_area( self.current_floor_key, self.current_floor_target, True )
+                self.player_dead_frames = 0

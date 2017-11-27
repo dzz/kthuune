@@ -48,10 +48,14 @@ class TumorCrab(Object):
         self.fr = 0.0
         self.color = [ 1.0,1.0,1.0,0.0 ]
         self.active = False
+        self.life = 0.0
 
     def tick(self):
 
         if self.active:
+
+            if(self.life<1.0):
+                self.life += 0.01
             self.light_color = [ 1.0,uniform(0.5,0.9),uniform(0.3,0.7),1.0 ]
             self.light_radius = uniform(200,300)
             self.fr += 0.7
@@ -62,9 +66,9 @@ class TumorCrab(Object):
 
             self.texture = TumorCrab.textures[ int(self.fr) ]
 
-            self.p[1] -= 0.13
+            self.p[1] -= 0.13*self.life
             if self.fr < 37:
-                self.vy = 0.038
+                self.vy = 0.038*self.life
             if( self.fr > 37 ):
                 self.p[1] -= self.vy
                 self.vy*=1.047
