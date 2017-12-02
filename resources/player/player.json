@@ -1,6 +1,9 @@
 {
     "preload": true,
     "resources" : {
+        "animation" : [
+            { "name" : "transporter_flash", "directory" : "{package_path}/transporter_flash/", "filtered" : false }
+        ],
         "texture" : [
             { "name" : "ship_exterior", "filename" : "{package_path}/ship_exterior.png", "filtered" : false },
             { "name" : "firefly", "filename" : "{package_path}/firefly.png", "filtered" : true },

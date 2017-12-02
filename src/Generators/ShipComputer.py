@@ -1,8 +1,31 @@
 from Beagle import API as BGL
 from ..KSounds import KSounds
 from ..Abilities import Abilities
+from Newfoundland.Object import Object
 
-        
+class TransporterFlash(Object):
+    textures = BGL.assets.get("KT-player/animation/transporter_flash")
+
+    def customize(self):
+        self.buftarget = "popup"
+        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+        self.tick_type = Object.TickTypes.PURGING
+        self.light_radius = 20
+        self.light_color = [ 1.0,0.0,1.0,1.0 ]
+        self.flash_color = [ 0.9,0.8,1.0,1.0 ]
+        self.texture = TransporterFlash.textures[0]
+        self.anim_frame = 0
+        self.size = [3.5,3.5]
+        self.z_index = 9000
+
+    def tick(self):
+        if(self.anim_frame< len(TransporterFlash.textures)):
+            self.texture = TransporterFlash.textures[ int(self.anim_frame) ] 
+            self.anim_frame += 0.5
+            self.flash_color[3] *= 0.9
+            return True
+        else:
+            return False
 
 class MenuTerminal:
     def setup_options(self):
@@ -140,7 +163,14 @@ class TeleportControl(MenuTerminal):
         else:
             player = self.owner.floor.player
             dest = player.world_map.systems[ player.current_system ]["destinations"][self.selected_destination]
-            player.game.next_area( dest["area_name"], None )
+
+            def animation_finished():
+                player.visible = True
+                player.game.next_area( dest["area_name"], None )
+
+            player.floor.camera.grab_cinematic(self.owner, 36, animation_finished )
+            player.floor.create_object(TransporterFlash( p= [ player.p[0], player.p[1]]))
+            player.visible = False
 
     def key_back(self):
         if not (self.in_menu):
