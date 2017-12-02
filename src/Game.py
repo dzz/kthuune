@@ -20,6 +20,7 @@ from .Background import Background
 from .Fog import Fog
 
 from .Abilities import Abilities
+from .Renderers.uniform_fade import uniform_fade 
 
 import audio
 class Game( BaseGame ):
@@ -316,7 +317,16 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
     def create_player(self):
         return KPlayer( game = self, sight_radius = 90.0, speed = 7.00, controllers = self.controllers, texture = BGL.assets.get("KT-player/texture/player"), size = [ 2.0,2.0] ) 
 
+
+    def trigger_fade(self, length, color = [ 0.0,0.0,0.0 ]):
+        self.max_fade_amt = length
+        self.fade_color = color
+        self.fade_amt = 0.0
+
     def initialize(self):
+        self.fade_amt = 1.1
+        self.max_fade_amt = 1.0
+        self.fade_color = [0.0,0.0,0.0]
 
         self.abilities = Abilities
         self.doing_random_test = False
@@ -343,8 +353,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         ### ENTRY POINT
 ###########################
-        loading_floor = "chase"
-        self.floor = self.create_tickable(self.load_floor("chase"))
+        loading_floor = "lacuna_canal"
+        self.floor = self.create_tickable(self.load_floor(loading_floor))
         self.current_floor_key = loading_floor
         self.current_floor_target = None
         self.player.trigger_title( self.floor.title )
@@ -372,12 +382,21 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         Game.god_buffer.render_processed( Game.god_shader )
         self.player.render_hud()
+        if(self.fade_amt< self.max_fade_amt):
+            fade_perc = self.fade_amt / self.max_fade_amt
+
+            with BGL.blendmode.alpha_over:
+                uniform_fade.apply_fadeout( fade_perc, self.fade_color )
 
     def tick(self):
 
         if(self.prebuffer < 30):
             self.prebuffer += 1
             return
+
+        if(self.fade_amt< self.max_fade_amt):
+            self.fade_amt += 1.0
+
         ### 
         ### can uncomment this to test rapid area switching
         ###

@@ -1228,6 +1228,7 @@ class KPlayer(Player):
         self.title_card.reset(title)
         
     def tick(self):
+        self.title_card.tick()
 
         if self.floor.camera.cinema_target:
             return True
@@ -1252,7 +1253,6 @@ class KPlayer(Player):
         if(self.run_stamina<0):
             self.run_stamina = 0
 
-        self.title_card.tick()
         if self.get_camera().cinema_target is not None:
             return
 

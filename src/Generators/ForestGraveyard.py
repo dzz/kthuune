@@ -28,6 +28,34 @@ from ..KSounds import KSounds
 from ..GeneratorOptions import GeneratorOptions
 from ..Abilities import Abilities
 
+class OnewayFadeSwitch(Object):
+    def parse(od, df):
+
+        if "radius" in od["meta"]:
+            radius = float(od["meta"]["radius"])
+        else:
+            radius = 5
+            
+        return OnewayFadeSwitch(trigger_radius=radius, p=[od["x"],od["y"]], target_area = od["meta"]["target"])
+
+    def customize(self):
+        self.visible = False
+        self.tick_type = Object.TickTypes.PURGING
+        self.fade_time = 60
+        self.triggered = False
+
+    def tick(self):
+        if self.mdist( self.floor.player )< self.trigger_radius:
+            self.triggered = True
+            def next_callback():
+                self.floor.game.next_area( self.target_area, None )
+            self.floor.camera.grab_cinematic( self, self.fade_time, next_callback )
+            self.floor.game.trigger_fade( self.fade_time )
+            return False
+        return True
+
+        
+
 class TumorCrab(Object):
     textures = BGL.assets.get('KT-forest/animation/tumorcrab')
 
@@ -3100,6 +3128,9 @@ class ForestGraveyard():
                     emitter_def = [ od["x"]-5.0,od["y"]-5.0, 10.0,10.0, [ 0.3,1.0,0.5,1.0] ]    
                     self.photon_emitters.append(emitter_def)
 
+            if od["key"] in [ "oneway_fade_switch"]:
+                self.objects.append(OnewayFadeSwitch.parse(od,df))
+                
             if od["key"] in [ "egg" ]:
                 if not Abilities.Born:
                     self.objects.append(Egg.parse(od,df ))
