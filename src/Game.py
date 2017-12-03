@@ -212,6 +212,21 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         floor.bg_texture = BGL.assets.get("KT-forest/texture/electrofore")
         floor.parallax_sky = 0.01
         floor.parallax_bg = 0.04
+        floor.fog_level_base = 1.0 #investigate
+
+        floor.uses_vision = True
+        return floor
+
+    def build_area_platform(self):
+        floor = self.build_area_ship_type("platform")
+        floor.title = "..."
+        floor.uses_vision = True
+
+        floor.music = None
+        floor.sky_texture = BGL.assets.get("KT-forest/texture/starfield1")
+        floor.bg_texture = BGL.assets.get("KT-forest/texture/nebula")
+        floor.parallax_sky = 0.01
+        floor.parallax_bg = 0.04
         floor.fog_level_base = 1.0
 
         floor.uses_vision = True
@@ -260,6 +275,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             floor = self.build_area_lacuna_canal()
         if key == "chase":
             floor = self.build_area_chase()
+        if key == "platform":
+            floor = self.build_area_platform()
         if key == "grey_world":
             floor = self.build_area_grey_world()
         if key == "crystals1":
@@ -378,7 +395,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
             self.floor.render()
             self.fog.camera = self.camera
-            #self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
+            self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
 
         Game.god_buffer.render_processed( Game.god_shader )
         self.player.render_hud()

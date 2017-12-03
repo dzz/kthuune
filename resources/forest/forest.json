@@ -105,7 +105,8 @@
             { "name" : "grey_world", "filename" : "{package_path}/grey_world.area" },
             { "name" : "crystals1", "filename" : "{package_path}/crystals1.area" },
             { "name" : "lacuna_canal", "filename" : "{package_path}/lacuna_canal.area" },
-            { "name" : "chase", "filename" : "{package_path}/chase.area" }
+            { "name" : "chase", "filename" : "{package_path}/chase.area" },
+            { "name" : "platform", "filename" : "{package_path}/platform.area" }
         ]
     }
 }

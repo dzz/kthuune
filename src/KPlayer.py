@@ -73,6 +73,8 @@ class SlashEffect(Object):
         self.cooldown = 0
         self.stagger_cooldown = 0
 
+
+
     def slash(self):
 
         if(self.floor.player.run_stamina>0):
@@ -122,7 +124,11 @@ class SlashEffect(Object):
                             #self.floor.player.p[1] = enemy.p[1]
                             KSounds.play( KSounds.slashhit )
                             #enemy.floor.player.add_dm_message("You slashed an enemy")
-                            enemy.receive_snap_attack( choice([False, False, True]) )
+
+                            if(self.floor.player.running):
+                                enemy.receive_snap_attack( True )
+                            else:
+                                enemy.receive_snap_attack( choice([False, False, True]) )
                             self.attacked_enemies.append(enemy)
                             self.stagger_cooldown += 25
             if self.stagger_cooldown==0:
@@ -452,7 +458,7 @@ class Sword(Object):
 
     def tick(self):
 
-        self.visible = Abilities.Sword and not self.floor.player.slash.visible
+        self.visible = Abilities.Sword and not self.floor.player.slash.visible and self.floor.player.visible
 
         if not self.visible:
             return True
@@ -575,6 +581,11 @@ class KPlayer(Player):
     STATE_DODGING = 2
     STATE_FIRING = 3
     
+    def boost_run_stamina(self):
+        self.run_stamina += 25
+        if(self.run_stamina>100):
+            self.run_stamina = 100 
+
     def has_inv(self):
         for x in self.inventory:
             if x is None:
@@ -661,6 +672,10 @@ class KPlayer(Player):
             crit = False
             if self.last_link == 0:
                 crit = True
+
+            if (self.run_stamina>10) and self.running:
+                crit = True
+                
             delta = None
             if(se.last_priority_score<9) and (se.snap_type == 1) and (se.iframes in range(3,10)):
                 delta = 0
@@ -1011,6 +1026,7 @@ class KPlayer(Player):
         self.cardtick = 0.0
         self.attack_object = None
         self.fire_timer = 0
+        self.running = False
 
         self.hittable_hilight = []
         self.hittable_hint_real = 0.0
@@ -1437,6 +1453,7 @@ class KPlayer(Player):
                 calc_speed *= 0.2
             if(pad.button_down( BGL.gamepads.buttons.RIGHT_BUMPER)):
                 if(self.run_stamina>0.0):
+                    self.running = True
                     self.stamina_recharge_buffer = 10.0
                     self.run_stamina -= 0.45
                     rs1 = self.run_stamina/75.0
@@ -1444,6 +1461,8 @@ class KPlayer(Player):
                     mod1 = 0.8 * rs1 
                     mod2 = 1.1 * rs2
                     calc_speed *= 1.0+(mod1+mod2)
+                    if(self.slash.visible):
+                        mod1*=1.5
             else:
                 self.stamina_recharge_buffer -= 0.2
                 if(self.stamina_recharge_buffer<0.0):

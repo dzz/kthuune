@@ -1215,6 +1215,7 @@ class SnapEnemy(Object):
 
     def die(self):
 
+        self.floor.player.boost_run_stamina()
         #self.floor.player.add_dm_message("You killed an enemy")
         if self in self.floor.objects:
             #hack
@@ -1383,7 +1384,7 @@ class ShipExterior(Object):
         self.light_color = [1.0,1.0,1.0,1.0]
         self.fridx = 0
         self.base_p = [ self.p[0], self.p[1] ]
-        self.buftarget = "floor"
+        self.buftarget = "underfloor"
         self.size = [ 50.0,50.0 ]
         self.z_index = -1100
         self.parallax = 0.9
@@ -2357,7 +2358,7 @@ class EglanBlob(SnapEnemy):
         self.hp = 160
         self.dead = False
         self.tick_type = Object.TickTypes.PURGING
-        self.physics = { "radius" : 1.5, "mass"   : 0.03, "friction" : 0.0 }
+        self.physics = { "radius" : 0.5, "mass"   : 0.0003, "friction" : 1.0 }
         self.buftarget = "popup"
         self.visible = True
         self.texture = EglanBlob.textures[0]
@@ -2368,7 +2369,17 @@ class EglanBlob(SnapEnemy):
         self.iframes = 0
         self.fridx = uniform(0.0,100.0)
         self.snap_effect_emit = 0
+        self.firing = False
+        self.fire_idx = 0
         SnapEnemy.set_combat_vars(self)
+
+    def fireRanged(self, rad):
+        self.flash(1.0,0.8,0.0)
+        #x = self.floor.player.p[0] - self.p[0]
+        #y = self.floor.player.p[1] - self.p[1]
+        #rad = atan2(y,x)
+        self.floor.create_object( ERangedMagic( p = [ self.p[0], self.p[1] ], rad = rad ) )
+        KSounds.play_eproj()
 
     def tick(self):
         self.fade_flash()
@@ -2376,8 +2387,25 @@ class EglanBlob(SnapEnemy):
         self.fridx += 1
         self.texture = EglanBlob.textures[ int(self.fridx/20) % 7 ]
 
+        if(self.firing):
+            self.fire_idx += 1
+            if self.fire_idx % 12 == 0:
+                rad = self.fire_base_rad
+                rad += 0.3
+                if(self.fire_idx>20):
+                    self.fireRanged(rad)
+                else:
+                    self.flash_color = [ 0.0,0.0,0.0,1.0 ]
+            if self.fire_idx > 90:
+                self.firing = False
+        else:
+            self.fire_idx = 0
+            self.fire_base_rad = uniform(-3.14,3.14)
+
         if self.texture == EglanBlob.textures[3]: 
-            self.flash_color = [ 0.0,0.0,0.0,1.0 ]
+
+            if(uniform(0.0,1.0)<0.01) and self.mdist(self.floor.player)<40:
+                self.firing = True
             if choice([True,False,False]):
                 self.v[0] = uniform(-8.0,8.0)
                 self.v[1] = uniform(-8.0,8.0)
@@ -2396,7 +2424,7 @@ class EglanBlob(SnapEnemy):
         self.light_color = [ abs(sin(self.fridx*0.03)),0.0,abs(cos(self.fridx*0.02)),1.0]
 
         if(self.hp < 0):
-            SnapEnemy.die(self)
+            SnapEnemy.die(self) #@bug physics not cleaned up
             return False
         return True
 
