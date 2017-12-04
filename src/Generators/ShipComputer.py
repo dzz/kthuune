@@ -120,6 +120,12 @@ class MenuTerminal:
     def key_back(self):
         pass
 
+    def get_top_level_selection(self):
+        return self.top_level_items[ self.top_level_item]
+
+    def get_second_level_selection(self):
+        return self.second_level_items_map[self.get_top_level_selection()][self.second_level_item]
+
 class ShipComputer(MenuTerminal):
     def setup_options(self):
         self.top_level_items = [ "navigation", "neurophagy" ]
@@ -130,12 +136,57 @@ class ShipComputer(MenuTerminal):
                 "Research"
             ]
         }
+
+        self.selected_destination = None
+        self.selecting_destination = False
+        self.in_menu = True
         self.synch_secondary_items()
+        self.selected_system = None
 
     def custom_render(self):
-        if(self.top_level_item==0):
+        if self.selecting_destination is True:
+            string = "Warp Target: " + self.selected_destination
+            cost = 2
+            if Abilities.ThoriumAmount >= 2:
+                BGL.lotext.render_text_pixels(string,8,223,[ 1.0,1.0,1.0 ])
+                BGL.lotext.render_text_pixels("Confirm Warp?",90,120,[ 1.0,1.0,1.0 ])
+            else:
+                BGL.lotext.render_text_pixels("ERROR: INSUFFICIENT THORIUM",90,120,[ 1.0,1.0,1.0 ])
+            BGL.lotext.render_text_pixels("COST: {0} Thorium".format(cost),90,129,[ 1.0,1.0,1.0 ])
+            BGL.lotext.render_text_pixels("AVAILABLE: {0}".format(Abilities.ThoriumAmount),90,138,[ 1.0,1.0,1.0 ])
+            return
+        elif(self.top_level_item==0):
             string = "Current System: " + self.owner.floor.player.current_system
             BGL.lotext.render_text_pixels(string,8,223,[ 1.0,1.0,1.0 ])
+
+    def key_back(self):
+        if self.selecting_destination:
+            self.selecting_destination = False
+            self.in_menu = True
+            KSounds.play( KSounds.term_back )
+        else:
+            pass
+
+    def key_select(self):
+        if self.get_top_level_selection() == "navigation":
+            if self.get_second_level_selection() == self.owner.floor.player.current_system:
+                return
+            if not self.selecting_destination:
+                self.selected_destination = self.get_second_level_selection()
+                self.selecting_destination = True
+                self.in_menu = False
+                KSounds.play( KSounds.term_select )
+            else:
+                cost = 2
+                if Abilities.ThoriumAmount >= 2:
+                    Abilities.ThoriumAmount -= 2
+                    self.owner.floor.player.current_system = self.selected_destination 
+                    self.owner.floor.game.trigger_cinematic("warp")
+                pass
+        else:
+            pass
+
+
         
 class TeleportControl(MenuTerminal):
     def setup_options(self):

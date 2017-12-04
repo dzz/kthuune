@@ -997,6 +997,9 @@ class ResourcePickup(Object):
         if (md<1.6):
             self.floor.objects.remove(self)
             self.floor.player.add_dm_message("You found some {0}".format(self.names[self.pickup_type]))
+
+            if(self.pickup_type == 0):
+                Abilities.ThoriumAmount += 1
             KSounds.play( KSounds.pickup )
             return False
         return True

@@ -31,6 +31,14 @@ class Game( BaseGame ):
     paused = False
     area_name = None
     ###############
+
+    def trigger_cinematic(self,key):
+        from .WarpCinematic import WarpCinematic
+        if key == "warp":
+            self.active_cinematic = WarpCinematic()
+            self.active_cinematic.game = self
+        pass
+
     def build_area_test(self):
         area_raw = BGL.assets.get("KT-forest/textfile/area_test")
         area_def = get_area_data( area_raw )
@@ -341,6 +349,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         self.fade_amt = 0.0
 
     def initialize(self):
+        self.active_cinematic = None
         self.fade_amt = 1.1
         self.max_fade_amt = 1.0
         self.fade_color = [0.0,0.0,0.0]
@@ -370,7 +379,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         ### ENTRY POINT
 ###########################
-        loading_floor = "lacuna_canal"
+        loading_floor = "ship"
         self.floor = self.create_tickable(self.load_floor(loading_floor))
         self.current_floor_key = loading_floor
         self.current_floor_target = None
@@ -388,17 +397,21 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         self.player_dead_frames = 0
 
     def render(self):
-        with BGL.context.render_target( Game.god_buffer):
 
-            BGL.context.clear( 1.0,1.0,1.0,1.0);
-            self.background.camera = self.camera
-            self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
-            self.floor.render()
-            self.fog.camera = self.camera
-            self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
+        if self.active_cinematic:
+            self.active_cinematic.render()
+        else:
+            with BGL.context.render_target( Game.god_buffer):
 
-        Game.god_buffer.render_processed( Game.god_shader )
-        self.player.render_hud()
+                BGL.context.clear( 1.0,1.0,1.0,1.0);
+                self.background.camera = self.camera
+                self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
+                self.floor.render()
+                self.fog.camera = self.camera
+                self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
+
+            Game.god_buffer.render_processed( Game.god_shader )
+            self.player.render_hud()
         if(self.fade_amt< self.max_fade_amt):
             fade_perc = self.fade_amt / self.max_fade_amt
 
@@ -413,6 +426,13 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         if(self.fade_amt< self.max_fade_amt):
             self.fade_amt += 1.0
+
+        if(self.active_cinematic):
+            cinematic_running = self.active_cinematic.tick()
+            if not cinematic_running:
+                self.active_cinematic = None
+            if self.active_cinematic:
+                return
 
         ### 
         ### can uncomment this to test rapid area switching
