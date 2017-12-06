@@ -100,7 +100,13 @@ class DungeonCamera (Camera):
                 self.p[0] = (pX+aim_offset_x)* rate + ((1.0-rate)*self.p[0])
                 self.p[1] = (pY+aim_offset_y)* rate + ((1.0-rate)*self.p[1])
 
-            calc_zoom = (self.base_zoom + (self.zoom*(-0.33)*isAiming) + sc)*0.6
+
+            if ( self.player.floor.override_base_zoom):
+                bz = self.player.floor.override_base_zoom
+            else:
+                bz = self.base_zoom
+
+            calc_zoom = (bz + (self.zoom*(-0.33)*isAiming) + sc)*0.6
 
             if(self.player.snap_animation_buffer>0):
                 calc_zoom *= 2.7

@@ -40,6 +40,8 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "override_base_zoom" : None,
+            "custom_background" : None,
             "blurring" : False,
             "music" : None,
             "music_playing" : False,

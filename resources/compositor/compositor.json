@@ -48,6 +48,11 @@
                 "pixel_program" : "{package_path}/background"
             },
             {
+                "name" : "cloud_background",
+                "vertex_program" : "{beagle-2d}/vertex/no_transform",
+                "pixel_program" : "{package_path}/cloud_background"
+            },
+            {
                 "name" : "fog",
                 "vertex_program" : "{beagle-2d}/vertex/no_transform",
                 "pixel_program" : "{package_path}/fog"

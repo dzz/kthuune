@@ -12,9 +12,12 @@ class Background:
     def __init__(self):
         self.bg_texture = None
         self.sky_texture = None
+        self.tick = None
 
+    def tick(self):
+        return False
+        
     def render(self, vision_tex):
-
 
         if(self.bg_texture is None):
              self.bg_texture = Background.bg_texture

@@ -2,7 +2,8 @@
     "preload": true,
     "resources" : {
         "animation" : [
-            { "name" : "tumorcrab", "directory" : "{package_path}/tumorcrab/", "filtered" : true }
+            { "name" : "tumorcrab", "directory" : "{package_path}/tumorcrab/", "filtered" : true },
+            { "name" : "clouds_compressed", "directory" : "{package_path}/clouds_compressed/", "filtered" : true }
         ],
         "texture" : [
             { "name" : "eglanblob1", "filename" : "{package_path}/eglanblob1.png", "filtered" : false },
@@ -106,7 +107,8 @@
             { "name" : "crystals1", "filename" : "{package_path}/crystals1.area" },
             { "name" : "lacuna_canal", "filename" : "{package_path}/lacuna_canal.area" },
             { "name" : "chase", "filename" : "{package_path}/chase.area" },
-            { "name" : "platform", "filename" : "{package_path}/platform.area" }
+            { "name" : "platform", "filename" : "{package_path}/platform.area" },
+            { "name" : "kiln", "filename" : "{package_path}/kiln.area" }
         ]
     }
 }

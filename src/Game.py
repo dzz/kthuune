@@ -17,6 +17,7 @@ from .Generators.ForestGraveyard import ForestGraveyard
 from .GeneratorOptions import GeneratorOptions
 
 from .Background import Background
+from .CloudBackground import CloudBackground
 from .Fog import Fog
 
 from .Abilities import Abilities
@@ -240,6 +241,23 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         floor.uses_vision = True
         return floor
 
+    def build_area_kiln(self):
+        floor = self.build_area_ship_type("kiln")
+        floor.title = "The Kiln"
+        floor.uses_vision = True
+        floor.custom_background = CloudBackground()
+
+        floor.music = None
+        floor.sky_texture = BGL.assets.get("KT-forest/texture/starfield1")
+        floor.bg_texture = BGL.assets.get("KT-forest/texture/nebula")
+        floor.parallax_sky = 0.01
+        floor.parallax_bg = 0.04
+        floor.fog_level_base = 1.0
+        floor.override_base_zoom = 0.2
+
+        floor.uses_vision = True
+        return floor
+
     def build_area_grey_world(self):
         area_raw = BGL.assets.get("KT-forest/textfile/grey_world")
         area_def = get_area_data( area_raw )
@@ -285,6 +303,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             floor = self.build_area_chase()
         if key == "platform":
             floor = self.build_area_platform()
+        if key == "kiln":
+            floor = self.build_area_kiln()
         if key == "grey_world":
             floor = self.build_area_grey_world()
         if key == "crystals1":
@@ -379,7 +399,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         ### ENTRY POINT
 ###########################
-        loading_floor = "ship"
+        loading_floor = "kiln"
         self.floor = self.create_tickable(self.load_floor(loading_floor))
         self.current_floor_key = loading_floor
         self.current_floor_target = None
@@ -404,8 +424,13 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             with BGL.context.render_target( Game.god_buffer):
 
                 BGL.context.clear( 1.0,1.0,1.0,1.0);
-                self.background.camera = self.camera
-                self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
+
+                if(self.floor.custom_background):
+                    self.floor.custom_background.camera = self.camera
+                    self.floor.custom_background.render(self.floor)
+                else:
+                    self.background.camera = self.camera
+                    self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
                 self.floor.render()
                 self.fog.camera = self.camera
                 self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
@@ -462,6 +487,9 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             KTState.paused = not KTState.paused
                 
         BaseGame.tick(self)
+
+        if(self.floor.custom_background):
+            self.floor.custom_background.tick()
 
         if self.player.hp <= 0:
             self.player_dead_frames += 1
