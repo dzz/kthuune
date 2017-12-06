@@ -1419,6 +1419,7 @@ class Prop(Object):
             p.z_index = -1000
             p.buftarget="underfloor"
         else:
+            p.buftarget = "floor"
             p.z_index = 1
 
         return p

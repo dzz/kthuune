@@ -9,6 +9,7 @@ uniform float fog_level;
 uniform vec2 camera_position;
 uniform sampler2D bg_texture;
 uniform sampler2D vision_tex;
+uniform float lightning;
 
 vec2 shift(vec2 v) {
     return vec2(v.x-0.5,v.y-0.5);
@@ -31,7 +32,7 @@ void main(void) {
 
     vec4 texel = texture( bg_texture, unshift(shifted*0.2) );
 
-    texel.rgb*=uv.y;
+    texel.rgb*=uv.y*lightning;
 
 
     gl_FragColor = texel*vision_texel;

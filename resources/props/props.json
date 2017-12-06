@@ -12,7 +12,8 @@
             { "name" : "lacuna_canal", "filename" : "{package_path}/lacuna_canal.png", "filtered" : false },
             { "name" : "chase", "filename" : "{package_path}/chase.png", "filtered" : false },
             { "name" : "platform", "filename" : "{package_path}/platform.png", "filtered" : false },
-            { "name" : "kiln_proc2", "filename" : "{package_path}/kiln_proc2.png", "filtered" : false }
+            { "name" : "kiln_proc2", "filename" : "{package_path}/kiln_proc2.png", "filtered" : true },
+            { "name" : "godtree", "filename" : "{package_path}/godtree.png", "filtered" : true }
         ]
     }
 }

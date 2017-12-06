@@ -239,12 +239,13 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         floor.fog_level_base = 1.0
 
         floor.uses_vision = True
+        floor.god_shader = BGL.assets.get("KT-compositor/shader/oort_god")
         return floor
 
     def build_area_kiln(self):
         floor = self.build_area_ship_type("kiln")
         floor.title = "The Kiln"
-        floor.uses_vision = True
+        floor.uses_vision = False
         floor.custom_background = CloudBackground()
 
         floor.music = None
