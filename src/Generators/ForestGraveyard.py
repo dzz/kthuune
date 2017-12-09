@@ -31,6 +31,8 @@ from .Enemies.SnapEnemy import SnapEnemy
 from .Particles.SplatterParticle import SplatterParticle
 from .LevelEffects.Blood import Blood
 from .LevelEffects.SpikeyWave import SpikeyWave
+from .LevelEffects.ChromaticWave import ChromaticWave
+from .Locomotion.Totem import Totem
 
 class OnewayFadeSwitch(Object):
     def parse(od, df):
@@ -1468,7 +1470,7 @@ class Acolyte(SnapEnemy):
             self.light_radius = uniform(30.0,50.0)
             self.v = [0.0,0.0]
             self.texture = Acolyte.textures[1]
-            self.floor.create_object( Flare( p = [ self.p[0], self.p[1] ] ) )
+            self.floor.create_object( ChromaticWave( p = [ self.p[0], self.p[1] ] ) )
             if( self.stimer > 25 ):
                 self.stimer = 0
                 self.state = Acolyte.STATE_FIRING_SHOT
@@ -1938,7 +1940,7 @@ class Skeline(SnapEnemy):
             self.light_radius = uniform(10.0,20.0)
             self.v = [0.0,0.0]
             self.texture = Skeline.textures[2]
-            self.floor.create_object( Flare( p = [ self.p[0], self.p[1] ] ) )
+            self.floor.create_object( ChromaticWave( p = [ self.p[0], self.p[1] ] ) )
             if( self.stimer > 20 ):
                 self.stimer = 0
                 self.state = Skeline.STATE_FIRING_SHOT
@@ -1975,34 +1977,6 @@ class Skeline(SnapEnemy):
         bp['translation_local'][1] = -0.4
         return bp
     
-class Flare(Object):
-    texture = BGL.assets.get('NL-lights/texture/flare')
-    def customize(self):
-        self.tick_type = Object.TickTypes.PURGING
-        self.texture = Flare.texture
-        self.size = [0.1,0.1]
-        self.ttl = 90
-        self.rp = uniform(-0.1,0.1)
-        self.xp = uniform(1.01,1.08)
-        self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
-        self.visible = False
-        self.buftarget = "floor"
-        self.z_index = 100
-
-    def tick(self):
-        #self.light_color[3] = self.light_color[3] * uniform(0.7,0.9)
-        #self.color[3] = self.color[3] * uniform(0.7,0.9)
-        self.rad = self.rad + self.rp
-        self.light_radius = uniform(10.0,80.0)
-
-        self.size[0] = self.size[0]*self.xp
-        self.size[1] = self.size[1]*self.xp
-        self.ttl = self.ttl - 1
-        if(self.ttl<0):
-            self.floor.objects.remove(self)
-            return False
-
-        return True
 
 
 
@@ -2262,7 +2236,7 @@ class Worm(SnapEnemy):
         if(self.hp<0.0):
             SnapEnemy.die(self)
             for fi in range(0,3):
-                self.floor.create_object( Flare( p = [ self.p[0], self.p[1] ] ) )
+                self.floor.create_object( ChromaticWave( p = [ self.p[0], self.p[1] ] ) )
             return False
 
         return True
@@ -2326,42 +2300,6 @@ class Elder(Object):
         ###    if self.floor.player.get_pad().button_down( BGL.gamepads.buttons.X ):
         ###        pass
 
-class Totem(Object):
-    texture = BGL.assets.get('KT-forest/texture/totem')
-
-    def customize(self):
-        self.snap_type = SnapEnemy.TOTEM
-        self.texture = Totem.texture
-        self.buftarget = "popup"
-        self.size =  [ 4.0, 4.0 ]
-        self.tick_type = Object.TickTypes.TICK_FOREVER
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_color =  [ 0.7,0.4,0.9,1.0]
-        self.light_radius = 5
-        #self.physics = { "radius" : 1.0, "mass"   : 100.0, "friction" : 0.0 } 
-        self.physics = None
-        self.z_index = 1
-        self.anim_index = 0
-        self.reset_timer = 0
-
-    def tick(self):
-        self.reset_timer = self.reset_timer+1
-        if(self.reset_timer == - 50):
-            KSounds.play(KSounds.totem_restored)
-        if(self.reset_timer==0):
-            self.floor.snap_enemies.append(self)
-            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-            self.light_radius = 17
-            self.visible = True
-        self.anim_index += 0.1
-        self.light_radius = 7 + (3*sin(self.anim_index))
-
-    def sleep_totem(self):
-        KSounds.play(KSounds.totem_hit)
-        self.floor.snap_enemies.remove(self)
-        self.reset_timer = -170
-        self.visible = False
-        self.light_type = Object.LightTypes.NONE
 
 class SkullDeath(Object):
     texture = BGL.assets.get('KT-forest/texture/skull0000')
