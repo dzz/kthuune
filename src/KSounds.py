@@ -45,6 +45,8 @@ class KSounds:
     mining2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/mining2")) 
     slimecrush = audio.baudy_load_sound(BGL.assets.get("KT-player/path/slimecrush")) 
     slimekill = audio.baudy_load_sound(BGL.assets.get("KT-player/path/slimekill")) 
+    atmozap1 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/atmozap1")) 
+    atmozap2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/atmozap2")) 
 
     typewriter_keys = [
         audio.baudy_load_sound(BGL.assets.get("KT-player/path/tkey1")) ,

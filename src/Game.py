@@ -255,7 +255,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         floor.parallax_bg = 0.04
         floor.fog_level_base = 1.0
         floor.override_base_zoom = 0.2
-
+        floor.fuzz_amt = 1.4
         floor.uses_vision = True
         return floor
 

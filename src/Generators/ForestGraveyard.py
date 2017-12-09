@@ -21,7 +21,7 @@ from math import floor
 from .magic_lines import vscan_line, fill_scanline
 import random
 from client.beagle.Newfoundland.GeometryUtils import segments_intersect
-from .ShipComputer import ShipComputer, TeleportControl, TelekineControl, SwordControl, ReturnToShip
+from .ShipComputer import ShipComputer, TeleportControl, TelekineControl, SwordControl, ReturnToShip, CommenceBirth
 
 from ..KSounds import KSounds
 
@@ -358,6 +358,14 @@ class FTermStand(Object):
         self.texture = FTermStand.texture
         self.tick_type = Object.TickTypes.STATIC
 
+class BTerm(Object):
+    def parse(od,df):
+        ret = []
+        ret.append(FTerm(p=[od["x"],od["y"]]))
+        ret.append(FTermStand(p=[od["x"],od["y"]]))
+        ret.append(Terminal(title="Commence Birth", p=[od["x"],od["y"]]))
+        return ret
+
 class Firefly(Object):
     
     texture = BGL.assets.get('KT-player/texture/firefly')
@@ -656,6 +664,10 @@ class Terminal(Object):
 
         self.install_percent = 0
 
+        if self.title == "Commence Birth":
+            self.ui = CommenceBirth(self)
+            self.term_installed = True
+            self.install_percent = 100
         if self.title == "Teleport to Ship":
             self.ui = ReturnToShip(self)
             self.term_installed = True
@@ -3284,6 +3296,9 @@ class ForestGraveyard():
 
             if od["key"] in ["fterm"]:
                 self.objects.extend(FTerm.parse(od,df))
+
+            if od["key"] in ["bterm"]:
+                self.objects.extend(BTerm.parse(od,df))
 
 
 

@@ -240,6 +240,18 @@ class ReturnToShip(TeleportControl):
         self.synch_secondary_items()
         self.selected_destination = None
 
+class CommenceBirth(TeleportControl):
+    def setup_options(self):
+        self.top_level_items = [ "destination" ]
+
+        self.second_level_items_map = {
+            "destination" : [ "COMMENCE BIRTH" ]
+        }
+
+        self.in_menu = True
+        self.synch_secondary_items()
+        self.selected_destination = None
+
 
 class TelekineControl(MenuTerminal):
     def setup_options(self):

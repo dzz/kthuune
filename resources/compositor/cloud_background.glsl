@@ -33,7 +33,8 @@ void main(void) {
     vec4 texel = texture( bg_texture, unshift(shifted*0.2) );
 
     texel.rgb*=uv.y*lightning;
+    texel.a = 0.2;
 
+    gl_FragColor = texel;
 
-    gl_FragColor = texel*vision_texel;
 }

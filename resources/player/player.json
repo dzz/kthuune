@@ -133,7 +133,9 @@
             { "name" : "mining2", "path" : "{package_path}/sounds/mining2.wav" },
             { "name" : "firefly", "path" : "{package_path}/sounds/firefly.wav" },
             { "name" : "slimecrush", "path" : "{package_path}/sounds/slimecrush.wav" },
-            { "name" : "slimekill", "path" : "{package_path}/sounds/slimekill.wav" }
+            { "name" : "slimekill", "path" : "{package_path}/sounds/slimekill.wav" },
+            { "name" : "atmozap1", "path" : "{package_path}/sounds/atmozap1.wav" },
+            { "name" : "atmozap2", "path" : "{package_path}/sounds/atmozap1.wav" }
         ]
     }
 }
