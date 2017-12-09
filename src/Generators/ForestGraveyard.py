@@ -30,7 +30,6 @@ from ..Abilities import Abilities
 
 class OnewayFadeSwitch(Object):
     def parse(od, df):
-
         if "radius" in od["meta"]:
             radius = float(od["meta"]["radius"])
         else:
@@ -668,7 +667,7 @@ class Terminal(Object):
             self.ui = CommenceBirth(self)
             self.term_installed = True
             self.install_percent = 100
-        if self.title == "Teleport to Ship":
+        elif self.title == "Teleport to Ship":
             self.ui = ReturnToShip(self)
             self.term_installed = True
             self.install_percent = 100

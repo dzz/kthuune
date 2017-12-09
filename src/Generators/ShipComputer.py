@@ -206,6 +206,11 @@ class TeleportControl(MenuTerminal):
             BGL.lotext.render_text_pixels(string,8,223,[ 1.0,1.0,1.0 ])
             BGL.lotext.render_text_pixels("Confirm Teleport?",90,120,[ 1.0,1.0,1.0 ])
     
+
+    def get_dest(self):
+            player = self.owner.floor.player
+            dest = player.world_map.systems[ player.current_system ]["destinations"][self.selected_destination]
+
     def key_select(self):
         if(self.in_menu):
             self.in_menu = False
@@ -213,7 +218,8 @@ class TeleportControl(MenuTerminal):
             KSounds.play( KSounds.term_select )
         else:
             player = self.owner.floor.player
-            dest = player.world_map.systems[ player.current_system ]["destinations"][self.selected_destination]
+            #dest = player.world_map.systems[ player.current_system ]["destinations"][self.selected_destination]
+            dest = self.get_dest()
 
             def animation_finished():
                 player.visible = True
@@ -252,6 +258,8 @@ class CommenceBirth(TeleportControl):
         self.synch_secondary_items()
         self.selected_destination = None
 
+    def get_dest(self):
+        return { "unlocked" : True, "area_name" : "lacuna_canal", "pin_name" : None }
 
 class TelekineControl(MenuTerminal):
     def setup_options(self):
