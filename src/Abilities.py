@@ -1,5 +1,5 @@
 class Abilities:
-    Born = True
+    Born = False
     Telekine = False
     InstallTelekine = False
     TelekineInstalled = False

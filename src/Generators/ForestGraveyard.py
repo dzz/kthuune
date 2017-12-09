@@ -27,6 +27,10 @@ from ..KSounds import KSounds
 
 from ..GeneratorOptions import GeneratorOptions
 from ..Abilities import Abilities
+from .Enemies.SnapEnemy import SnapEnemy
+from .Particles.SplatterParticle import SplatterParticle
+from .LevelEffects.Blood import Blood
+from .LevelEffects.SpikeyWave import SpikeyWave
 
 class OnewayFadeSwitch(Object):
     def parse(od, df):
@@ -354,6 +358,7 @@ class FTermStand(Object):
         self.buftarget = "floor"
         self.texture = FTermStand.texture
         self.tick_type = Object.TickTypes.STATIC
+        self.physics = { "radius" : 1.2, "mass"   : 900, "friction" : 0.3 }
 
 class BTerm(Object):
     def parse(od,df):
@@ -363,88 +368,6 @@ class BTerm(Object):
         ret.append(Terminal(title="Commence Birth", p=[od["x"],od["y"]]))
         return ret
 
-class Firefly(Object):
-    
-    texture = BGL.assets.get('KT-player/texture/firefly')
-
-    def __init__(self,**kwargs):
-        Object.__init__(self,**kwargs)
-        self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
-        self.light_texture = BGL.assets.get('NL-lights/texture/radial')
-        self.texture = Firefly.texture
-        self.buftarget = "additive"
-        self.is_pixie = False
-        self.light_color = [ 1.0,0.6,0.3,1.0 ]
-        self.color = [ 1.0,0.8,0.2,1.0]
-        self.light_radius = 15
-        self.tick_type = Object.TickTypes.PURGING
-        self.life = 0
-        self.trigger_life = uniform( 30.0,60.0 )
-        self.base_p = self.p
-
-        
-        self.size = [0.7+uniform(0.0,0.3),0.7+uniform(0.0,0.3)]
-        self.visible = True
-        self.offs = uniform(0.0,3.14)
-
-        spd = uniform(0.5,0.9)
-        d = uniform(-3.14,3.14)
-        self.vx = cos(d)*spd
-        self.vy = sin(d)*spd
-
-    def tick(self):
-        self.life += 1
-
-        self.p[0] = (self.p[0] *0.6) + (self.base_p[0]*0.4)
-        self.p[1] = (self.p[1] *0.6) + (self.base_p[1]*0.4)
-        self.p[0] = self.base_p[0]
-        self.p[1] = self.base_p[1]
-
-        if(self.life < self.trigger_life ):
-            self.base_p[0] += self.vx
-            self.base_p[1] += self.vy
-        
-            self.vx *= 0.93
-            self.vy *= 0.97
-
-            self.size[0]*=1.01
-            self.size[1]*=1.01
-
-            self.vx += sin(self.offs+(self.life*0.1))*0.03
-            self.vy += cos(self.offs+(self.life*0.2))*0.03
-        else:
-            self.size[0]*=0.96
-            self.size[1]*=0.96
-            dx = self.floor.player.p[0] - self.base_p[0]
-            dy = self.floor.player.p[1] - self.base_p[1]
-
-            self.base_p[0] += dx/5.0
-            self.base_p[1] += dy/5.0
-
-            if self.mdist(self.floor.player)<1.0:
-                self.floor.remove_object(self)
-                if not self.is_pixie:
-                    self.floor.player.add_firefly()
-                    for x in range(0,3):
-                        self.floor.create_object(PixieDust( p = [ self.p[0], self.p[1] ]))
-                return False
-
-        self.rad = atan2( self.vx, self.vy ) + (self.life/10.0)
-        return True
-
-class PixieDust(Firefly):
-    def __init__(self,**kwargs):
-        Firefly.__init__(self, **kwargs)
-        self.texture = BGL.assets.get('NL-lights/texture/flare')
-        self.color = [ 0.0,0.8,1.0,0.5]
-        self.size[0] *=2
-        self.size[1] *=2
-        self.is_pixie = True
-        spd = uniform(0.1,0.2)
-        d = uniform(-3.14,3.14)
-        self.vx = cos(d)*spd
-        self.vy = sin(d)*spd
-        self.trigger_life = uniform(20.0,30.0)
     
 
 class CrystalChunk(Object):
@@ -833,21 +756,6 @@ class SpeechBubble(Object):
         #    self.current_script_time += 1
         #pass            
 
-class Blood(Object):
-    texture = [
-        BGL.assets.get("KT-forest/texture/blood0000"),
-        BGL.assets.get("KT-forest/texture/blood0001"),
-        BGL.assets.get("KT-forest/texture/blood0002"),
-        BGL.assets.get("KT-forest/texture/blood0003"),
-    ]
-
-    def customize(self):
-        self.rad = uniform(0.0,3.14*2)
-        self.size = [ 3.0+uniform(0.0,1.0),3.0+uniform(0.0,1.0)]
-        self.buftarget = "floor"
-        self.tick_type = Object.TickTypes.STATIC
-        self.texture = choice(Blood.texture)
-        pass
 
 class SoftwarePickup(Object):
     textures = [ 
@@ -1062,36 +970,6 @@ class HealthVial(Object):
 
         return True
 
-class AttackInfo(Object):
-    def customize(self):
-        self.tick_type = Object.TickTypes.PURGING
-        self.buffer = BGL.framebuffer.from_dims( len(self.message)*8, 8)
-        self.texture = self.buffer.get_texture()      
-        self.buftarget = "hud"
-        self.size = [ 1.0*len(self.message), -1.0 ]
-
-        self.lifetime = 100
-        with BGL.context.render_target(self.buffer):
-            BGL.context.clear(0.0,0.0,0.0,0.0)
-            BGL.lotext.render_text_pixels( self.message, 0,0, [1.0,1.0,1.0] )
-
-    def tick(self):
-        if self.lifetime<60:
-            self.size[0] *= 1.28
-            self.size[1] *= 1.28
-    
-        if self.lifetime<80:
-            self.color[3] = self.color[3]*0.95
-            self.color[0] = uniform(0.0,1.0)
-            self.color[1] = uniform(0.0,1.0)
-            self.color[2] = uniform(0.0,1.0)
-
-        if self.lifetime>0:
-            self.lifetime -=1
-            return True
-        else:
-            self.floor.objects.remove(self)
-            return False
 
 
 class FactoryLight(Object):
@@ -1208,146 +1086,6 @@ class Door(Object):
 
         return [ [ self.parsed_pin, [ex,ey] ] ]
         
-
-class SnapEnemy(Object):
-    TOTEM = 0
-    ENEMY = 1
-
-    def get_firefly_count(self):
-        return 5
-
-    def custom_die(self):
-        pass
-    def can_see_player(self):
-        test_segment = [ [ self.floor.player.p[0], self.floor.player.p[1] ], [self.p[0], self.p[1] ] ]
-        for segment in self.floor.get_light_occluders():
-            if segments_intersect( segment, test_segment ):
-                return False
-        return True
-
-    def die(self):
-
-        self.floor.player.boost_run_stamina()
-        #self.floor.player.add_dm_message("You killed an enemy")
-        if self in self.floor.objects:
-            #hack
-            self.floor.objects.remove(self)
-        if(self in self.floor.snap_enemies):
-            self.floor.snap_enemies.remove(self)
-        #self.floor.create_object( SkullDeath( p = [ self.p[0], self.p[1] ] ) )
-        self.floor.player.set_hud_message("KILL!", 60)
-        self.floor.player.notify_enemy_killed()
-        self.floor.freeze_frames = 3
-        
-        #if(uniform(0.0,1.0) > 0.85):
-        #    self.floor.create_object(HealthVial(p=[ self.p[0], self.p[1]]))
-
-        self.floor.create_object(Blood(p=[self.p[0],self.p[1]]))
-        self.custom_die()
-        for x in range(0,self.get_kill_particles()):
-            spltr = SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14))
-            spltr.color = [0.0,0.0,0.0,1.0]
-            spltr.light_color = [ 0.0,1.0,0.0,1.0]
-            spltr.size[0]*=uniform(1.0,1.5)
-            self.floor.create_object(spltr)
-
-        for x in range(0, self.get_firefly_count()):
-            self.floor.create_object( Firefly( p = [ self.p[0], self.p[1] ] ))
-        self.floor.player.impulse_hittables()
-
-
-    def get_kill_particles(self):
-        return 15
-
-    def parse(od,df):
-        o = SnapEnemy( p = [ od["x"],od["y"] ] )
-        df.snap_enemies.append(o)
-        return o
-
-    def raise_critical_attack(self):
-        self.snap_effect_emit = 20
-        self.floor.player.notify_crit()
-        self.floor.create_object( SwordCrit( p = [ self.p[0], self.p[1]-30 ]))
-
-    def flash(self,r,g,b):
-        self.flash_color = [ r,g,b,1.0 ]
-
-    def receive_snap_attack(self, was_crit):
-
-        self.iframes = 20
-        self.snap_effect_emit = 10
-
-        crit = 1
-
-        #if(uniform(0.0,1.0)< (self.floor.player.crit_chance*self.floor.player.get_crit_mod())):
-        if was_crit:
-            crit = 1.8
-            print("CRITICAL")
-            self.raise_critical_attack()
-
-        attack_amt = (self.floor.player.attack_str*crit) - self.defense
-
-        if(attack_amt<=0):
-            attack_amt = 1
-
-        attack_amt += uniform(0, self.floor.player.attack_bonus) * self.floor.player.attack_str
-
-        attack_amt = floor(attack_amt)
-        print("ATTACK -> {0}".format(attack_amt))
-
-        self.flash(1.0,0.0,0.0)
-        self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="{0}".format(attack_amt)))
-        self.hp = self.hp - attack_amt
-
-        for x in range(0,5):
-            spltr = SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14))
-            spltr.color = [0.0,0.0,0.0,1.0]
-            spltr.light_color = [ 0.0,1.0,0.0,1.0]
-            spltr.size[0]*=uniform(1.0,1.5)
-            self.floor.create_object(spltr)
-
-        if self.floor.player.snap_animation_buffer>0 and self.hp<=0:
-            r = self.tick()
-            if not r:
-                if self in self.floor.purging_tick_manager.tickables:
-                    self.floor.purging_tick_manager.tickables.remove(self)
-
-    def fade_flash(self):
-        if(self.flash_color[3]>0.1):
-            self.flash_color[3] *= 0.935
-        else:
-            self.flash_color[3] = 0.0
-
-    def tick(self):
-        self.fade_flash()
-
-        if(self.iframes>0):
-            self.iframes -=1
-        if(self.snap_effect_emit>0):
-            self.snap_effect_emit = self.snap_effect_emit - 1
-            self.floor.create_object( Splat( p = self.p ) )
-
-        self.light_radius = uniform(2.0,12.0)
-        return True
-
-    def customize(self):
-        self.flash_color = [ 1.0,0.0,0.0,1.0 ]
-        self.snap_type = SnapEnemy.ENEMY
-        self.snap_effect_emit = 0
-        self.tick_type = Object.TickTypes.PURGING
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_radius = 10.0
-        self.light_color = [ 1.0, 0.8, 0.0, 1.0 ]
-        self.visible = True
-        self.z_index = 1
-        self.buftarget = "popup"
-        self.texture = Skeline.textures[2]
-        self.size = [ 1.75, 1.75 ]
-        self.set_combat_vars(self)
-
-    def set_combat_vars(self):
-        self.hp = 85
-        self.defense = 10
 
 class AreaSwitch(Object):
     def customize(self):
@@ -1483,53 +1221,6 @@ class Sword(Object):
 class vconf():
     visRad = 50
 
-class SplatterParticle(Object):
-    def __init__(self,**kwargs):
-        Object.__init__(self,**kwargs)
-
-        self.texture = choice(Blood.texture)
-
-        if "ptexture" in self.__dict__:
-            self.texture = self.ptexture 
-
-        self.buftarget = "popup"
-        self.tick_type = Object.TickTypes.PURGING
-
-        #self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
-        #self.light_texture = BGL.assets.get('NL-lights/texture/radial')
-        #self.light_radius = 15
-        self.lifespan = 90
-        self.light_color = [ 1.0,0.7,0.0,0.0 ]
-        self.color = [1.0,0.5,0.5,1.0]
-
-        self.size = [ 3.8,3.8 ]
-        if "ptexture" in self.__dict__:
-            self.size = [ 5.0,5.0] 
-
-        self.snapshot_fields = [ 'p' ]
-
-        spd = 0.3 + uniform(0.2,0.8)
-        self.vx = cos( self.rad )*spd
-        self.vy = sin( self.rad )*spd
-        self.rad = uniform(-3.14,3.14)
-
-        
-    def tick(self):
-        self.color[3]*=uniform(0.98,0.999)
-        self.light_radius*=0.95
-        self.vx*=0.9
-        self.vy*=0.9
-        self.vy+=0.02
-        self.p[0] = self.p[0] + self.vx 
-        self.p[1] = self.p[1] + self.vy 
-
-        self.size[0]*=0.94
-        self.size[1]*=0.94
-        self.lifespan = self.lifespan-1
-        if(self.lifespan<0):
-            self.floor.objects.remove(self)
-            return False
-        return True
 
 class ERangedMagic(Object):
     arrow_texture = BGL.assets.get("KT-player/texture/flare")
@@ -1620,7 +1311,7 @@ class ERangedMagic(Object):
 
                 if(self.player_touch_frames>7):
                     self.floor.player.receive_ranged_attack(self)
-                    self.floor.create_object( Splat( p = self.p, color=[1.0,0.0,0.0,1.0] ) )
+                    self.floor.create_object( SpikeyWave( p = self.p, color=[1.0,0.0,0.0,1.0] ) )
                     self.floor.objects.remove(self)
 
                     for x in range(0,25):
@@ -2314,39 +2005,6 @@ class Flare(Object):
         return True
 
 
-class Splat(Object):
-    textures = [
-        BGL.assets.get('KT-forest/texture/splat0000'),
-        BGL.assets.get('KT-forest/texture/splat0001'),
-        BGL.assets.get('KT-forest/texture/splat0002'),
-        BGL.assets.get('KT-forest/texture/splat0003'),
-    ]
-    def customize(self):
-        self.tick_type = Object.TickTypes.PURGING
-        self.cooldown = 80
-        self.rad = uniform(-3.14,3.14)
-        self.buftarget = "popup"
-        self.zindex = 100
-        self.size = [ uniform(1.3,2.7), uniform(1.3,2.7) ]
-        self.spin = uniform(-0.1,0.1)
-
-    def get_shader_params(self):
-        sp = Object.get_shader_params(self)
-        sp["filter_color"] = [1.0,1.0,1.0,float(self.cooldown)/80.]
-        return sp
-
-    def tick(self):
-        self.floor.add_fog( self, 0.1 )
-        self.size[0] = self.size[0] * 1.2 
-        self.size[1] = self.size[1] * 1.2 
-        self.rad = self.rad + self.spin
-        self.cooldown = self.cooldown - 4.0
-        if(self.cooldown<=0):
-            self.floor.objects.remove(self)
-            return False
-        else:
-            self.texture = Splat.textures[int(floor((80-self.cooldown) / 80)) ]
-            return True
 
 class EglanBlob(SnapEnemy):
 
@@ -2599,7 +2257,7 @@ class Worm(SnapEnemy):
                     self.floor.player.next_dashcombo()
                     self.v[0] = self.v[0]*-8
                     self.v[1] = self.v[1]*-8
-                    self.floor.create_object( Splat( p = self.p ) )
+                    self.floor.create_object( SpikeyWave( p = self.p ) )
 
         if(self.hp<0.0):
             SnapEnemy.die(self)
@@ -2745,45 +2403,6 @@ class SkullDeath(Object):
             self.delay = self.delay + 1
             return True
 
-class SwordCrit(Object):
-    texture = BGL.assets.get('KT-player/texture/sword')
-
-    def customize(self):
-        self.texture = SwordCrit.texture
-        self.buftarget = "hud"
-
-        self.size =  [ 9.0, 9.0 ]
-        self.rad = 3.14/2
-        #self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_type = Object.LightTypes.NONE
-        self.light_color =  [ 0.0,1.0,0.0,1.0]
-        self.color = [ 1.0,1.0,1.0,0.5]
-        self.light_radius = 50.0
-        self.physics = None
-        self.z_index = 9000
-        self.tick_type = Object.TickTypes.PURGING
-        self.delta_vy = 0.3
-        self.lifetime = 0
-        self.delay = 0
-        self.visible = False
-        self.anim_tick = 0.2
-
-    def tick(self):
-
-        if(self.delay> 5):
-            self.visible = True
-            self.lifetime = self.lifetime + 1
-            self.p[1] = self.p[1] + self.delta_vy
-            self.delta_vy *= 1.2
-
-            self.anim_tick = self.anim_tick * 1.08
-            if(self.lifetime > 30):
-                self.floor.objects.remove(self)
-                return False
-            return True
-        else:
-            self.delay = self.delay + 1
-            return True
         
         
 
