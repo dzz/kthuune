@@ -210,6 +210,7 @@ class TeleportControl(MenuTerminal):
     def get_dest(self):
             player = self.owner.floor.player
             dest = player.world_map.systems[ player.current_system ]["destinations"][self.selected_destination]
+            return dest
 
     def key_select(self):
         if(self.in_menu):

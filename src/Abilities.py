@@ -1,9 +1,9 @@
 class Abilities:
-    Born = False
+    Born = True
     Telekine = False
     InstallTelekine = False
     TelekineInstalled = False
-    Sword = False
+    Sword = True
     InstallCentral = False
     CentralInstalled = False
     ThoriumAmount = 2

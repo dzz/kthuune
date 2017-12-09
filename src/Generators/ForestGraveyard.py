@@ -78,9 +78,7 @@ class TumorCrab(Object):
         self.life = 0.0
 
     def tick(self):
-
         if self.active:
-
             if(self.life<1.0):
                 self.life += 0.01
             self.light_color = [ 1.0,uniform(0.5,0.9),uniform(0.3,0.7),1.0 ]

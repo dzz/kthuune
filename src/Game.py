@@ -400,7 +400,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         ### ENTRY POINT
 ###########################
-        loading_floor = "kiln"
+        loading_floor = "platform"
         self.floor = self.create_tickable(self.load_floor(loading_floor))
         self.current_floor_key = loading_floor
         self.current_floor_target = None
