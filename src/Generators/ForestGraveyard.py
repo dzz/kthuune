@@ -29,35 +29,12 @@ from ..GeneratorOptions import GeneratorOptions
 from ..Abilities import Abilities
 from .Enemies.SnapEnemy import SnapEnemy
 from .Particles.SplatterParticle import SplatterParticle
+from .Particles.CrystalChunk import CrystalChunk
 from .LevelEffects.Blood import Blood
 from .LevelEffects.SpikeyWave import SpikeyWave
 from .LevelEffects.ChromaticWave import ChromaticWave
 from .Locomotion.Totem import Totem
-
-class OnewayFadeSwitch(Object):
-    def parse(od, df):
-        if "radius" in od["meta"]:
-            radius = float(od["meta"]["radius"])
-        else:
-            radius = 5
-            
-        return OnewayFadeSwitch(trigger_radius=radius, p=[od["x"],od["y"]], target_area = od["meta"]["target"])
-
-    def customize(self):
-        self.visible = False
-        self.tick_type = Object.TickTypes.PURGING
-        self.fade_time = 60
-        self.triggered = False
-
-    def tick(self):
-        if self.mdist( self.floor.player )< self.trigger_radius:
-            self.triggered = True
-            def next_callback():
-                self.floor.game.next_area( self.target_area, None )
-            self.floor.camera.grab_cinematic( self, self.fade_time, next_callback )
-            self.floor.game.trigger_fade( self.fade_time )
-            return False
-        return True
+from .Locomotion.OnewayFadeSwitch import OnewayFadeSwitch
 
         
 
@@ -372,56 +349,6 @@ class BTerm(Object):
 
     
 
-class CrystalChunk(Object):
-    textures = [
-        BGL.assets.get('KT-forest/texture/crystal_1'),
-        BGL.assets.get('KT-forest/texture/crystal_2'),
-        BGL.assets.get('KT-forest/texture/crystal_3'),
-        BGL.assets.get('KT-forest/texture/crystal_4'),
-        BGL.assets.get('KT-forest/texture/blocker1'),
-        BGL.assets.get('KT-forest/texture/blocker2'),
-    ]
-    def __init__(self,**kwargs):
-        Object.__init__(self,**kwargs)
-        self.rad = uniform(-3.14,3.14)
-        self.texture = choice(CrystalChunk.textures)
-        self.buftarget = "popup"
-        self.tick_type = Object.TickTypes.PURGING
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_radius = 15
-        self.lifespan = 90
-        self.light_color = [ 1.0,0.7,0.0,0.0 ]
-        self.color = [1.0,1.0,1.0,1.0]
-
-        sz = uniform(2.0,4.0)
-        self.size = [ sz,sz ]
-        self.snapshot_fields = [ 'p' ]
-
-        spd = 0.3 + uniform(0.2,0.8)
-        self.vx = cos( self.rad )*spd
-        self.vy = sin( self.rad )*spd
-        self.rad = uniform(-3.14,3.14)
-
-        
-    def tick(self):
-        self.color[3]*=uniform(0.98,0.999)
-        self.light_radius*=0.95
-        self.rad+=0.01
-        self.vx*=0.9
-        self.vy*=0.9
-        self.vy+=0.02
-        self.p[0] = self.p[0] + self.vx 
-        self.p[1] = self.p[1] + self.vy 
-
-        self.size[0]*=0.94
-        self.size[1]*=0.94
-
-        self.color[3]*=0.99
-        self.lifespan = self.lifespan-1
-        if(self.lifespan<0):
-            self.floor.objects.remove(self)
-            return False
-        return True
 
 class Slime(Breakable):
     def parse(od,df):
@@ -1088,38 +1015,6 @@ class Door(Object):
 
         return [ [ self.parsed_pin, [ex,ey] ] ]
         
-
-class AreaSwitch(Object):
-    def customize(self):
-        self.visible = False
-        self.tick_type = Object.TickTypes.TICK_FOREVER
-        self.trigger_active = True
-        self.rad2 = 15
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_color =  [ 2.8,2.7,2.0,1.0]
-        self.light_radius = 5.0
-
-    def tick(self):
-        dx = self.floor.player.p[0] - self.p[0]
-        dy = self.floor.player.p[1] - self.p[1]
-        d2 = (dx*dx)+(dy*dy)
-
-        if not self.trigger_active:
-            self.light_radius = 0.1
-        else:
-            if self.light_radius < 5.0:
-                self.light_radius = self.light_radius*1.2
-        if d2 > (self.rad2*5):
-
-            self.trigger_active = True
-        if self.trigger_active:
-            if d2 < (self.rad2*10):
-                self.floor.player.set_hud_message("go to {0} - {1}".format(self.target_area, self.target_switch))
-            if d2 < self.rad2:
-                self.trigger()
-
-    def trigger(self):
-        self.floor.game.next_area( self.target_area, self.target_switch )
 
 class ShipExterior(Object):
     texture = BGL.assets.get("KT-player/texture/ship_exterior")
