@@ -50,6 +50,7 @@ from .LevelProps.DeadK import DeadK
 from .LevelProps.ShipExterior import ShipExterior
 from .LevelProps.SpeechBubble import SpeechBubble
 from .LevelProps.Telekine import Telekine
+from .LevelProps.Prop import Prop
 from .Pickups.HealthVial import HealthVial
 from .Pickups.SoftwarePickup import SoftwarePickup
 from .Pickups.SwordPickup import SwordPickup
@@ -218,23 +219,6 @@ class Door(Object):
         return [ [ self.parsed_pin, [ex,ey] ] ]
         
 
-class Prop(Object):
-    def parse(pd):
-        p = Prop( texture = BGL.assets.get("KT-props/texture/" + pd["image"]))
-        p.p[0] = pd["x"]
-        p.p[1] = pd["y"]
-        p.size[0] = pd["w"]
-        p.size[1] = pd["h"]
-        p.r = pd["r"]
-
-        if "layer" in pd and pd["layer"]==0:
-            p.z_index = -1000
-            p.buftarget="underfloor"
-        else:
-            p.buftarget = "floor"
-            p.z_index = 1
-
-        return p
 
 class Firepot(Object):
     textures = [
