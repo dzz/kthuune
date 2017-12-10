@@ -3,6 +3,7 @@ from Beagle import API as BGL
 from math import sin,cos,atan2
 from ...KSounds import KSounds
 from ...Abilities import Abilities
+from random import choice
 
 class ResourcePickup(Object):
     textures = [ 
