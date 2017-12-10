@@ -13,6 +13,7 @@ class Telekine(Object):
         BGL.assets.get("KT-player/texture/birdman0001"),
         BGL.assets.get("KT-player/texture/birdman0002")
     ]
+
     def parse(od,df):
         Telekine.instance = Telekine(p=[od["x"],od["y"]])
         return Telekine.instance
