@@ -1,5 +1,6 @@
 from Newfoundland.Object import Object
 from Beagle import API as BGL
+from random import uniform
 
 class TumorCrab(Object):
     textures = BGL.assets.get('KT-forest/animation/tumorcrab')
