@@ -43,6 +43,8 @@ from .Locomotion.Totem import Totem
 from .Locomotion.OnewayFadeSwitch import OnewayFadeSwitch
 from .RangedEnemyAttacks.BasicProjectile import BasicProjectile        
 from .Configuration.vconf import vconf
+from .LevelProps.Egg import Egg
+from .LevelProps.FloatingPlayer import FloatingPlayer
 
 class Breakable(Object):
     def handle_pull(self):
@@ -51,96 +53,6 @@ class Breakable(Object):
         self.floor.player.v[0] += dx * 2.2
         self.floor.player.v[1] += dy * 2.2
 
-class FloatingPlayer(Object):
-    def parse(od,df):
-        FloatingPlayer.instance = FloatingPlayer(p=[od["x"],od["y"]])
-        return FloatingPlayer.instance
-
-    def customize(self):
-        self.buftarget = "floor"
-        self.tick_type = Object.TickTypes.PURGING
-        self.visible = True
-        self.fr = 0
-        self.fridx = 0.0
-        self.texture = BGL.assets.get('KT-player/texture/knight0018')
-        self.size = [ 2.0,2.0 ]
-        self.color = [ 0.0,1.0,0.0,0.7 ]
-        self.base_p = list(self.p)
-        self.z_index = 9000
-
-    def tick(self):
-        self.fridx += 1.0
-        if not self.floor.player.title_card.displaying():
-            self.fr += 1
-            self.p[0] = float(self.base_p[0] + uniform(-0.5,0.5)*(self.fr/80))
-        #self.p[1] = float(self.base_p[1] + (sin(self.fridx/20)*0.7))
-
-        offs = sin(self.fridx/20)*0.5
-        self.p[1] = float(self.base_p[1])+offs
-
-        if(self.fr<80):
-            return True
-        return False
-    
-class Egg(Object):
-    def parse(od,df):
-        Egg.instance = Egg(p=[od["x"],od["y"]])
-        return Egg.instance
-    frames = [
-        BGL.assets.get('KT-forest/texture/egg1'),
-        BGL.assets.get('KT-forest/texture/egg2'),
-        BGL.assets.get('KT-forest/texture/egg3'),
-        BGL.assets.get('KT-forest/texture/egg4'),
-        BGL.assets.get('KT-forest/texture/egg5'),
-        BGL.assets.get('KT-forest/texture/egg6'),
-        BGL.assets.get('KT-forest/texture/egg7'),
-        BGL.assets.get('KT-forest/texture/egg8'),
-    ]
-    def customize(self):
-        self.buftarget = "floor"
-        self.tick_type = Object.TickTypes.PURGING
-        self.visible = True
-        self.fr = 0
-        self.fridx = 0
-        self.texture = Egg.frames[0]
-        self.size = [ 8.0,8.0 ]
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_color = [ -1.0,1.0,-1.0,1.0 ]
-        
-
-    def tick(self):
-
-        self.fridx += 1
-        self.light_radius = 10+(cos(self.fridx/10)*5)
-        if not self.floor.player.title_card.displaying():
-            self.fr += 1
-
-        self.floor.camera.grab_cinematic( self, 5 )
-
-        if(self.fr<80):
-            self.texture = Egg.frames[int(self.fr/10)]
-            self.floor.player.visible = False
-
-            if(self.fr>40):
-                if(choice([True,False,False])):
-                    KSounds.play(
-                        choice([ 
-                            KSounds.slimekill,
-                            KSounds.slimecrush,
-                            KSounds.enemy_killed
-                        ]))
-                if choice([True,False,False]):
-                    self.floor.create_object(Blood(p=[self.p[0]+uniform(-3.0,3.0),self.p[1]+uniform(-3.0,3.0)]))
-                for x in range(0,5):
-                    self.floor.create_object( SplatterParticle( size = [ 5.0,5.0], ptexture = Slime.textures[0], rad= uniform(0.0,6.5), p = [ self.p[0], self.p[1]]))
-            return True
-
-        else:
-            self.floor.player.visible = True
-            self.floor.objects.remove(self)
-            self.floor.objects.remove(FloatingPlayer.instance)
-            Abilities.Born = True
-            return False
 
 class DeadK(Object):
     def parse(od,df):
