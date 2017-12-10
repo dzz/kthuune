@@ -1,4 +1,6 @@
 from Newfoundland.Object import Object
+from client.beagle.Newfoundland.GeometryUtils import segments_intersect
+
 from ..Particles.Firefly import Firefly
 from ..Particles.SplatterParticle import SplatterParticle
 from ..LevelEffects.SwordCrit import SwordCrit
