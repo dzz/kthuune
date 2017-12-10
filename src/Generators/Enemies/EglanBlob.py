@@ -7,7 +7,6 @@ from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 from ..LevelEffects.ChromaticWave import ChromaticWave
 from ...KSounds import KSounds
 from ..RangedEnemyAttacks.BasicProjectile import BasicProjectile
-from ..Hazards.WormField import WormField
 
 class EglanBlob(SnapEnemy):
 
