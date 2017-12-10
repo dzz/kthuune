@@ -3,7 +3,7 @@ class Abilities:
     Telekine = False
     InstallTelekine = True
     TelekineInstalled = False
-    Sword = True
+    Sword = False
     InstallCentral = False
     CentralInstalled = False
     ThoriumAmount = 2
