@@ -27,6 +27,7 @@ from ..KSounds import KSounds
 from ..KPlayer import Sword
 from ..GeneratorOptions import GeneratorOptions
 from ..Abilities import Abilities
+
 from .Hazards.WormField import WormField
 from .Enemies.SnapEnemy import SnapEnemy
 from .Enemies.Acolyte import Acolyte
@@ -47,6 +48,8 @@ from .LevelProps.Egg import Egg
 from .LevelProps.FloatingPlayer import FloatingPlayer
 from .LevelProps.DeadK import DeadK
 from .LevelProps.ShipExterior import ShipExterior
+from .Pickups.HealthVial import HealthVial
+from .Pickups.SoftwarePickup import SoftwarePickup
 
 class Breakable(Object):
     def handle_pull(self):
@@ -511,60 +514,6 @@ class SpeechBubble(Object):
         #pass            
 
 
-class SoftwarePickup(Object):
-    textures = [ 
-        BGL.assets.get("KT-player/texture/software"),
-    ]
-   
-    def parse(od,df):
-        o = SoftwarePickup( p = [ od["x"], od["y"] ], software_key = od["meta"]["key"] )
-        return o
-        
-    def customize(self):
-        self.fridx = 0
-        self.texture = SoftwarePickup.textures[0]
-        self.buftarget = "popup"
-        self.base_p = list(self.p)
-        self.tick_type = Object.TickTypes.PURGING
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_color = [ 0.0, 1.0, 1.0, 1.0 ]
-        self.light_radius = 25.
-        self.visible = True
-        self.size = [ 2.5,2.5 ]
-
-        self.label = "UNKNOWN SOFTWARE"
-        if self.software_key == "telekine":
-            self.label = "TELEKINE BIOMETRICS"
-        if self.software_key == "central":
-            self.label = "CENTRAL PROCESSING"
-
-    def tick(self):
-        self.visible = True
-
-        self.fridx = (self.fridx + 1) % 80
- 
-        y_offs = sin(self.fridx*(3.14/40.0))
-        self.light_radius = 25. + y_offs
-
-        self.size[0] = 2.5*y_offs
-        self.p[1] = self.base_p[1] + (y_offs*0.15)
-
-        dx = self.p[0] - self.floor.player.p[0]
-        dy = self.p[1] - self.floor.player.p[1]
-
-        md = (dx*dx) + (dy*dy)
-
-        if (md<1.6):
-            self.floor.objects.remove(self)
-            KSounds.play( KSounds.pickup )
-            self.floor.player.add_dm_message("You found a disk labelled: " + self.label)
-
-            if self.software_key == "telekine":
-                Abilities.InstallTelekine = True
-            if self.software_key == "central":
-                Abilities.InstallCentral = True
-            return False
-        return True
 
 class SwordPickup(Object):
     textures = [ 
@@ -675,54 +624,6 @@ class ResourcePickup(Object):
             return False
         return True
 
-class HealthVial(Object):
-    textures = [ 
-        BGL.assets.get("KT-player/texture/healthvial0000"),
-        BGL.assets.get("KT-player/texture/healthvial0001"),
-    ]
-   
-    def customize(self):
-        self.fridx = 0
-        self.texture = HealthVial.textures[0]
-        self.buftarget = "popup"
-        self.base_p = list(self.p)
-        self.tick_type = Object.TickTypes.PURGING
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_color = [ 1.0, 0.0, 0.0, 1.0 ]
-        self.light_radius = 10.
-        self.trigger_timer = 0
-        self.visible = False
-
-    def tick(self):
-        self.trigger_timer = self.trigger_timer + 1
-       
-        if self.trigger_timer<30:
-            return True 
-
-        self.visible = True
-
-        self.fridx = (self.fridx + 1) % 40
-        self.texture = HealthVial.textures[int(self.fridx/20)]
- 
-        y_offs = sin(self.fridx*(6.28/40.0))
-
-        self.rad = y_offs*0.1
-
-        self.p[1] = self.base_p[1] + (y_offs*0.15)
-
-        dx = self.p[0] - self.floor.player.p[0]
-        dy = self.p[1] - self.floor.player.p[1]
-
-        md = (dx*dx) + (dy*dy)
-
-        if (md<2):
-            if(self.floor.player.has_inv()):
-                self.floor.objects.remove(self)
-                self.floor.player.add_inv("hp_vial")
-                KSounds.play( KSounds.pickup )
-                return False
-
-        return True
 
 
 
