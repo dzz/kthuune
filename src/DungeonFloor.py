@@ -4,7 +4,7 @@ from Newfoundland.Floor import createFloorClass
 from Newfoundland.Tilemap import Tilemap
 from Newfoundland.Object import Object
 from random import choice
-from .Generators.ForestGraveyard import ForestGraveyard, TreeRoots,Fire
+from .Generators.ForestGraveyard import ForestGraveyard
 from .Generators.BasicGenerator import BasicGenerator
 from .Renderers.DFRenderer import DFRenderer
 from random import uniform
