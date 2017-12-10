@@ -48,8 +48,11 @@ from .LevelProps.Egg import Egg
 from .LevelProps.FloatingPlayer import FloatingPlayer
 from .LevelProps.DeadK import DeadK
 from .LevelProps.ShipExterior import ShipExterior
+from .LevelProps.SpeechBubble import SpeechBubble
+from .LevelProps.Telekine import Telekine
 from .Pickups.HealthVial import HealthVial
 from .Pickups.SoftwarePickup import SoftwarePickup
+
 
 class Breakable(Object):
     def handle_pull(self):
@@ -57,72 +60,6 @@ class Breakable(Object):
         dy = self.p[1] - self.floor.player.p[1]
         self.floor.player.v[0] += dx * 2.2
         self.floor.player.v[1] += dy * 2.2
-
-
-class Telekine(Object):
-    instance = None
-    BirdmanTextures = [
-        BGL.assets.get("KT-player/texture/birdman0000"),
-        BGL.assets.get("KT-player/texture/birdman0001"),
-        BGL.assets.get("KT-player/texture/birdman0002")
-    ]
-    def parse(od,df):
-        Telekine.instance = Telekine(p=[od["x"],od["y"]])
-        return Telekine.instance
-
-    def customize(self):
-        self.buftarget = "floor"
-        self.texture = Telekine.BirdmanTextures[0]
-        self.tick_type = Object.TickTypes.TICK_FOREVER
-        self.size = [2.0,2.0]
-        self.color = [ 1.0,1.0,1.0,0.0]
-        self.fr = 0 
-        self.light_color = [ 0.0,0.6,0.9,1.0 ]
-        self.light_radius = 1
-        self.visible = False
-
-        if Abilities.TelekineInstalled:
-            self.visible = True
-            self.light_radius = 25
-            self.color[3] = 1.0
-
-    def enable(self):
-        def spawn_objects():
-            t = None
-            for x in range(0,3):
-                t = Totem( p = [ self.p[0]+7.5+23 + (x*10), self.p[1] + 4.5 ])
-                self.floor.snap_enemies.append(t)
-                self.floor.create_object(t)
-                t.sleep_totem()
-                t.reset_timer -= x*45
-                self.floor.camera.grab_cinematic( t, 170+(45*3) )
-
-            sb = SpeechBubble( p = list(self.p) )
-            sb.trigger_script = [ "HEY! BASTARD!", "PUSH (X) TO TELEKINE" ]
-            sb.mode = 1
-            self.floor.create_object( sb )
-            sb.tick()
-            sb.p[0] = self.p[0] + 17.5+23
-            sb.p[1] = self.p[1] + 6.5
-
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.visible = True
-        self.get_camera().grab_cinematic(self, 200, spawn_objects )
-        Abilities.TelekineInstalled = True
-
-    def tick(self):
-
-        if(self.visible):
-            if(self.color[3]<1.0):
-                self.color[3] += 0.01
-            if(self.light_radius < 25 ):
-                self.light_radius += 0.2
-
-        self.fr += 1
-        if(self.fr == 90):
-            self.fr = 0
-        self.texture = Telekine.BirdmanTextures[ self.fr // 30 ]
-
 
 class FTerm(Object):
     def parse(od,df):
@@ -396,122 +333,6 @@ class Terminal(Object):
                 print("HIDING",self)
         
 
-class SpeechBubble(Object):
-    instance = None
-    MODE_PERSISTANT_TRIGGERED = 1
-
-
-    def parse(od,df):
-        sb = SpeechBubble( p = [ od['x'], od['y'] ] )
-        sb.trigger_script = [ od['meta']['text'] ]
-        sb.mode = 1
-        return sb
-
-    def customize(self):
-        self.mode = 0
-        self.trigger_dist = 100
-        self.triggered = False
-        self.trigger_script = None
-
-        self.buffer = BGL.framebuffer.from_dims( 8*20, 8*3)
-        self.texture = self.buffer
-        self.buftarget = "floor"
-        self.tick_type = Object.TickTypes.TICK_FOREVER
-        self.size = [ 8,-1.2 ]
-        self.visible = False
-        self.z_index = 9000
-        self.script = None
-        #self.render_string("Habooboo")
-
-        self.current_string = None
-        self.current_string_timer = 0
-        self.current_string_char = 0
-        self.current_char_timer = 7
-
-        self.script_queue = []
-        print("hello")
-
-        
-    def render_string(self, string):
-        self.buffer = BGL.framebuffer.from_dims( 8*len(string) + 2, 10, filtered=False )
-        self.texture = self.buffer
-        self.size = [ 0.5*len(string),-0.8 ]
-        with BGL.context.render_target( self.buffer ):
-            BGL.context.clear( 0.0,0.0,0.0,1.0)
-            with BGL.blendmode.alpha_over:
-                BGL.lotext.render_text_pixels(string,1,1,[ 1.0,0.5,0.8 ])
-
-    def set_script(self,script, p):
-
-        if(self.script is None):
-            self.script = script
-            self.current_string = script[0]
-            self.current_string_timer = 0
-
-            self.p[0] = p[0]
-            self.p[1] = p[1] + 5
-            self.visible = True
-            #self.message = msg
-            #self.lifetime = 0
-
-    
-    def next_char(self):
-        if(self.current_string):
-            if(self.current_string_char<=len(self.current_string)):
-                KSounds.play(choice(KSounds.typewriter_keys))
-                renderable_string = self.current_string[0:self.current_string_char]
-                self.render_string( renderable_string )
-                self.current_string_char+=1
-                if(len(renderable_string)>=1):
-                    tchar = renderable_string[-1]
-                    if tchar == ",":
-                        self.current_char_timer = choice([6,7])
-                    elif tchar == "?":
-                        self.current_char_timer = choice([8,9])
-                    elif tchar in [".","!",":"]:
-                        self.current_char_timer = choice([11,12])
-                    else:
-                        self.current_char_timer = choice([4,5,6])
-            else:
-                self.current_string_char = 0
-                KSounds.play(KSounds.typewriter_return)
-                self.current_char_timer = 2*len(self.current_string)
-                if(len(self.script)>1):
-                    self.current_string = self.script[1]
-                    self.script = self.script[1:] 
-                else:
-                    self.script = None
-                    #self.visible = False
-
-
-    def tick(self):
-
-        if(self.floor.player.title_card.displaying()):
-            return
-
-        if(self.mode == 1):
-            if not self.triggered:
-                dx = self.p[0] - self.floor.player.p[0]
-                dy = self.p[1] - self.floor.player.p[1]
-                md = (dx*dx)+(dy*dy)
-                if(md<self.trigger_dist):
-                    self.set_script( self.trigger_script, self.p )
-                    self.triggered = True
-
-        if(self.script):
-            self.current_string_timer +=1
-            if(self.current_string_timer > self.current_char_timer):
-                self.current_string_timer = 0
-                self.next_char()
-        else:
-            if(self.current_string_timer > self.current_char_timer):
-                self.visible = False
-                with BGL.context.render_target( self.buffer ):
-                    BGL.context.clear( 0.0,0.0,0.0,0.0)
-
-        #if(self.script):
-        #    self.current_script_time += 1
-        #pass            
 
 
 
@@ -567,63 +388,6 @@ class SwordPickup(Object):
 
             return False
         return True
-
-class ResourcePickup(Object):
-    textures = [ 
-        BGL.assets.get("KT-player/texture/thorium"),
-        BGL.assets.get("KT-player/texture/neon"),
-        BGL.assets.get("KT-player/texture/carbon"),
-    ]
-    names = [
-        "Thorium",
-        "Iridium",
-        "Carbon"
-    ]
-   
-    def customize(self):
-        self.names = ResourcePickup.names
-        self.fridx = 0
-        self.pickup_type = choice([0,0,0,0,1,1,1,2,2])
-        self.texture = ResourcePickup.textures[self.pickup_type]
-        self.buftarget = "popup"
-        self.base_p = list(self.p)
-        self.tick_type = Object.TickTypes.PURGING
-        self.light_type = Object.LightTypes.NONE
-        self.light_color = [ 1.0, 1.0, 1.0, 1.0 ]
-        self.light_radius = 1.0
-        self.trigger_timer = 0
-        self.visible = True
-
-    def tick(self):
-        self.trigger_timer = self.trigger_timer + 1
-       
-        if self.trigger_timer<30:
-            return True 
-
-        self.visible = True
-
-        self.fridx = (self.fridx + 1) % 40
- 
-        y_offs = sin(self.fridx*(3.14/40.0))
-        self.light_radius = 25. + y_offs
-
-        self.p[1] = self.base_p[1] + (y_offs*0.15)
-
-        dx = self.p[0] - self.floor.player.p[0]
-        dy = self.p[1] - self.floor.player.p[1]
-
-        md = (dx*dx) + (dy*dy)
-
-        if (md<1.6):
-            self.floor.objects.remove(self)
-            self.floor.player.add_dm_message("You found some {0}".format(self.names[self.pickup_type]))
-
-            if(self.pickup_type == 0):
-                Abilities.ThoriumAmount += 1
-            KSounds.play( KSounds.pickup )
-            return False
-        return True
-
 
 
 
