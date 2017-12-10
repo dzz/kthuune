@@ -13,7 +13,7 @@ from .KTState import KTState
 
 from .superstructure import generate_qualified_areas
 from .Generators.AreaLoader import get_area_data
-from .Generators.ForestGraveyard import ForestGraveyard
+from .Generators.AreaCompiler import AreaCompiler
 from .GeneratorOptions import GeneratorOptions
 
 from .Background import Background
@@ -400,7 +400,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         ### ENTRY POINT
 ###########################
-        loading_floor = "crystals1"
+        loading_floor = "ship"
         self.floor = self.create_tickable(self.load_floor(loading_floor))
         self.current_floor_key = loading_floor
         self.current_floor_target = None

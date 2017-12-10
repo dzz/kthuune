@@ -64,167 +64,9 @@ from .NPC.Elder import Elder
 from .Decorators.TreeTop import TreeTop
 from .Decorators.TreeRoots import TreeRoots
 from .Decorators.TreeShadow import TreeShadow
+from .Interaction.Terminals import *
 
-class FTerm(Object):
-    def parse(od,df):
-        ret = []
-        ret.append(FTerm(p=[od["x"],od["y"]]))
-        ret.append(FTermStand(p=[od["x"],od["y"]]))
-        ret.append(Terminal(title="Teleport to Ship", p=[od["x"],od["y"]]))
-        return ret
-
-    textures = [
-        BGL.assets.get('KT-forest/texture/term0000'),
-        BGL.assets.get('KT-forest/texture/term0001')
-    ]
-
-    def __init__(self,**kwargs):
-        Object.__init__(self,**kwargs)
-        self.buftarget = "floor"
-        self.z_index = 2
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_color = [ 0.8,0.0,1.0,1.0 ]
-        self.light_radius = 25
-        self.tick_type = Object.TickTypes.TICK_FOREVER
-        self.size = [2.0,2.0]
-        self.fr = 0 
-
-    def tick(self):
-        self.fr += 1
-        if(self.fr==90):
-            self.fr = 0
-        self.texture = FTerm.textures[ int(self.fr)//45 ]
-
-class FTermStand(Object):
-
-    texture = BGL.assets.get('KT-forest/texture/termstand')
-
-    def __init__(self,**kwargs):
-        Object.__init__(self,**kwargs)
-        self.p[1] += 1.5
-        self.size = [3.0,3.0]
-        self.buftarget = "floor"
-        self.texture = FTermStand.texture
-        self.tick_type = Object.TickTypes.STATIC
-        self.physics = { "radius" : 1.2, "mass"   : 900, "friction" : 0.3 }
-
-class BTerm(Object):
-    def parse(od,df):
-        ret = []
-        ret.append(FTerm(p=[od["x"],od["y"]]))
-        ret.append(FTermStand(p=[od["x"],od["y"]]))
-        ret.append(Terminal(title="Commence Birth", p=[od["x"],od["y"]]))
-        return ret
-
-class Terminal(Object):
-    def parse(od,df):
-        return Terminal( title=od['meta']['title'], p = [ od['x'], od['y'] ] )
-
-    def get_ui(self):
-        return self.ui
-
-    def customize(self):
-        self.visible = False
-        self.tick_type = Object.TickTypes.TICK_FOREVER
-
-        self.install_percent = 0
-
-        if self.title == "Commence Birth":
-            self.ui = CommenceBirth(self)
-            self.term_installed = True
-            self.install_percent = 100
-        elif self.title == "Teleport to Ship":
-            self.ui = ReturnToShip(self)
-            self.term_installed = True
-            self.install_percent = 100
-        elif self.title == "Teleport Control":
-            self.ui = TeleportControl(self)
-            self.term_installed = True
-            self.install_percent = 100
-        elif self.title == "Telekine Biometrics":
-            self.ui = TelekineControl(self)
-            self.term_installed = Abilities.InstallTelekine
-            self.install_percent = 0
-            if Abilities.TelekineInstalled:
-                self.install_percent = 100
-        elif self.title == "Sword Technology":
-            self.ui = SwordControl(self)
-            self.term_installed = False
-            self.install_percent = 0
-        else:
-            self.ui = ShipComputer(self)
-            self.term_installed = Abilities.InstallCentral
-            self.install_percent = 0
-            if Abilities.CentralInstalled:
-                self.install_percent = 100
-
-    def render_ui(self):
-        self.ui.render()
-
-    def tick(self):
-        if(self.mdist(self.floor.player)<6.5): 
-
-            if(self.install_percent<100) and self.term_installed:
-                self.install_percent += choice([0.1,0.5,0.25])
-                if self.install_percent >= 100:
-                    if self.title == "Telekine Biometrics":
-                        Abilities.Telekine = True
-                        Telekine.instance.enable()
-                    if self.title == "Central Processing":
-                        Abilities.CentralInstalled = True
-            if(self.floor.player.active_terminal != self):
-                self.floor.player.active_terminal = self
-                self.ui.setup_options()
-                #self.floor.player.add_dm_message("You opened the {0} terminal".format(self.title))
-                KSounds.play(KSounds.terminal_open)
-        else:
-            if self.floor.player.active_terminal == self:
-                KSounds.play(KSounds.terminal_close)
-                self.floor.player.active_terminal = None
-                print("HIDING",self)
-
-        
-class SkullDeath(Object):
-    texture = BGL.assets.get('KT-forest/texture/skull0000')
-
-    def customize(self):
-        self.texture = SkullDeath.texture
-        self.buftarget = "hud"
-
-        self.size =  [ 3.0, 3.0 ]
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_color =  [ 1.0,0.0,1.0,1.0]
-        self.color = [ 1.0,1.0,1.0,0.5]
-        self.light_radius = 50.0
-        self.physics = None
-        self.z_index = 9000
-        self.tick_type = Object.TickTypes.PURGING
-        self.delta_vy = -0.03
-        self.lifetime = 0
-        self.delay = 0
-        self.visible = False
-        self.anim_tick = 0.2
-
-    def tick(self):
-
-        if(self.delay> 5):
-            self.visible = True
-            self.lifetime = self.lifetime + 1
-            self.p[1] = self.p[1] + self.delta_vy
-            self.delta_vy *= 1.1
-
-            self.anim_tick = self.anim_tick * 1.08
-            self.size[0] = sin( self.anim_tick ) * 5.0
-            self.size[1] = self.size[1] * 1.02
-            if(self.lifetime > 100):
-                self.floor.objects.remove(self)
-                return False
-            return True
-        else:
-            self.delay = self.delay + 1
-            return True
-
-class ForestGraveyard():
+class AreaCompiler():
     def __init__(self):
         pass
 
@@ -487,70 +329,9 @@ class ForestGraveyard():
             self.light_occluders = []
             self.light_occluders.extend( self.map_edges )
     
-            self.generate_inner_trees(dungeon_floor)
             self.generate_edge_trees()
             self.generate_tiledata(  dungeon_floor )
 
-
-
-    def generate_fires(self,df):
-        for pobj in filter( lambda x: "portal_target" in x.__dict__, self.objects):
-            self.objects.append( Fire( p=pobj.p) )
-
-
-    def generate_inner_trees(self,df):
-
-        self.tree_pts = []
-        occluders = []
-        trees = 0
-
-        for t in range(0,trees):
-            px,py = uniform(-df.width,df.width),uniform(-df.height,df.height)
-            px*=0.4
-            py*=0.4
-            rad = uniform(3.2,6.3)
-            occluders.extend( self.gen_rand_circle_lines( 0.5,1.5, rad, [px,py]))
-
-            size = uniform(1.0,8.0)
-            plx = uniform(2.2,3.8)
-
-            self.tree_pts.append([px,py])
-            pobjs = filter( lambda x: "portal_target" in x.__dict__, self.objects)
-            for tt in range(2,choice(range(4,5))):
-                valid = False
-                while not valid:
-                    valid = True
-                    min_dist = 25
-                    p = [px+uniform(-3.0,3.0),py+uniform(-3.0,3.0)]
-                    for obj in pobjs:
-                        if hypot( p[0]-obj.p[0], p[1]-obj.p[1])<min_dist: 
-                            valid = False
-                            break
-
-                tt = TreeTop( p=p, size=[size,size],parralax = plx) 
-                self.objects.append( tt )
-                #tt.visible = False
-                self.objects.append( TreeShadow(p=p, TreeTop=tt) )
-                size = size * uniform(1.2,1.5)
-                plx = plx * uniform(1.1,1.3)
-                size = uniform(3.0,7.0)
-                self.objects.append( TreeRoots( p=p, size=[size,size]) )
-
-            for tt in range(2,choice(range(2,5))):
-                size = uniform(10.0,40.0)
-                p = [px+uniform(-2.0,2.0),py+uniform(-2.0,2.0)]
-                self.objects.append( TreeRoots( p=p, size=[size,size]) )
-            #    if(choice([True,False])):
-            #        self.objects.append( TreeShadow( p=p, size=[size*2,size*2]) )
-
-
-            ##for tt in range(2,choice(range(3,15))):
-            ##    p = [px+uniform(-3.0,3.0),py+uniform(-3.0,3.0)]
-            ##    self.objects.append( TreeTop( p=p, size=[size,size],parralax = plx) )
-            ##    size = size * uniform(1.2,1.5)
-            ##    plx = plx * uniform(1.2,1.5)
-
-        self.light_occluders.extend(occluders)
 
 
     def generate_edge_trees(self, edges = None):
@@ -591,33 +372,8 @@ class ForestGraveyard():
                 #    self.objects.append( TreeRoots( p=p, size=[size,size]) )
 
 
-
-
     def get_objects(self):
         return self.objects
-
-
-    def gen_rand_circle_lines(self,min_step,max_step,rad, p=[0.0,0.0]):
-        r = -pi
-        points = []
-        dfilt = None
-        while(r < pi):
-            r = r + uniform(min_step,max_step)
-            #rad = min(df.width,df.height)*0.5
-            d = uniform(0.5*rad, 1.0*rad)
-            if dfilt is None:
-                dfilt = d
-            else:
-                dfilt = (d*0.2)+(dfilt*0.8)
-            points.append( [ (cos(r)*dfilt)+p[0], (sin(r)*dfilt)+p[1] ] )
-
-
-        lines = []
-        for i in range(0, len(points)-1):
-            lines.append( [ points[i],points[i+1]] )
-
-        lines.append( [ points[len(points)-1],points[0]] )
-        return lines
 
     def get_light_occluders(self):
         return self.light_occluders
