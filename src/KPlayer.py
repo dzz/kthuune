@@ -1,4 +1,3 @@
-
 #####
 ##
 #
@@ -21,6 +20,7 @@ from .KSounds import KSounds
 from .TitleCard import TitleCard
 
 from .WorldMap import WorldMap
+from .Universe.LevelEffects.PlayerPhantom import PlayerPhantom
 
 class DMMessage():
 
@@ -188,46 +188,6 @@ class HealthBubble(Object):
 
 def ur1():
     return uniform(0.0,1.0)
-
-class PlayerPhantom(Object):
-    def customize(self):
-        self.texture = self.player.texture
-        self.animation_target = ( self.target.p[0], self.target.p[1] )
-
-        self.p[0] = self.player.p[0]
-        self.p[1] = self.player.p[1]
-
-        dx = self.animation_target[0] - self.p[0]
-        dy = self.animation_target[1] - self.p[1]
-
-        self.p[0] = self.p[0] - (dx*0.5)
-        self.p[1] = self.p[1] - (dy*0.5)
-
-        self.visible = False
-        self.buftarget = "floor"
-        self.z_index = 900
-        self.tick_type = Object.TickTypes.PURGING
-        self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
-        self.light_radius = 20.0
-        self.light_color = [ uniform(0.1,0.4),uniform(0.0,0.2),uniform(0.7,1.0),1.0 ]
-        self.animation_counter = 0
-        self.size = [ 2.5,2.5]
-
-    
-    def tick(self):
-        self.light_radius *= 0.9
-        self.animation_counter = self.animation_counter + 1
-        if(self.animation_counter-self.animation_threshold > 12 ):
-            self.floor.objects.remove(self)
-            return False
-        if(self.animation_counter > self.animation_threshold):
-            self.visible = True
-            dx = (self.animation_target[0] - self.p[0]) / 4
-            dy = (self.animation_target[1] - self.p[1]) / 4
-            self.p[0] = self.p[0] + dx
-            self.p[1] = self.p[1] + dy
-        return True
-        
 
 class Hud():
     view = BGL.view.widescreen_16_9
@@ -417,6 +377,79 @@ class WandCard(Card):
             "filter_color"         : [1.0,1.0,1.0,1.0],
             "uv_translate"         : [ 0,0 ] }
 
+class TelekineCard(Card):
+    shader = BGL.assets.get("KT-player/shader/telekine")
+    textures = [
+            BGL.assets.get('KT-player/texture/birdman0000'),
+            BGL.assets.get('KT-player/texture/birdman0001'),
+            BGL.assets.get('KT-player/texture/birdman0002'),
+            BGL.assets.get('KT-player/texture/birdman0001')
+        ]
+
+    def render(self):
+        with BGL.blendmode.alpha_over:
+            Card.primitive.render_shaded( TelekineCard.shader, self.get_shader_params() )
+
+    def __init__(self, player):
+        self.fridx = choice( range(0,360) )
+        self.player = player
+
+    def tick(self):
+        self.fridx = (self.fridx + 1) %360
+
+    def get_shader_params(self):
+
+        print(self.player.teleportAmt)
+
+        return {
+            "flashamt" : [ self.player.telekineFlash ],
+            "statusamt" : [ self.player.teleportAmt / 100.0 ],
+            "statuscolor" : [ 1.0,1.0,1.0,1.0 ],
+            "tick" : [self.player.cardtick+40.0],
+            "texBuffer"            : TelekineCard.textures[self.fridx//90],
+            "translation_local"    : [ 0, 0 ],
+            "scale_local"          : [ 0.7,0.7 ],
+            "translation_world"    : [ -7.0,3.2],
+            "scale_world"          : [1.0,1.0],
+            "view"                 : Hud.view,
+            "rotation_local"       : 0.0,
+            "filter_color"         : [1.0,1.0,1.0,1.0],
+            "uv_translate"         : [ 0,0 ] }
+
+class PotionCard(Card):
+    shader = BGL.assets.get("KT-player/shader/potion")
+    textures = [
+            BGL.assets.get('KT-player/texture/healthvial0000'),
+            BGL.assets.get('KT-player/texture/healthvial0001'),
+        ]
+
+    def render(self):
+        with BGL.blendmode.alpha_over:
+            Card.primitive.render_shaded( PotionCard.shader, self.get_shader_params() )
+
+    def __init__(self, player):
+        self.fridx = choice( range(0,180) )
+        self.player = player
+
+    def tick(self):
+        self.fridx = (self.fridx + 1) %180
+
+    def get_shader_params(self):
+        return {
+            "flashamt" : [ self.player.potionFlash ],
+            "statusamt" : [ 1.0 ],
+            "statuscolor" : [ 1.0,1.0,1.0,1.0 ],
+            "tick" : [self.player.cardtick+40.0],
+            "texBuffer"            : PotionCard.textures[self.fridx//90],
+            "translation_local"    : [ 0, 0 ],
+            "scale_local"          : [ 0.7,0.7 ],
+            "translation_world"    : [ -7.0,-3.2],
+            "scale_world"          : [1.0,1.0],
+            "view"                 : Hud.view,
+            "rotation_local"       : 0.0,
+            "filter_color"         : [1.0,1.0,1.0,1.0],
+            "uv_translate"         : [ 0,0 ] }
+
 
 def rad_2_index(rad, segments):
     segment_amt = ((2*pi)/segments)
@@ -599,6 +632,7 @@ class KPlayer(Player):
 
     def consume_hp(self):
 
+        self.potionFlash = 1.0
         self.ability_timeout = 65
         self.active_ability = KPlayer.ABILITY_HP
 
@@ -639,6 +673,14 @@ class KPlayer(Player):
         KSounds.play( KSounds.player_hurt )
  
     def attempt_snap_attack(self, snap = True):
+
+        self.telekineFlash = 1.0
+        teleportCost = 10.0
+        if(self.teleportAmt<teleportCost):
+            self.add_dm_message("You don't have enough Telekine Power!!")
+            return
+
+        self.teleportAmt -= 10.0
 
         if not Abilities.Telekine:
             return
@@ -789,6 +831,7 @@ class KPlayer(Player):
         #playerinit
 
         self.current_system = "Oort Cloud"
+        self.teleportAmt = 100.0
         self.world_map = WorldMap
         self.snap_attack_frozen = False
         self.attack_physics_timer = 0
@@ -921,6 +964,9 @@ class KPlayer(Player):
         self.hittable_hint_real += 0.01
         self.hittable_hint_impulse = 0.7
         self.flash_color = [ 0.0,0.8,1.0,1.0]
+
+        fireflyTeleportBonus = 10.0/12.0
+        self.teleportAmt += fireflyTeleportBonus
         KSounds.play( KSounds.firefly )
 
 
@@ -989,6 +1035,13 @@ class KPlayer(Player):
         #        PlayerInvSlot.render(x, self.inventory[x], False, x == self.active_invslot)
         #PlayerInvSlot.render(self.sel_invslot, self.inventory[self.sel_invslot], True, self.sel_invslot == self.active_invslot)
         self.swordcard.render()
+
+        
+        if(Abilities.Telekine):
+            self.telekinecard.render()
+
+        self.potioncard.render()
+
         #self.wandcard.render()
 
 
@@ -1002,6 +1055,8 @@ class KPlayer(Player):
 
 
     def customize(self):
+
+        self.health_count = 2
         self.dch_cooldown = 0
         self.active_invslot = None
         self.sel_invslot = 0
@@ -1010,12 +1065,17 @@ class KPlayer(Player):
         self.active_terminal = None
         self.terminal_size = 0.0
 
+        self.telekineFlash = 0.0
+        self.potionFlash = 0.0
+
         self.inventory = [None] * self.max_invslots
         self.inventory[0] = "hp_vial"
         self.inventory[1] = "hp_vial"
         self.heartcard = HeartCard(self)
         self.swordcard = SwordCard(self)
         self.wandcard = WandCard(self)
+        self.telekinecard = TelekineCard(self)
+        self.potioncard = PotionCard(self)
         #self.hp = 100
         self.dash_amt = 1.0
         self.sword = Sword(player=self)
@@ -1187,17 +1247,19 @@ class KPlayer(Player):
 
 
         if self.Y_PRESSED:
+            if( self.health_count>0):
+                self.consume_hp()
 
-            if(self.sel_invslot == self.active_invslot):
-                self.consume_inventory()
-                self.active_invslot = None
-            else:
-                if(self.inventory[self.sel_invslot] is None) and (self.active_invslot is not None):
-                    self.inventory[self.sel_invslot] = self.inventory[self.active_invslot]
-                    self.inventory[self.active_invslot] = None
-                    self.active_invslot = None
-                else:
-                    self.active_invslot = self.sel_invslot
+            #if(self.sel_invslot == self.active_invslot):
+            #    self.consume_inventory()
+            #    self.active_invslot = None
+            #else:
+            #    if(self.inventory[self.sel_invslot] is None) and (self.active_invslot is not None):
+            #        self.inventory[self.sel_invslot] = self.inventory[self.active_invslot]
+            #        self.inventory[self.active_invslot] = None
+            #        self.active_invslot = None
+            #    else:
+            #        self.active_invslot = self.sel_invslot
 
 
     def route_terminal_input(self):
@@ -1245,6 +1307,14 @@ class KPlayer(Player):
         
     def tick(self):
         self.title_card.tick()
+
+        self.telekineFlash *= 0.95
+        self.potionFlash *= 0.95
+
+
+        teleportRecharge = 0.03
+        if(self.teleportAmt < 100.0):
+            self.teleportAmt += teleportRecharge
 
         if self.floor.camera.cinema_target:
             return True
@@ -1323,6 +1393,8 @@ class KPlayer(Player):
         self.heartcard.tick()
         self.swordcard.tick()
         self.wandcard.tick()
+        self.telekinecard.tick()
+        self.potioncard.tick()
 
 
         self.pumped_dashcombo = False

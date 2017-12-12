@@ -109,7 +109,7 @@ class CloudBackground:
                     "camera_position" : self.camera.p,
                     "parallax" : -0.002,
                     "vision_tex" : self.white_texture,
-                    "lightning" : lightning
+                    "lightning" : -1*lightning
                 })
 
                 self.yaomat.render(d)

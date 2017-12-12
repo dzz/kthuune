@@ -11,9 +11,8 @@ from .DungeonCamera import DungeonCamera
 from .KPlayer import KPlayer
 from .KTState import KTState
 
-from .superstructure import generate_qualified_areas
-from .Generators.AreaLoader import get_area_data
-from .Generators.AreaCompiler import AreaCompiler
+from .Universe.AreaLoader import get_area_data
+from .Universe.AreaCompiler import AreaCompiler
 from .GeneratorOptions import GeneratorOptions
 
 from .Background import Background
@@ -23,7 +22,6 @@ from .Fog import Fog
 from .Abilities import Abilities
 from .Renderers.uniform_fade import uniform_fade 
 
-import audio
 class Game( BaseGame ):
 
     god_buffer = BGL.framebuffer.from_screen()
@@ -382,22 +380,6 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         self.controllers    = self.create_tickable( Controllers() )
         self.player         = self.create_tickable( self.create_player() )
 
-        #areas = generate_qualified_areas()
-        #areas = []
-        #start_area = filter(lambda x: x.ring==0 and x.depth==0, areas).__next__()
-        #start_area.floor = DungeonFloor( width = 90, height = 90, camera = self.camera, player = self.player, objects=[], area=start_area );
-        #self.floor          = self.create_tickable( start_area.floor )
-
-        #self.floor = self.create_tickable( Floor() )
-
-
-        #prime the cache
-        ## self.load_floor("area_test")
-        ## self.load_floor("tower")
-        ## self.load_floor("arena")
-        ## self.load_floor("docks")
-
-
         ### ENTRY POINT
 ###########################
         loading_floor = "ship"
@@ -459,10 +441,6 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                 self.active_cinematic = None
             if self.active_cinematic:
                 return
-
-        ### 
-        ### can uncomment this to test rapid area switching
-        ###
 
         else:
             if self.doing_random_test:

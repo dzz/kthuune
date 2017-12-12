@@ -78,6 +78,8 @@
             { "name" : "software", "filename" : "{package_path}/software.png", "filtered" : false }
         ],
         "shader" :  [
+            { "name" : "telekine", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/telekine" },
+            { "name" : "potion", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/potion" },
             { "name" : "card", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/cardp" },
             { "name" : "islot", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/islotp" },
             { "name" : "terminal", "vertex_program" : "{package_path}/shader/terminalv", "pixel_program" : "{package_path}/shader/terminalp" }

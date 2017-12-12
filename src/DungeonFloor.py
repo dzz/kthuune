@@ -4,8 +4,7 @@ from Newfoundland.Floor import createFloorClass
 from Newfoundland.Tilemap import Tilemap
 from Newfoundland.Object import Object
 from random import choice
-from .Generators.AreaCompiler import AreaCompiler
-from .Generators.BasicGenerator import BasicGenerator
+from .Universe.AreaCompiler import AreaCompiler
 from .Renderers.DFRenderer import DFRenderer
 from random import uniform
 from math import sin,cos,hypot
@@ -65,7 +64,6 @@ class DungeonFloor( Floor ):
             "width" : 32,
             "height" : 32,
             "generator" : AreaCompiler(),
-            #"generator" : BasicGenerator(),
             "area" : None,
             "renderer_config" : {
                 "vision_lightmap_width" : 960/4,

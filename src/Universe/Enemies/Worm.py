@@ -5,6 +5,7 @@ from math import sin,cos,atan2,floor,hypot
 from Beagle import API as BGL
 from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 from ..LevelEffects.ChromaticWave import ChromaticWave
+from ..LevelEffects.SpikeyWave import SpikeyWave
 from ...KSounds import KSounds
 from ..Configuration.vconf import vconf
 from ...KPlayer import Sword
