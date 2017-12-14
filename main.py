@@ -1,14 +1,14 @@
 import cProfile
-from .src.Game import Game
+import beagle_runtime
 
 pr = cProfile.Profile()
 
 class glb:
     tick = 0
-    game = Game()
     ini = None
 
 def init():
+    print(beagle_runtime.get_user_specified_config_string())
     #pr.enable()
     glb.game.init()
 
@@ -25,4 +25,12 @@ def finalize():
 
 def configure( application_ini ):
     glb.ini = application_ini
+
+    if( beagle_runtime.get_user_specified_config_string() == "edit"):
+        from .src.Editor import Editor
+        glb.game = Editor()
+    else:
+        from .src.Game import Game
+        glb.game = Game()
+    
     glb.game.configure( application_ini )
