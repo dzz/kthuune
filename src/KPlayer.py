@@ -74,7 +74,6 @@ class SlashEffect(Object):
         self.stagger_cooldown = 0
 
 
-
     def slash(self):
 
         if(self.floor.player.run_stamina>0):
@@ -416,6 +415,34 @@ class TelekineCard(Card):
             "filter_color"         : [1.0,1.0,1.0,1.0],
             "uv_translate"         : [ 0,0 ] }
 
+class PotionCountView():
+    shader = BGL.assets.get("beagle-2d/shader/beagle-2d")
+    
+    def __init__(self,player):
+        self.fb = BGL.framebuffer.from_dims( (8*3)+2, 10 )
+        self.player = player
+
+    def render(self):
+        with BGL.context.render_target(self.fb):
+            with BGL.blendmode.alpha_over:
+                BGL.context.clear(0.0,0.0,0.0,0.0)
+                BGL.lotext.render_text_pixels("x{0}".format(self.player.health_count),1,1,[1.0,0.0,0.0])
+        with BGL.blendmode.alpha_over:
+            Card.primitive.render_shaded( PotionCountView.shader, self.get_shader_params() )
+
+    def get_shader_params(self):
+        return {
+            "texBuffer"            : self.fb,
+            "translation_local"    : [ 0, 0 ],
+            "scale_local"          : [ 3.0*0.25,-1.0*0.25 ],
+            "translation_world"    : [ -5.85,-2.8],
+            "scale_world"          : [1.0,1.0],
+            "view"                 : Hud.view,
+            "rotation_local"       : 0.0,
+            "filter_color"         : [1.0,1.0,1.0,1.0],
+            "uv_translate"         : [ 0,0 ] }
+
+
 class PotionCard(Card):
     shader = BGL.assets.get("KT-player/shader/potion")
     textures = [
@@ -625,13 +652,20 @@ class KPlayer(Player):
                 return True
 
     def add_inv(self,inv):
-        for i, o in enumerate(self.inventory):
-            if o is None:
-                self.inventory[i] = inv
-                return
+
+        if(inv=="hp_vial"):
+            self.health_count += 1
+        #for i, o in enumerate(self.inventory):
+        #    if o is None:
+        #        self.inventory[i] = inv
+        #        return
 
     def consume_hp(self):
 
+        if(self.health_count==0):
+            return
+
+        self.health_count -= 1
         self.potionFlash = 1.0
         self.ability_timeout = 65
         self.active_ability = KPlayer.ABILITY_HP
@@ -1041,6 +1075,7 @@ class KPlayer(Player):
             self.telekinecard.render()
 
         self.potioncard.render()
+        self.potioncountview.render()
 
         #self.wandcard.render()
 
@@ -1076,6 +1111,7 @@ class KPlayer(Player):
         self.wandcard = WandCard(self)
         self.telekinecard = TelekineCard(self)
         self.potioncard = PotionCard(self)
+        self.potioncountview = PotionCountView(self)
         #self.hp = 100
         self.dash_amt = 1.0
         self.sword = Sword(player=self)
@@ -1395,6 +1431,7 @@ class KPlayer(Player):
         self.wandcard.tick()
         self.telekinecard.tick()
         self.potioncard.tick()
+
 
 
         self.pumped_dashcombo = False
