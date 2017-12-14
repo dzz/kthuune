@@ -6,9 +6,9 @@ pr = cProfile.Profile()
 class glb:
     tick = 0
     ini = None
+    editor = False
 
 def init():
-    print(beagle_runtime.get_user_specified_config_string())
     #pr.enable()
     glb.game.init()
 
@@ -29,6 +29,7 @@ def configure( application_ini ):
     if( beagle_runtime.get_user_specified_config_string() == "edit"):
         from .src.Editor import Editor
         glb.game = Editor()
+        glb.game.__shell__ = globals()["__shell__"]
     else:
         from .src.Game import Game
         glb.game = Game()
