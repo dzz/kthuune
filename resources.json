@@ -8,6 +8,7 @@
         "KT-compositor" : "resources/compositor/compositor.json",
         "KT-tiles"      : "resources/tiles/tiles.json",
         "KT-forest"     : "resources/forest/forest.json",
-        "KT-props"      : "resources/props/props.json"
+        "KT-props"      : "resources/props/props.json",
+        "KT-editor"     : "resources/editor/editor.json"
     }
 }

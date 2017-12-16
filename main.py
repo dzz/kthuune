@@ -23,11 +23,28 @@ def finalize():
     #pr.print_stats()
     glb.game.finalize()
 
+def dispatch_mousedown(button,x,y):
+    if glb.editor:
+        glb.game.dispatch_mousedown(button,x,y)
+
+def dispatch_mouseup(button,x,y):
+    if glb.editor:
+        glb.game.dispatch_mouseup(button,x,y)
+
+def dispatch_mousemotion(x,y):
+    if glb.editor:
+        glb.game.dispatch_mousemotion(x,y)
+
+def dispatch_mousewheel(y):
+    if glb.editor:
+        glb.game.dispatch_mousewheel(y)
+
 def configure( application_ini ):
     glb.ini = application_ini
 
     if( beagle_runtime.get_user_specified_config_string() == "edit"):
         from .src.Editor import Editor
+        glb.editor = True
         glb.game = Editor()
         glb.game.__shell__ = globals()["__shell__"]
     else:

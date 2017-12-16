@@ -1,0 +1,20 @@
+{
+    "preload" : true,
+    "resources" : {
+        "shader" : [
+            {
+                "name" : "grid",
+                "vertex_program" : "{beagle-2d}/vertex/no_transform",
+                "pixel_program" : "{package_path}/grid"
+            },
+            {
+                "name" : "titlebar",
+                "vertex_program" : "{beagle-2d}/vertex/no_transform",
+                "pixel_program" : "{package_path}/titlebar"
+            }
+        ],
+        "texture" : [
+            { "name" : "grid", "filename" : "{package_path}/grid.png", "filtered" : true }
+        ]
+    }
+}
