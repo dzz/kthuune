@@ -16,10 +16,12 @@ class World:
             limit = max(abs(brush.x2),limit)
             limit = max(abs(brush.y2),limit)
              
-        World.GeneratedArea.width = limit*4 #1 in brush space == 2 in gamespace, w/h <>
-        World.GeneratedArea.height = limit*4
+        World.GeneratedArea.width = limit*2 #1 in brush space == 2 in gamespace, w/h <>
+        World.GeneratedArea.height = limit*2
 
     def reduce():
+
+        World.GeneratedArea.reset()
 
         World.find_limits()
         polyfill_map = PolyFillList.getPolyFillMap()
@@ -28,6 +30,8 @@ class World:
             if brush.polyfill_key in polyfill_map:
                 polyfill = polyfill_map[brush.polyfill_key]
                 polyfill.reduce( World.GeneratedArea, brush )
+
+        World.GeneratedArea.serialize()
 
 
 
