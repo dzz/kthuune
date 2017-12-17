@@ -6,6 +6,7 @@ from .EditorElements.ToolBox import ToolBox
 from .EditorElements.BrushTool import BrushTool
 from .EditorElements.Brushes import Brushes
 from .EditorElements.BrushSelectTool import BrushSelectTool
+from .EditorElements.World import World
 
 class Editor:
     instance = None
@@ -136,3 +137,4 @@ class Editor:
         pass
 
 
+BGL.keyboard.register_keydown_handler('p', World.reduce)

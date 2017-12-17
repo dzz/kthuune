@@ -26,3 +26,4 @@ class Brush:
         b.x2 = tool.x2
         b.y2 = tool.y2
         return b
+
