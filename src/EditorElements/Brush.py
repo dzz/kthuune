@@ -4,7 +4,7 @@ class Brush:
         self.y1 = None
         self.x2 = None 
         self.y2 = None 
-        self.layer = None
+        self.layer = 0
         self.generator_key = None
 
     def from_tool(tool):

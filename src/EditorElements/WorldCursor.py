@@ -15,14 +15,19 @@ class WorldCursor:
 
         cx, cy = app.scr_to_world(cx,cy)
 
+        WorldCursor.ix = floor(cx*2)/2.0
+        WorldCursor.iy = floor(cy*2)/2.0
+
         cx += 0.5
         cy += 0.5
+
 
         cx = floor(cx)
         cy = floor(cy)
 
         WorldCursor.x = cx
         WorldCursor.y = cy
+
 
         cx, cy = app.world_to_scr(cx,cy)
 

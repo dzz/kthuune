@@ -11,6 +11,11 @@
                 "name" : "titlebar",
                 "vertex_program" : "{beagle-2d}/vertex/no_transform",
                 "pixel_program" : "{package_path}/titlebar"
+            },
+            {
+                "name" : "toolbox",
+                "vertex_program" : "{beagle-2d}/vertex/no_transform",
+                "pixel_program" : "{package_path}/toolbox"
             }
         ],
         "texture" : [

@@ -2,25 +2,29 @@ from Beagle import API as BGL
 from .EditorElements.Cursor import Cursor
 from .EditorElements.Grid import Grid
 from .EditorElements.TitleBar import TitleBar
+from .EditorElements.ToolBox import ToolBox
 from .EditorElements.BrushTool import BrushTool
 from .EditorElements.Brushes import Brushes
+from .EditorElements.BrushSelectTool import BrushSelectTool
 
 class Editor:
+    instance = None
     ui_fb = BGL.framebuffer.from_dims(960, 540)
     cursor_tex = BGL.assets.get('KT-player/texture/cursor')
 
     def __init__(self):
+        Editor.instance = self
         self.mouse_context = "camera"
         self.camera_x = 0
         self.camera_y = 0
         self.camera_zoom = 1.0
-
         self.mx = 0
         self.my = 0
         self.nmx = 0
         self.nmy = 0
         self.wmx = 0
         self.wmy = 0
+        self.layer = 0
         pass
 
     def scr_to_world(self, x, y):
@@ -42,7 +46,6 @@ class Editor:
     def size_to_scr(self, size):
         return size / (1.0/Grid.zoom)
         
-    
     def dispatch_mousewheel(self,y):
         if(self.mouse_context == "camera"):
             self.camera_zoom += (y*0.1)
@@ -51,14 +54,17 @@ class Editor:
 
     def dispatch_mousedown(self,button,x,y):
 
+        if(self.mouse_context == "toolbox"):
+            ToolBox.dispatch_mousedown(self, button, x,y)
 
         if(self.mouse_context == "camera"):
-
             if(button ==1):
                 if(BrushTool.is_defining()):
                     BrushTool.end_brush()
                 else:
-                    BrushTool.start_brush()
+                    BrushSelectTool.attempt_select(self)
+                    if(len(Brushes.selected_brushes) == 0):
+                        BrushTool.start_brush()
 
             if(button ==2):
                 origin_x, origin_y = self.scr_to_world(self.nmx,self.nmy)
@@ -89,6 +95,11 @@ class Editor:
         self.nmx = ((self.mx / BGL.engine.window.width)*16)-8
         self.nmy = ((self.my / BGL.engine.window.height)*9)-4.5
         self.wmx, self.wmy = self.scr_to_world(self.nmx, self.nmy)
+        if(ToolBox.is_open()) and (self.nmx < -4.8):
+                self.mouse_context = "toolbox"
+        else:
+                self.mouse_context = "camera"
+            
 
     def tick(self):
         self.update_mouse_position()
@@ -97,16 +108,22 @@ class Editor:
         pass
 
 
-    def get_status_str(self):
+    def get_title_str(self):
         return "EDITOR. screen({0:0.2f},{1:0.2f}, world({2:0.2f},{3:0.2f})".format( self.nmx, self.nmy, self.wmx, self.wmy)
+    def get_status_str(self):
+        return "LAYER:{0}".format( self.layer)
 
     def render(self):
         with BGL.context.render_target(Editor.ui_fb):
             BGL.context.clear(0.0,0.0,0.0,0.0)
             with BGL.blendmode.alpha_over:
+
+                ToolBox.render(self)
                 TitleBar.render(self)
-                BGL.lotext.render_text_pixels(self.get_status_str(), 1,1, [0.3,0.3,0.3])
-                BGL.lotext.render_text_pixels(self.get_status_str(), 1,2, [1.0,1.0,1.0])
+                BGL.lotext.render_text_pixels(self.get_title_str(), 2,1, [0.3,0.3,0.3])
+                BGL.lotext.render_text_pixels(self.get_title_str(), 2,2, [1.0,1.0,1.0])
+                BGL.lotext.render_text_pixels(self.get_status_str(), 2,540-11, [0.3,0.3,0.3])
+                BGL.lotext.render_text_pixels(self.get_status_str(), 2,540-10, [1.0,1.0,1.0])
 
 
         BGL.context.clear(0.0,0.0,0.0,0.0)
@@ -121,3 +138,5 @@ class Editor:
 
     def finalize(self):
         pass
+
+
