@@ -34,9 +34,15 @@ class Brushes:
                         cny*=60
                         cnx += 480
                         cny += 270
-                        BGL.lotext.render_text_pixels( "Boof", cnx, cny, [1.0,1.0,1.0])
+                        label = "{0}:{1}".format(brush.id, brush.polyfill_key)
+                        BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny, [1.0,1.0,1.0])
+
         with BGL.blendmode.alpha_over:
             Brushes.ui_fb.render_processed(BGL.assets.get("beagle-2d/shader/passthru"))
+
+    def set_polyfill(polyfill_key):
+        for brush in Brushes.selected_brushes:
+            brush.polyfill_key = polyfill_key
 
     def move_left():
         for brush in Brushes.selected_brushes:

@@ -11,6 +11,9 @@ class WorldCursor:
 
     def render(app):
 
+        if(app.mouse_context == "toolbox"):
+            return
+
         cx,cy = app.nmx, app.nmy
 
         cx, cy = app.scr_to_world(cx,cy)
@@ -29,7 +32,7 @@ class WorldCursor:
         WorldCursor.y = cy
 
 
-        cx, cy = app.world_to_scr(cx,cy)
+        cx, cy = app.world_to_scr(WorldCursor.ix,WorldCursor.iy)
 
         sz = WorldCursor.size / (1.0/app.camera_zoom)
         WorldCursor.primitive.render_shaded(WorldCursor.shader, {

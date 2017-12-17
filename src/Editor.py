@@ -78,10 +78,8 @@ class Editor:
         pass
  
     def dispatch_mousemotion(self,x,y):
-    #    self.mx = x
-    #    self.my = y
-    #    self.nmx = ((self.mx / BGL.engine.window.width)*16)-8
-    #    self.nmy = ((self.my / BGL.engine.window.height)*9)-4.5
+        if(self.mouse_context == "toolbox"):
+            ToolBox.dispatch_mousemotion(self, x,y)
         pass
 
     def configure(self, config):
@@ -99,14 +97,12 @@ class Editor:
                 self.mouse_context = "toolbox"
         else:
                 self.mouse_context = "camera"
-            
 
     def tick(self):
         self.update_mouse_position()
         if BrushTool.is_defining():
             BrushTool.update_brush()
         pass
-
 
     def get_title_str(self):
         return "EDITOR. screen({0:0.2f},{1:0.2f}, world({2:0.2f},{3:0.2f})".format( self.nmx, self.nmy, self.wmx, self.wmy)
