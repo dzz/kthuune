@@ -2,6 +2,8 @@ from Beagle import API as BGL
 from .EditorElements.Cursor import Cursor
 from .EditorElements.Grid import Grid
 from .EditorElements.TitleBar import TitleBar
+from .EditorElements.BrushTool import BrushTool
+from .EditorElements.Brushes import Brushes
 
 class Editor:
     ui_fb = BGL.framebuffer.from_dims(960, 540)
@@ -30,13 +32,15 @@ class Editor:
         return ( x, y )
 
     def world_to_scr(self, x, y):
-
         x-= Grid.cx
         y-= Grid.cy
 
         x = x / (1.0/Grid.zoom)
         y = y / (1.0/Grid.zoom)
         return ( x, y )
+
+    def size_to_scr(self, size):
+        return size / (1.0/Grid.zoom)
         
     
     def dispatch_mousewheel(self,y):
@@ -47,13 +51,20 @@ class Editor:
 
     def dispatch_mousedown(self,button,x,y):
 
+
         if(self.mouse_context == "camera"):
-            if(button !=2):
-                return
-            origin_x, origin_y = self.scr_to_world(self.nmx,self.nmy)
+
+            if(button ==1):
+                if(BrushTool.is_defining()):
+                    BrushTool.end_brush()
+                else:
+                    BrushTool.start_brush()
+
+            if(button ==2):
+                origin_x, origin_y = self.scr_to_world(self.nmx,self.nmy)
     
-            self.camera_x = origin_x;
-            self.camera_y = origin_y;
+                self.camera_x = origin_x;
+                self.camera_y = origin_y;
     
         pass
  
@@ -81,6 +92,8 @@ class Editor:
 
     def tick(self):
         self.update_mouse_position()
+        if BrushTool.is_defining():
+            BrushTool.update_brush()
         pass
 
 
@@ -98,6 +111,9 @@ class Editor:
 
         BGL.context.clear(0.0,0.0,0.0,0.0)
         Grid.render(self)
+        Brushes.render_rects(self)
+        Brushes.render_labels(self)
+        BrushTool.render(self)
         with BGL.blendmode.alpha_over:
             Editor.ui_fb.render_processed(BGL.assets.get("beagle-2d/shader/passthru"))
         with BGL.blendmode.alpha_over:

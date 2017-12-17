@@ -15,6 +15,7 @@
         ],
         "texture" : [
             { "name" : "grid", "filename" : "{package_path}/grid.png", "filtered" : true },
+            { "name" : "brush", "filename" : "{package_path}/brush.png", "filtered" : true },
             { "name" : "worldcursor", "filename" : "{package_path}/worldcursor.png", "filtered" : true }
         ]
     }

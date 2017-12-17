@@ -6,6 +6,8 @@ class WorldCursor:
     primitive = BGL.primitive.unit_uv_square
     shader = BGL.assets.get('beagle-2d/shader/beagle-2d')
     size = 0.2
+    x = 0.0
+    y = 0.0
 
     def render(app):
 
@@ -18,6 +20,9 @@ class WorldCursor:
 
         cx = floor(cx)
         cy = floor(cy)
+
+        WorldCursor.x = cx
+        WorldCursor.y = cy
 
         cx, cy = app.world_to_scr(cx,cy)
 
