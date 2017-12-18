@@ -193,6 +193,26 @@ class DFRenderer( FloorRenderer ):
         else:
             self.guppyRenderer.renderTexturePriorityObjects( renderable_objects )
 
+
+    def render_preview(self):
+        shader = BGL.assets.get("KT-compositor/shader/compositor")
+        with BGL.blendmode.alpha_over:
+            BGL.compositor.render_composite( shader, {
+                "tick"              : self._tick,
+                "camera_position" : self.camera.p,
+                "fuzz_amt"  : self.fuzz_amt,
+                "floor_buffer" : self.floor_buffer,
+                "shadow_buffer" : self.shadow_buffer,
+                "light_buffer" : self.light_buffer,
+                "object_buffer" : self.object_buffer,
+                "vision_buffer" : self.vision_lightmap.get_lightmap_texture(),
+                "photon_buffer" : self.photon_buffer,
+                "reflect_map" : self.reflection_map,
+                "canopy_buffer" : self.canopy_buffer,
+                "target_width" : Platform.video.get_screen_width(),
+                "target_height" : Platform.video.get_screen_height() 
+            })
+
     def render_composite(self):
         #print("FRAMESTART")
         shader  = self.compositor_shader

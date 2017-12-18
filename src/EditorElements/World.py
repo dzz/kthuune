@@ -1,6 +1,7 @@
 from .Brushes import Brushes
 from .GeneratedArea import GeneratedArea
 from .PolyFillList import PolyFillList
+from .LevelPreview import LevelPreview
 
 class World:
     Brushes = Brushes
@@ -33,7 +34,6 @@ class World:
 
         World.GeneratedArea.serialize()
 
-
-
+        LevelPreview.reset( World.GeneratedArea.output_data )
 
         

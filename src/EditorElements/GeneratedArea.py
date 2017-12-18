@@ -24,13 +24,13 @@ class GeneratedArea:
         limit = int(GeneratedArea.width/2)
         for x in range( -1 * limit, limit):
             for y in range( -1 * limit, limit):
-                GeneratedArea.add_line("TILE")
-                GeneratedArea.add_line("{0}".format(x))
-                GeneratedArea.add_line("{0}".format(y))
                 if (x,y) in GeneratedArea.tiles:
+                    GeneratedArea.add_line("TILE")
+                    GeneratedArea.add_line("{0}".format(x))
+                    GeneratedArea.add_line("{0}".format(y))
                     GeneratedArea.add_line("{0}".format(GeneratedArea.tiles[(x,y)]))
-                else:
-                    GeneratedArea.add_line("{0}".format(0))
+                #else:
+                #    GeneratedArea.add_line("{0}".format(0))
 
     def serialize_player():
         GeneratedArea.add_line("OBJECT")

@@ -7,6 +7,7 @@ from .EditorElements.BrushTool import BrushTool
 from .EditorElements.Brushes import Brushes
 from .EditorElements.BrushSelectTool import BrushSelectTool
 from .EditorElements.World import World
+from .EditorElements.LevelPreview import LevelPreview
 
 class Editor:
     instance = None
@@ -125,6 +126,7 @@ class Editor:
 
         BGL.context.clear(0.0,0.0,0.0,0.0)
         Grid.render(self)
+        LevelPreview.render(self)
         Brushes.render_rects(self)
         Brushes.render_labels(self)
         BrushTool.render(self)
@@ -132,6 +134,7 @@ class Editor:
             Editor.ui_fb.render_processed(BGL.assets.get("beagle-2d/shader/passthru"))
         with BGL.blendmode.alpha_over:
             Cursor.render(self)
+
 
     def finalize(self):
         pass
