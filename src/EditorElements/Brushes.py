@@ -35,7 +35,8 @@ class Brushes:
                         cnx += 480
                         cny += 270
                         label = "{0}:{1}".format(brush.id, brush.polyfill_key)
-                        BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny, [1.0,1.0,1.0])
+                        BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny-8, [1.0,1.0,1.0])
+                        BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny, [0.0,0.0,0.0])
 
         with BGL.blendmode.alpha_over:
             Brushes.ui_fb.render_processed(BGL.assets.get("beagle-2d/shader/passthru"))
@@ -77,9 +78,9 @@ class Brushes:
                 cny = (cy1+cy2)/2
 
                 if brush in Brushes.selected_brushes:
-                    filter_color = [ 1.0,1.0,1.0,1.0]
+                    filter_color = [ 0.7,0.7,0.7,0.7]
                 else:
-                    filter_color = [ 0.7,0.7,0.7,1.0]
+                    filter_color = [ 0.5,0.5,0.5,0.5]
                 Brushes.primitive.render_shaded(Brushes.shader, {
                     "texBuffer"            : Brushes.texture,
                     "translation_local"    : [ 0.0,0.0],

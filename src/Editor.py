@@ -27,7 +27,16 @@ class Editor:
         self.wmx = 0
         self.wmy = 0
         self.layer = 0
+        self.show_preview = True
+        self.show_brushes = True
         pass
+
+    def toggle_preview():
+        Editor.instance.show_preview = not Editor.instance.show_preview
+
+    def toggle_brushes():
+        Editor.instance.show_brushes = not Editor.instance.show_brushes
+
 
     def scr_to_world(self, x, y):
         x = x * (1.0/Grid.zoom)
@@ -127,9 +136,12 @@ class Editor:
 
         BGL.context.clear(0.0,0.0,0.0,0.0)
         Grid.render(self)
-        LevelPreview.render(self)
-        Brushes.render_rects(self)
-        Brushes.render_labels(self)
+        if(self.show_preview):
+            LevelPreview.render(self)
+
+        if(self.show_brushes):
+            Brushes.render_rects(self)
+            Brushes.render_labels(self)
         BrushTool.render(self)
         with BGL.blendmode.alpha_over:
             Editor.ui_fb.render_processed(BGL.assets.get("beagle-2d/shader/passthru"))
@@ -142,3 +154,5 @@ class Editor:
 
 
 BGL.keyboard.register_keydown_handler('p', World.reduce)
+BGL.keyboard.register_keydown_handler('b', Editor.toggle_brushes)
+BGL.keyboard.register_keydown_handler('v', Editor.toggle_preview)

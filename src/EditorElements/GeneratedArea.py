@@ -6,6 +6,7 @@ class GeneratedArea:
 
     def reset():
         GeneratedArea.output_data = ""
+        GeneratedArea.extra = ""
         GeneratedArea.tiles = {}
 
     def set_tile(x,y,value):
@@ -40,7 +41,6 @@ class GeneratedArea:
         GeneratedArea.add_line("{}")
 
     def serialize():
-        GeneratedArea.output_data = ""
         GeneratedArea.serialize_model()
         GeneratedArea.serialize_tiles()
         GeneratedArea.serialize_player()
