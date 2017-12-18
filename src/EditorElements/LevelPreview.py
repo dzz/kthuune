@@ -8,7 +8,11 @@ from ..KPlayer import KPlayer
 from .Grid import Grid
 
 class PreviewCamera(Camera):
-    pass
+    def __init__(self, **kwargs):
+        Camera.__init__(self,**kwargs)
+        self.cinema_target = None
+        self.cinema_timeout = 0
+        self.cinema_callback = None
 
 class LevelPreview:
 
@@ -26,8 +30,12 @@ class LevelPreview:
         LevelPreview.floor = DungeonFloor( game = LevelPreview, tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = LevelPreview.camera, player = LevelPreview.player, objects = [], area_def = area_def )
 
 
-    def render(app):
+    def tick(app):
+        if LevelPreview.floor:
+            LevelPreview.controllers.tick()
+            LevelPreview.floor.tick()
 
+    def render(app):
         LevelPreview.camera.p[0] = Grid.cx*2
         LevelPreview.camera.p[1] = Grid.cy*2
         LevelPreview.camera.zoom = Grid.zoom*0.5

@@ -101,6 +101,7 @@ class Editor:
                 self.mouse_context = "camera"
 
     def tick(self):
+        LevelPreview.tick(self)
         self.update_mouse_position()
         if BrushTool.is_defining():
             BrushTool.update_brush()
