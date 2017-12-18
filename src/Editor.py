@@ -39,9 +39,11 @@ class Editor:
         Editor.instance.show_brushes = not Editor.instance.show_brushes
 
     def layer_down():
+        Brushes.selected_brushes = []
         Editor.instance.layer = max( 0, Editor.instance.layer - 1)
 
     def layer_up():
+        Brushes.selected_brushes = []
         Editor.instance.layer = Editor.instance.layer + 1
 
 

@@ -1,5 +1,4 @@
 from Beagle import API as BGL
-from .WorldCursor import WorldCursor
 
 class Grid:
     shader = BGL.assets.get('KT-editor/shader/grid')
@@ -29,5 +28,3 @@ class Grid:
             "grid_cell" : Grid.texture
         } )    
 
-        with BGL.blendmode.add:
-            WorldCursor.render(app)

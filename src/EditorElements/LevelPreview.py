@@ -32,7 +32,14 @@ class LevelPreview:
 
     def tick(app):
         if LevelPreview.floor:
+            LevelPreview.player.tick()
             LevelPreview.controllers.tick()
+            if(LevelPreview.floor.freeze_delay < 0):
+                if(LevelPreview.floor.freeze_frames > 0):
+                    LevelPreview.floor.freeze_frames = LevelPreview.floor.freeze_frames - 1
+            else:
+                LevelPreview.floor.freeze_delay = LevelPreview.floor.freeze_delay - 1
+
             LevelPreview.floor.tick()
 
     def render(app):

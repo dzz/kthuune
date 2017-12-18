@@ -12,7 +12,14 @@ class GeneratedArea:
         GeneratedArea.extra = ""
         GeneratedArea.tiles = {}
 
-    def set_tile(x,y,value):
+    def set_tile(x,y,value, brush = None):
+
+        if brush:
+            if x < brush.x1: return
+            if x > brush.x2: return
+            if y < brush.y1: return
+            if y > brush.y2: return
+
         GeneratedArea.tiles[(int(x),int(y))] = value
         pass
 
