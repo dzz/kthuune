@@ -194,6 +194,14 @@ class DFRenderer( FloorRenderer ):
             self.guppyRenderer.renderTexturePriorityObjects( renderable_objects )
 
 
+    def render_canopy(self):
+        with BGL.context.render_target( self.canopy_buffer):
+            BGL.context.clear(1.0,1.0,1.0,0.0)
+            with BGL.blendmode.alpha_over:
+                self.render_objects("canopy", True)
+        with BGL.blendmode.alpha_over:
+            self.canopy_buffer.render_processed(DFRenderer.canopy_shader, { "light_buffer" : self.light_buffer })
+
     def render_preview(self):
         shader = BGL.assets.get("KT-compositor/shader/compositor")
         with BGL.blendmode.alpha_over:
@@ -212,6 +220,7 @@ class DFRenderer( FloorRenderer ):
                 "target_width" : Platform.video.get_screen_width(),
                 "target_height" : Platform.video.get_screen_height() 
             })
+        self.render_canopy()
 
     def render_composite(self):
         #print("FRAMESTART")
@@ -235,12 +244,7 @@ class DFRenderer( FloorRenderer ):
                 "target_width" : Platform.video.get_screen_width(),
                 "target_height" : Platform.video.get_screen_height() 
             })
-        with BGL.context.render_target( self.canopy_buffer):
-            BGL.context.clear(1.0,1.0,1.0,0.0)
-            with BGL.blendmode.alpha_over:
-                self.render_objects("canopy", True)
-        with BGL.blendmode.alpha_over:
-            self.canopy_buffer.render_processed(DFRenderer.canopy_shader, { "light_buffer" : self.light_buffer })
+        self.render_canopy()
         with BGL.blendmode.add:
             self.render_objects( "additive" )
 
