@@ -12,9 +12,8 @@ class room_test:
         wsb = WorldSpaceBrush.from_brush(brush) 
 
         Factory.make_light( area, wsb.cx, wsb.cy, "shipfill" )
-        edges = Edges.make_edges( area,brush, Brushes.brushes )
-
-        Factory.make_edges( area, edges )
+        #edges = Edges.make_edges( area,brush, Brushes.brushes )
+        #Factory.make_edges( area, edges )
 
 
         

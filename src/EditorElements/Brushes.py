@@ -26,6 +26,8 @@ class Brushes:
             BGL.context.clear( 0.0,0.0,0.0,0.0 )
             with BGL.blendmode.alpha_over:
                 for brush in Brushes.brushes:
+                        if brush.layer != app.layer:
+                            continue
                         cx1, cy1 = app.world_to_scr( brush.x1, brush.y1)
                         cx2, cy2 = app.world_to_scr( brush.x2, brush.y2)
                         cnx = (cx1+cx2)/2
@@ -81,6 +83,10 @@ class Brushes:
                     filter_color = [ 0.7,0.7,0.7,0.7]
                 else:
                     filter_color = [ 0.5,0.5,0.5,0.5]
+
+                if brush.layer !=  app.layer:
+                    filter_color = [ 0.2,0.2,0.2,0.2]
+
                 Brushes.primitive.render_shaded(Brushes.shader, {
                     "texBuffer"            : Brushes.texture,
                     "translation_local"    : [ 0.0,0.0],

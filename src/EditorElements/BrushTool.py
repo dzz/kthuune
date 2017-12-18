@@ -19,9 +19,10 @@ class BrushTool:
     def is_defining():
         return BrushTool.x1 is not None
 
-    def start_brush():
+    def start_brush(app):
         BrushTool.x1 = WorldCursor.x
         BrushTool.y1 = WorldCursor.y
+        BrushTool.layer = app.layer
 
     def end_brush():
         if(BrushTool.x1-BrushTool.x2) == 0:

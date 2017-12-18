@@ -8,6 +8,7 @@ from .EditorElements.Brushes import Brushes
 from .EditorElements.BrushSelectTool import BrushSelectTool
 from .EditorElements.World import World
 from .EditorElements.LevelPreview import LevelPreview
+from .EditorElements.WorldCursor import WorldCursor
 
 class Editor:
     instance = None
@@ -36,6 +37,12 @@ class Editor:
 
     def toggle_brushes():
         Editor.instance.show_brushes = not Editor.instance.show_brushes
+
+    def layer_down():
+        Editor.instance.layer = max( 0, Editor.instance.layer - 1)
+
+    def layer_up():
+        Editor.instance.layer = Editor.instance.layer + 1
 
 
     def scr_to_world(self, x, y):
@@ -75,7 +82,7 @@ class Editor:
                 else:
                     BrushSelectTool.attempt_select(self)
                     if(len(Brushes.selected_brushes) == 0):
-                        BrushTool.start_brush()
+                        BrushTool.start_brush(self)
 
             if(button ==2):
                 origin_x, origin_y = self.scr_to_world(self.nmx,self.nmy)
@@ -143,6 +150,8 @@ class Editor:
             Brushes.render_rects(self)
             Brushes.render_labels(self)
         BrushTool.render(self)
+        with BGL.blendmode.add:
+            WorldCursor.render(self)
         with BGL.blendmode.alpha_over:
             Editor.ui_fb.render_processed(BGL.assets.get("beagle-2d/shader/passthru"))
         with BGL.blendmode.alpha_over:
@@ -156,3 +165,5 @@ class Editor:
 BGL.keyboard.register_keydown_handler('p', World.reduce)
 BGL.keyboard.register_keydown_handler('b', Editor.toggle_brushes)
 BGL.keyboard.register_keydown_handler('v', Editor.toggle_preview)
+BGL.keyboard.register_keydown_handler('leftbracket', Editor.layer_down)
+BGL.keyboard.register_keydown_handler('rightbracket', Editor.layer_up)

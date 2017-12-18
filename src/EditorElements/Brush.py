@@ -25,6 +25,7 @@ class Brush:
         b.y1 = tool.y1
         b.x2 = tool.x2
         b.y2 = tool.y2
+        b.layer = tool.layer
         return b
 
 

@@ -10,7 +10,7 @@ class Factory:
         area.add_line("0") #width
         area.add_line("0") #height
 
-    def make_edges( area, edges, physics = True, lights = True, decoration = True ):
+    def make_edges( area, edges, physics = True, lights = True, decoration = False ):
         for edge in edges:
             area.add_line("LINE")
             area.add_line("{0}".format(edge[0]*2.0))

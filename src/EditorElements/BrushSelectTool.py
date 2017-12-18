@@ -10,7 +10,6 @@ class BrushSelectTool:
     def disable_multi():
         BrushSelectTool.multi = False
 
-
     def attempt_select(app):
         valid = Brushes.by_layer(app.layer)
         for brush in valid:
