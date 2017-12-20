@@ -2,6 +2,7 @@ from Beagle import API as BGL
 from .WorldCursor import WorldCursor
 from .Brushes import Brushes
 from .Brush import Brush
+from .PolyFillList import PolyFillList
 
 class BrushTool:
     texture = BGL.assets.get('KT-editor/texture/brush')
@@ -42,18 +43,18 @@ class BrushTool:
         BrushTool.x1 = None 
 
     def update_brush():
-        BrushTool.x2 = WorldCursor.x
-        BrushTool.y2 = WorldCursor.y
 
-        #if(BrushTool.x1>BrushTool.x2):
-        #    x = BrushTool.x2 
-        #    BrushTool.x2 = BrushTool.x1
-        #    BrushTool.x1 = x
+        polyfill = PolyFillList.getPolyFill( Brush.template_polyfill )
 
-        #if(BrushTool.y1>BrushTool.y2):
-        #    y = BrushTool.y2 
-        #    BrushTool.y2 = BrushTool.y1
-        #    BrushTool.y1 = y
+        if not polyfill.dims:
+            BrushTool.x2 = WorldCursor.x
+            BrushTool.y2 = WorldCursor.y
+        else:
+            BrushTool.x1 = WorldCursor.x
+            BrushTool.y1 = WorldCursor.y
+            BrushTool.x2 = WorldCursor.x+polyfill.dims[0]
+            BrushTool.y2 = WorldCursor.y+polyfill.dims[1]
+
 
     def render(app):
         if(BrushTool.is_defining()):

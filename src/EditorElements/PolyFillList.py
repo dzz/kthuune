@@ -9,6 +9,8 @@ class PolyFillList:
     def getPolyFillMap():
         if PolyFillList.cached_list is None:
             class no_polyfill():
+                dims = None
+                mesh_key = None
                 def reduce(area,brush):
                     pass
             polyfill_map = {
@@ -19,6 +21,9 @@ class PolyFillList:
             }
             PolyFillList.cached_list = polyfill_map
         return PolyFillList.cached_list
+
+    def getPolyFill(key):
+        return PolyFillList.getPolyFillMap()[key]
 
     def getPolyFills():
         return list(PolyFillList.getPolyFillMap().keys())

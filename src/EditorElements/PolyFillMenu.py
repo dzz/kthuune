@@ -34,7 +34,6 @@ class PolyFillMenu:
         menu.my = floor(y / 2)
 
     def dispatch_mousedown(app, button, x, y):
-
         Brush.set_template_polyfill( PolyFillMenu.hover_item )
         Brushes.set_polyfill( PolyFillMenu.hover_item )
         

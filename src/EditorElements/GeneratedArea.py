@@ -5,12 +5,14 @@ class GeneratedArea:
     height = 0
     output_data = ""
     tiles = {}
+    conditional_tiles = {}
     shadow_tiles = [ 59,60 ]
 
     def reset():
         GeneratedArea.output_data = ""
         GeneratedArea.extra = ""
         GeneratedArea.tiles = {}
+        GeneratedArea.conditional_tiles = {}
 
     def set_tile(x,y,value, brush = None):
 
@@ -21,7 +23,9 @@ class GeneratedArea:
             if y > brush.y2: return
 
         GeneratedArea.tiles[(int(x),int(y))] = value
-        pass
+
+    def set_conditional_tile(x,y,value, brush = None):
+        GeneratedArea.conditional_tiles[(int(x),int(y))] = value
 
     def add_line(line):
         GeneratedArea.output_data = "{0}{1}\n".format(GeneratedArea.output_data,line)
@@ -36,10 +40,14 @@ class GeneratedArea:
         for x in range( -1 * limit, limit):
             for y in range( -1 * limit, limit):
                 if (x,y) in GeneratedArea.tiles:
+                    tile = GeneratedArea.tiles[(x,y)]
+                    if(x,y) in GeneratedArea.conditional_tiles:
+                        tile = GeneratedArea.conditional_tiles[(x,y)]
+
                     GeneratedArea.add_line("TILE")
                     GeneratedArea.add_line("{0}".format(x))
                     GeneratedArea.add_line("{0}".format(y))
-                    GeneratedArea.add_line("{0}".format(GeneratedArea.tiles[(x,y)]))
+                    GeneratedArea.add_line("{0}".format( tile ))
                 else:
                     if (x,y-1) in GeneratedArea.tiles:
                         GeneratedArea.add_line("TILE")
