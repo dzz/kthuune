@@ -4,6 +4,7 @@ from .Factory import Factory
 from .Edges import Edges
 
 class room_test:
+    layer = 1
     dims = None
     mesh_key = "platform"
     def reduce( area, brush ):

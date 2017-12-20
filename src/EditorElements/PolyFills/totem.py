@@ -5,13 +5,14 @@ from .WorldSpaceBrush import WorldSpaceBrush
 class totem:
     dims = (3,3)
     mesh_key = "platform"
+    layer = 2
     def reduce(area, brush):
         wsb = WorldSpaceBrush.from_brush(brush) 
         Factory.make_totem( area, wsb.cx, wsb.cy)
 
         for x in range(brush.x1, brush.x2):
             for y in range(brush.y1, brush.y2):
-                area.set_tile(x,y, choice(range(40,47)))
+                area.set_tile(x,y, choice(range(43,47)))
 
         for x in range(brush.x1-1, brush.x2+1):
                 area.set_conditional_tile(x,brush.y1-1, choice(range(30,42)))

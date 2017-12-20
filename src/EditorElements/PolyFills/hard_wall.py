@@ -1,6 +1,7 @@
 from .Factory import Factory
 
 class hard_wall:
+    layer = 3
     def reduce(area, brush):
         Factory.make_edges( area,
             [

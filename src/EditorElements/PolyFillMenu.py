@@ -14,7 +14,7 @@ class PolyFillMenu:
             BGL.lotext.render_text_pixels("Brush Polyfill", 5, 18, [1.0,1.0,1.0])
             BGL.lotext.render_text_pixels("--------------", 5, 27, [1.0,1.0,1.0])
 
-        for idx,polyfill in enumerate(PolyFillList.getPolyFills()):
+        for idx,polyfill in enumerate(PolyFillList.getPolyFills(app.layer)):
             color = [ 0.5,0.5,0.5 ]
             menu = PolyFillMenu
             base_px = 38
