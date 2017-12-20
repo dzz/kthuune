@@ -1,4 +1,5 @@
 import json
+
 class Factory:
     def make_light( area, x, y, light_class ):
         area.add_line("OBJECT")

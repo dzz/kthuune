@@ -2,10 +2,13 @@ from .Brushes import Brushes
 from .GeneratedArea import GeneratedArea
 from .PolyFillList import PolyFillList
 from .LevelPreview import LevelPreview
+from .Remesher import Remesher
+from .PolyFills.Factory import Factory
 
 class World:
     Brushes = Brushes
     GeneratedArea = GeneratedArea
+    Meshes = [ "platform" ]
 
     def find_limits():
         #find a square area that fits the entire world
@@ -33,8 +36,12 @@ class World:
                 polyfill = polyfill_map[brush.polyfill_key]
                 polyfill.reduce( World.GeneratedArea, brush )
 
+        for mesh_key in World.Meshes:
+            remesher = Remesher()
+            mesh = remesher.remesh( sorted_brushes, mesh_key )
+            Factory.make_edges( World.GeneratedArea, mesh , True, True, False )
+
         World.GeneratedArea.serialize()
 
         LevelPreview.reset( World.GeneratedArea.output_data )
 
-        

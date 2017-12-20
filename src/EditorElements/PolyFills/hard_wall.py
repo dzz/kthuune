@@ -2,6 +2,9 @@ from .Factory import Factory
 
 class hard_wall:
     layer = 3
+    dims = None
+    mesh_key = None
+
     def reduce(area, brush):
         Factory.make_edges( area,
             [
