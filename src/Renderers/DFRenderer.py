@@ -198,6 +198,7 @@ class DFRenderer( FloorRenderer ):
         with BGL.context.render_target( self.canopy_buffer):
             BGL.context.clear(1.0,1.0,1.0,0.0)
             with BGL.blendmode.alpha_over:
+                self.tilemap_fg.render()
                 self.render_objects("canopy", True)
         with BGL.blendmode.alpha_over:
             self.canopy_buffer.render_processed(DFRenderer.canopy_shader, { "light_buffer" : self.light_buffer })

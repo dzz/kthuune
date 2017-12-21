@@ -13,6 +13,7 @@ class Remesher:
             bottom = max(bottom,brush.y2)
         self.left, self.right, self.top, self.bottom = left,right,top,bottom
 
+
     def remesh( self, brushes, key ):
 
         meshable = list(filter( lambda brush: PolyFillList.getPolyFill(brush.polyfill_key).mesh_key == key , brushes))

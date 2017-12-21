@@ -19,7 +19,8 @@ def get_area_data(data):
         "object_defs" : [],
         "prop_defs" : [],
         "magic_lines" : [],
-        "tile_defs" : []
+        "tile_defs" : [],
+        "tile_defs_fg" : []
     }
 
     data = data.replace("\r","").split("\n")
@@ -132,6 +133,8 @@ def get_area_data(data):
                 t["y"] = int(txt) 
             if row ==2:
                 t["idx"] = int(txt)
+            if row ==3:
+                t["layer"] = "fg"
 
         if mode == "PROP":
             p = parsed["prop_defs"][-1]

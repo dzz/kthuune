@@ -14,6 +14,9 @@ class hard_wall:
                 [ brush.x2, brush.y1, brush.x2, brush.y2 ],
             ],
             True, True, False)
+        for x in range(brush.x1, brush.x2):
+            for y in range(brush.y1, brush.y2):
+                area.set_tile(x,y, 5, brush, True)
 
 
 

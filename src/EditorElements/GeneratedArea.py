@@ -12,17 +12,20 @@ class GeneratedArea:
         GeneratedArea.output_data = ""
         GeneratedArea.extra = ""
         GeneratedArea.tiles = {}
+        GeneratedArea.fg_tiles = {}
         GeneratedArea.conditional_tiles = {}
 
-    def set_tile(x,y,value, brush = None):
-
+    def set_tile(x,y,value, brush = None, fg = False):
         if brush:
             if x < brush.x1: return
             if x > brush.x2: return
             if y < brush.y1: return
             if y > brush.y2: return
 
-        GeneratedArea.tiles[(int(x),int(y))] = value
+        if not fg:
+            GeneratedArea.tiles[(int(x),int(y))] = value
+        else:
+            GeneratedArea.fg_tiles[(int(x),int(y))] = value
 
     def set_conditional_tile(x,y,value, brush = None):
         GeneratedArea.conditional_tiles[(int(x),int(y))] = value
@@ -54,6 +57,13 @@ class GeneratedArea:
                         GeneratedArea.add_line("{0}".format(x))
                         GeneratedArea.add_line("{0}".format(y))
                         GeneratedArea.add_line("{0}".format(choice( GeneratedArea.shadow_tiles)))
+                if (x,y) in GeneratedArea.fg_tiles:
+                    tile = GeneratedArea.fg_tiles[(x,y)]
+                    GeneratedArea.add_line("TILE")
+                    GeneratedArea.add_line("{0}".format(x))
+                    GeneratedArea.add_line("{0}".format(y))
+                    GeneratedArea.add_line("{0}".format( tile ))
+                    GeneratedArea.add_line("foreground")
 
     def serialize_player():
         GeneratedArea.add_line("OBJECT")

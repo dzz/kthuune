@@ -381,15 +381,24 @@ class AreaCompiler():
     def get_tiledata(self):
         return self.tile_data
 
+    def get_tiledata_fg(self):
+        return self.tile_data_fg
+
     def get_photon_emitters(self):
         return self.photon_emitters
 
     def generate_tiledata( self, df ):
         self.df = df 
         tile_data = [0]*(df.tilemap_width*df.tilemap_height)
+        tile_data_fg = [0]*(df.tilemap_width*df.tilemap_height)
         for tile_def in self.ad["tile_defs"]:
             addr = tile_def["x"] + (tile_def["y"]*df.tilemap_width)
-            tile_data[addr] = tile_def["idx"] + 1
-        self.tile_data = tile_data;
+            if not "layer" in tile_def:
+                tile_data[addr] = tile_def["idx"] + 1
+            else:
+                tile_data_fg[addr] = tile_def["idx"] + 1
+
+        self.tile_data = tile_data
+        self.tile_data_fg = tile_data_fg
         return;
 

@@ -14,26 +14,6 @@ from .KTState import KTState
 from .KSounds import KSounds
 import client.system.keyboard as keyboard
 
-
-class Portal(Object):
-    def __init__(self,**kwargs):
-        overrides = {
-                        "texture" : BGL.assets.get('KT-forest/texture/portal'),
-                        'light_radius' : 65.0,
-                        'size': [ 13.0, 13.0] ,
-                        'light_color' : [ 0.2,0.4,0.4,0.4],
-                        'rad' : uniform(-3.14,3.14),
-                        'light_type' : Object.LightTypes.DYNAMIC_SHADOWCASTER,
-                        'tick_type' : Object.TickTypes.TICK_FOREVER,
-                        "buftarget" : "floor"
-                    }
-        overrides.update(kwargs)
-        Object.__init__(self,**overrides)
-
-    def tick(self):
-        self.rad = self.rad + 0.001
-
-
 Floor = createFloorClass( DFRenderer )
 class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
@@ -133,9 +113,27 @@ class DungeonFloor( Floor ):
             }
         )
 
+        beagle_tilemap_fg = BGL.tilemap(
+            tileset = beagle_tileset,
+            configuration = {
+                "layers" : [
+                    {
+                        "data" : self.generator.get_tiledata_fg(),
+                        "width": self.tilemap_width,
+                        "height": self.tilemap_height,
+                        "name": "floor"
+                    }
+                ]
+            }
+        )
+
         floor_configuration = kwargs
         floor_configuration.update({
             "tilemap" : Tilemap( tilescale = self.tilescale, beagle_tilemap = beagle_tilemap, channel_textures = {
+                "height" : BGL.assets.get("KT-tiles/texture/plain_tiles"),
+                "reflection" : BGL.assets.get("KT-tiles/texture/plain_tiles")
+            } ),
+            "tilemap_fg" : Tilemap( tilescale = self.tilescale, beagle_tilemap = beagle_tilemap_fg, channel_textures = {
                 "height" : BGL.assets.get("KT-tiles/texture/plain_tiles"),
                 "reflection" : BGL.assets.get("KT-tiles/texture/plain_tiles")
             } ),
@@ -167,6 +165,8 @@ class DungeonFloor( Floor ):
         self.recursive_snapper = None
         self.destroyed = False
         Floor.__init__(self,**floor_configuration)
+
+        self.tilemap_fg.linkFloor(self)
         self.active_vision_mute = self.vision_mute
 
 
