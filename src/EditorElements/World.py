@@ -39,7 +39,7 @@ class World:
         for mesh_key in World.Meshes:
             remesher = Remesher()
             mesh = remesher.remesh( sorted_brushes, mesh_key )
-            Factory.make_edges( World.GeneratedArea, mesh , True, True, False )
+            Factory.make_edges( World.GeneratedArea, mesh , True, False, False )
 
         World.GeneratedArea.serialize()
 

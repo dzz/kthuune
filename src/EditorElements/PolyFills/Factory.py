@@ -31,3 +31,30 @@ class Factory:
         area.add_line("False") #is region
         area.add_line("0") #width
         area.add_line("0") #height
+
+    def make_door( area, x1,y1, x2,y2, uid ):
+        area.add_line("OBJECT")
+        area.add_line("door_pin") #object type
+        area.add_line("{0}".format(x1))
+        area.add_line("{0}".format(y1)) 
+        area.add_line(uid)
+        area.add_line("False") #is region
+        area.add_line("0") #width
+        area.add_line("0") #height
+        area.add_line("OBJECT")
+        area.add_line("door_end") #object type
+        area.add_line("{0}".format(x2))
+        area.add_line("{0}".format(y2)) 
+        area.add_line(uid)
+        area.add_line("False") #is region
+        area.add_line("0") #width
+        area.add_line("0") #height
+        area.add_line("OBJECT")
+        area.add_line("door_sensor") #object type
+        area.add_line("{0}".format((x2+x1)/2))
+        area.add_line("{0}".format((y2+y1)/2)) 
+        area.add_line(uid)
+        area.add_line("False") #is region
+        area.add_line("0") #width
+        area.add_line("0") #height
+

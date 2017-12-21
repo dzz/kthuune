@@ -9,5 +9,7 @@ class WorldSpaceBrush:
         wsb.cy = (wsb.y2+wsb.y1)/2.0
         wsb.icx = int((wsb.x2+wsb.x1)/2.0)
         wsb.icy = int((wsb.y2+wsb.y1)/2.0)
+        wsb.width = abs(wsb.x2 - wsb.x1)
+        wsb.height = abs(wsb.y2 - wsb.y1)
         return wsb
 

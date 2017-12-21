@@ -2,6 +2,7 @@ import importlib
 from .PolyFills.room_test import room_test
 from .PolyFills.hard_wall import hard_wall
 from .PolyFills.totem import totem
+from .PolyFills.door import door
 
 class PolyFillList:
     cached_list = None
@@ -19,6 +20,7 @@ class PolyFillList:
                 "room_test" : room_test,
                 "hard_wall" : hard_wall,
                 "totem" : totem,
+                "door" : door,
             }
             PolyFillList.cached_list = polyfill_map
         return PolyFillList.cached_list
