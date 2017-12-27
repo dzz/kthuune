@@ -1,3 +1,5 @@
+#version 330
+
 in vec2 uv;
 uniform float open_amt;
 uniform sampler2D menu;

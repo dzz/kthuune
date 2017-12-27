@@ -1,3 +1,5 @@
+#version 330
+
 in vec2 uv;
 uniform float cam_x;
 uniform float cam_y;
