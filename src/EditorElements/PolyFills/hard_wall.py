@@ -1,4 +1,5 @@
 from .Factory import Factory
+from random import choice
 
 class hard_wall:
     layer = 3
@@ -16,7 +17,7 @@ class hard_wall:
             True, True, False)
         for x in range(brush.x1, brush.x2):
             for y in range(brush.y1, brush.y2):
-                area.set_tile(x,y, 5, brush, True)
+                area.set_tile(x,y, choice(range(10,15)), brush, True)
 
 
 
