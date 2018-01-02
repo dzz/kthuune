@@ -46,14 +46,14 @@ class DungeonFloor( Floor ):
             "generator" : AreaCompiler(),
             "area" : None,
             "renderer_config" : {
-                "vision_lightmap_width" : 960/4,
-                "vision_lightmap_height" : 540/4,
+                "vision_lightmap_width" : 1920,
+                "vision_lightmap_height" : 1080,
                 "photon_map_width" : 1024,
                 "photon_map_height" : 1024,
                 "static_lightmap_width" : 1024,
                 "static_lightmap_height" : 1024,
-                "dynamic_lightmap_width" : 960/4,
-                "dynamic_lightmap_height" : 540/4,
+                "dynamic_lightmap_width" : 1920,
+                "dynamic_lightmap_height" : 1080,
                 "photon_mapper_config" : {
                     'stream' : True,
                     'photon_radius' :70.0,
