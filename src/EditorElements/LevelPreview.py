@@ -16,6 +16,8 @@ class PreviewCamera(Camera):
 
 class LevelPreview:
 
+    tpx = None
+    playercam = False
     camera = PreviewCamera()
     controllers = Controllers()
     player = None
@@ -30,6 +32,7 @@ class LevelPreview:
         LevelPreview.floor = DungeonFloor( game = LevelPreview, tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera = LevelPreview.camera, player = LevelPreview.player, objects = [], area_def = area_def )
 
 
+
     def tick(app):
         if LevelPreview.floor:
             LevelPreview.player.tick()
@@ -42,11 +45,45 @@ class LevelPreview:
 
             LevelPreview.floor.tick()
 
+            if LevelPreview.tpx is not None:
+                LevelPreview.player.p[0] = LevelPreview.tpx
+                LevelPreview.player.p[1] = LevelPreview.tpy
+                LevelPreview.tpx = None
+
+
+    def toggle_camlock():
+        LevelPreview.playercam = not LevelPreview.playercam
+
+
+    def orient_player():
+        if LevelPreview.floor is not None:
+            LevelPreview.player.p[0] = Grid.cx*2
+            LevelPreview.player.p[1] = Grid.cx*2
+
+    def synch_cams(app):
+        if LevelPreview.floor is not None:
+            if(LevelPreview.playercam):
+                LevelPreview.camera.p[0] = LevelPreview.player.p[0]
+                LevelPreview.camera.p[1] = LevelPreview.player.p[1]
+                Grid.cx = LevelPreview.player.p[0]*0.5
+                Grid.cy = LevelPreview.player.p[1]*0.5
+
+    def stash_player():
+        if(LevelPreview.floor is not None):
+            LevelPreview.tpx = LevelPreview.player.p[0]
+            LevelPreview.tpy = LevelPreview.player.p[1]
+
     def render(app):
         LevelPreview.camera.p[0] = Grid.cx*2
         LevelPreview.camera.p[1] = Grid.cy*2
         LevelPreview.camera.zoom = Grid.zoom*0.5
         if LevelPreview.floor is not None:
+            if(LevelPreview.playercam):
+                LevelPreview.camera.p[0] = LevelPreview.player.p[0]
+                LevelPreview.camera.p[1] = LevelPreview.player.p[1]
+                Grid.cx = LevelPreview.player.p[0]*0.5
+                Grid.cy = LevelPreview.player.p[1]*0.5
+
             LevelPreview.floor.precompute_frame()
             LevelPreview.floor.render_preview()
 

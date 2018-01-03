@@ -2,9 +2,10 @@ from ..Brushes import Brushes
 from .WorldSpaceBrush import WorldSpaceBrush
 from .Factory import Factory
 from .Edges import Edges
+from .layer_map import layer_map
 
-class room_test:
-    layer = 1
+class platform_floor:
+    layer = layer_map.get_layer_id("floor")
     dims = None
     mesh_key = "platform"
     def reduce( area, brush ):

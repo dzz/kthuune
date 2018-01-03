@@ -9,6 +9,7 @@ from .EditorElements.BrushSelectTool import BrushSelectTool
 from .EditorElements.World import World
 from .EditorElements.LevelPreview import LevelPreview
 from .EditorElements.WorldCursor import WorldCursor
+from .EditorElements.PolyFills.layer_map import layer_map
 
 class Editor:
     instance = None
@@ -128,9 +129,16 @@ class Editor:
     def get_title_str(self):
         return "EDITOR. screen({0:0.2f},{1:0.2f}, world({2:0.2f},{3:0.2f})".format( self.nmx, self.nmy, self.wmx, self.wmy)
     def get_status_str(self):
-        return "LAYER:{0}".format( self.layer)
+        if(self.layer > 0 and self.layer<len(layer_map.key_order)):
+            layername = layer_map.key_order[self.layer]
+        else:
+            layername = self.layer
+        return "LAYER:{0}".format( layername)
 
     def render(self):
+
+        LevelPreview.synch_cams(self)
+
         with BGL.context.render_target(Editor.ui_fb):
             BGL.context.clear(0.0,0.0,0.0,0.0)
             with BGL.blendmode.alpha_over:
@@ -144,6 +152,7 @@ class Editor:
 
 
         BGL.context.clear(0.0,0.0,0.0,0.0)
+
         Grid.render(self)
         if(self.show_preview):
             LevelPreview.render(self)
@@ -165,7 +174,9 @@ class Editor:
 
 
 BGL.keyboard.register_keydown_handler('p', World.reduce)
+BGL.keyboard.register_keydown_handler('c', LevelPreview.toggle_camlock)
 BGL.keyboard.register_keydown_handler('b', Editor.toggle_brushes)
 BGL.keyboard.register_keydown_handler('v', Editor.toggle_preview)
 BGL.keyboard.register_keydown_handler('leftbracket', Editor.layer_down)
 BGL.keyboard.register_keydown_handler('rightbracket', Editor.layer_up)
+

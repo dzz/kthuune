@@ -25,6 +25,8 @@ class World:
 
     def reduce():
 
+
+        LevelPreview.stash_player()
         World.GeneratedArea.reset()
 
         World.find_limits()
