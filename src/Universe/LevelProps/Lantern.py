@@ -9,7 +9,7 @@ class Lantern(Object):
 
     def customize(self):
         self.buftarget = "popup"
-        self.size = [ 1.0,1.0 ]
+        self.size = [ 1.5,1.5 ]
         self.light_color = [ 1.0,0.6,0.6,1.0 ]
         self.light_radius = 20
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
@@ -23,7 +23,7 @@ class Lantern(Object):
 
     def tick(self):
         self.light_color = [ uniform(0.7,1.0),uniform(0.3,0.6),0.2,1.0 ]
-        self.light_radius = uniform(8.0,10.0)
+        self.light_radius = uniform(15.0,16.0)
         self.fr += 0.1
         if(self.fr>len(self.textures)):
             self.fr = 0.0
