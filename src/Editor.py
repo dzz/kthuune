@@ -32,7 +32,13 @@ class Editor:
         self.layer = 0
         self.show_preview = True
         self.show_brushes = True
+
+        BGL.console.attach(self)
         pass
+
+
+    def woop(self):
+        print("woop")
 
     def toggle_preview():
         Editor.instance.show_preview = not Editor.instance.show_preview
