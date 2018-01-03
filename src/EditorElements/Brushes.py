@@ -1,4 +1,6 @@
 from Beagle import API as BGL
+from .PolyFillList import PolyFillList
+from .PolyFills.layer_map import layer_map
 
 class Brushes:
     ui_fb = BGL.framebuffer.from_dims(960, 540)
@@ -20,6 +22,11 @@ class Brushes:
     def remove_selected():
         for brush in Brushes.selected_brushes:
             Brushes.brushes.remove(brush)
+
+    def reflow():
+        for brush in Brushes.brushes:
+            pf = PolyFillList.getPolyFill( brush.polyfill_key )
+            brush.layer = pf.layer
 
     def render_labels(app):
         with BGL.context.render_target( Brushes.ui_fb ):
@@ -98,9 +105,3 @@ class Brushes:
                     "filter_color"         : filter_color
                     })
 
-BGL.keyboard.register_keydown_handler('escape', Brushes.select_none)
-BGL.keyboard.register_keydown_handler('delete', Brushes.remove_selected)
-BGL.keyboard.register_keydown_handler('a', Brushes.move_left)
-BGL.keyboard.register_keydown_handler('d', Brushes.move_right)
-BGL.keyboard.register_keydown_handler('w', Brushes.move_up)
-BGL.keyboard.register_keydown_handler('s', Brushes.move_down)

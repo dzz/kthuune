@@ -7,7 +7,6 @@ class Dust(Object):
     textures = BGL.assets.get('KT-player/animation/dust')
 
     def customize(self):
-
         sz = uniform(0.8,1.1)
         self.size = [ sz,sz]
         self.buftarget = "floor"

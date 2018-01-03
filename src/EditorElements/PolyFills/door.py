@@ -1,4 +1,3 @@
-from ..Brushes import Brushes
 from .WorldSpaceBrush import WorldSpaceBrush
 from .Factory import Factory
 from .Edges import Edges
@@ -29,6 +28,5 @@ class door:
             Factory.make_door( area, wsb.cx, wsb.y1, wsb.cx, wsb.y2, door_name )
 
         Factory.make_light( area, wsb.cx, wsb.cy, "shortwave" )
-        #edges = Edges.make_edges( area,brush, Brushes.brushes )
         #Factory.make_edges( area, edges )
 
