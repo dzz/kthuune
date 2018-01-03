@@ -408,15 +408,15 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
                 BGL.context.clear( 1.0,1.0,1.0,1.0);
 
-                if(self.floor.custom_background):
-                    self.floor.custom_background.camera = self.camera
-                    self.floor.custom_background.render(self.floor)
-                else:
-                    self.background.camera = self.camera
-                    self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
+                #if(self.floor.custom_background):
+                #    self.floor.custom_background.camera = self.camera
+                #    self.floor.custom_background.render(self.floor)
+                #else:
+                #    self.background.camera = self.camera
+                #    self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
                 self.floor.render()
-                self.fog.camera = self.camera
-                self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
+                #self.fog.camera = self.camera
+                #self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
 
             Game.god_buffer.render_processed( Game.god_shader )
             self.player.render_hud()

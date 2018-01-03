@@ -44,8 +44,10 @@ class GeneratedArea:
             for y in range( -1 * limit, limit):
                 if (x,y) in GeneratedArea.tiles:
                     tile = GeneratedArea.tiles[(x,y)]
-                    if(x,y) in GeneratedArea.conditional_tiles:
-                        tile = GeneratedArea.conditional_tiles[(x,y)]
+
+                    if(tile<60):
+                        if(x,y) in GeneratedArea.conditional_tiles:
+                            tile = GeneratedArea.conditional_tiles[(x,y)]
 
                     GeneratedArea.add_line("TILE")
                     GeneratedArea.add_line("{0}".format(x))

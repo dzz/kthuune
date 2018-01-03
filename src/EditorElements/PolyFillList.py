@@ -1,6 +1,8 @@
 import importlib
-from .PolyFills.room_test import room_test
+from .PolyFills.platform_floor import platform_floor
 from .PolyFills.hard_wall import hard_wall
+from .PolyFills.soft_wall import soft_wall
+from .PolyFills.church_wall import church_wall
 from .PolyFills.totem import totem
 from .PolyFills.door import door
 
@@ -17,8 +19,10 @@ class PolyFillList:
                     pass
             polyfill_map = {
                 "None" : no_polyfill,
-                "room_test" : room_test,
+                "platform_floor" : platform_floor,
                 "hard_wall" : hard_wall,
+                "soft_wall" : soft_wall,
+                "church_wall" : church_wall,
                 "totem" : totem,
                 "door" : door,
             }

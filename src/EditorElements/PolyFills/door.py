@@ -3,10 +3,11 @@ from .WorldSpaceBrush import WorldSpaceBrush
 from .Factory import Factory
 from .Edges import Edges
 from random import choice
+from .layer_map import layer_map
 import uuid
 
 class door:
-    layer = 3
+    layer = layer_map.get_layer_id("wall")
     dims = None
     mesh_key = "platform"
     def reduce( area, brush ):
