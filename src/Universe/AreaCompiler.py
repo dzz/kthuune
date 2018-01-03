@@ -49,6 +49,7 @@ from .Configuration.vconf import vconf
 from .LevelProps.Egg import Egg
 from .LevelProps.FloatingPlayer import FloatingPlayer
 from .LevelProps.DeadK import DeadK
+from .LevelProps.Lantern import Lantern
 from .LevelProps.ShipExterior import ShipExterior
 from .LevelProps.SpeechBubble import SpeechBubble
 from .LevelProps.Telekine import Telekine
@@ -167,6 +168,9 @@ class AreaCompiler():
                     self.objects.append(Blood( p = bloodp))
                     
                 self.objects.append(DeadK.parse(od,df ))
+
+            if od["key"] in [ "lantern" ]:
+                self.objects.append(Lantern.parse(od,df ))
 
             if od["key"] in [ "ship_exterior" ]:
                 self.objects.append(ShipExterior.parse(od,df ))

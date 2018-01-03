@@ -2,6 +2,7 @@
     "preload": true,
     "resources" : {
         "animation" : [
+            { "name" : "lantern", "directory" : "{package_path}/lantern/", "filtered" : false },
             { "name" : "tumorcrab", "directory" : "{package_path}/tumorcrab/", "filtered" : true },
             { "name" : "clouds_compressed", "directory" : "{package_path}/clouds_compressed/", "filtered" : true }
         ],

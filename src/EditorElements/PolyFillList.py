@@ -4,6 +4,7 @@ from .PolyFills.hard_wall import hard_wall
 from .PolyFills.soft_wall import soft_wall
 from .PolyFills.church_wall import church_wall
 from .PolyFills.totem import totem
+from .PolyFills.lantern import lantern
 from .PolyFills.door import door
 
 class PolyFillList:
@@ -24,6 +25,7 @@ class PolyFillList:
                 "soft_wall" : soft_wall,
                 "church_wall" : church_wall,
                 "totem" : totem,
+                "lantern" : lantern,
                 "door" : door,
             }
             PolyFillList.cached_list = polyfill_map

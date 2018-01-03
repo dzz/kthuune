@@ -83,6 +83,8 @@ class LevelPreview:
                 LevelPreview.camera.p[1] = LevelPreview.player.p[1]
                 Grid.cx = LevelPreview.player.p[0]*0.5
                 Grid.cy = LevelPreview.player.p[1]*0.5
+                app.camera_x = Grid.cx
+                app.camera_y = Grid.cy
 
             LevelPreview.floor.precompute_frame()
             LevelPreview.floor.render_preview()

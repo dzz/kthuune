@@ -54,7 +54,7 @@ class GeneratedArea:
                     GeneratedArea.add_line("{0}".format(y))
                     GeneratedArea.add_line("{0}".format( tile ))
                 else:
-                    if (x,y-1) in GeneratedArea.tiles:
+                    if (x,y-1) in GeneratedArea.tiles and GeneratedArea.tiles[(x,y-1)]<60:
                         GeneratedArea.add_line("TILE")
                         GeneratedArea.add_line("{0}".format(x))
                         GeneratedArea.add_line("{0}".format(y))
