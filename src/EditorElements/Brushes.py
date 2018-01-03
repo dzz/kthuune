@@ -1,14 +1,27 @@
 from Beagle import API as BGL
 from .PolyFillList import PolyFillList
 from .PolyFills.layer_map import layer_map
+from .BrushFile import BrushFile
+from .Brush import Brush
 
 class Brushes:
+    Brush = Brush
     ui_fb = BGL.framebuffer.from_dims(960, 540)
     brushes = []
     texture = BGL.assets.get('KT-editor/texture/brush')
     primitive = BGL.primitive.unit_uv_square
     shader = BGL.assets.get('beagle-2d/shader/beagle-2d')
     selected_brushes = []
+    level_name = "default"
+
+    def set_name(name):
+        Brushes.level_name = name
+
+    def save():
+        BrushFile.save( Brushes )
+
+    def load():
+        BrushFile.load(Brushes)
 
     def by_layer(l):
         return list(filter(lambda x: x.layer == l,Brushes.brushes))

@@ -37,8 +37,15 @@ class Editor:
         pass
 
 
-    def woop(self):
-        print("woop")
+    def set_name(self,name):
+        Brushes.set_name(name)
+
+    def save(self):
+        Brushes.save()
+    
+    def load( self, name):
+        Brushes.set_name(name)
+        Brushes.load()
 
     def toggle_preview():
         Editor.instance.show_preview = not Editor.instance.show_preview
