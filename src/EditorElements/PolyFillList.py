@@ -7,6 +7,7 @@ from .PolyFills.totem import totem
 from .PolyFills.lantern import lantern
 from .PolyFills.door import door
 from .PolyFills.skeline import skeline
+from .PolyFills.trees import trees
 
 class PolyFillList:
     cached_list = None
@@ -29,6 +30,7 @@ class PolyFillList:
                 "lantern" : lantern,
                 "door" : door,
                 "skeline" : skeline,
+                "trees" : trees,
             }
             PolyFillList.cached_list = polyfill_map
         return PolyFillList.cached_list

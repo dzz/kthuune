@@ -4,7 +4,7 @@ from .WorldSpaceBrush import WorldSpaceBrush
 from .layer_map import layer_map
 
 class lantern:
-    dims = (1,1)
+    dims = None
     mesh_key = "platform"
     layer = layer_map.get_layer_id("decorator")
 

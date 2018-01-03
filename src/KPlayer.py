@@ -21,6 +21,7 @@ from .TitleCard import TitleCard
 
 from .WorldMap import WorldMap
 from .Universe.LevelEffects.PlayerPhantom import PlayerPhantom
+from .Universe.LevelEffects.Dust import Dust
 
 class DMMessage():
 
@@ -1647,6 +1648,11 @@ class KPlayer(Player):
             if(self.slash.visible):
                 self.v[0] *= 1.05
                 self.v[1] *= 1.05
+
+
+            if(abs(self.v[0]) + abs(self.v[1])>0.5):
+                if uniform(0.0,1.0)>0.98:
+                    self.floor.create_object(Dust( p=[ self.p[0], self.p[1]+0.8]))
 
             Object.tick(self)
 

@@ -7,6 +7,7 @@ from ..LevelEffects.SwordCrit import SwordCrit
 from ..LevelEffects.AttackInfo import AttackInfo
 from ..LevelEffects.Blood import Blood
 from ..LevelEffects.SpikeyWave import SpikeyWave
+from ..LevelEffects.Explosion import Explosion
 
 from random import uniform
 from math import floor
@@ -57,6 +58,7 @@ class SnapEnemy(Object):
         for x in range(0, self.get_firefly_count()):
             self.floor.create_object( Firefly( p = [ self.p[0], self.p[1] ] ))
         self.floor.player.impulse_hittables()
+        self.floor.create_object( Explosion( p = [ self.p[0], self.p[1] ] ))
 
 
     def get_kill_particles(self):

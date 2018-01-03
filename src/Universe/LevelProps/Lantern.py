@@ -1,7 +1,7 @@
 from Newfoundland.Object import Object
 from Beagle import API as BGL
 from math import floor
-from random import uniform
+from random import uniform, choice
 
 class Lantern(Object):
     def parse(od,df):
@@ -18,7 +18,7 @@ class Lantern(Object):
         self.texture = self.textures[0]
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.z_index = 1
-        self.fr = 0
+        self.fr = float(choice(range(0,len(self.textures))))
         #self.physics = { "radius" : 1.0, "mass"   : 900, "friction" : 0.3 }
 
     def tick(self):

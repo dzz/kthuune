@@ -87,14 +87,14 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
     def build_area_oort_cloud(self):
 
-        GeneratorOptions.TreeTopTextures = [
-            BGL.assets.get("KT-forest/texture/crystal_1"),
-            BGL.assets.get("KT-forest/texture/crystal_2"),
-            BGL.assets.get("KT-forest/texture/crystal_3"),
-            BGL.assets.get("KT-forest/texture/crystal_4")
-        ]
+        #GeneratorOptions.TreeTopTextures = [
+        #    BGL.assets.get("KT-forest/texture/crystal_1"),
+        #    BGL.assets.get("KT-forest/texture/crystal_2"),
+        #    BGL.assets.get("KT-forest/texture/crystal_3"),
+        #    BGL.assets.get("KT-forest/texture/crystal_4")
+        #]
 
-        GeneratorOptions.TreeShadowTextures = GeneratorOptions.TreeTopTextures
+        #GeneratorOptions.TreeShadowTextures = GeneratorOptions.TreeTopTextures
 
         area_raw = BGL.assets.get("KT-forest/textfile/oort_cloud")
         area_def = get_area_data( area_raw )
@@ -108,14 +108,14 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
     def build_area_crystals1(self):
 
-        GeneratorOptions.TreeTopTextures = [
-            BGL.assets.get("KT-forest/texture/crystal_1"),
-            BGL.assets.get("KT-forest/texture/crystal_2"),
-            BGL.assets.get("KT-forest/texture/crystal_3"),
-            BGL.assets.get("KT-forest/texture/crystal_4")
-        ]
+        #GeneratorOptions.TreeTopTextures = [
+        #    BGL.assets.get("KT-forest/texture/crystal_1"),
+        #    BGL.assets.get("KT-forest/texture/crystal_2"),
+        #    BGL.assets.get("KT-forest/texture/crystal_3"),
+        #    BGL.assets.get("KT-forest/texture/crystal_4")
+        #]
 
-        GeneratorOptions.TreeShadowTextures = GeneratorOptions.TreeTopTextures
+        #GeneratorOptions.TreeShadowTextures = GeneratorOptions.TreeTopTextures
 
         area_raw = BGL.assets.get("KT-forest/textfile/crystals1")
         area_def = get_area_data( area_raw )
@@ -137,14 +137,14 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
     def build_area_ship_type(self, key):
         # a generic level template with good settings for smaller areas without a lot of lighting requirements 
-        GeneratorOptions.TreeTopTextures = [
-            BGL.assets.get("KT-forest/texture/crystal_1"),
-            BGL.assets.get("KT-forest/texture/crystal_2"),
-            BGL.assets.get("KT-forest/texture/crystal_3"),
-            BGL.assets.get("KT-forest/texture/crystal_4")
-        ]
+        #GeneratorOptions.TreeTopTextures = [
+        #    BGL.assets.get("KT-forest/texture/crystal_1"),
+        #    BGL.assets.get("KT-forest/texture/crystal_2"),
+        #    BGL.assets.get("KT-forest/texture/crystal_3"),
+        #    BGL.assets.get("KT-forest/texture/crystal_4")
+        #]
 
-        GeneratorOptions.TreeShadowTextures = GeneratorOptions.TreeTopTextures
+        #GeneratorOptions.TreeShadowTextures = GeneratorOptions.TreeTopTextures
 
         area_raw = BGL.assets.get("KT-forest/textfile/"+key)
         area_def = get_area_data( area_raw )

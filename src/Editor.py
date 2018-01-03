@@ -18,6 +18,7 @@ class Editor:
 
     def __init__(self):
         Editor.instance = self
+
         self.mouse_context = "camera"
         self.camera_x = 0
         self.camera_y = 0
