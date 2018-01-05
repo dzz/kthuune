@@ -8,6 +8,7 @@ from .PolyFills.lantern import lantern
 from .PolyFills.door import door
 from .PolyFills.skeline import skeline
 from .PolyFills.trees import trees
+from .PolyFills.generate_triggers import generate_below, generate_above, generate_left, generate_right
 
 class PolyFillList:
     cached_list = None
@@ -31,6 +32,10 @@ class PolyFillList:
                 "door" : door,
                 "skeline" : skeline,
                 "trees" : trees,
+                "generate_below" : generate_below,
+                "generate_above" : generate_above,
+                "generate_left" : generate_left,
+                "generate_right" : generate_right,
             }
             PolyFillList.cached_list = polyfill_map
         return PolyFillList.cached_list

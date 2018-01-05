@@ -52,6 +52,46 @@ class Factory:
         area.add_line("0") #width
         area.add_line("0") #height
 
+    def make_generator_above( area, wsb):
+        area.add_line("OBJECT")
+        area.add_line("generator_above") #object type
+        area.add_line("{0}".format(wsb.x1))
+        area.add_line("{0}".format(wsb.cy)) 
+        area.add_line("{}")
+        area.add_line("True") #is region
+        area.add_line("{0}".format(wsb.width)) #width
+        area.add_line("0") #height
+
+    def make_generator_below( area, wsb):
+        area.add_line("OBJECT")
+        area.add_line("generator_below") #object type
+        area.add_line("{0}".format(wsb.x1))
+        area.add_line("{0}".format(wsb.cy)) 
+        area.add_line("{}")
+        area.add_line("True") #is region
+        area.add_line("{0}".format(wsb.width)) #width
+        area.add_line("0") #height
+
+    def make_generator_left( area, wsb):
+        area.add_line("OBJECT")
+        area.add_line("generator_below") #object type
+        area.add_line("{0}".format(wsb.cx))
+        area.add_line("{0}".format(wsb.y1)) 
+        area.add_line("{}")
+        area.add_line("True") #is region
+        area.add_line("0") #width
+        area.add_line("{0}".format(wsb.height)) #height
+
+    def make_generator_right( area, wsb):
+        area.add_line("OBJECT")
+        area.add_line("generator_below") #object type
+        area.add_line("{0}".format(wsb.cx))
+        area.add_line("{0}".format(wsb.y1)) 
+        area.add_line("{}")
+        area.add_line("True") #is region
+        area.add_line("0") #width
+        area.add_line("{0}".format(wsb.height)) #height
+
     def make_door( area, x1,y1, x2,y2, uid ):
         area.add_line("OBJECT")
         area.add_line("door_pin") #object type

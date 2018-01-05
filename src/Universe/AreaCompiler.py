@@ -1,13 +1,3 @@
-#### MACHINE GIRL 
-#### BATMAN 
-#### ZELDA
-#### STIMULANTS
-#### PAGANISM
-#### BREAKCORE TEMPOS
-#### SIEZURES
-#### DARK SOULS
-#### X FILES
-
 import gc
 from random import uniform, choice
 from math import hypot
@@ -355,7 +345,7 @@ class AreaCompiler():
                 if uniform(0.0,1.0) < 0.85:
                     continue
                     
-                size = uniform(2.5,5.5)
+                size = uniform(1.5,2.5)
                 dx = edge[1][0] - edge[0][0]
                 dy = edge[1][1] - edge[0][1]
                 d = uniform(0.0,1.0)

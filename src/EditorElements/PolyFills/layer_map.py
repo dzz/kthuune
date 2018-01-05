@@ -5,7 +5,8 @@ class layer_map:
                 "totem",
                 "wall",
                 "npc",
-                "decorator"
+                "decorator",
+                "g_trigger"
             ]
 
     def get_layer_id(key):
