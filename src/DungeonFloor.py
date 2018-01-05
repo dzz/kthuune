@@ -330,6 +330,21 @@ class DungeonFloor( Floor ):
     def get_light_occluders(self):
         return self.light_occluders
 
+    #### linked generatorrrssss
+
+    def new_area_up(self, trigger):
+        print("GENERATE UP")
+
+    def new_area_down(self, trigger):
+        print("GENERATE DOWN")
+
+    def new_area_left(self, trigger):
+        print("GENERATE LEFT")
+
+    def new_area_right(self, trigger):
+        print("GENERATE RIGHT")
+
+
 
 def get_DF():
     return DungeonFloor

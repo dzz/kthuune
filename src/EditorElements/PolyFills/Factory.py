@@ -74,7 +74,7 @@ class Factory:
 
     def make_generator_left( area, wsb):
         area.add_line("OBJECT")
-        area.add_line("generator_below") #object type
+        area.add_line("generator_left") #object type
         area.add_line("{0}".format(wsb.cx))
         area.add_line("{0}".format(wsb.y1)) 
         area.add_line("{}")
@@ -84,7 +84,7 @@ class Factory:
 
     def make_generator_right( area, wsb):
         area.add_line("OBJECT")
-        area.add_line("generator_below") #object type
+        area.add_line("generator_right") #object type
         area.add_line("{0}".format(wsb.cx))
         area.add_line("{0}".format(wsb.y1)) 
         area.add_line("{}")

@@ -56,6 +56,7 @@ from .Decorators.TreeTop import TreeTop
 from .Decorators.TreeRoots import TreeRoots
 from .Decorators.TreeShadow import TreeShadow
 from .Interaction.Terminals import *
+from .Interaction.GeneratorTrigger import GeneratorTrigger
 
 class AreaCompiler():
     def __init__(self):
@@ -247,6 +248,9 @@ class AreaCompiler():
             if od["key"] in ["text" ]:
                 self.objects.append(SpeechBubble.parse(od,df))
 
+
+            if od["key"] in ["generator_above", "generator_below", "generator_left", "generator_right" ]:
+                self.objects.append(GeneratorTrigger.parse(od,df))
 
             if od["key"] in ["camlock_x", "camlock_y", "camlock" ]:
                 if( od["key"] == "camlock_x" ):
