@@ -18,6 +18,11 @@ class GeneratorTrigger(Object):
         self.w = int( floor(abs(self.x2 - self.x1) / 2))
         self.h = int( floor(abs(self.y2 - self.y1) / 2))
 
+        self.x1b = int(floor(self.x1/2))
+        self.y1b = int(floor(self.y1/2))
+        self.x2b = int(floor(self.x2/2))
+        self.y2b = int(floor(self.y2/2))
+
     def snapshot_player(self):
         self.last_pp = [ self.floor.player.p[0], self.floor.player.p[1] ]
 

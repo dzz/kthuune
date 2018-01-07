@@ -52,3 +52,36 @@ class BrushNetwork:
         BrushNetwork.level_map['left'] = BrushNetwork.left
         BrushNetwork.level_map['right'] = BrushNetwork.right
 
+    def move_up(key, trigger):
+
+        above = list(filter( lambda x: x.polyfill_key == 'generate_below', Brushes.brushes))[0]
+        print(above.x1, above.x2, above.y1, above.y2)
+
+        Brushes.set_name(key)
+        Brushes.load()
+
+        below = list(filter( lambda x: x.polyfill_key == 'generate_above', Brushes.brushes))[0]
+
+        y_delta = above.y1 - below.y2
+        x_delta = above.x1 - below.x1
+        print(below.x1, below.x2, below.y1, below.y2)
+
+        for brush in Brushes.brushes:
+            brush.y1 -= y_delta
+            brush.y2 -= y_delta
+            brush.x1 -= x_delta
+            brush.x2 -= x_delta
+
+
+    def move_down(key, trigger):
+        Brushes.set_name(key)
+        Brushes.load()
+
+    def move_left(key, trigger):
+        Brushes.set_name(key)
+        Brushes.load()
+
+    def move_right(key, trigger):
+        Brushes.set_name(key)
+        Brushes.load()
+

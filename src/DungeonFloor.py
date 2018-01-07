@@ -337,23 +337,27 @@ class DungeonFloor( Floor ):
     def new_area_up(self, trigger):
         print("GENERATE UP")
         next_brush_area = choice( BrushNetwork.above[ trigger.w ])
+        BrushNetwork.move_up(next_brush_area, trigger)
         print(next_brush_area)
 
     def new_area_down(self, trigger):
         print("GENERATE DOWN")
         next_brush_area = choice( BrushNetwork.below[ trigger.w ])
+        BrushNetwork.move_down(next_brush_area, trigger)
         print(next_brush_area)
 
     def new_area_left(self, trigger):
         print("GENERATE LEFT")
         print(BrushNetwork.right)
         next_brush_area = choice( BrushNetwork.left[ trigger.h ])
+        BrushNetwork.move_left(next_brush_area, trigger)
         print(next_brush_area)
 
     def new_area_right(self, trigger):
         print("GENERATE RIGHT")
         print(BrushNetwork.right)
         next_brush_area = choice( BrushNetwork.right[ trigger.h ])
+        BrushNetwork.move_right(next_brush_area, trigger)
         print(next_brush_area)
 
 
