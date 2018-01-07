@@ -28,5 +28,9 @@ class Brush:
         b.layer = tool.layer
         return b
 
+    def get_link_w(self):
+        return abs(self.x2-self.x1)
 
+    def get_link_h(self):
+        return abs(self.y2-self.y1)
 

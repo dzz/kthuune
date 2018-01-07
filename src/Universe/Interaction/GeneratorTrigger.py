@@ -1,4 +1,5 @@
 from Newfoundland.Object import Object
+from math import floor
 
 class GeneratorTrigger(Object):
     def parse(od,df):
@@ -13,6 +14,9 @@ class GeneratorTrigger(Object):
         self.visible = False
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.last_pp = None
+
+        self.w = int( floor(abs(self.x2 - self.x1) / 2))
+        self.h = int( floor(abs(self.y2 - self.y1) / 2))
 
     def snapshot_player(self):
         self.last_pp = [ self.floor.player.p[0], self.floor.player.p[1] ]

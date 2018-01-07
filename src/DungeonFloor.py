@@ -13,6 +13,7 @@ from .AimingBeam import LazerBeam
 from .KTState import KTState
 from .KSounds import KSounds
 import client.system.keyboard as keyboard
+from .BrushNetwork import BrushNetwork
 
 Floor = createFloorClass( DFRenderer )
 class DungeonFloor( Floor ):
@@ -168,6 +169,8 @@ class DungeonFloor( Floor ):
 
         self.tilemap_fg.linkFloor(self)
         self.active_vision_mute = self.vision_mute
+
+        BrushNetwork.parse()
 
 
 
@@ -331,18 +334,27 @@ class DungeonFloor( Floor ):
         return self.light_occluders
 
     #### linked generatorrrssss
-
     def new_area_up(self, trigger):
         print("GENERATE UP")
+        next_brush_area = choice( BrushNetwork.above[ trigger.w ])
+        print(next_brush_area)
 
     def new_area_down(self, trigger):
         print("GENERATE DOWN")
+        next_brush_area = choice( BrushNetwork.below[ trigger.w ])
+        print(next_brush_area)
 
     def new_area_left(self, trigger):
         print("GENERATE LEFT")
+        print(BrushNetwork.right)
+        next_brush_area = choice( BrushNetwork.left[ trigger.h ])
+        print(next_brush_area)
 
     def new_area_right(self, trigger):
         print("GENERATE RIGHT")
+        print(BrushNetwork.right)
+        next_brush_area = choice( BrushNetwork.right[ trigger.h ])
+        print(next_brush_area)
 
 
 

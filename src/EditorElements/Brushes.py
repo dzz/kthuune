@@ -17,6 +17,9 @@ class Brushes:
     def set_name(name):
         Brushes.level_name = name
 
+    def get_name(name):
+        return Brushes.level_name
+
     def save():
         BrushFile.save( Brushes )
 
