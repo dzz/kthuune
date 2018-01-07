@@ -1,7 +1,6 @@
 from .Brushes import Brushes
 from .GeneratedArea import GeneratedArea
 from .PolyFillList import PolyFillList
-from .LevelPreview import LevelPreview
 from .Remesher import Remesher
 from .PolyFills.Factory import Factory
 
@@ -24,9 +23,7 @@ class World:
         World.GeneratedArea.height = (limit*2)+2
 
     def reduce():
-
-
-        LevelPreview.stash_player()
+        #LevelPreview.stash_player()
         World.GeneratedArea.reset()
 
         World.find_limits()
@@ -45,5 +42,5 @@ class World:
 
         World.GeneratedArea.serialize()
 
-        LevelPreview.reset( World.GeneratedArea.output_data )
+        #LevelPreview.reset( World.GeneratedArea.output_data )
 

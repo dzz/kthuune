@@ -3,6 +3,7 @@ from .EditorElements.Brushes import Brushes
 from .EditorElements.BrushFile import BrushFile
 import glob
 from random import choice
+from .EditorElements.World import World
 
 class BrushNetwork:
 
@@ -57,6 +58,8 @@ class BrushNetwork:
         above = list(filter( lambda x: x.polyfill_key == 'generate_below', Brushes.brushes))[0]
         print(above.x1, above.x2, above.y1, above.y2)
 
+        stashed = list(Brushes.brushes)
+
         Brushes.set_name(key)
         Brushes.load()
 
@@ -72,6 +75,10 @@ class BrushNetwork:
             brush.x1 -= x_delta
             brush.x2 -= x_delta
 
+        for brush in stashed:
+            brush.age += 1
+        stashed.extend(Brushes.brushes)
+        return stashed
 
     def move_down(key, trigger):
         Brushes.set_name(key)

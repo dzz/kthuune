@@ -183,11 +183,16 @@ class Editor:
             Cursor.render(self)
 
 
+    def reduce():
+        LevelPreview.stash_player()
+        World.reduce()
+        LevelPreview.reset( World.GeneratedArea.output_data )
+
     def finalize(self):
         pass
 
 
-BGL.keyboard.register_keydown_handler('p', World.reduce)
+BGL.keyboard.register_keydown_handler('p', Editor.reduce)
 BGL.keyboard.register_keydown_handler('c', LevelPreview.toggle_camlock)
 BGL.keyboard.register_keydown_handler('b', Editor.toggle_brushes)
 BGL.keyboard.register_keydown_handler('v', Editor.toggle_preview)

@@ -5,6 +5,7 @@ from Newfoundland.Tilemap import Tilemap
 from Newfoundland.Object import Object
 from random import choice
 from .Universe.AreaCompiler import AreaCompiler
+from .Universe.AreaLoader import get_area_data
 from .Renderers.DFRenderer import DFRenderer
 from random import uniform
 from math import sin,cos,hypot
@@ -14,6 +15,10 @@ from .KTState import KTState
 from .KSounds import KSounds
 import client.system.keyboard as keyboard
 from .BrushNetwork import BrushNetwork
+from .EditorElements.PolyFillList import PolyFillList
+from .EditorElements.World import World
+from .EditorElements.Brushes import Brushes
+
 
 Floor = createFloorClass( DFRenderer )
 class DungeonFloor( Floor ):
@@ -337,13 +342,12 @@ class DungeonFloor( Floor ):
     def new_area_up(self, trigger):
         print("GENERATE UP")
         next_brush_area = choice( BrushNetwork.above[ trigger.w ])
-        BrushNetwork.move_up(next_brush_area, trigger)
-        print(next_brush_area)
+        new_brush_set = BrushNetwork.move_up(next_brush_area, trigger)
+        self.reduce_brushes(new_brush_set)
 
     def new_area_down(self, trigger):
         print("GENERATE DOWN")
         next_brush_area = choice( BrushNetwork.below[ trigger.w ])
-        BrushNetwork.move_down(next_brush_area, trigger)
         print(next_brush_area)
 
     def new_area_left(self, trigger):
@@ -360,7 +364,26 @@ class DungeonFloor( Floor ):
         BrushNetwork.move_right(next_brush_area, trigger)
         print(next_brush_area)
 
+    def reduce_brushes(self, new_brushes):
+        Brushes.brushes = new_brushes
+        World.reduce()
+        area_def =  get_area_data( World.GeneratedArea.output_data )
 
+        new_floor = DungeonFloor(
+            game = self.game,
+            tilescale = self.tilescale,
+            width = area_def['width']*2,
+            height = area_def['height']*2,
+            camera = self.camera,
+            player = self.player,
+            objects = [],
+            area_def = area_def )
+
+        self.game.floor = new_floor
+
+
+
+            
 
 def get_DF():
     return DungeonFloor
