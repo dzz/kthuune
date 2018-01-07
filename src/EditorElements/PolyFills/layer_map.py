@@ -2,6 +2,8 @@ class layer_map:
     key_order = [
                 "all",
                 "floor",
+                "floor_decorators",
+                "floor_interactions",
                 "totem",
                 "wall",
                 "npc",

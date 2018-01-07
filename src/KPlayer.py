@@ -1028,7 +1028,7 @@ class KPlayer(Player):
         self.floor.freeze_frames = 6
         self.floor.freeze_delay = 4
 
-    def render_hud(self):
+    def render_hud(self, render_titlecard = True):
 
         with BGL.context.render_target( self.hud_buffer ):
             BGL.context.clear(0.0,0.0,0.0,0.0)
@@ -1086,7 +1086,9 @@ class KPlayer(Player):
             if(self.terminal_size>0):
                 if self.get_camera().cinema_target is None:
                     TerminalRenderer.render(self.terminal_size, self.cardtick,self.active_terminal)
-            self.title_card.render()
+
+            if(render_titlecard):
+                self.title_card.render()
 
 
 

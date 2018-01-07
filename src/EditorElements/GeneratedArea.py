@@ -38,6 +38,7 @@ class GeneratedArea:
         GeneratedArea.add_line("{0}".format(GeneratedArea.width))
         GeneratedArea.add_line("{0}".format(GeneratedArea.height))
 
+
     def serialize_tiles():
         limit = int(GeneratedArea.width/2)
         for x in range( -1 * limit, limit):
@@ -53,6 +54,29 @@ class GeneratedArea:
                     GeneratedArea.add_line("{0}".format(x))
                     GeneratedArea.add_line("{0}".format(y))
                     GeneratedArea.add_line("{0}".format( tile ))
+
+                    if (x,y) not in GeneratedArea.fg_tiles:
+                        if(x,y-1) not in GeneratedArea.tiles:
+                            GeneratedArea.fg_tiles[(x,y)] = 72
+
+                        if(x,y+1) not in GeneratedArea.tiles:
+                            GeneratedArea.fg_tiles[(x,y)] = 73
+
+                        if(x-1,y) not in GeneratedArea.tiles:
+                            if ((x,y) in GeneratedArea.fg_tiles) and (GeneratedArea.fg_tiles[(x,y)] == 72):
+                                GeneratedArea.fg_tiles[(x,y)] = 76
+                            elif ((x,y) in GeneratedArea.fg_tiles) and (GeneratedArea.fg_tiles[(x,y)] == 73):
+                                GeneratedArea.fg_tiles[(x,y)] = 78
+                            else:
+                                GeneratedArea.fg_tiles[(x,y)] = 74
+
+                        if(x+1,y) not in GeneratedArea.tiles:
+                            if ((x,y) in GeneratedArea.fg_tiles) and (GeneratedArea.fg_tiles[(x,y)] == 72):
+                                GeneratedArea.fg_tiles[(x,y)] = 77
+                            elif ((x,y) in GeneratedArea.fg_tiles) and (GeneratedArea.fg_tiles[(x,y)] == 73):
+                                GeneratedArea.fg_tiles[(x,y)] = 79
+                            else:
+                                GeneratedArea.fg_tiles[(x,y)] = 75
                 else:
                     if (x,y-1) in GeneratedArea.tiles and GeneratedArea.tiles[(x,y-1)]<60:
                         GeneratedArea.add_line("TILE")

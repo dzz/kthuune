@@ -88,5 +88,6 @@ class LevelPreview:
 
             LevelPreview.floor.precompute_frame()
             LevelPreview.floor.render_preview()
+            LevelPreview.player.render_hud(False)
 
 

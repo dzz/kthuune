@@ -54,6 +54,7 @@ from .LevelProps.ShipExterior import ShipExterior
 from .LevelProps.SpeechBubble import SpeechBubble
 from .LevelProps.Telekine import Telekine
 from .LevelProps.Prop import Prop
+from .LevelProps.Stainglass import Stainglass
 from .Pickups.HealthVial import HealthVial
 from .Pickups.SoftwarePickup import SoftwarePickup
 from .Pickups.SwordPickup import SwordPickup
@@ -63,6 +64,7 @@ from .Destructables.Slime import Slime
 from .Interaction.Door import Door
 from .NPC.Elder import Elder
 from .NPC.Hostage import Hostage
+from .Interaction.Chargeplate import Chargeplate
 from .Decorators.TreeTop import TreeTop
 from .Decorators.TreeRoots import TreeRoots
 from .Decorators.TreeShadow import TreeShadow
@@ -187,6 +189,12 @@ class AreaCompiler():
 
             if od["key"] in [ "hostage" ]:
                 self.objects.append(Hostage.parse(od,df ))
+
+            if od["key"] in [ "stainglass" ]:
+                self.objects.append(Stainglass.parse(od,df ))
+
+            if od["key"] in [ "chargeplate" ]:
+                self.objects.append(Chargeplate.parse(od,df ))
 
             if od["key"] in [ "eglans" ]:
                 for x in range(0,5):

@@ -32,6 +32,16 @@ class Factory:
         area.add_line("0") #width
         area.add_line("0") #height
 
+    def make_chargeplate( area, x, y):
+        area.add_line("OBJECT")
+        area.add_line("chargeplate") #object type
+        area.add_line("{0}".format(x))
+        area.add_line("{0}".format(y)) 
+        area.add_line("{}")
+        area.add_line("False") #is region
+        area.add_line("0") #width
+        area.add_line("0") #height
+
     def make_skeline( area, x, y):
         area.add_line("OBJECT")
         area.add_line("skeline") #object type
@@ -45,6 +55,16 @@ class Factory:
     def make_lantern( area, x, y):
         area.add_line("OBJECT")
         area.add_line("lantern") #object type
+        area.add_line("{0}".format(x))
+        area.add_line("{0}".format(y)) 
+        area.add_line("{}")
+        area.add_line("False") #is region
+        area.add_line("0") #width
+        area.add_line("0") #height
+
+    def make_stainglass( area, x, y):
+        area.add_line("OBJECT")
+        area.add_line("stainglass") #object type
         area.add_line("{0}".format(x))
         area.add_line("{0}".format(y)) 
         area.add_line("{}")
