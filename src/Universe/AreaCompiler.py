@@ -62,6 +62,7 @@ from .Destructables.Crystal import Crystal
 from .Destructables.Slime import Slime
 from .Interaction.Door import Door
 from .NPC.Elder import Elder
+from .NPC.Hostage import Hostage
 from .Decorators.TreeTop import TreeTop
 from .Decorators.TreeRoots import TreeRoots
 from .Decorators.TreeShadow import TreeShadow
@@ -183,6 +184,9 @@ class AreaCompiler():
 
             if od["key"] in [ "snap_enemy", "skeline"]:
                 self.objects.append(Skeline.parse(od,df ))
+
+            if od["key"] in [ "hostage" ]:
+                self.objects.append(Hostage.parse(od,df ))
 
             if od["key"] in [ "eglans" ]:
                 for x in range(0,5):

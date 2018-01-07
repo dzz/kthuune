@@ -5,7 +5,7 @@ from .layer_map import layer_map
 
 class trees:
     dims = None
-    mesh_key = "platform"
+    mesh_key = None
     layer = layer_map.get_layer_id("decorator")
 
     def reduce(area, brush):
