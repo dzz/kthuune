@@ -9,6 +9,7 @@ class BrushFile:
         brush_file = open(BrushFile.get_filename(Brushes.level_name), "w")
         brush_file.write('BRUSH_HEADER\n')
         brush_file.write(Brushes.level_name + '\n')
+        brush_file.write("{0}\n".format(int(Brushes.w_size)))
         for brush in Brushes.brushes:
             brush_file.write('BRUSH\n')
             brush_file.write('{0}\n'.format(brush.x1))

@@ -188,6 +188,7 @@ class Editor:
 
 
 BGL.keyboard.register_keydown_handler('p', World.reduce)
+BGL.keyboard.register_keydown_handler('r', Brushes.cycle_size)
 BGL.keyboard.register_keydown_handler('c', LevelPreview.toggle_camlock)
 BGL.keyboard.register_keydown_handler('b', Editor.toggle_brushes)
 BGL.keyboard.register_keydown_handler('v', Editor.toggle_preview)

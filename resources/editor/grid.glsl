@@ -4,6 +4,7 @@ in vec2 uv;
 uniform float cam_x;
 uniform float cam_y;
 uniform float cam_zoom;
+uniform float w_size;
 
 uniform sampler2D grid_cell;
 
@@ -22,6 +23,14 @@ void main() {
     float x_mod = mod(UV.x,1.0);
     float y_mod = mod(UV.y,1.0);
 
-    gl_FragColor = texture( grid_cell, vec2(x_mod, y_mod));
+
+    gl_FragColor = vec4(0.0,0.0,0.0,1.0);
+
+    if(w_size!=0.0) {
+        if(abs(UV.x)<w_size)
+            if(abs(UV.y)<w_size)
+                gl_FragColor = texture( grid_cell, vec2(x_mod, y_mod));
+    }
+
 }
 

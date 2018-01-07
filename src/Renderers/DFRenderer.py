@@ -124,6 +124,7 @@ class DFRenderer( FloorRenderer ):
             BGL.context.clear(1.0,1.0,1.0,1.0)
             with BGL.blendmode.alpha_over:
                 self.render_objects("shadow")
+                self.tilemap_fg.render()
 
         with BGL.context.render_target( self.floor_buffer ):
             BGL.context.clear(0.0,0.0,0.0,0.0)
@@ -133,7 +134,6 @@ class DFRenderer( FloorRenderer ):
                     self.render_tiles()
             with BGL.blendmode.alpha_over:
                 self.render_objects("floor" )
-                self.tilemap_fg.render()
 
         #with BGL.context.render_target( self.photon_buffer ):
         #    BGL.context.clear(0.0,0.0,0.0,1.0)

@@ -13,6 +13,15 @@ class Brushes:
     shader = BGL.assets.get('beagle-2d/shader/beagle-2d')
     selected_brushes = []
     level_name = "default"
+    w_sizes = [ 7.0, 14.0 ]
+    w_size = 7.0
+
+    def cycle_size():
+        i = Brushes.w_sizes.index( Brushes.w_size )
+        i = i +1 
+        if(i>=len(Brushes.w_sizes)):
+            i= 0
+        Brushes.w_size = Brushes.w_sizes[i]
 
     def set_name(name):
         Brushes.level_name = name

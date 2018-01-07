@@ -1,4 +1,5 @@
 from Beagle import API as BGL
+from .Brushes import Brushes
 
 class Grid:
     shader = BGL.assets.get('KT-editor/shader/grid')
@@ -25,6 +26,7 @@ class Grid:
             "cam_x"     : float(Grid.cx),
             "cam_y"     : float(Grid.cy),
             "cam_zoom"  : float(Grid.zoom),
-            "grid_cell" : Grid.texture
+            "grid_cell" : Grid.texture,
+            "w_size" : Brushes.w_size
         } )    
 
