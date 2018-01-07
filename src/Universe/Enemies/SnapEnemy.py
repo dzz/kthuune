@@ -9,6 +9,8 @@ from ..LevelEffects.Blood import Blood
 from ..LevelEffects.SpikeyWave import SpikeyWave
 from ..LevelEffects.Explosion import Explosion
 
+from .Spawner import Spawner
+
 from random import uniform
 from math import floor
 from Beagle import API as BGL
@@ -22,6 +24,7 @@ class SnapEnemy(Object):
 
     def custom_die(self):
         pass
+
     def can_see_player(self):
         test_segment = [ [ self.floor.player.p[0], self.floor.player.p[1] ], [self.p[0], self.p[1] ] ]
         for segment in self.floor.get_light_occluders():
@@ -48,6 +51,7 @@ class SnapEnemy(Object):
 
         self.floor.create_object(Blood(p=[self.p[0],self.p[1]]))
         self.custom_die()
+        self.floor.create_object( Spawner( p = list(self.p), loser = self ) )
         for x in range(0,self.get_kill_particles()):
             spltr = SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14))
             spltr.color = [0.0,0.0,0.0,1.0]

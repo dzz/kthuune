@@ -31,6 +31,8 @@ class Skeline(SnapEnemy):
         BGL.assets.get("KT-forest/texture/skeline0003"),
     ] 
     def customize(self):
+
+        self.op = list(self.p)
         self.triggered = False
         self.tick_type = Object.TickTypes.PURGING
         self.snap_type = SnapEnemy.ENEMY
