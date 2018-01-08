@@ -86,8 +86,10 @@ class LevelPreview:
                 app.camera_x = Grid.cx
                 app.camera_y = Grid.cy
 
+            LevelPreview.floor.guppyRenderer.gup_count = 0
             LevelPreview.floor.precompute_frame()
             LevelPreview.floor.render_preview()
             LevelPreview.player.render_hud(False)
+            LevelPreview.floor.gup_count = LevelPreview.floor.guppyRenderer.gup_count
 
 

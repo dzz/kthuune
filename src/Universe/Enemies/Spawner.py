@@ -1,7 +1,7 @@
 from Newfoundland.Object import Object
 from Beagle import API as BGL
 from math import floor
-from random import uniform
+from random import uniform, choice
 
 class Spawner(Object):
     textures = BGL.assets.get('KT-player/animation/explosion')
@@ -14,6 +14,7 @@ class Spawner(Object):
         self.texture = Spawner.textures[0]
         self.color = [ 0.0,0.0,1.0,1.0 ]
         self.fr = 0.0
+        self.fv = uniform(0.03,0.08)
         
 
     def spawn(self):
@@ -22,14 +23,13 @@ class Spawner(Object):
         self.floor.snap_enemies.append( new_object )
 
     def tick(self):
-        self.fr += 0.05
+        self.fr += self.fv
 
         self.color[0] = uniform(0.0,1.0)
         self.color[1] = uniform(0.0,1.0)
         self.color[2] = uniform(0.0,1.0)
         self.size[0]*=1.01
         self.size[1]*=1.01
-        print(self.fr)
         if(self.fr>= len (Spawner.textures)):
             self.floor.remove_object(self)
             self.spawn()

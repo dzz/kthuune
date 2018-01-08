@@ -43,7 +43,7 @@ class TreeTop(Object):
             return True
 
         def should_draw(self):
-            return True
+            return self.mdist( self.floor.player)<150
             #p = self.get_shader_params()['translation_world']
             #visRad = vconf.visRad
             #if(p[0]<-visRad): return False

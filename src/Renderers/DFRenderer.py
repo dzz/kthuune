@@ -10,10 +10,10 @@ class DFRenderer( FloorRenderer ):
     photon_buffer = BGL.framebuffer.from_screen()
     shadow_buffer = BGL.framebuffer.from_screen()
     floor_buffer = BGL.framebuffer.from_screen(filtered=False, scale = 1.0)
-    light_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
+    light_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.25)
     object_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
-    canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 1.0)
-    hittable_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.5)
+    canopy_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.25)
+    hittable_buffer = BGL.framebuffer.from_screen(filtered=True, scale = 0.25)
 
     dynamic_lightmapper = None
     vision_lightmapper = None
@@ -25,6 +25,7 @@ class DFRenderer( FloorRenderer ):
     def __init__(self,**kwargs):
         self.guppyRenderer = DFRenderer.GR
         DFRenderer.lbtick = 0
+        self.gup_count = 0
         FloorRenderer.__init__(self,**kwargs)
 
     #def configure_lightmaps(self):
@@ -62,8 +63,10 @@ class DFRenderer( FloorRenderer ):
             print("trying to render a previously destroyed floor!!!")
             return
             
+        self.guppyRenderer.gup_count = 0
         self.precompute_frame()
         self.render_composite()
+        self.gup_count = self.guppyRenderer.gup_count
 
     max_lights = 9999
     def visible_light(self,obj):
@@ -187,7 +190,7 @@ class DFRenderer( FloorRenderer ):
         objects = []
         objects.extend( self.objects )
         objects.extend( self.get_player_objects() )
-        renderable_objects = list(filter(lambda x: x.should_draw() and x.visible and x.buftarget == buftarget, objects))
+        renderable_objects = list(filter(lambda x: x.should_draw() and x.visible and x.buftarget == buftarget and x.mdist(self.player)<100, objects))
 
         if not texture_priority:
             self.guppyRenderer.renderObjects( renderable_objects )

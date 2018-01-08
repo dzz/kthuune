@@ -4,11 +4,11 @@ from .EditorElements.Brush import Brush
 from glob import glob
 from os.path import basename
 from copy import copy
-from random import choice
+from random import choice, sample
 
 class LevelGenerator():
 
-    world_size = 2
+    world_size = 3
     brush_map = { 7: [], 14: []} 
 
     def map_brushfiles():
@@ -25,13 +25,34 @@ class LevelGenerator():
     def get_modded_room_brushes( x, y, size ):
         brushes = []
         room = choice(LevelGenerator.brush_map[size])
+
+        mirror_h = choice( [True, False] )
+        mirror_v = choice( [ True, False ] )
         for brush in room:
             nbrush = copy(brush)
+
+            if(mirror_h):
+                nbrush.x1 *= -1
+                nbrush.x2 *= -1
+                tmp = nbrush.x1
+                nbrush.x1 = nbrush.x2
+                nbrush.x2 = tmp
+            if(mirror_v):
+                nbrush.y1 *= -1
+                nbrush.y2 *= -1
+                tmp = nbrush.y1
+                nbrush.y1 = nbrush.y2
+                nbrush.y2 = tmp
+
             nbrush.x1 += x
             nbrush.x2 += x
             nbrush.y1 += y
             nbrush.y2 += y
             brushes.append(nbrush)
+
+
+
+                
         return brushes
 
     def get_large_room_brushes( x, y ):
@@ -53,10 +74,19 @@ class LevelGenerator():
                 # place 1 large room
                 brushes.extend(LevelGenerator.get_large_room_brushes((x*28)+14,(y*28)+14))
             else:
-                brushes.extend(LevelGenerator.get_small_room_brushes((x*28)+7,(y*28)+7))
-                brushes.extend(LevelGenerator.get_small_room_brushes((x*28)+21,(y*28)+7))
-                brushes.extend(LevelGenerator.get_small_room_brushes((x*28)+7,(y*28)+21))
-                brushes.extend(LevelGenerator.get_small_room_brushes((x*28)+21,(y*28)+21))
+
+                opts = [ "tl", "tr", "bl", "br" ]
+
+                choices = sample(opts, choice(range(1,4)))
+
+                if "tl" in choices:
+                    brushes.extend(LevelGenerator.get_small_room_brushes((x*28)+7,(y*28)+7))
+                if "tr" in choices:
+                    brushes.extend(LevelGenerator.get_small_room_brushes((x*28)+21,(y*28)+7))
+                if "bl" in choices:
+                    brushes.extend(LevelGenerator.get_small_room_brushes((x*28)+7,(y*28)+21))
+                if "br" in choices:
+                    brushes.extend(LevelGenerator.get_small_room_brushes((x*28)+21,(y*28)+21))
 
             print(len(brushes))
 

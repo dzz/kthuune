@@ -20,7 +20,6 @@ class Explosion(Object):
 
         self.size[0]*=1.01
         self.size[1]*=1.01
-        print(self.fr)
         if(self.fr>= len (Explosion.textures)):
             self.floor.remove_object(self)
             return False

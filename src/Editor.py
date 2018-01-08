@@ -147,7 +147,15 @@ class Editor:
             layername = layer_map.key_order[self.layer]
         else:
             layername = self.layer
-        return "LAYER:{0}".format( layername)
+
+        gup_count = 0
+        ptlen = 0
+        stlen = 0
+        if LevelPreview.floor:
+            gup_count = LevelPreview.floor.gup_count
+            ptlen = len(LevelPreview.floor.purging_tick_manager.tickables)
+            stlen = len(LevelPreview.floor.simple_tick_manager.tickables)
+        return "LAYER:{0} GFX_1:{1} PTLEN:{2} STLEN:{3}".format( layername, gup_count, ptlen, stlen )
 
     def render(self):
 

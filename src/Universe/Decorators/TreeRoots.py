@@ -14,7 +14,7 @@ class TreeRoots(Object):
                     'size' : [ 5.0,5.0],
                     'rad' : uniform(-3.14,3.14),
                     'z_index' : -121,
-                    'buftarget' : 'floor'
+                    'buftarget' : 'popup'
                 }
             overrides.update(kwargs)
             Object.__init__(self,**overrides)

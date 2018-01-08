@@ -20,7 +20,6 @@ class Poof(Object):
 
         self.size[0]*=1.04
         self.size[1]*=1.04
-        print(self.fr)
         if(self.fr>= len (Poof.textures)):
             self.floor.remove_object(self)
             return False

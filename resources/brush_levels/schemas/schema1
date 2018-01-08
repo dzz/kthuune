@@ -1,0 +1,38 @@
+B = start
++ = casual connector
+C = chargeplate
+H = hostages
+L = challenge area
+X = exit
+i = interior
+
+--------
+
+B+C+L+C+X
+
+--------
+
+B++C
+   +
+ H+++i+
+
+
+---------------------
+
+B++
+  +
+  ++++C
+  +
+  ++C+++++H
+     +
+     C
+ H++++
+     +
+     ++++L
+       +
+      iii
+       +
+       +++X
+
+    
+

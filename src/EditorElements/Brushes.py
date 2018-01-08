@@ -15,7 +15,9 @@ class Brushes:
     level_name = "default"
     w_sizes = [ 7.0, 14.0 ]
     w_size = 7.0
-
+    difficulty = 0
+    weight = 1
+    
     def cycle_size():
         i = Brushes.w_sizes.index( Brushes.w_size )
         i = i +1 
