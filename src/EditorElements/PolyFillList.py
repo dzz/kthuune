@@ -11,6 +11,8 @@ from .PolyFills.skeline import skeline
 from .PolyFills.trees import trees
 from .PolyFills.hostage_field import hostage_field
 from .PolyFills.chargeplate import chargeplate
+from .PolyFills.firepot_x import firepot_x
+from .PolyFills.firepot_y import firepot_y
 
 class PolyFillList:
     cached_list = None
@@ -37,6 +39,8 @@ class PolyFillList:
                 "trees" : trees,
                 "hostage_field": hostage_field,
                 "chargeplate" : chargeplate,
+                "firepot_x" : firepot_x,
+                "firepot_y" : firepot_y,
             }
             PolyFillList.cached_list = polyfill_map
         return PolyFillList.cached_list

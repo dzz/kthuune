@@ -362,7 +362,7 @@ class AreaCompiler():
 
             u_l = hypot( edge[1][0]-edge[0][0], edge[1][1]-edge[1][1])
 
-            for x in range(0,int(u_l+uniform(0.0,5.0))):
+            for x in range(0,int(u_l+uniform(1.0,3.0))):
 
                 if uniform(0.0,1.0) < 0.85:
                     continue

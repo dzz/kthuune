@@ -72,9 +72,39 @@ class Factory:
         area.add_line("0") #width
         area.add_line("0") #height
 
-    def make_firepot( area, x, y):
+    def make_firepot_up( area, x, y):
         area.add_line("OBJECT")
-        area.add_line("firepot") #object type
+        area.add_line("firepot_up") #object type
+        area.add_line("{0}".format(x))
+        area.add_line("{0}".format(y)) 
+        area.add_line("{}")
+        area.add_line("False") #is region
+        area.add_line("0") #width
+        area.add_line("0") #height
+
+    def make_firepot_down( area, x, y):
+        area.add_line("OBJECT")
+        area.add_line("firepot_down") #object type
+        area.add_line("{0}".format(x))
+        area.add_line("{0}".format(y)) 
+        area.add_line("{}")
+        area.add_line("False") #is region
+        area.add_line("0") #width
+        area.add_line("0") #height
+
+    def make_firepot_right( area, x, y):
+        area.add_line("OBJECT")
+        area.add_line("firepot_right") #object type
+        area.add_line("{0}".format(x))
+        area.add_line("{0}".format(y)) 
+        area.add_line("{}")
+        area.add_line("False") #is region
+        area.add_line("0") #width
+        area.add_line("0") #height
+
+    def make_firepot_left( area, x, y):
+        area.add_line("OBJECT")
+        area.add_line("firepot_left") #object type
         area.add_line("{0}".format(x))
         area.add_line("{0}".format(y)) 
         area.add_line("{}")
