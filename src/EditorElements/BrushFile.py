@@ -35,6 +35,9 @@ class BrushFile:
                     Brushes.brushes.append(brush)
                 brush = Brushes.Brush()
                 row = 0
+            if mode == 'HEADER':
+                if row == 2:
+                    Brushes.w_size = float(line)
             if mode == 'BRUSH':
                 if row == 1:
                     brush.x1 = int(line)

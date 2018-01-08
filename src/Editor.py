@@ -182,9 +182,12 @@ class Editor:
         with BGL.blendmode.alpha_over:
             Cursor.render(self)
 
-
     def finalize(self):
         pass
+
+    def LevelGenerate():
+        from .LevelGenerator import LevelGenerator
+        LevelGenerator.generate()
 
 
 BGL.keyboard.register_keydown_handler('p', World.reduce)
@@ -201,4 +204,5 @@ BGL.keyboard.register_keydown_handler('d', Brushes.move_right)
 BGL.keyboard.register_keydown_handler('w', Brushes.move_up)
 BGL.keyboard.register_keydown_handler('s', Brushes.move_down)
 BGL.keyboard.register_keydown_handler('f', Brushes.reflow)
+BGL.keyboard.register_keydown_handler('g', Editor.LevelGenerate)
 
