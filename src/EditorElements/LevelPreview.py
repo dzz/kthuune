@@ -61,12 +61,13 @@ class LevelPreview:
             LevelPreview.player.p[1] = Grid.cx*2
 
     def synch_cams(app):
+        yoffs = -940
         if LevelPreview.floor is not None:
             if(LevelPreview.playercam):
                 LevelPreview.camera.p[0] = LevelPreview.player.p[0]
-                LevelPreview.camera.p[1] = LevelPreview.player.p[1]
+                LevelPreview.camera.p[1] = LevelPreview.player.p[1] + yoffs
                 Grid.cx = LevelPreview.player.p[0]*0.5
-                Grid.cy = LevelPreview.player.p[1]*0.5
+                Grid.cy = (LevelPreview.player.p[1]*0.5) + yoffs
 
     def stash_player():
         if(LevelPreview.floor is not None):

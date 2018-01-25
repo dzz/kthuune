@@ -364,7 +364,7 @@ class AreaCompiler():
 
             for x in range(0,int(u_l+uniform(1.0,3.0))):
 
-                if uniform(0.0,1.0) < 0.85:
+                if uniform(0.0,1.0) < 0.98:
                     continue
                     
                 size = uniform(2.5,5.5)
@@ -374,15 +374,15 @@ class AreaCompiler():
                 px,py = d*dx,d*dy
                 x,y = edge[0][0]+px,edge[0][1]+py
                 p = [x,y]
-                if(uniform(0.0,1.0)>0.2):
-                    self.tree_pts.append(p)
+                #if(uniform(0.0,1.0)>0.2):
+                #    self.tree_pts.append(p)
 
                 tt = TreeTop( p=p, size=[size,size],parralax = uniform(1.1,2.8)) 
                 self.objects.append( tt )
-                if(uniform(0.0,1.0)>0.8):
+                if(uniform(0.0,1.0)>0.5):
                     self.objects.append( TreeShadow(p=p, TreeTop=tt) )
 
-                #for tt in range(2,choice(range(2,5))):
+                #for tt in range(1,choice(range(1,2))):
                 #    size = uniform(10.0,40.0)
                 #    p = [px+uniform(-2.0,2.0),py+uniform(-2.0,2.0)]
                 #    self.objects.append( TreeRoots( p=p, size=[size,size]) )
