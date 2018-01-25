@@ -9,6 +9,7 @@
         "KT-tiles"      : "resources/tiles/tiles.json",
         "KT-forest"     : "resources/forest/forest.json",
         "KT-props"      : "resources/props/props.json",
-        "KT-editor"     : "resources/editor/editor.json"
+        "KT-editor"     : "resources/editor/editor.json",
+        "KT-city"     : "resources/city/city.json"
     }
 }

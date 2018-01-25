@@ -10,6 +10,7 @@ from .EditorElements.World import World
 from .EditorElements.LevelPreview import LevelPreview
 from .EditorElements.WorldCursor import WorldCursor
 from .EditorElements.PolyFills.layer_map import layer_map
+from .ParallaxBackground import ParallaxBackground
 
 class Editor:
     instance = None
@@ -176,6 +177,7 @@ class Editor:
         BGL.context.clear(0.0,0.0,0.0,0.0)
 
         Grid.render(self)
+        ParallaxBackground.render( (Grid.cx*2)*0.01 )
         if(self.show_preview):
             LevelPreview.render(self)
 

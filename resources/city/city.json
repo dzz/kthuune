@@ -1,0 +1,20 @@
+{
+    "preload": true,
+    "resources" : {
+        "texture" : [
+            { "name" : "city2_background", "filename" : "{package_path}/city2_background.png", "filtered" : false },
+            { "name" : "city2_mountains_far", "filename" : "{package_path}/city2_mountains_far.png", "filtered" : false },
+            { "name" : "city2_mountains_near", "filename" : "{package_path}/city2_mountains_near.png", "filtered" : false },
+            { "name" : "city2_buildings_far", "filename" : "{package_path}/city2_buildings_far.png", "filtered" : false },
+            { "name" : "city2_buildings_middle", "filename" : "{package_path}/city2_buildings_middle.png", "filtered" : false },
+            { "name" : "city2_buildings_near", "filename" : "{package_path}/city2_buildings_near.png", "filtered" : false }
+        ],
+        "shader" : [
+            {
+                "name" : "city",
+                "vertex_program" : "{beagle-2d}/vertex/no_transform",
+                "pixel_program" : "{package_path}/city"
+            }
+        ]
+    }
+}

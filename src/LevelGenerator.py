@@ -8,7 +8,7 @@ from random import choice, sample
 
 class LevelGenerator():
 
-    world_size = 3
+    world_size = 2
     brush_map = { 7: [], 14: []} 
 
     def map_brushfiles():
