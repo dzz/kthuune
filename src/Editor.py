@@ -178,6 +178,7 @@ class Editor:
 
         Grid.render(self)
         ParallaxBackground.render( (Grid.cx*2)*0.01 )
+
         if(self.show_preview):
             LevelPreview.render(self)
 

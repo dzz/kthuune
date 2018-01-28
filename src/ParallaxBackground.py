@@ -15,5 +15,5 @@ class ParallaxBackground:
     def render(x):
         with BGL.blendmode.alpha_over:
             for layer in ParallaxBackground.layers:
-                ParallaxBackground.primitive.render_shaded(ParallaxBackground.shader,  { "texBuffer" : layer[0], "offs": x*layer[1] } )
+                ParallaxBackground.primitive.render_shaded(ParallaxBackground.shader,  { "texBuffer" : layer[0], "offs": x*layer[1]*0.6 } )
 
