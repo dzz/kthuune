@@ -16,9 +16,14 @@ import client.system.keyboard as keyboard
 
 Floor = createFloorClass( DFRenderer )
 class DungeonFloor( Floor ):
+
+    def add_timeout(self, to):
+        self.timeouts.append(to)
+
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "timeouts" : [],
             "chargeplates" : [],
             "hostages" : [],
             "override_base_zoom" : None,
@@ -319,6 +324,19 @@ class DungeonFloor( Floor ):
             self.fog_level_real = (self.fog_level_real * 0.97) + (self.fog_level_impulse*0.03)
         if(self.fog_level_impulse > self.fog_level_real):
             self.fog_level_real = (self.fog_level_real * 0.95) + (self.fog_level_impulse*0.05)
+
+        #timeouts
+        done_to = []
+        for to in self.timeouts:
+            to[1]-=1
+            if to[1] == 0:
+                to[0]()
+                done_to.append(to)
+
+        for to in done_to: 
+            self.timeouts.remove(to) 
+
+            
 
     def get_occluders(self):
         return self.light_occluders
