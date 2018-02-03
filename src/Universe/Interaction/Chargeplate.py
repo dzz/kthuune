@@ -28,6 +28,13 @@ class Chargeplate(Object):
         if(self.charged):
             self.texture = Chargeplate.textures[ len(Chargeplate.textures)-1]
             self.color = [ 1.0,1.0,1.0,1.0 ]
+            win = True
+            for cp in self.floor.chargeplates:
+                if(not cp.charged):
+                    win = False
+                    break                    
+            if win: 
+                self.floor.game.next_sequence()
             return False
 
         self.fr += self.cv
