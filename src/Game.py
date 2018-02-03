@@ -22,6 +22,8 @@ from .Fog import Fog
 from .Abilities import Abilities
 from .Renderers.uniform_fade import uniform_fade 
 
+from .Sequences import Sequences
+
 class Game( BaseGame ):
 
     god_buffer = BGL.framebuffer.from_screen()
@@ -276,11 +278,15 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
     ###############
 
-    def load_floor( self, key ):
+    def load_floor( self, key, sequence = False ):
 
         self.background = Background()
         self.fog = Fog()
         self.area_name = key
+
+        if sequence:
+            return Sequences.build_sequence(self, sequence)            
+             
         floor = None
         if key == "area_test":
             floor = self.build_area_test()
@@ -367,7 +373,21 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         self.fade_color = color
         self.fade_amt = 0.0
 
+
+    def next_sequence(self):
+        self.floor.destroy()
+        self.floor = self.create_tickable( self.load_floor( None, Sequences.next() ) )
+        self.player.trigger_title( self.floor.title )
+        self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
+        self.camera.set_player(self.player)
+        self.player.active_terminal = None
+        if(self.floor.god_shader):
+            Game.god_shader = self.floor.god_shader
+
     def initialize(self):
+
+        Sequences.initialize()
+
         self.active_cinematic = None
         self.fade_amt = 1.1
         self.max_fade_amt = 1.0
@@ -383,8 +403,10 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         ### ENTRY POINT
 ###########################
         loading_floor = "ship"
-        self.floor = self.create_tickable(self.load_floor(loading_floor))
-        self.current_floor_key = loading_floor
+    
+        #self.floor = self.create_tickable(self.load_floor(loading_floor))
+        self.floor = self.create_tickable(self.load_floor(None,"1"))
+        #self.current_floor_key = loading_floor
         self.current_floor_target = None
         self.player.trigger_title( self.floor.title )
         if "bg_texture" in self.floor.__dict__:
@@ -406,7 +428,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         else:
             with BGL.context.render_target( Game.god_buffer):
 
-                BGL.context.clear( 1.0,1.0,1.0,1.0);
+                BGL.context.clear( 0.0,0.0,0.0,0.0);
 
                 #if(self.floor.custom_background):
                 #    self.floor.custom_background.camera = self.camera

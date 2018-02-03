@@ -1,9 +1,13 @@
 from Beagle import API as BGL
 
 class BrushFile:
-
+    sequence = None
     def get_filename(level_name):
-        return BGL.environment.settings['app_dir'] + "resources/brush_levels/" + level_name + ".brushes"
+        if not BrushFile.sequence:
+            return BGL.environment.settings['app_dir'] + "resources/brush_levels/" + level_name + ".brushes"
+        else:
+            filename = "{0}/{1}.brushes".format(BGL.assets.get('KT-player/path/sequence'),BrushFile.sequence)
+            return filename
 
     def save(Brushes):
         brush_file = open(BrushFile.get_filename(Brushes.level_name), "w")
