@@ -37,7 +37,13 @@ class Chargeplate(Object):
                 dfloor = self.floor
                 def ns():
                     dfloor.game.next_sequence()
-                self.floor.add_timeout( [ ns, 120 ] )
+                def ms():
+                    ai = AttackInfo( p=[ self.p[0], self.p[1] ], message="SEQUENCE COMPLETE")
+                    dfloor.create_object(ai)
+
+                self.floor.add_timeout( [ ms, 100 ] )
+                self.floor.add_timeout( [ ns, 240 ] )
+                self.floor.game.trigger_fade( 240, [ 1.0,1.0,1.0] )
             return False
 
         self.fr += self.cv

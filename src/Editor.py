@@ -5,6 +5,7 @@ from .EditorElements.TitleBar import TitleBar
 from .EditorElements.ToolBox import ToolBox
 from .EditorElements.BrushTool import BrushTool
 from .EditorElements.Brushes import Brushes
+from .EditorElements.BrushFile import BrushFile
 from .EditorElements.BrushSelectTool import BrushSelectTool
 from .EditorElements.World import World
 from .EditorElements.LevelPreview import LevelPreview
@@ -41,6 +42,16 @@ class Editor:
     def set_name(self,name):
         Brushes.set_name(name)
 
+    def build_sequence(self,seqid):
+        filename = "{0}/{1}.area".format(BGL.assets.get('KT-player/path/sequence'),seqid)
+        f = open(filename,'w')
+        f.write(World.GeneratedArea.output_data)
+        f.close()
+        Brushes.set_name(seqid)
+        BrushFile.sequence = seqid
+        Brushes.save()
+        BrushFile.sequence = None
+        
     def save(self):
         Brushes.save()
     

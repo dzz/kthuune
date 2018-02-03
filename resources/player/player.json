@@ -88,6 +88,7 @@
             { "name" : "terminal", "vertex_program" : "{package_path}/shader/terminalv", "pixel_program" : "{package_path}/shader/terminalp" }
         ],
         "path" : [
+            { "name" : "sequence", "path" : "{package_path}/sequence/" },
             { "name" : "charge_initiated", "path" : "{package_path}/sounds/charge_initiated.wav" },
             { "name" : "charge_executed", "path" : "{package_path}/sounds/charge_executed.wav" },
             { "name" : "snap_landed", "path" : "{package_path}/sounds/snap_landed.wav" },
