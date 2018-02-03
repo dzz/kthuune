@@ -195,6 +195,7 @@ class AreaCompiler():
 
             if od["key"] in [ "chargeplate" ]:
                 self.objects.append(Chargeplate.parse(od,df ))
+                df.chargeplates.append(self.objects[-1])
 
             if od["key"] in [ "eglans" ]:
                 for x in range(0,5):
