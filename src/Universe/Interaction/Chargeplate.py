@@ -34,7 +34,10 @@ class Chargeplate(Object):
                     win = False
                     break                    
             if win: 
-                self.floor.game.next_sequence()
+                dfloor = self.floor
+                def ns():
+                    dfloor.game.next_sequence()
+                self.floor.add_timeout( [ ns, 120 ] )
             return False
 
         self.fr += self.cv
