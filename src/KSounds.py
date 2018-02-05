@@ -4,6 +4,8 @@ from random import choice
 
 class KSounds:
     charge_initiated = audio.baudy_load_sound(BGL.assets.get("KT-player/path/charge_initiated")) 
+    spawned = audio.baudy_load_sound(BGL.assets.get("KT-player/path/spawned")) 
+    charging = audio.baudy_load_sound(BGL.assets.get("KT-player/path/charging")) 
     charge_executed = audio.baudy_load_sound(BGL.assets.get("KT-player/path/charge_executed")) 
     snap_landed = audio.baudy_load_sound(BGL.assets.get("KT-player/path/snap_landed")) 
     basic_hit = audio.baudy_load_sound(BGL.assets.get("KT-player/path/basic_hit")) 
@@ -47,6 +49,8 @@ class KSounds:
     slimekill = audio.baudy_load_sound(BGL.assets.get("KT-player/path/slimekill")) 
     atmozap1 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/atmozap1")) 
     atmozap2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/atmozap2")) 
+    charged = audio.baudy_load_sound(BGL.assets.get("KT-player/path/charged")) 
+    sequenced = audio.baudy_load_sound(BGL.assets.get("KT-player/path/sequenced")) 
 
     typewriter_keys = [
         audio.baudy_load_sound(BGL.assets.get("KT-player/path/tkey1")) ,

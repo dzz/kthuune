@@ -23,6 +23,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "totems" : [],
             "timeouts" : [],
             "chargeplates" : [],
             "hostages" : [],
@@ -105,7 +106,7 @@ class DungeonFloor( Floor ):
             self.generator.compile( self, []  )
 
 
-
+        self.sounds = KSounds
         beagle_tilemap = BGL.tilemap(
             tileset = beagle_tileset,
             configuration = {

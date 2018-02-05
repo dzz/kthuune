@@ -1,4 +1,5 @@
 import gc
+from math import floor 
 from random import uniform, choice
 from Beagle import API as BGL
 from Newfoundland.Camera import Camera
@@ -23,6 +24,7 @@ from .Abilities import Abilities
 from .Renderers.uniform_fade import uniform_fade 
 
 from .Sequences import Sequences
+from .ParallaxBackground import ParallaxBackground
 
 class Game( BaseGame ):
 
@@ -374,9 +376,13 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         self.fade_amt = 0.0
 
 
-    def next_sequence(self):
+    def next_sequence(self, advance = True ):
+
+        if(advance):
+            self.player.time_penalty = floor(self.player.time_penalty * 1.23)
+        self.player.pump_timer("completion")
         self.floor.destroy()
-        self.floor = self.create_tickable( self.load_floor( None, Sequences.next() ) )
+        self.floor = self.create_tickable( self.load_floor( None, Sequences.next(advance) ) )
         self.player.trigger_title( self.floor.title )
         self.floor.compositor_shader = BGL.assets.get("KT-compositor/shader/compositor")
         self.camera.set_player(self.player)
@@ -428,7 +434,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         else:
             with BGL.context.render_target( Game.god_buffer):
 
-                BGL.context.clear( 0.0,0.0,0.0,0.0);
+                ParallaxBackground.render(self.player.p[0]*0.01)
+                #BGL.context.clear( 0.0,0.0,0.0,0.0);
 
                 #if(self.floor.custom_background):
                 #    self.floor.custom_background.camera = self.camera
@@ -496,5 +503,9 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             self.player_dead_frames += 1
             if self.player_dead_frames > 220:
                 self.player.hp = 100
-                self.next_area( self.current_floor_key, self.current_floor_target, True )
+                if "current_floor_key" in dir(self) and self.current_floor_key:
+                    self.next_area( self.current_floor_key, self.current_floor_target, True )
+                else:
+                    self.player.pump_timer("death")
+                    self.next_sequence(False)
                 self.player_dead_frames = 0

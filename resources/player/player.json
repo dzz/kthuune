@@ -89,6 +89,10 @@
         ],
         "path" : [
             { "name" : "sequence", "path" : "{package_path}/sequence/" },
+            { "name" : "charged", "path" : "{package_path}/sounds/charged.wav" },
+            { "name" : "charging", "path" : "{package_path}/sounds/charging.wav" },
+            { "name" : "spawned", "path" : "{package_path}/sounds/spawned.wav" },
+            { "name" : "sequenced", "path" : "{package_path}/sounds/sequenced.wav" },
             { "name" : "charge_initiated", "path" : "{package_path}/sounds/charge_initiated.wav" },
             { "name" : "charge_executed", "path" : "{package_path}/sounds/charge_executed.wav" },
             { "name" : "snap_landed", "path" : "{package_path}/sounds/snap_landed.wav" },

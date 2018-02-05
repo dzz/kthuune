@@ -22,10 +22,16 @@ class Chargeplate(Object):
         self.fr = 0.0
         self.cv = 0.0
         self.charged = False
+        self.incr_frames = 0
+        self.decr_frames = 0
+        self.l_idx = 0
 
     def tick(self):
 
         if(self.charged):
+            self.floor.sounds.play(self.floor.sounds.charged)
+            self.floor.player.pump_timer('chargeplate')
+
             self.texture = Chargeplate.textures[ len(Chargeplate.textures)-1]
             self.color = [ 1.0,1.0,1.0,1.0 ]
             win = True
@@ -39,21 +45,31 @@ class Chargeplate(Object):
                     dfloor.game.next_sequence()
                 def ms():
                     ai = AttackInfo( p=[ self.p[0], self.p[1] ], message="SEQUENCE COMPLETE")
+                    self.floor.sounds.play(self.floor.sounds.sequenced)
                     dfloor.create_object(ai)
 
                 self.floor.add_timeout( [ ms, 100 ] )
                 self.floor.add_timeout( [ ns, 240 ] )
-                self.floor.game.trigger_fade( 240, [ 1.0,1.0,1.0] )
+                self.floor.game.trigger_fade( 242, [ 1.0,1.0,1.0] )
             return False
 
         self.fr += self.cv
 
         if(self.fr>= len (Chargeplate.textures)):
             self.fr = 0
+
         self.texture = Chargeplate.textures[floor(self.fr)]
 
+        n_lidx = floor((self.cv * 8))
+
+        if(n_lidx!=self.l_idx):
+            self.floor.sounds.play(self.floor.sounds.charging)
+        self.l_idx = n_lidx
+
+
+
         if(self.mdist( self.floor.player)<2):
-            self.cv += 0.01
+            self.cv += 0.02
             #self.floor.create_object(Poof( p = list(self.p)))
             #self.floor.objects.remove(self)
             #return False            
