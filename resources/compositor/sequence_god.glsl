@@ -3,6 +3,7 @@
 
 in vec2 uv;
 uniform float amt;
+uniform float g;
 uniform sampler2D scene;
 
 // @load "includes/colors.glsl"
@@ -28,6 +29,12 @@ void main() {
    // gl_FragColor.rgb= vec3(l,l,l);
 
     vec3 uv_fix = photo*vec3(1.0,0.9,0.4);
-    gl_FragColor.rgb= (uv_fix*(hsl_photo.y))+(photo*(1.0-hsl_photo.y));
+
+    vec3 comp = (uv_fix*(hsl_photo.y))+(photo*(1.0-hsl_photo.y));
+    //vec3 inv = vec3(1.0,1.0,1.0)-(vec3(l*l,l*l,l*l)*2);
+
+    vec3 inv = comp*vec3(10,5,2); 
+
+    gl_FragColor.rgb = (comp*(1.0-g))+(inv*g);
     gl_FragColor.a = 1.0;
 }

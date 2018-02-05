@@ -394,6 +394,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
     def initialize(self):
 
+        self.rg = 0.0
         self.genocide_trigger_available = True
         Sequences.initialize()
 
@@ -414,7 +415,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         loading_floor = "ship"
     
         #self.floor = self.create_tickable(self.load_floor(loading_floor))
-        self.floor = self.create_tickable(self.load_floor(None,"3"))
+        self.floor = self.create_tickable(self.load_floor(None,"1"))
         #self.current_floor_key = loading_floor
         self.current_floor_target = None
         self.player.trigger_title( self.floor.title )
@@ -450,6 +451,10 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                 #self.fog.camera = self.camera
                 #self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
 
+
+            self.floor.god_shader.bind({
+                "g" : self.rg
+            })
             Game.god_buffer.render_processed( self.floor.god_shader )
             self.player.render_hud()
         if(self.fade_amt< self.max_fade_amt):
@@ -538,5 +543,10 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                self.floor.game.trigger_fade( 242, [ 1.0,1.0,1.0] )
 
 
+        g = 0.0
+        if(self.floor.playing_genocide()):
+            if(self.genocide_trigger_available):
+                g = 1.0
+        self.rg = g*0.01 + (self.rg*0.98)
         #if self.player.sequence_kills >= 4:
         #    self.next_sequence(True)
