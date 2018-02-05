@@ -95,6 +95,7 @@ class SlashEffect(Object):
 
     def tick(self):
 
+
         if(self.cooldown>0):
             self.cooldown -= 1
 
@@ -706,6 +707,7 @@ class KPlayer(Player):
         self.sword.state = Sword.STATE_IDLE
         self.sword.stimer = 0
         KSounds.play( KSounds.player_hurt )
+        self.pump_timer("injured")
  
     def attempt_snap_attack(self, snap = True):
 
@@ -796,6 +798,7 @@ class KPlayer(Player):
                 for x in range(0,15):
                     self.floor.create_object( PlayerPhantom( player = self, animation_threshold = 2*x, target = se ) )
 
+                self.pump_timer('totem')
                 self.display_p = [ self.p[0], self.p[1] ]
                 if snap:
                     self.p[0] = se.p[0]
@@ -862,9 +865,32 @@ class KPlayer(Player):
         self.stimer = 0
         self.state = state
 
+
+    def pump_timer(self,key):
+        if key=='skeline':
+            self.life_timer += 450
+        if key=='chargeplate':
+            self.life_timer += 300
+        if key=='totem':
+            self.life_timer += 20
+        if key=="completion":
+            self.life_timer += floor(self.completion_bonus)
+            self.completion_bonus *= 1.08
+        if key=="death":
+            self.life_timer -= 500
+            self.completion_bonus*= 0.9
+        if key=="injured":
+            self.life_timer -= 75
+
+
     def __init__(self, **kwargs):
         #playerinit
 
+        self.life_timer = 2800
+        self.time_penalty = 100
+        self.disp_life_timer = self.life_timer
+        self.completion_bonus = 900
+        self.lt_tick = 0
         self.current_system = "Oort Cloud"
         self.teleportAmt = 100.0
         self.world_map = WorldMap
@@ -973,6 +999,7 @@ class KPlayer(Player):
         self.dash_flash = False
         self.dash_combo = False
         self.hud_buffer = BGL.framebuffer.from_dims(1920,1080)
+        self.time_buffer = BGL.framebuffer.from_dims( 160, 120 )
         self.combo_count = 0
         self.link_count = 0
         self.can_combo = False
@@ -1030,6 +1057,10 @@ class KPlayer(Player):
 
     def render_hud(self, render_titlecard = True):
 
+        with BGL.context.render_target( self.time_buffer ):
+            BGL.context.clear(0.0,0.0,0.0,0.0)
+            with BGL.blendmode.alpha_over:
+                BGL.lotext.render_text_pixels("LIFETIME:{0}".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
         with BGL.context.render_target( self.hud_buffer ):
             BGL.context.clear(0.0,0.0,0.0,0.0)
             if(self.critical_hit_display_counter>0) and (self.critical_hit_display_counter<55):
@@ -1060,6 +1091,7 @@ class KPlayer(Player):
 
         with BGL.blendmode.alpha_over:
             self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
+            self.time_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
             self.floor.render_objects("hud", True)
 
 
@@ -1345,6 +1377,22 @@ class KPlayer(Player):
         self.title_card.reset(title)
         
     def tick(self):
+
+        self.lt_tick = (self.lt_tick + 1)%220
+        ad = abs(self.disp_life_timer-self.life_timer)
+        amt = 1
+        if(ad>3): amt = 2
+        if(ad>7): amt = 6
+        if(ad>20): amt = 13
+        if(ad>60): amt = 50
+        if(self.disp_life_timer<self.life_timer):
+            self.disp_life_timer +=amt
+        if(self.disp_life_timer>self.life_timer):
+            self.disp_life_timer -=amt
+
+        if(self.lt_tick==0):
+            self.life_timer -= self.time_penalty
+
         self.title_card.tick()
 
         self.telekineFlash *= 0.95

@@ -14,7 +14,9 @@ class Sequences:
         for s in sequences:
             Sequences.found.append(splitext(basename(s))[0])
 
-    def next():
+    def next(advance):
+        if not advance:
+            return Sequences.found[Sequences.current_index]
         idx = (Sequences.current_index+1)%len(Sequences.found)
         return Sequences.found[idx]
 

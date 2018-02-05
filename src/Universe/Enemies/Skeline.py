@@ -162,6 +162,7 @@ class Skeline(SnapEnemy):
                 self.fireRanged()
 
         if(self.hp < 0):
+            self.floor.player.pump_timer('skeline')
             SnapEnemy.die(self)
             return False
 
