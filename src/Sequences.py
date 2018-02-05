@@ -6,6 +6,24 @@ from .DungeonFloor import DungeonFloor
 from .Universe.AreaLoader import get_area_data
 
 class Sequences:
+    titles = {
+        "1" : "BLASPHEME THY WAY",
+        "2" : "AMONG CYCLOPEAN FOES",
+        "3" : "THE UNNAMED SWORD",
+        "4" : "PALACE OF PHASE",
+        "5" : "EMERGE, THE SWAN",
+        "6" : "NIGHT TERROR",
+        "7" : "MECHANICAL IN DEFEAT",
+        "8" : "RESTLESS SPIRITS",
+        "9" : "GIBBOUS MOON",
+        "A0" : "FORTUITOUS SHATTERING",
+        "A1" : "A FETAL MEMORY",
+        "A2" : "LURKING IMMEMORIAL",
+        "A3" : "MANIFEST SHUDDER",
+        "A4" : "VERSIONLESS MOMENT",
+        "A5" : "FUNCTIONAL COLLAPSE",
+        "A6" : "DIGITAL OCEANS"
+    }
     found = []
     current_index = 0
 
@@ -38,10 +56,16 @@ class Sequences:
 
 
     def buildarea_default(Game,area_def, sequence):
+
+        if sequence in Sequences.titles:
+            title = Sequences.titles[sequence]
+        else:
+            title = "SEQUENCE-{0}".format(sequence)
+
         floor = DungeonFloor( 
             music = BGL.assets.get("KT-player/path/ship_music"),
-            title = "SEQUENCE-{0}".format(sequence),
-            god_shader = BGL.assets.get("KT-compositor/shader/ship_god"),
+            title = title,
+            god_shader = BGL.assets.get("KT-compositor/shader/sequence_god"),
             fuzz_amt = 0.8,
             fog_level_base=0.5, 
             tilescale =2, 
