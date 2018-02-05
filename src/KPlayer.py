@@ -883,9 +883,15 @@ class KPlayer(Player):
             self.life_timer -= 75
 
 
+    def add_sequence_kill(self):
+        self.sequence_kills+=1
+
     def __init__(self, **kwargs):
         #playerinit
-
+        #PLAYER INIT
+        #player init
+        
+        self.sequence_kills = 0
         self.life_timer = 2800
         self.time_penalty = 100
         self.disp_life_timer = self.life_timer

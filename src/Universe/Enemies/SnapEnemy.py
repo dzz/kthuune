@@ -8,6 +8,7 @@ from ..LevelEffects.AttackInfo import AttackInfo
 from ..LevelEffects.Blood import Blood
 from ..LevelEffects.SpikeyWave import SpikeyWave
 from ..LevelEffects.Explosion import Explosion
+from ..LevelEffects.SkullDeath import SkullDeath
 
 from .Spawner import Spawner
 
@@ -41,8 +42,9 @@ class SnapEnemy(Object):
             self.floor.objects.remove(self)
         if(self in self.floor.snap_enemies):
             self.floor.snap_enemies.remove(self)
-        #self.floor.create_object( SkullDeath( p = [ self.p[0], self.p[1] ] ) )
+        self.floor.create_object( SkullDeath( p = [ self.p[0], self.p[1] ] ) )
         self.floor.player.set_hud_message("KILL!", 60)
+        self.floor.player.add_sequence_kill()
         self.floor.player.notify_enemy_killed()
         self.floor.freeze_frames = 3
         
@@ -51,7 +53,8 @@ class SnapEnemy(Object):
 
         self.floor.create_object(Blood(p=[self.p[0],self.p[1]]))
         self.custom_die()
-        self.floor.create_object( Spawner( p = list(self.p), loser = self ) )
+        if not self.floor.playing_genocide():
+            self.floor.create_object( Spawner( p = list(self.p), loser = self ) )
         for x in range(0,self.get_kill_particles()):
             spltr = SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14))
             spltr.color = [0.0,0.0,0.0,1.0]

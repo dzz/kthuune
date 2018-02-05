@@ -1,5 +1,6 @@
 from Newfoundland.Object import Object
 from Beagle import API as BGL
+from math import cos,sin
 
 class SkullDeath(Object):
     texture = BGL.assets.get('KT-forest/texture/skull0000')

@@ -17,12 +17,16 @@ import client.system.keyboard as keyboard
 Floor = createFloorClass( DFRenderer )
 class DungeonFloor( Floor ):
 
+    def playing_genocide(self):
+        return self.game_mode == 1
+
     def add_timeout(self, to):
         self.timeouts.append(to)
 
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "game_mode" : 0,
             "totems" : [],
             "timeouts" : [],
             "chargeplates" : [],

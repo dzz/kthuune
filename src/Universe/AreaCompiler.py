@@ -300,7 +300,6 @@ class AreaCompiler():
                 self.objects.extend(BTerm.parse(od,df))
 
 
-
     def link_doors(self):
         for key in self.door_sensors:
             self.objects.append( Door( door_pin = self.door_pins[key], door_end = self.door_ends[key], sensors = self.door_sensors[key] ) )            
@@ -311,6 +310,8 @@ class AreaCompiler():
         if dungeon_floor.area_def:
             self.process_area_def( dungeon_floor, dungeon_floor.area_def )
             self.link_doors()
+            if len(dungeon_floor.chargeplates)==0:
+                dungeon_floor.game_mode = Chargeplate.GENOCIDE
 
         elif dungeon_floor.area_def is None:
             self.objects = []

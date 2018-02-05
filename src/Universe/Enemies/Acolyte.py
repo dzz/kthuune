@@ -27,6 +27,7 @@ class Acolyte(SnapEnemy):
     def parse(od,df):
         o = Acolyte( p = [ od["x"],od["y"] ] )
         df.snap_enemies.append(o)
+        df.enemies.append(eb)
         return o
 
     STATE_SEEKING_RANDOM = 0

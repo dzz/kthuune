@@ -7,6 +7,9 @@ from ..LevelEffects.Poof import Poof
 from ..LevelEffects.AttackInfo import AttackInfo
 
 class Chargeplate(Object):
+    PLATES = 0
+    GENOCIDE = 1
+
     textures = BGL.assets.get('KT-forest/animation/chargeplate')
 
     def parse(od,df):
@@ -42,15 +45,19 @@ class Chargeplate(Object):
             if win: 
                 dfloor = self.floor
                 def ns():
-                    dfloor.game.next_sequence()
+                    #dfloor.game.next_sequence()
+                    dfloor.game_mode = Chargeplate.GENOCIDE
+                    ai = AttackInfo( p=[ self.p[0], self.p[1] ], message="BEGIN PURIFICATION")
+                    self.floor.sounds.play(self.floor.sounds.sequenced)
+                    dfloor.create_object(ai)
                 def ms():
                     ai = AttackInfo( p=[ self.p[0], self.p[1] ], message="SEQUENCE COMPLETE")
                     self.floor.sounds.play(self.floor.sounds.sequenced)
                     dfloor.create_object(ai)
 
-                self.floor.add_timeout( [ ms, 100 ] )
-                self.floor.add_timeout( [ ns, 240 ] )
-                self.floor.game.trigger_fade( 242, [ 1.0,1.0,1.0] )
+                self.floor.add_timeout( [ ms, 30 ] )
+                self.floor.add_timeout( [ ns, 90 ] )
+                #self.floor.game.trigger_fade( 242, [ 1.0,1.0,1.0] )
             return False
 
         self.fr += self.cv

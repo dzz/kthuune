@@ -25,6 +25,7 @@ from .Renderers.uniform_fade import uniform_fade
 
 from .Sequences import Sequences
 from .ParallaxBackground import ParallaxBackground
+from .Universe.LevelEffects.AttackInfo import AttackInfo
 
 class Game( BaseGame ):
 
@@ -377,7 +378,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
 
     def next_sequence(self, advance = True ):
-
+        self.genocide_trigger_available = True
+        self.player.sequence_kills = 0
         if(advance):
             self.player.time_penalty = floor(self.player.time_penalty * 1.23)
         self.player.pump_timer("completion")
@@ -392,6 +394,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
     def initialize(self):
 
+        self.genocide_trigger_available = True
         Sequences.initialize()
 
         self.active_cinematic = None
@@ -411,7 +414,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         loading_floor = "ship"
     
         #self.floor = self.create_tickable(self.load_floor(loading_floor))
-        self.floor = self.create_tickable(self.load_floor(None,"1"))
+        self.floor = self.create_tickable(self.load_floor(None,"3"))
         #self.current_floor_key = loading_floor
         self.current_floor_target = None
         self.player.trigger_title( self.floor.title )
@@ -447,7 +450,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                 #self.fog.camera = self.camera
                 #self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
 
-            Game.god_buffer.render_processed( Game.god_shader )
+            Game.god_buffer.render_processed( self.floor.god_shader )
             self.player.render_hud()
         if(self.fade_amt< self.max_fade_amt):
             fade_perc = self.fade_amt / self.max_fade_amt
@@ -509,3 +512,31 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                     self.player.pump_timer("death")
                     self.next_sequence(False)
                 self.player_dead_frames = 0
+
+
+        
+        if self.floor.playing_genocide() and self.genocide_trigger_available:
+            passed_genocide = True
+            for enemy in self.floor.snap_enemies:
+                if enemy.snap_type == 1:
+                    passed_genocide = False
+                    break
+
+            if passed_genocide:
+               self.genocide_trigger_available = False
+               dfloor = self.floor
+               def ns():
+                   dfloor.game.next_sequence()
+               def ms():
+                   ai = AttackInfo( p=[ self.camera.p[0], self.camera.p[1] ], message="PURIFICATION COMPLETE")
+                   self.floor.sounds.play(self.floor.sounds.sequenced)
+                   dfloor.create_object(ai)
+
+               for x in range(0,15):
+                    self.floor.add_timeout( [ ms, x*x ] )
+               self.floor.add_timeout( [ ns, 250 ] )
+               self.floor.game.trigger_fade( 242, [ 1.0,1.0,1.0] )
+
+
+        #if self.player.sequence_kills >= 4:
+        #    self.next_sequence(True)
