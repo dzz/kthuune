@@ -67,7 +67,7 @@ class Brushes:
                         cny*=60
                         cnx += 480
                         cny += 270
-                        label = "{0}:{1}".format(brush.id, brush.polyfill_key)
+                        label = "{0}:{1}({2})".format(brush.id, brush.polyfill_key, brush.group)
                         BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny-8, [1.0,1.0,1.0])
                         BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny, [0.0,0.0,0.0])
 

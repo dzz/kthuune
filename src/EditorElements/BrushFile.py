@@ -21,6 +21,7 @@ class BrushFile:
             brush_file.write('{0}\n'.format(brush.x2))
             brush_file.write('{0}\n'.format(brush.y2))
             brush_file.write('{0}\n'.format(brush.polyfill_key))
+            brush_file.write('{0}\n'.format(brush.group))
 
         brush_file.close()
 
@@ -53,6 +54,8 @@ class BrushFile:
                     brush.y2 = int(line)
                 elif row == 5:
                     brush.polyfill_key = line
+                elif row == 6:
+                    brush.group = int(line)
             row+=1
         if brush:
             Brushes.brushes.append(brush)

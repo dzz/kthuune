@@ -210,6 +210,10 @@ class Editor:
     def LevelGenerate():
         from .LevelGenerator import LevelGenerator
         LevelGenerator.generate()
+    
+    def set_group(x):
+        for brush in Brushes.selected_brushes:
+            brush.group = x
 
 
 BGL.keyboard.register_keydown_handler('p', World.reduce)
@@ -227,4 +231,15 @@ BGL.keyboard.register_keydown_handler('w', Brushes.move_up)
 BGL.keyboard.register_keydown_handler('s', Brushes.move_down)
 BGL.keyboard.register_keydown_handler('f', Brushes.reflow)
 BGL.keyboard.register_keydown_handler('g', Editor.LevelGenerate)
+
+BGL.keyboard.register_keydown_handler("0", lambda: Editor.set_group(0))
+BGL.keyboard.register_keydown_handler("1", lambda: Editor.set_group(1))
+BGL.keyboard.register_keydown_handler("2", lambda: Editor.set_group(2))
+BGL.keyboard.register_keydown_handler("3", lambda: Editor.set_group(3))
+BGL.keyboard.register_keydown_handler("4", lambda: Editor.set_group(4))
+BGL.keyboard.register_keydown_handler("5", lambda: Editor.set_group(5))
+BGL.keyboard.register_keydown_handler("6", lambda: Editor.set_group(6))
+BGL.keyboard.register_keydown_handler("7", lambda: Editor.set_group(7))
+BGL.keyboard.register_keydown_handler("8", lambda: Editor.set_group(8))
+BGL.keyboard.register_keydown_handler("9", lambda: Editor.set_group(9))
 
