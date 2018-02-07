@@ -14,6 +14,7 @@ class GeneratedArea:
         GeneratedArea.tiles = {}
         GeneratedArea.fg_tiles = {}
         GeneratedArea.conditional_tiles = {}
+        GeneratedArea.nodefault_playerstart = False
 
     def set_tile(x,y,value, brush = None, fg = False):
         if brush:
@@ -92,11 +93,12 @@ class GeneratedArea:
                     GeneratedArea.add_line("foreground")
 
     def serialize_player():
-        GeneratedArea.add_line("OBJECT")
-        GeneratedArea.add_line("player_start")
-        GeneratedArea.add_line("0")
-        GeneratedArea.add_line("0")
-        GeneratedArea.add_line("{}")
+        if not GeneratedArea.nodefault_playerstart:
+            GeneratedArea.add_line("OBJECT")
+            GeneratedArea.add_line("player_start")
+            GeneratedArea.add_line("0")
+            GeneratedArea.add_line("0")
+            GeneratedArea.add_line("{}")
 
     def serialize():
         GeneratedArea.serialize_model()
