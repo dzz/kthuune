@@ -10,7 +10,9 @@ class totem:
 
     def reduce(area, brush):
         wsb = WorldSpaceBrush.from_brush(brush) 
-        Factory.make_totem( area, wsb.cx, wsb.cy)
+
+        print("TOTEM OF GROUP: {0}".format(brush.group))
+        Factory.make_totem( area, wsb.cx, wsb.cy, brush.group)
 
         for x in range(brush.x1, brush.x2):
             for y in range(brush.y1, brush.y2):
