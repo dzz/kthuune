@@ -22,9 +22,12 @@ class Totem(Object):
         self.z_index = 1
         self.anim_index = 0
         self.reset_timer = 0
+        #self.group = 0
+        self.active = True
 
     def tick(self):
-        self.reset_timer = self.reset_timer+1
+        if self.active:
+            self.reset_timer = self.reset_timer+1
         if(self.reset_timer == - 50):
             KSounds.play(KSounds.totem_restored)
         if(self.reset_timer==0):
@@ -41,3 +44,17 @@ class Totem(Object):
         self.reset_timer = -170
         self.visible = False
         self.light_type = Object.LightTypes.NONE
+        self.active = False
+
+        reset = True
+        for totem in self.floor.totems:
+            print("TOTEM GROUP: {0}".format(totem.group))
+            if totem.group == self.group and totem.active == True:
+                #print("totem breaking reset because group {0}=={1}".format(self.group, totem.group))
+                reset = False
+
+        if reset:
+            for totem in self.floor.totems:
+                if totem.group == self.group:
+                    totem.active = True
+
