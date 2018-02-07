@@ -32,6 +32,16 @@ class Factory:
         area.add_line("0") #width
         area.add_line("0") #height
 
+    def make_playerstart( area, x, y):
+        area.add_line("OBJECT")
+        area.add_line("player_start") #object type
+        area.add_line("{0}".format(x))
+        area.add_line("{0}".format(y)) 
+        area.add_line("{}")
+        area.add_line("False") #is region
+        area.add_line("0") #width
+        area.add_line("0") #height
+
     def make_chargeplate( area, x, y):
         area.add_line("OBJECT")
         area.add_line("chargeplate") #object type
