@@ -34,6 +34,8 @@ class Acolyte(SnapEnemy):
                             enemy.p[1] += 99999
                             enemy.physics_suspended = False
                             enemy.tick()
+                            enemy.visible = True
+                            enemy.triggered = True
                             ai= AttackInfo( p=[ enemy.p[0], enemy.p[1] ], message="~infection~")
                             self.floor.create_object( Explosion( p = list(enemy.p) ) )
                             self.floor.create_object(ai)
