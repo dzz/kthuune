@@ -104,8 +104,8 @@ class Chargeplate(Object):
 
 
 
-        if(self.mdist( self.floor.player)<2):
-            self.cv += 0.02
+        if(self.mdist( self.floor.player)<2.27):
+            self.cv += 0.03
             #self.floor.create_object(Poof( p = list(self.p)))
             #self.floor.objects.remove(self)
             #return False            
