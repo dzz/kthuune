@@ -41,17 +41,21 @@ class Totem(Object):
     def sleep_totem(self):
         KSounds.play(KSounds.totem_hit)
         self.floor.snap_enemies.remove(self)
+
         self.reset_timer = -170
+
         self.visible = False
         self.light_type = Object.LightTypes.NONE
         self.active = False
 
         reset = True
-        for totem in self.floor.totems:
-            print("TOTEM GROUP: {0}".format(totem.group))
-            if totem.group == self.group and totem.active == True:
-                #print("totem breaking reset because group {0}=={1}".format(self.group, totem.group))
-                reset = False
+
+        if self.group!=0:
+            for totem in self.floor.totems:
+                #print("TOTEM GROUP: {0}".format(totem.group))
+                if totem.group == self.group and totem.active == True:
+                    #print("totem breaking reset because group {0}=={1}".format(self.group, totem.group))
+                    reset = False
 
         if reset:
             for totem in self.floor.totems:

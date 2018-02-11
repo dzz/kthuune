@@ -9,15 +9,41 @@ from ...KSounds import KSounds
 from ..RangedEnemyAttacks.BasicProjectile import BasicProjectile
 from .Skeline import Skeline #TODO: eliminate this dependency
 from ..Hazards.WormField import WormField
+from ..LevelEffects.AttackInfo import AttackInfo
 
 class Acolyte(SnapEnemy):
     def custom_die(self):
-        wf_spec = [ self.p[0], self.p[1], 15 ]
-        self.floor.create_object( WormField( wf_spec = wf_spec) )
         for enemy in self.floor.snap_enemies:
             if enemy.snap_type == SnapEnemy.ENEMY:
                 if enemy.triggered:
                     enemy.receive_snap_attack(True)
+
+        if(self.floor.playing_genocide()):
+            target_group = self.group+1
+            notify_timeout = 20
+            for enemy in self.floor.enemies:
+
+                #print("CHECKING ENEMEY GROUP {0} == {1}",enemy.group, target_group )
+                if enemy.group == target_group:
+                    def fes(enemy):
+                        def es():
+                            enemy.group_active = True
+                            enemy.p[0] += 99999
+                            enemy.p[1] += 99999
+                            enemy.physics_suspended = False
+                            enemy.tick()
+                            ai= AttackInfo( p=[ enemy.p[0], enemy.p[1] ], message="~infection~")
+                            self.floor.create_object(ai)
+                            self.floor.camera.grab_cinematic( ai, 20 )
+                            self.floor.sounds.play(self.floor.sounds.spawned)
+                        return es
+
+                    self.floor.add_timeout( [fes(enemy), notify_timeout])
+                    notify_timeout += 40
+                    
+
+        wf_spec = [ self.p[0], self.p[1], 15 ]
+        self.floor.create_object( WormField( wf_spec = wf_spec) )
 
     def receive_snap_attack(self, was_crit):
         SnapEnemy.receive_snap_attack(self, was_crit)
@@ -26,8 +52,9 @@ class Acolyte(SnapEnemy):
 
     def parse(od,df):
         o = Acolyte( p = [ od["x"],od["y"] ] )
+        SnapEnemy.set_group(o,od)
         df.snap_enemies.append(o)
-        df.enemies.append(eb)
+        df.enemies.append(o)
         return o
 
     STATE_SEEKING_RANDOM = 0
@@ -70,6 +97,8 @@ class Acolyte(SnapEnemy):
         
 
     def tick(self):
+        if(SnapEnemy.handle_tick_disabled(self)):
+            return True
 
         if self.triggered:
             self.floor.add_fog(self, 0.7)

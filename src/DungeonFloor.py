@@ -50,6 +50,7 @@ class DungeonFloor( Floor ):
             "freeze_delay" : 0,
             "doors" : [],
             "snap_enemies" : [],
+            "enemies" : [],
             "using_tilemap" : True,
             "tilescale" : 3,
             "area_def" : None,

@@ -28,7 +28,7 @@ void main() {
 
    // gl_FragColor.rgb= vec3(l,l,l);
 
-    vec3 uv_fix = photo*vec3(1.0,0.9,0.4);
+    vec3 uv_fix = photo*vec3(1.3,1.1,0.8);
 
     vec3 comp = (uv_fix*(hsl_photo.y))+(photo*(1.0-hsl_photo.y));
     //vec3 inv = vec3(1.0,1.0,1.0)-(vec3(l*l,l*l,l*l)*2);

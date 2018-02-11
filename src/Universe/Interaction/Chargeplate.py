@@ -14,6 +14,13 @@ class Chargeplate(Object):
 
     def parse(od,df):
         o = Chargeplate( p = [ od["x"],od["y"] ] )
+
+        o.group = 0
+        if("group" in od["meta"]):
+            o.group = od["meta"]["group"]
+
+        if(o.group!=0):
+            o.visible = False
         return o
         
     def customize(self):
@@ -31,7 +38,29 @@ class Chargeplate(Object):
 
     def tick(self):
 
+        if(not self.visible):
+            return True
+
         if(self.charged):
+
+            notify_timeout = 30
+            for chargeplate in self.floor.chargeplates:
+                if chargeplate.group == self.group + 1:
+                    if not(chargeplate.visible):
+                        dfloor = self.floor
+
+                        def fnn(chargeplate):
+                            cbplat = chargeplate
+                            def nn():
+                                cbplat.visible = True
+                                ai = AttackInfo( p=[ cbplat.p[0], cbplat.p[1] ], message="NEW NODE")
+                                self.floor.camera.grab_cinematic( ai, 25 )
+                                self.floor.sounds.play(self.floor.sounds.sequenced)
+                                dfloor.create_object(ai)
+                            return nn
+                        self.floor.add_timeout( [ fnn(chargeplate), notify_timeout ] )
+                        notify_timeout += 30
+
             self.floor.sounds.play(self.floor.sounds.charged)
             self.floor.player.pump_timer('chargeplate')
 

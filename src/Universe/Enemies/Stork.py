@@ -26,6 +26,7 @@ class Stork(SnapEnemy):
 
     def parse(od,df):
         o = Stork( p = [ od["x"],od["y"] ] )
+        SnapEnemy.set_group(o,od)
         df.snap_enemies.append(o)
         return o
 

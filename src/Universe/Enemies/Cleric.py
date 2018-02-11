@@ -44,7 +44,9 @@ class Cleric(SnapEnemy):
 
     def parse(od,df):
         o = Cleric( p = [ od["x"],od["y"] ] )
+        SnapEnemy.set_group(o,od)
         df.snap_enemies.append(o)
+        df.enemies.append(o)
         return o
 
     def customize(self):
@@ -74,7 +76,9 @@ class Cleric(SnapEnemy):
         self.player_samples = []
 
     def tick(self):
-    
+        if(SnapEnemy.handle_tick_disabled(self)):
+            return True
+
         self.fade_flash()
 
         if self.hp<=0:
