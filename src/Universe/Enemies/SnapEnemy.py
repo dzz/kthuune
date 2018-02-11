@@ -74,8 +74,10 @@ class SnapEnemy(Object):
 
         self.floor.create_object(Blood(p=[self.p[0],self.p[1]]))
         self.custom_die()
+
         if not self.floor.playing_genocide():
-            self.floor.create_object( Spawner( p = list(self.p), loser = self ) )
+            if not self.skips_spawn():
+                self.floor.create_object( Spawner( p = list(self.p), loser = self ) )
         for x in range(0,self.get_kill_particles()):
             spltr = SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14))
             spltr.color = [0.0,0.0,0.0,1.0]
@@ -89,6 +91,8 @@ class SnapEnemy(Object):
         self.floor.create_object( Explosion( p = [ self.p[0], self.p[1] ] ))
 
 
+    def skips_spawn(self):
+        return False
     def get_kill_particles(self):
         return 15
 

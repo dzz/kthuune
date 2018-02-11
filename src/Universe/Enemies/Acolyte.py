@@ -20,9 +20,9 @@ class Acolyte(SnapEnemy):
         #        if enemy.triggered:
         #            enemy.receive_snap_attack(True)
 
+        notify_timeout = 20
         if(self.floor.playing_genocide()):
             target_group = self.group+1
-            notify_timeout = 20
             for enemy in self.floor.enemies:
 
                 #print("CHECKING ENEMEY GROUP {0} == {1}",enemy.group, target_group )
@@ -30,6 +30,7 @@ class Acolyte(SnapEnemy):
                     def fes(enemy):
                         def es():
                             enemy.group_active = True
+                            enemy.flash_color = [ 1.0,1.0,1.0, 1.0 ]
                             enemy.p[0] += 99999
                             enemy.p[1] += 99999
                             enemy.physics_suspended = False
@@ -47,8 +48,10 @@ class Acolyte(SnapEnemy):
                     notify_timeout += 50
                     
 
-        wf_spec = [ self.p[0], self.p[1], 15 ]
-        self.floor.create_object( WormField( wf_spec = wf_spec) )
+        def mk_wormfield():
+            wf_spec = [ self.p[0], self.p[1], 15 ]
+            self.floor.create_object( WormField( wf_spec = wf_spec) )
+        self.floor.add_timeout( [ mk_wormfield , notify_timeout ] )
 
     def receive_snap_attack(self, was_crit):
         SnapEnemy.receive_snap_attack(self, was_crit)

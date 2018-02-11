@@ -50,7 +50,9 @@ class Totem(Object):
             KSounds.play(KSounds.totem_restored)
         if(self.reset_timer==0):
             self.floor.snap_enemies.append(self)
-            self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message=choice(Totem.alive_statements)))
+            self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ],
+                    # message=choice(Totem.alive_statements)))
+                    message="~totem restored~"))
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_radius = 17
             self.visible = True
