@@ -49,22 +49,30 @@ class Chargeplate(Object):
         if(self.charged):
 
             notify_timeout = 30
-            for chargeplate in self.floor.chargeplates:
-                if chargeplate.group == self.group + 1:
-                    if not(chargeplate.visible):
-                        dfloor = self.floor
 
-                        def fnn(chargeplate):
-                            cbplat = chargeplate
-                            def nn():
-                                cbplat.visible = True
-                                ai = AttackInfo( p=[ cbplat.p[0], cbplat.p[1] ], message="NEW NODE")
-                                self.floor.camera.grab_cinematic( ai, 40 )
-                                self.floor.sounds.play(self.floor.sounds.sequenced)
-                                dfloor.create_object(ai)
-                            return nn
-                        self.floor.add_timeout( [ fnn(chargeplate), notify_timeout ] )
-                        notify_timeout += 40
+            check = True
+            for chargeplate in self.floor.chargeplates:
+                if chargeplate.group==self.group and chargeplate.charged == False:
+                    check = False
+                    break
+
+            if check:
+                for chargeplate in self.floor.chargeplates:
+                    if chargeplate.group == self.group + 1:
+                        if not(chargeplate.visible):
+                            dfloor = self.floor
+
+                            def fnn(chargeplate):
+                                cbplat = chargeplate
+                                def nn():
+                                    cbplat.visible = True
+                                    ai = AttackInfo( p=[ cbplat.p[0], cbplat.p[1] ], message="~new node~")
+                                    self.floor.camera.grab_cinematic( ai, 40 )
+                                    self.floor.sounds.play(self.floor.sounds.sequenced)
+                                    dfloor.create_object(ai)
+                                return nn
+                            self.floor.add_timeout( [ fnn(chargeplate), notify_timeout ] )
+                            notify_timeout += 40
 
             self.floor.sounds.play(self.floor.sounds.charged)
             self.floor.player.pump_timer('chargeplate')
