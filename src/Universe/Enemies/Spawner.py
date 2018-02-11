@@ -2,6 +2,7 @@ from Newfoundland.Object import Object
 from Beagle import API as BGL
 from math import floor
 from random import uniform, choice
+from ..LevelEffects.AttackInfo import AttackInfo
 
 class Spawner(Object):
     textures = BGL.assets.get('KT-player/animation/explosion')
@@ -18,6 +19,7 @@ class Spawner(Object):
         
 
     def spawn(self):
+        self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="~respawn~"))
         self.floor.sounds.play(self.floor.sounds.spawned)
         new_object = self.loser.__class__( p = list(self.p) )
         new_object.flash_color = [ 0.0,1.0,0.0,1.0 ]
@@ -25,6 +27,11 @@ class Spawner(Object):
         self.floor.snap_enemies.append( new_object )
 
     def tick(self):
+
+        if(self.floor.playing_genocide()):
+            self.floor.remove_object(self)
+            return False
+
         self.fr += self.fv
 
         self.color[0] = uniform(0.0,1.0)

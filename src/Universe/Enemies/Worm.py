@@ -44,6 +44,8 @@ class Worm(SnapEnemy):
         self.iframes = 0
         self.defense = 3
         self.lifetime = 0
+        self.group = 0
+        self.group_active = True
         
     def pick_target(self):
         rad = None
@@ -76,7 +78,10 @@ class Worm(SnapEnemy):
         return True
 
     def tick(self):
+        if(SnapEnemy.handle_tick_disabled(self)):
+            return True
 
+        self.fade_flash()
         self.lifetime+=1
         if(self.lifetime>10):
             self.triggered = True

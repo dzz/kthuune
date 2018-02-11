@@ -16,7 +16,9 @@ class Skeline(SnapEnemy):
 
     def parse(od,df):
         o = Skeline( p = [ od["x"],od["y"] ] )
+        SnapEnemy.set_group(o,od)
         df.snap_enemies.append(o)
+        df.enemies.append(o)
         return o
 
     STATE_SEEKING_RANDOM = 0
@@ -58,6 +60,8 @@ class Skeline(SnapEnemy):
         
 
     def tick(self):
+        if(SnapEnemy.handle_tick_disabled(self)):
+            return True
         if self.triggered:
             self.floor.add_fog(self, 0.30)
         SnapEnemy.tick(self)

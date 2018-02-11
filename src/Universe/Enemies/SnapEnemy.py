@@ -20,11 +20,32 @@ class SnapEnemy(Object):
     TOTEM = 0
     ENEMY = 1
 
+    def handle_tick_disabled(self):
+        if not self.group_active:
+            self.visible = False
+            return True
+        return False
+
     def get_firefly_count(self):
         return 5
 
     def custom_die(self):
         pass
+
+    def set_group(o,od):
+        o.group = 0
+        if "group" in od["meta"]:
+            o.group = od["meta"]["group"]
+
+        if o.group==0:
+            o.group_active = True
+        else:
+            o.group_active = False
+            o.physics_suspended = True
+            o.p[0] -= 99999 #sweet hax, don't want the physics running until
+                            #active, but don't want to rewrite the binding code,
+                            # so just move it faaaar away until its needed
+            o.p[1] -= 99999
 
     def can_see_player(self):
         test_segment = [ [ self.floor.player.p[0], self.floor.player.p[1] ], [self.p[0], self.p[1] ] ]

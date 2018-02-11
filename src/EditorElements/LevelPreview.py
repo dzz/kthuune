@@ -14,6 +14,13 @@ class PreviewCamera(Camera):
         self.cinema_timeout = 0
         self.cinema_callback = None
 
+    def grab_cinematic(self, obj, timeout, callback = None ):
+        pass
+        #self.cinema_target = obj
+        #self.cinema_timeout = timeout
+        #self.cinema_callback = callback
+    
+
 class LevelPreview:
 
     tpx = None

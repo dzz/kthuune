@@ -8,6 +8,7 @@ from .PolyFills.totem import totem
 from .PolyFills.lantern import lantern
 from .PolyFills.door import door
 from .PolyFills.skeline import skeline
+from .PolyFills.acolyte import acolyte
 from .PolyFills.trees import trees
 from .PolyFills.hostage_field import hostage_field
 from .PolyFills.chargeplate import chargeplate
@@ -37,6 +38,7 @@ class PolyFillList:
                 "lantern" : lantern,
                 "door" : door,
                 "skeline" : skeline,
+                "acolyte" : acolyte,
                 "trees" : trees,
                 "hostage_field": hostage_field,
                 "chargeplate" : chargeplate,

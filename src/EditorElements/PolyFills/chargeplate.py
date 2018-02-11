@@ -10,7 +10,7 @@ class chargeplate:
 
     def reduce(area, brush):
         wsb = WorldSpaceBrush.from_brush(brush) 
-        Factory.make_chargeplate( area, wsb.cx, wsb.cy)
+        Factory.make_chargeplate( area, wsb.cx, wsb.cy, brush.group)
         Factory.make_light( area, wsb.cx, wsb.cy, "shortwave" )
 
 

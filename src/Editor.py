@@ -51,6 +51,13 @@ class Editor:
         BrushFile.sequence = seqid
         Brushes.save()
         BrushFile.sequence = None
+
+    def load_sequence(self,seqid):
+        Brushes.set_name(seqid)
+        BrushFile.sequence = seqid
+        Brushes.load()
+        BrushFile.sequence = None
+
         
     def save(self):
         Brushes.save()
