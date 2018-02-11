@@ -38,6 +38,11 @@ class Chargeplate(Object):
 
     def tick(self):
 
+        if(self.visible):
+            self.light_color = [ 1.0,1.0,self.cv ]
+            self.light_radius = 2.0 + (self.cv*3.0)
+            self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+
         if(not self.visible):
             return True
 
@@ -54,12 +59,12 @@ class Chargeplate(Object):
                             def nn():
                                 cbplat.visible = True
                                 ai = AttackInfo( p=[ cbplat.p[0], cbplat.p[1] ], message="NEW NODE")
-                                self.floor.camera.grab_cinematic( ai, 25 )
+                                self.floor.camera.grab_cinematic( ai, 40 )
                                 self.floor.sounds.play(self.floor.sounds.sequenced)
                                 dfloor.create_object(ai)
                             return nn
                         self.floor.add_timeout( [ fnn(chargeplate), notify_timeout ] )
-                        notify_timeout += 30
+                        notify_timeout += 40
 
             self.floor.sounds.play(self.floor.sounds.charged)
             self.floor.player.pump_timer('chargeplate')
@@ -76,16 +81,17 @@ class Chargeplate(Object):
                 def ns():
                     #dfloor.game.next_sequence()
                     dfloor.game_mode = Chargeplate.GENOCIDE
-                    ai = AttackInfo( p=[ self.p[0], self.p[1] ], message="BEGIN PURIFICATION")
+                    ai = AttackInfo( p=[ self.p[0], self.p[1]+3 ], message="~!PuRiFy!~")
                     self.floor.sounds.play(self.floor.sounds.sequenced)
                     dfloor.create_object(ai)
+
                 def ms():
-                    ai = AttackInfo( p=[ self.p[0], self.p[1] ], message="SEQUENCE COMPLETE")
+                    ai = AttackInfo( p=[ self.p[0], self.p[1] ], message="~SEQUENCED~")
                     self.floor.sounds.play(self.floor.sounds.sequenced)
                     dfloor.create_object(ai)
 
                 self.floor.add_timeout( [ ms, 30 ] )
-                self.floor.add_timeout( [ ns, 90 ] )
+                self.floor.add_timeout( [ ns, 60 ] )
                 #self.floor.game.trigger_fade( 242, [ 1.0,1.0,1.0] )
             return False
 
@@ -115,7 +121,7 @@ class Chargeplate(Object):
         if(self.cv>1.0):
             self.cv = 1.0
             self.charged = True
-            self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="CHARGED!"))
+            self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="~charged~"))
 
         self.color = [
             self.cv,

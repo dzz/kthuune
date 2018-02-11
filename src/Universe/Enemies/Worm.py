@@ -47,6 +47,9 @@ class Worm(SnapEnemy):
         self.group = 0
         self.group_active = True
         
+    def skips_spawn(self):
+        return True
+
     def pick_target(self):
         rad = None
         speed = None

@@ -533,12 +533,12 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                def ns():
                    dfloor.game.next_sequence()
                def ms():
-                   ai = AttackInfo( p=[ self.camera.p[0], self.camera.p[1] ], message="PURIFICATION COMPLETE")
+                   ai = AttackInfo( p=[ self.camera.p[0]+uniform(-1.0,1.0), self.camera.p[1]+uniform(-1.0,1.0) ], message="~!purified!~")
                    self.floor.sounds.play(self.floor.sounds.sequenced)
                    dfloor.create_object(ai)
 
-               for x in range(0,15):
-                    self.floor.add_timeout( [ ms, x*x ] )
+               for x in range(0,7):
+                    self.floor.add_timeout( [ ms, 5+(x*x) ] )
                self.floor.add_timeout( [ ns, 250 ] )
                self.floor.game.trigger_fade( 242, [ 1.0,1.0,1.0] )
 
@@ -547,6 +547,6 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         if(self.floor.playing_genocide()):
             if(self.genocide_trigger_available):
                 g = 1.0
-        self.rg = g*0.01 + (self.rg*0.98)
+        self.rg = g*0.3 + (self.rg*0.7)
         #if self.player.sequence_kills >= 4:
         #    self.next_sequence(True)
