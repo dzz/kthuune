@@ -10,13 +10,15 @@ from ..RangedEnemyAttacks.BasicProjectile import BasicProjectile
 from .Skeline import Skeline #TODO: eliminate this dependency
 from ..Hazards.WormField import WormField
 from ..LevelEffects.AttackInfo import AttackInfo
+from ..Particles.SplatterParticle import SplatterParticle
+from ..LevelEffects.Explosion import Explosion
 
 class Acolyte(SnapEnemy):
     def custom_die(self):
-        for enemy in self.floor.snap_enemies:
-            if enemy.snap_type == SnapEnemy.ENEMY:
-                if enemy.triggered:
-                    enemy.receive_snap_attack(True)
+        #for enemy in self.floor.snap_enemies:
+        #    if enemy.snap_type == SnapEnemy.ENEMY:
+        #        if enemy.triggered:
+        #            enemy.receive_snap_attack(True)
 
         if(self.floor.playing_genocide()):
             target_group = self.group+1
@@ -33,13 +35,14 @@ class Acolyte(SnapEnemy):
                             enemy.physics_suspended = False
                             enemy.tick()
                             ai= AttackInfo( p=[ enemy.p[0], enemy.p[1] ], message="~infection~")
+                            self.floor.create_object( Explosion( p = list(enemy.p) ) )
                             self.floor.create_object(ai)
-                            self.floor.camera.grab_cinematic( ai, 20 )
+                            self.floor.camera.grab_cinematic( ai, 50 )
                             self.floor.sounds.play(self.floor.sounds.spawned)
                         return es
 
                     self.floor.add_timeout( [fes(enemy), notify_timeout])
-                    notify_timeout += 40
+                    notify_timeout += 50
                     
 
         wf_spec = [ self.p[0], self.p[1], 15 ]

@@ -22,23 +22,23 @@ class Cleric(SnapEnemy):
             if not choice([True,False,False]):
                 return                
 
-        secondaries = []
-        if self.floor.recursive_snapper is None:
-            self.floor.recursive_snapper = self #HACKKKKKK
-        for se2 in self.floor.snap_enemies:
-            if se2.snap_type == SnapEnemy.ENEMY and se2.triggered:
-                if(se2 is not self and se2 is not self.floor.recursive_snapper):
-                    secondaries.append(se2)
+        #secondaries = []
+        #if self.floor.recursive_snapper is None:
+        #    self.floor.recursive_snapper = self #HACKKKKKK
+        #for se2 in self.floor.snap_enemies:
+        #    if se2.snap_type == SnapEnemy.ENEMY and se2.triggered:
+        #        if(se2 is not self and se2 is not self.floor.recursive_snapper):
+        #            secondaries.append(se2)
 
-        for x in range(0,3):
-            if(len(secondaries))==0:
-                break
-            se2 = choice(secondaries)
-            se2.receive_snap_attack(True)
-            secondaries.remove(se2)
+        #for x in range(0,3):
+        #    if(len(secondaries))==0:
+        #        break
+        #    se2 = choice(secondaries)
+        #    se2.receive_snap_attack(True)
+        #    secondaries.remove(se2)
 
-        if self.floor.recursive_snapper is self:
-            self.floor.recursive_snapper = None
+        #if self.floor.recursive_snapper is self:
+        #    self.floor.recursive_snapper = None
                 
                 
 
