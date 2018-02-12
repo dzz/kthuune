@@ -101,6 +101,9 @@ class Cleric(SnapEnemy):
                         return
 
         ai = AttackInfo( p=list(self.p), message="!BREAK!")
+    
+        self.floor.game.rb = 1.0
+
         self.floor.create_object(ai)
 
         self.floor.activated_totem_groups.append(key_group)

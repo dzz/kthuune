@@ -395,6 +395,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
     def initialize(self):
 
         self.rg = 0.0
+        self.rb = 0.0
         self.genocide_trigger_available = True
         Sequences.initialize()
 
@@ -453,7 +454,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
 
             self.floor.god_shader.bind({
-                "g" : self.rg
+                "g" : self.rg,
+                "b" : self.rb,
             })
             Game.god_buffer.render_processed( self.floor.god_shader )
             self.player.render_hud()
@@ -548,5 +550,11 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             if(self.genocide_trigger_available):
                 g = 1.0
         self.rg = g*0.3 + (self.rg*0.7)
+
+        self.rb = self.rb * 0.94
+
+        if(self.rb<0.01):
+            self.rb = 0.0
+
         #if self.player.sequence_kills >= 4:
         #    self.next_sequence(True)
