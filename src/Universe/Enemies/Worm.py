@@ -81,6 +81,10 @@ class Worm(SnapEnemy):
         return True
 
     def tick(self):
+
+        if(self.floor.camera.cinema_target):
+            return True
+
         if(SnapEnemy.handle_tick_disabled(self)):
             return True
 

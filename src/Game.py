@@ -416,7 +416,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         loading_floor = "ship"
     
         #self.floor = self.create_tickable(self.load_floor(loading_floor))
-        self.floor = self.create_tickable(self.load_floor(None,"5"))
+        self.floor = self.create_tickable(self.load_floor(None,"1"))
         #self.current_floor_key = loading_floor
         self.current_floor_target = None
         self.player.trigger_title( self.floor.title )

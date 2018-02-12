@@ -8,6 +8,7 @@ from ..LevelEffects.ChromaticWave import ChromaticWave
 from ...KSounds import KSounds
 from ..RangedEnemyAttacks.BasicProjectile import BasicProjectile
 from ..LevelEffects.AttackInfo import AttackInfo
+from ..LevelEffects.Explosion import Explosion
 
 class Cleric(SnapEnemy):
     textures = [
@@ -119,6 +120,32 @@ class Cleric(SnapEnemy):
                 totem.reset_timer = -51
                 self.floor.add_timeout([fns(totem), 50+notify_amt])
                 notify_amt += 40
+        target_group = self.group+1
+        notify_timeout = 20
+        for enemy in self.floor.enemies:
+            if not enemy.is_cleric():
+                continue
+            #print("CHECKING ENEMEY GROUP {0} == {1}",enemy.group, target_group )
+            if enemy.group == target_group:
+                def fes(enemy):
+                    def es():
+                        enemy.group_active = True
+                        enemy.flash_color = [ 1.0,1.0,1.0, 1.0 ]
+                        enemy.p[0] += 99999
+                        enemy.p[1] += 99999
+                        enemy.physics_suspended = False
+                        enemy.tick()
+                        enemy.visible = True
+                        enemy.triggered = True
+                        ai= AttackInfo( p=[ enemy.p[0], enemy.p[1] ], message="~mutation~")
+                        self.floor.create_object( Explosion( p = list(enemy.p) ) )
+                        self.floor.create_object(ai)
+                        self.floor.camera.grab_cinematic( ai, 50 )
+                        self.floor.sounds.play(self.floor.sounds.spawned)
+                    return es
+
+                self.floor.add_timeout( [fes(enemy), notify_timeout])
+                notify_timeout += 50
 
     def tick(self):
         if(SnapEnemy.handle_tick_disabled(self)):

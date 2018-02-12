@@ -42,6 +42,10 @@ class BasicProjectile(Object):
     def tick(self):
 
 
+        if(self.floor.camera.cinema_target):
+            self.floor.remove_object(self)
+            return False
+
         deadly = False
         if(self.size[0] < 1.5):
             growth = 1.2
