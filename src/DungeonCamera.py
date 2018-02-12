@@ -31,6 +31,11 @@ class DungeonCamera (Camera):
         self.p[1] = self.player.p[1]
 
     def tick(self):
+
+        if self.cinema_target:
+            if "message" in self.cinema_target.__dict__:
+                print(self.cinema_target.message)
+                print(self.cinema_target.p)
         if not KTState.paused:
             aim_offset_x = 0.0
             aim_offset_y = 0.0

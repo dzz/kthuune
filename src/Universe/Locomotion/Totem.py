@@ -74,17 +74,17 @@ class Totem(Object):
         self.light_type = Object.LightTypes.NONE
         self.active = False
 
-        reset = True
+        #reset = True
 
-        if self.group!=0:
-            for totem in self.floor.totems:
-                #print("TOTEM GROUP: {0}".format(totem.group))
-                if totem.group == self.group and totem.active == True:
-                    #print("totem breaking reset because group {0}=={1}".format(self.group, totem.group))
-                    reset = False
+        #if self.group!=0:
+        #    for totem in self.floor.totems:
+        #        #print("TOTEM GROUP: {0}".format(totem.group))
+        #        if totem.group == self.group and totem.active == True:
+        #            #print("totem breaking reset because group {0}=={1}".format(self.group, totem.group))
+        #            reset = False
 
-        if reset:
-            for totem in self.floor.totems:
-                if totem.group == self.group:
-                    totem.active = True
+        #if reset:
+        #    for totem in self.floor.totems:
+        #        if totem.group == self.group:
+        #            totem.active = True
 
