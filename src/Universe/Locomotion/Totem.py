@@ -72,7 +72,7 @@ class Totem(Object):
 
         self.visible = False
         self.light_type = Object.LightTypes.NONE
-        self.active = False
+        #self.active = False
 
         #reset = True
 
