@@ -24,7 +24,6 @@ class Acolyte(SnapEnemy):
         if(self.floor.playing_genocide()):
             target_group = self.group+1
             for enemy in self.floor.enemies:
-
                 #print("CHECKING ENEMEY GROUP {0} == {1}",enemy.group, target_group )
                 if enemy.group == target_group and enemy.hp>0:
                     def fes(enemy):

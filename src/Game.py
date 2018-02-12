@@ -416,7 +416,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         loading_floor = "ship"
     
         #self.floor = self.create_tickable(self.load_floor(loading_floor))
-        self.floor = self.create_tickable(self.load_floor(None,"8"))
+        self.floor = self.create_tickable(self.load_floor(None,"1"))
         #self.current_floor_key = loading_floor
         self.current_floor_target = None
         self.player.trigger_title( self.floor.title )
@@ -526,8 +526,9 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             passed_genocide = True
             for enemy in self.floor.snap_enemies:
                 if enemy.snap_type == 1:
-                    passed_genocide = False
-                    break
+                    if not enemy.skips_genocide():
+                        passed_genocide = False
+                        break
 
             if passed_genocide:
                self.genocide_trigger_available = False

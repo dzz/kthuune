@@ -50,6 +50,9 @@ class Worm(SnapEnemy):
     def skips_spawn(self):
         return True
 
+    def skips_genocide(self):
+        return True
+
     def pick_target(self):
         rad = None
         speed = None

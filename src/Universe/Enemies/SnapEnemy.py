@@ -94,6 +94,9 @@ class SnapEnemy(Object):
         self.floor.create_object( Explosion( p = [ self.p[0], self.p[1] ] ))
 
 
+    def skips_genocide(self):
+        return False
+
     def skips_spawn(self):
         return False
     def get_kill_particles(self):
