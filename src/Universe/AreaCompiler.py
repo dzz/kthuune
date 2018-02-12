@@ -118,7 +118,13 @@ class AreaCompiler():
                 if "group" in od["meta"]:
                     group = od["meta"]["group"];    
                 self.objects.append(Totem( group = group, p = [ od['x'],od['y'] ]))
-                df.snap_enemies.append(self.objects[-1])
+
+                if(group!=0):
+                    self.objects[-1].active = False
+                    self.objects[-1].visible = False
+                    self.objects[-1].reset_timer = Totem.reset_time
+                else:
+                    df.snap_enemies.append(self.objects[-1])
                 df.totems.append(self.objects[-1])
             if od["key"] == "light":
                 self.objects.append(FactoryLight( factory_def = od ))

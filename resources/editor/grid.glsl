@@ -26,11 +26,11 @@ void main() {
 
     gl_FragColor = vec4(0.0,0.0,0.0,1.0);
 
-    if(w_size!=0.0) {
+    /*if(w_size!=0.0) {
         if(abs(UV.x)<w_size)
-            if(abs(UV.y)<w_size)
+            if(abs(UV.y)<w_size)*/
                 gl_FragColor = texture( grid_cell, vec2(x_mod, y_mod));
-    }
+    //}
 
 }
 

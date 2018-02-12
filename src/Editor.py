@@ -195,7 +195,7 @@ class Editor:
         BGL.context.clear(0.0,0.0,0.0,0.0)
 
         Grid.render(self)
-        ParallaxBackground.render( (Grid.cx*2)*0.01 )
+        #ParallaxBackground.render( (Grid.cx*2)*0.01 )
 
         if(self.show_preview):
             LevelPreview.render(self)
@@ -237,6 +237,7 @@ BGL.keyboard.register_keydown_handler('d', Brushes.move_right)
 BGL.keyboard.register_keydown_handler('w', Brushes.move_up)
 BGL.keyboard.register_keydown_handler('s', Brushes.move_down)
 BGL.keyboard.register_keydown_handler('f', Brushes.reflow)
+BGL.keyboard.register_keydown_handler('v', Brushes.collapse)
 BGL.keyboard.register_keydown_handler('g', Editor.LevelGenerate)
 
 BGL.keyboard.register_keydown_handler("0", lambda: Editor.set_group(0))

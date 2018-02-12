@@ -39,6 +39,11 @@ class Chargeplate(Object):
     def tick(self):
 
         if(self.visible):
+            self.color = [
+                1.0+self.cv,
+                1.0+self.cv,
+                1.0+self.cv,
+                1.0 ]
             self.light_color = [ 1.0,1.0,self.cv ]
             self.light_radius = 2.0 + (self.cv*3.0)
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
@@ -131,10 +136,5 @@ class Chargeplate(Object):
             self.charged = True
             self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="~charged~"))
 
-        self.color = [
-            self.cv,
-            self.cv,
-            1.0,
-            1.0 ]
         return True
 

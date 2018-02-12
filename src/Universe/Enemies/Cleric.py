@@ -7,6 +7,7 @@ from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 from ..LevelEffects.ChromaticWave import ChromaticWave
 from ...KSounds import KSounds
 from ..RangedEnemyAttacks.BasicProjectile import BasicProjectile
+from ..LevelEffects.AttackInfo import AttackInfo
 
 class Cleric(SnapEnemy):
     textures = [
@@ -14,6 +15,15 @@ class Cleric(SnapEnemy):
         BGL.assets.get("KT-forest/texture/cleric0001"),
         BGL.assets.get("KT-forest/texture/cleric0002")
     ]
+
+    def skips_spawn(self):
+        if(self.permadeath):
+            return True
+        key_group = self.group+1
+        if key_group in self.floor.activated_totem_groups:
+            self.permadeath = True
+            return True
+        return False
 
     def receive_snap_attack(self, was_crit):
         SnapEnemy.receive_snap_attack(self, was_crit)
@@ -68,12 +78,44 @@ class Cleric(SnapEnemy):
         self.rvx = None
         self.speed = 3.2
         self.rejects_snap_attack = False#not used yet
-
+        self.permadeath = False
         self.snap_effect_emit = 0
         self.iframes = 0
         SnapEnemy.set_combat_vars(self)
         self.hp = 95
         self.player_samples = []
+
+    def is_cleric(self):
+        return True
+
+    def custom_die(self):
+        key_group = self.group+1
+        if key_group in self.floor.activated_totem_groups:
+            return
+            
+        for enemy in self.floor.enemies:
+            notify_amt = 0
+            if enemy.is_cleric():
+                if enemy.hp>0:
+                    if enemy.group == self.group:
+                        return
+
+        ai = AttackInfo( p=list(self.p), message="!BREAK!")
+        self.floor.create_object(ai)
+
+        self.floor.activated_totem_groups.append(key_group)
+        for totem in self.floor.totems:
+            if totem.group == key_group:
+                def fns(totem):
+                    def ns():
+                        ai = AttackInfo( p=list(totem.p), message="~connection~")
+                        self.floor.camera.grab_cinematic( ai, 40 )
+                    return ns
+                     
+                totem.active = True
+                totem.reset_timer = -51
+                self.floor.add_timeout([fns(totem), 50+notify_amt])
+                notify_amt += 40
 
     def tick(self):
         if(SnapEnemy.handle_tick_disabled(self)):

@@ -7,7 +7,12 @@ from random import choice
 
 from math import sin
 
+#warp totems, chain totems.... 
+
+
+
 class Totem(Object):
+    reset_time = -170
     alive_statements = [
         "~i'm alive~",
         "~hello~",
@@ -63,7 +68,7 @@ class Totem(Object):
         KSounds.play(KSounds.totem_hit)
         self.floor.snap_enemies.remove(self)
 
-        self.reset_timer = -170
+        self.reset_timer = Totem.reset_time 
 
         self.visible = False
         self.light_type = Object.LightTypes.NONE

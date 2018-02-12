@@ -32,6 +32,9 @@ class SnapEnemy(Object):
     def custom_die(self):
         pass
 
+    def is_cleric(self):
+        return False
+
     def set_group(o,od):
         o.group = 0
         if "group" in od["meta"]:

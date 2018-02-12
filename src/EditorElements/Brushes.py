@@ -52,6 +52,10 @@ class Brushes:
             pf = PolyFillList.getPolyFill( brush.polyfill_key )
             brush.layer = pf.layer
 
+    def collapse():
+        for brush in Brushes.brushes:
+            brush.layer = 0
+
     def render_labels(app):
         with BGL.context.render_target( Brushes.ui_fb ):
             BGL.context.clear( 0.0,0.0,0.0,0.0 )
