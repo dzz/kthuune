@@ -27,6 +27,7 @@ class Spawner(Object):
         new_object.flash_color = [ 0.0,1.0,0.0,1.0 ]
         self.floor.create_object( new_object )
         self.floor.snap_enemies.append( new_object )
+        self.floor.enemies.append( new_object )
 
     def tick(self):
 
