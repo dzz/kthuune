@@ -11,7 +11,23 @@ uniform sampler2D scene;
 
 void main() {
 
-    vec4 base = texture( scene, uv);
+    vec2 c_uv = vec2(0.5,0.5) - uv;
+    float d = length(c_uv)*0.3;
+
+    vec4 centerc = texture( scene, uv );
+    float divergence = 0.005 + (0.005*length(centerc))*(0.2+(g*0.4)+(b*3.2))*0.2;
+
+
+    vec2 r_offs = vec2(0.0,-divergence) * d;
+    vec2 g_offs = vec2(-divergence,divergence) * d;
+    vec2 b_offs = vec2(divergence,divergence) * d;
+
+    vec4 base_r = texture( scene, uv+r_offs);
+    vec4 base_g = texture( scene, uv+g_offs);
+    vec4 base_b = texture( scene, uv+b_offs);
+
+    vec4 base = vec4( base_r.r, base_g.g, base_b.b, 1.0 );
+
 
     float l = length(base.rgb);
 
