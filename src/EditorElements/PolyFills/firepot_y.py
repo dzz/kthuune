@@ -11,8 +11,8 @@ class firepot_y:
         wsb = WorldSpaceBrush.from_brush(brush) 
 
         for y in range(int(wsb.y1), int(wsb.y2), 6):
-            Factory.make_firepot_right(area, y, wsb.y1)
-            Factory.make_firepot_left(area, y+3, wsb.y2)
+            Factory.make_firepot_right(area, wsb.x1, y )
+            Factory.make_firepot_left(area,  wsb.x2, y+3 )
 
 
 
