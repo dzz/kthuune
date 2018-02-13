@@ -25,7 +25,7 @@ class Acolyte(SnapEnemy):
             target_group = self.group+1
             for enemy in self.floor.enemies:
                 #print("CHECKING ENEMEY GROUP {0} == {1}",enemy.group, target_group )
-                if enemy.group == target_group and enemy.hp>0:
+                if enemy.group == target_group and enemy.hp>0 and enemy.group_active == False:
                     def fes(enemy):
                         def es():
                             enemy.group_active = True
