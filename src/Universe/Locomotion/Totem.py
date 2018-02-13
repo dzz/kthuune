@@ -30,10 +30,13 @@ class Totem(Object):
         "~returning~",
         "~reentrance~" ]
     texture = BGL.assets.get('KT-forest/texture/totem')
+    shield_texture = BGL.assets.get('KT-forest/texture/shield_totem')
 
     def customize(self):
+        self.shield_totem = False
         self.snap_type = SnapEnemy.TOTEM
         self.texture = Totem.texture
+        self.shield_texture = Totem.shield_texture
         self.buftarget = "popup"
         self.size =  [ 4.0, 4.0 ]
         self.tick_type = Object.TickTypes.TICK_FOREVER
@@ -49,6 +52,8 @@ class Totem(Object):
         self.active = True
 
     def tick(self):
+        if(self.shield_totem):
+            self.texture = self.shield_texture
         if self.active:
             self.reset_timer = self.reset_timer+1
         if(self.reset_timer == - 50):
@@ -64,7 +69,14 @@ class Totem(Object):
         self.anim_index += 0.1
         self.light_radius = 7 + (3*sin(self.anim_index))
 
-    def sleep_totem(self):
+    def sleep_totem(self, player = None):
+
+        if player:
+            if self.shield_totem:
+                player.shield_frames += 60*5
+                self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ],
+                        # message=choice(Totem.alive_statements)))
+                        message="~!SHIELDED!~"))
         KSounds.play(KSounds.totem_hit)
         self.floor.snap_enemies.remove(self)
 

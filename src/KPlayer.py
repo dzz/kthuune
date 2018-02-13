@@ -22,6 +22,7 @@ from .TitleCard import TitleCard
 from .WorldMap import WorldMap
 from .Universe.LevelEffects.PlayerPhantom import PlayerPhantom
 from .Universe.LevelEffects.Dust import Dust
+from .Universe.LevelEffects.Explosion import Explosion
 
 class DMMessage():
 
@@ -689,6 +690,10 @@ class KPlayer(Player):
 
     def receive_ranged_attack(self, attack):
 
+        if self.shield_frames>0:
+            self.floor.create_object( Explosion( p = list(attack.p) ) )
+            return
+
         if self.floor.camera.cinema_target:
             return
 
@@ -766,7 +771,6 @@ class KPlayer(Player):
                 
                 delta = abs( rad - self.rad )
 
-            print( delta)
             tolerance = (pi*2)/10.25
             if(delta < tolerance) or (delta > ((2*pi)-(tolerance))):
                 self.floor.freeze_frames = 2
@@ -846,7 +850,7 @@ class KPlayer(Player):
                     KSounds.play( KSounds.tubular )
             else:
                 #self.add_dm_message("You executed a passive Telekine") 
-                se.sleep_totem()
+                se.sleep_totem( self )
                 self.snap_animation_buffer = 6
 
             self.last_link = se.snap_type
@@ -891,6 +895,7 @@ class KPlayer(Player):
         #PLAYER INIT
         #player init
         
+        self.shield_frames = 0 
         self.sequence_kills = 0
         self.life_timer = 2800
         self.time_penalty = 100
@@ -1078,7 +1083,7 @@ class KPlayer(Player):
                 if(self.combo_count>1):
                     offsx = choice(range(-1,1))
                     offsy = choice(range(-1,1))
-                    #BGL.lotext.render_text_pixels("COMBO:{0}".format(self.combo_count-1), 4+offsx,4+offsy, [1.0,uniform(0.0,1.0),1.0] )
+                    BGL.lotext.render_text_pixels("COMBO:{0}".format(self.combo_count-1), 4+offsx,4+offsy, [1.0,uniform(0.0,1.0),1.0] )
 
                 if(self.hud_message_timeout>0):
                     mx = 160 - floor(len(self.hud_message)*4)
@@ -1189,6 +1194,8 @@ class KPlayer(Player):
             #print(self.display_p,self.p)
             base_params["texBuffer"] = KPlayer.BirdmanTextures[ int(KPlayer.BirdmanTick/5)%3 ]
             base_params["translation_world"] = self.get_camera().translate_position( self.display_p )
+        if(self.shield_frames>0):
+            base_params["texBuffer"] = KPlayer.BirdmanTextures[ int(KPlayer.BirdmanTick/5)%3 ]
 
         #if self.state == KPlayer.STATE_STUNNED:
         #    base_params["rotation_local"] = sin(self.cardtick)*0.2
@@ -1401,6 +1408,14 @@ class KPlayer(Player):
 
         self.title_card.tick()
 
+        if(self.title_card.displaying()):
+            self.determine_texture()
+            self.physics_suspended = True
+            self.vx = 0
+            self.vy = 0
+            self.v = [0.0,0.0]
+            return True
+
         self.telekineFlash *= 0.95
         self.potionFlash *= 0.95
 
@@ -1410,7 +1425,12 @@ class KPlayer(Player):
             self.teleportAmt += teleportRecharge
 
         if self.floor.camera.cinema_target:
+            self.physics_suspended = True
+            self.vx = 0
+            self.vy = 0
+            self.v = [0.0,0.0]
             return True
+        self.physics_suspended = False
 
         if(self.flash_color[3]>0.1):
             self.flash_color[3] *= 0.95
@@ -1464,6 +1484,8 @@ class KPlayer(Player):
         #    self.add_dm_message("You over exerted yourself")
 
         self.invuln_frames -= 1
+        if(self.shield_frames>0):
+            self.shield_frames -= 1
         KPlayer.BirdmanTick = KPlayer.BirdmanTick+1
 
         self.snap_animation_buffer -= 1

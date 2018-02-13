@@ -104,6 +104,8 @@ class Acolyte(SnapEnemy):
         
 
     def tick(self):
+        if(self.floor.player.title_card.displaying()):
+            return True
         if(SnapEnemy.handle_tick_disabled(self)):
             return True
 

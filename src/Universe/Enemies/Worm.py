@@ -6,6 +6,7 @@ from Beagle import API as BGL
 from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 from ..LevelEffects.ChromaticWave import ChromaticWave
 from ..LevelEffects.SpikeyWave import SpikeyWave
+from ..LevelEffects.AttackInfo import AttackInfo
 from ...KSounds import KSounds
 from ..Configuration.vconf import vconf
 from ...KPlayer import Sword
@@ -84,6 +85,14 @@ class Worm(SnapEnemy):
         return True
 
     def tick(self):
+        if(self.floor.passed_genocide):
+            self.floor.remove_object(self)
+            ai= AttackInfo( p=[ self.p[0], self.p[1] ], message="worm.kill()")
+            self.floor.create_object(ai)
+            return False
+
+        if(self.floor.player.shield_frames>0):
+            return True
 
         if(self.floor.camera.cinema_target):
             return True

@@ -22,12 +22,12 @@ class Factory:
             area.add_line("{0}".format(physics))
             area.add_line("{0}".format(decoration))
             
-    def make_totem( area, x, y, group):
+    def make_totem( area, x, y, group, shield = False):
         area.add_line("OBJECT")
         area.add_line("totem") #object type
         area.add_line("{0}".format(x))
         area.add_line("{0}".format(y)) 
-        area.add_line(json.dumps({"group":group}))
+        area.add_line(json.dumps({"group":group, "shield":shield}))
         area.add_line("False") #is region
         area.add_line("0") #width
         area.add_line("0") #height

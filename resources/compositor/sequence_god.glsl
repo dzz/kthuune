@@ -5,6 +5,9 @@ in vec2 uv;
 uniform float amt;
 uniform float g;
 uniform float b;
+uniform float s;
+uniform float t;
+uniform float tick;
 uniform sampler2D scene;
 
 // @load "includes/colors.glsl"
@@ -12,11 +15,12 @@ uniform sampler2D scene;
 void main() {
 
     vec2 c_uv = vec2(0.5,0.5) - uv;
-    float d = length(c_uv)*0.3;
+    float d = ((1.0-t)*length(c_uv))*0.3;
 
     vec4 centerc = texture( scene, uv );
     float divergence = 0.005 + (0.005*length(centerc))*(0.2+(g*0.4)+(b*3.2))*0.2;
 
+    divergence *= (30*t);
 
     vec2 r_offs = vec2(0.0,-divergence) * d;
     vec2 g_offs = vec2(-divergence,divergence) * d;
@@ -52,8 +56,15 @@ void main() {
 
     vec3 inv = comp*vec3(10,5,2); 
 
-    gl_FragColor.rgb = (comp*(1.0-g))+(inv*g);
 
-    gl_FragColor.rgb*=vec3(1.0,1.0,1.0)+vec3(b*100,b*80,b*40);
+    float mg=g*((sin(tick*0.01)+1.0)/2.0);
+    gl_FragColor.rgb = (comp*(1.0-mg))+(inv*mg);
+    gl_FragColor.rgb*=vec3(1.0,1.0,1.0)+vec3(b*50,b*40,b*20);
+
+    gl_FragColor.rgb = ((1.0-s)*gl_FragColor.rgb)+(s*vec3(comp.r,1.0-l,1.0-l));
+
+    gl_FragColor.rgb*= (1.0-t);
+
+    gl_FragColor.rgb+=t*vec3(1.0-l,1.0-l,l);
     gl_FragColor.a = 1.0;
 }
