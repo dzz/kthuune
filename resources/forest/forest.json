@@ -88,6 +88,7 @@
             { "name" : "firepot0005", "filename" : "{package_path}/firepot0005.png", "filtered" : false },
             { "name" : "skull0000", "filename" : "{package_path}/skull0000.png", "filtered" : false },
             { "name" : "totem", "filename" : "{package_path}/totem0000.png", "filtered" : false },
+            { "name" : "shield_totem", "filename" : "{package_path}/shieldtotem.png", "filtered" : false },
             { "name" : "cave_entrance", "filename" : "{package_path}/cave_entrance.png", "filtered" : false },
             { "name" : "grey_world_background", "filename" : "{package_path}/grey_world_background.png", "filtered" : true },
             { "name" : "grey_world_processed", "filename" : "{package_path}/grey_world_processed.png", "filtered" : true },

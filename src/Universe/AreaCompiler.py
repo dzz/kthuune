@@ -126,6 +126,9 @@ class AreaCompiler():
                 else:
                     df.snap_enemies.append(self.objects[-1])
                 df.totems.append(self.objects[-1])
+                if "shield" in od["meta"]:
+                    if od["meta"]["shield"]:
+                        self.objects[-1].shield_totem = True
             if od["key"] == "light":
                 self.objects.append(FactoryLight( factory_def = od ))
             if od["key"] == "door_pin":

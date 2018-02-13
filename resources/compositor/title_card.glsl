@@ -17,6 +17,8 @@ void main(void) {
         t = 1.0-t;
         t=t*t*t;
         t = 1.0-t;
+
+        t = t + ((sin((uv.y+(t*0.3))*24)*0.01)*cos(t*0.1));
         if(uv.y<0.3333) {
             if(uv.x<1.0-t)
             gl_FragColor = vec4(0.0,0.0,0.0,1.0);

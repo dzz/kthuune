@@ -4,7 +4,7 @@ from .PolyFills.checker_floor import checker_floor
 from .PolyFills.hard_wall import hard_wall
 from .PolyFills.soft_wall import soft_wall
 from .PolyFills.church_wall import church_wall
-from .PolyFills.totem import totem
+from .PolyFills.totem import totem, shield_totem
 from .PolyFills.lantern import lantern
 from .PolyFills.door import door
 from .PolyFills.skeline import skeline
@@ -36,6 +36,7 @@ class PolyFillList:
                 "soft_wall" : soft_wall,
                 "church_wall" : church_wall,
                 "totem" : totem,
+                "shield_totem" : shield_totem,
                 "lantern" : lantern,
                 "door" : door,
                 "skeline" : skeline,

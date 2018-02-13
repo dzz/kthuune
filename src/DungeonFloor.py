@@ -285,6 +285,7 @@ class DungeonFloor( Floor ):
             self.fog_level_impulse = self.fog_level_impulse + amt
 
     def tick(self):
+        self._tick = self._tick + 0.01
         pX = self.player.p[0]
         pY = self.player.p[1]
         target_vision_mute = self.vision_mute
