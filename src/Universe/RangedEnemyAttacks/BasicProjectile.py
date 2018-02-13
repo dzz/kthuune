@@ -42,7 +42,7 @@ class BasicProjectile(Object):
     def tick(self):
 
 
-        if(self.floor.camera.cinema_target):
+        if(self.floor.camera.cinema_target or self.floor.passed_genocide):
             self.floor.remove_object(self)
             return False
 

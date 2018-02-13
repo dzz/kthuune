@@ -531,6 +531,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                         break
 
             if passed_genocide:
+               self.floor.passed_genocide = True
                self.genocide_trigger_available = False
                dfloor = self.floor
                def ns():

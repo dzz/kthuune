@@ -1405,7 +1405,7 @@ class KPlayer(Player):
         self.potionFlash *= 0.95
 
 
-        teleportRecharge = 0.03
+        teleportRecharge = 0.09
         if(self.teleportAmt < 100.0):
             self.teleportAmt += teleportRecharge
 

@@ -32,7 +32,8 @@ class Spawner(Object):
     def tick(self):
 
         if(self.floor.playing_genocide()):
-            self.spawn()
+            if not self.floor.passed_genocide:
+                self.spawn()
             self.floor.remove_object(self)
             return False
 
