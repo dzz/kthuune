@@ -18,7 +18,7 @@ void main() {
     float d = ((1.0-t)*length(c_uv))*0.3;
 
     vec4 centerc = texture( scene, uv );
-    float divergence = 0.005 + (0.005*length(centerc))*(0.2+(g*0.4)+(b*3.2))*0.2;
+    float divergence = 0.005 + (0.005*length(centerc))*(0.2+(t*0.8)+(g*0.4)+(b*3.2))*0.2;
 
     divergence *= (30*t);
 

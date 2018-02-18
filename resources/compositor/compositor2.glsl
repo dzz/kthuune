@@ -47,6 +47,8 @@ void main() {
     vec4 light_texel = texture( light_buffer, floor_uv )*vision_texel;
     vec4 shadow_texel = texture( shadow_buffer, floor_uv);
 
+
+
     light_texel.rgb*= (shadow_texel.a*shadow_texel.rgb);
 
 
@@ -62,7 +64,7 @@ void main() {
     floor_texel.rgb *= vision_texel.r;
     floor_texel.rgb *= expose(light_texel.rgb);
 
-    object_texel.rgb *= expose(light_texel.rgb);
+    object_texel.rgb *= expose(object_light_texel.rgb);
 
     gl_FragColor = alphablend( floor_texel, object_texel);
 }
