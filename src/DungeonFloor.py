@@ -26,6 +26,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "_tick" : 0.0,
             "passed_genocide" : False,
             "activated_totem_groups" : [ 0 ],
             "game_mode" : 0,
