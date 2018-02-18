@@ -25,7 +25,7 @@ class Chargeplate(Object):
         
     def customize(self):
         self.size = [ 2.0, 2.0 ]
-        self.buftarget = "floor"
+        self.buftarget = "popup"
         self.tick_type = Object.TickTypes.PURGING
         self.texture = Chargeplate.textures[0]
         self.color = [ 0.0,0.0,0.0,1.0 ]
