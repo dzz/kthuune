@@ -27,6 +27,8 @@ from .Sequences import Sequences
 from .ParallaxBackground import ParallaxBackground
 from .Universe.LevelEffects.AttackInfo import AttackInfo
 
+from .Menu.Menu import Menu
+
 class Game( BaseGame ):
 
     god_buffer = BGL.framebuffer.from_screen()
@@ -34,6 +36,7 @@ class Game( BaseGame ):
 
     paused = False
     area_name = None
+    main_menu = True
     ###############
 
     def trigger_cinematic(self,key):
@@ -435,7 +438,6 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         self.player_dead_frames = 0
 
     def render(self):
-
         if self.active_cinematic:
             self.active_cinematic.render()
         else:
@@ -469,12 +471,16 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
             with BGL.blendmode.alpha_over:
                 uniform_fade.apply_fadeout( fade_perc, self.fade_color )
+        Menu.render()
 
     def tick(self):
 
         if(self.prebuffer < 30):
             self.prebuffer += 1
             return
+
+        if self.main_menu:
+            return Menu.tick()
 
         if(self.fade_amt< self.max_fade_amt):
             self.fade_amt += 1.0
