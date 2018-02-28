@@ -7,6 +7,7 @@
             { "name" : "explosion", "directory" : "{package_path}/explosion/", "filtered" : false }
         ],
         "texture" : [
+            { "name" : "menu_title", "filename" : "{package_path}/menu/title.png", "filtered" : false },
             { "name" : "ship_exterior", "filename" : "{package_path}/ship_exterior.png", "filtered" : false },
             { "name" : "firefly", "filename" : "{package_path}/firefly.png", "filtered" : true },
             { "name" : "player", "filename" : "{package_path}/player.png", "filtered" : true },
@@ -85,7 +86,8 @@
             { "name" : "potion", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/potion" },
             { "name" : "card", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/cardp" },
             { "name" : "islot", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/islotp" },
-            { "name" : "terminal", "vertex_program" : "{package_path}/shader/terminalv", "pixel_program" : "{package_path}/shader/terminalp" }
+            { "name" : "terminal", "vertex_program" : "{package_path}/shader/terminalv", "pixel_program" : "{package_path}/shader/terminalp" },
+            { "name" : "menu_base", "vertex_program" : "{package_path}/shader/menu/menuv", "pixel_program" : "{package_path}/shader/menu/menup" }
         ],
         "path" : [
             { "name" : "sequence", "path" : "{package_path}/sequence/" },
