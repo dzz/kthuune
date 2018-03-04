@@ -7,7 +7,7 @@ class Menu:
     t = 0.0
 
     def tick():
-        Menu.t += 0.01;
+        Menu.t += 0.003;
         if(Menu.t>1000):
             Menu.t = 0
     
