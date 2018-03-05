@@ -5,6 +5,9 @@ from ..KSounds import KSounds
 def start_game():
     Menu.Game.main_menu = False
 
+def quit_game():
+    exit()
+
 class Menu:
     texture_title = BGL.assets.get("KT-player/texture/menu_title")
     primitive = BGL.primitive.unit_uv_square
@@ -24,7 +27,7 @@ class Menu:
         { "label" : "The Story So Far" },
         { "label" : "How To Play" },
         { "label" : "Settings" },
-        { "label" : "Quit" },
+        { "label" : "Quit", "callback" : quit_game },
     ]
 
     current_selection = 0
@@ -86,6 +89,7 @@ class Menu:
                     comp = os + option["label"] + cs
                     l = len(comp)
                     x = (480/2)-(l*4)
+                    BGL.lotext.render_text_pixels(comp, x,1+(120+(11*i)), [0.0,0.0,0.0] )
                     BGL.lotext.render_text_pixels(comp, x,120+(11*i), color )
 
 
