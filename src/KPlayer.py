@@ -400,9 +400,6 @@ class TelekineCard(Card):
         self.fridx = (self.fridx + 1) %360
 
     def get_shader_params(self):
-
-        print(self.player.teleportAmt)
-
         return {
             "flashamt" : [ self.player.telekineFlash ],
             "statusamt" : [ self.player.teleportAmt / 100.0 ],
@@ -1071,7 +1068,13 @@ class KPlayer(Player):
         with BGL.context.render_target( self.time_buffer ):
             BGL.context.clear(0.0,0.0,0.0,0.0)
             with BGL.blendmode.alpha_over:
-                BGL.lotext.render_text_pixels("LIFETIME:{0}".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
+                #if(self.floor.playing_genocide()):
+                #    BGL.lotext.render_text_pixels("CLEAR THE INFECTION".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
+                #else:
+                #    BGL.lotext.render_text_pixels("FIND THE SWITCHES".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
+                #BGL.lotext.render_text_pixels("LIFETIME:{0}".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
+                pass
+
         with BGL.context.render_target( self.hud_buffer ):
             BGL.context.clear(0.0,0.0,0.0,0.0)
             if(self.critical_hit_display_counter>0) and (self.critical_hit_display_counter<55):
@@ -1108,18 +1111,18 @@ class KPlayer(Player):
 
         self.heartcard.render()
 
-        #for x in reversed(range(0,self.max_invslots)):
-        #    if x is not self.sel_invslot:
-        #        PlayerInvSlot.render(x, self.inventory[x], False, x == self.active_invslot)
-        #PlayerInvSlot.render(self.sel_invslot, self.inventory[self.sel_invslot], True, self.sel_invslot == self.active_invslot)
+        for x in reversed(range(0,self.max_invslots)):
+            if x is not self.sel_invslot:
+                PlayerInvSlot.render(x, self.inventory[x], False, x == self.active_invslot)
+        PlayerInvSlot.render(self.sel_invslot, self.inventory[self.sel_invslot], True, self.sel_invslot == self.active_invslot)
         self.swordcard.render()
 
         
-        if(Abilities.Telekine):
-            self.telekinecard.render()
+        #if(Abilities.Telekine):
+        #    self.telekinecard.render()
 
-        self.potioncard.render()
-        self.potioncountview.render()
+        #self.potioncard.render()
+        #self.potioncountview.render()
 
         #self.wandcard.render()
 
@@ -1331,19 +1334,19 @@ class KPlayer(Player):
 
 
         if self.Y_PRESSED:
-            if( self.health_count>0):
-                self.consume_hp()
+            #if( self.health_count>0):
+            #    self.consume_hp()
 
-            #if(self.sel_invslot == self.active_invslot):
-            #    self.consume_inventory()
-            #    self.active_invslot = None
-            #else:
-            #    if(self.inventory[self.sel_invslot] is None) and (self.active_invslot is not None):
-            #        self.inventory[self.sel_invslot] = self.inventory[self.active_invslot]
-            #        self.inventory[self.active_invslot] = None
-            #        self.active_invslot = None
-            #    else:
-            #        self.active_invslot = self.sel_invslot
+            if(self.sel_invslot == self.active_invslot):
+                self.consume_inventory()
+                self.active_invslot = None
+            else:
+                if(self.inventory[self.sel_invslot] is None) and (self.active_invslot is not None):
+                    self.inventory[self.sel_invslot] = self.inventory[self.active_invslot]
+                    self.inventory[self.active_invslot] = None
+                    self.active_invslot = None
+                else:
+                    self.active_invslot = self.sel_invslot
 
 
     def route_terminal_input(self):

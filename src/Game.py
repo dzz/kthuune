@@ -29,6 +29,12 @@ from .Universe.LevelEffects.AttackInfo import AttackInfo
 
 from .Menu.Menu import Menu
 
+
+def nopt():
+    pass
+
+print=nopt
+
 class Game( BaseGame ):
 
     god_buffer = BGL.framebuffer.from_screen()
