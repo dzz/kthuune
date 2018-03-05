@@ -518,7 +518,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         KTState.start_pressed[0] = KTState.pad.button_down(BGL.gamepads.buttons.START)
         
         if(KTState.start_pressed[0]==False) and (KTState.start_pressed[1]==True):
-            KTState.paused = not KTState.paused
+            #KTState.paused = not KTState.paused
+            Game.main_menu = not Game.main_menu
                 
         BaseGame.tick(self)
 
