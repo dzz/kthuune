@@ -48,11 +48,19 @@ class Chargeplate(Object):
             self.light_radius = 2.0 + (self.cv*3.0)
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
 
+            self.flash_color[3] *= 0.95;
+            
+            if not self.charged:
+                if( uniform(0.0,1.0)>0.9):
+                    i = uniform(0.8,1.5)
+                    self.flash_color = [ 0,0,i,1.0]
+
         if(not self.visible):
             return True
 
         if(self.charged):
 
+            self.flash_color[3] = 0.0 
             notify_timeout = 30
 
             check = True
@@ -125,6 +133,7 @@ class Chargeplate(Object):
 
         if(self.mdist( self.floor.player)<2.27):
             self.cv += 0.03
+            self.flash_color[3] = 0.0
             #self.floor.create_object(Poof( p = list(self.p)))
             #self.floor.objects.remove(self)
             #return False            
