@@ -1,14 +1,18 @@
 from Beagle import API as BGL
 from ..KSounds import KSounds
+import audio
 
 
 def start_game():
     Menu.Game.main_menu = False
+    audio.baudy_play_music( BGL.assets.get("KT-player/path/gameplay1"))
+    Menu.initialized = False
 
 def quit_game():
     exit()
 
 class Menu:
+    initialized = False
     texture_title = BGL.assets.get("KT-player/texture/menu_title")
     primitive = BGL.primitive.unit_uv_square
     shader = BGL.assets.get("KT-player/shader/menu_base")
@@ -27,6 +31,7 @@ class Menu:
         { "label" : "The Story So Far" },
         { "label" : "How To Play" },
         { "label" : "Settings" },
+        { "label" : "Credits" },
         { "label" : "Quit", "callback" : quit_game },
     ]
 
@@ -72,6 +77,11 @@ class Menu:
                 opt["callback"]()
     
     def render():
+
+        if not Menu.initialized:
+            audio.baudy_play_music( BGL.assets.get("KT-player/path/vectormenu"))
+            Menu.initialized = True
+            
         with BGL.context.render_target( Menu.texbuffer ):
 
             BGL.context.clear(  0.0,0.0,0.0,0.0 )
