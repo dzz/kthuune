@@ -26,6 +26,8 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "genocide_flash_timeout" : 60.0,
+            "genocide_show_seconds" : 0.0,
             "_tick" : 0.0,
             "passed_genocide" : False,
             "activated_totem_groups" : [ 0 ],
@@ -286,6 +288,28 @@ class DungeonFloor( Floor ):
             self.fog_level_impulse = self.fog_level_impulse + amt
 
     def tick(self):
+
+        #def make_follower(enemy):
+        #    def h():
+        #        enemy.floor.camera.grab_cinematic( enemy, 30 )
+        #    return h
+
+        if(self.playing_genocide()):
+            self.genocide_flash_timeout -= 1
+            if(self.genocide_flash_timeout<0):
+                self.genocide_flash_timeout = 60
+                self.genocide_show_seconds += 1
+                for enemy in self.enemies:
+                    enemy.flash_color = [ 1.0,1.0,1.0,1.0 ]
+
+                #if self.genocide_show_seconds > 5:
+                #    self.genocide_show_seconds = 0
+                #    for i,enemy in enumerate(self.enemies):
+                #        self.add_timeout( [ make_follower(enemy), i*30 ] )
+                        
+                    
+
+
         self._tick = self._tick + 0.01
         pX = self.player.p[0]
         pY = self.player.p[1]

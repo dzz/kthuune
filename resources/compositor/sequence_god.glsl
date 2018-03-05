@@ -65,6 +65,6 @@ void main() {
 
     gl_FragColor.rgb*= (1.0-t);
 
-    gl_FragColor.rgb+=t*vec3(1.0-l,1.0-l,l);
+    gl_FragColor.rgb+=t*vec3(1.0-l,1.0-l,1.0-l);
     gl_FragColor.a = 1.0;
 }
