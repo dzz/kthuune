@@ -72,8 +72,8 @@ class SnapEnemy(Object):
         self.floor.player.notify_enemy_killed()
         self.floor.freeze_frames = 3
         
-        #if(uniform(0.0,1.0) > 0.85):
-        #    self.floor.create_object(HealthVial(p=[ self.p[0], self.p[1]]))
+        if(uniform(0.0,1.0) > 0.85):
+            self.floor.create_object(HealthVial(p=[ self.p[0], self.p[1]]))
 
         self.floor.create_object(Blood(p=[self.p[0],self.p[1]]))
         self.custom_die()
