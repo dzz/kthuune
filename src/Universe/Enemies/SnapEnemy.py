@@ -9,6 +9,7 @@ from ..LevelEffects.Blood import Blood
 from ..LevelEffects.SpikeyWave import SpikeyWave
 from ..LevelEffects.Explosion import Explosion
 from ..LevelEffects.SkullDeath import SkullDeath
+from ..Pickups.HealthVial import HealthVial
 
 from .Spawner import Spawner
 

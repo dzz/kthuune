@@ -64,7 +64,7 @@ void main() {
     floor_texel.rgb *= vision_texel.r;
     floor_texel.rgb *= expose(light_texel.rgb);
 
-    object_texel.rgb *= expose(object_light_texel.rgb);
+    //object_texel.rgb *= expose(object_light_texel.rgb);
 
     gl_FragColor = alphablend( floor_texel, object_texel);
 }
