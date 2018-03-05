@@ -397,6 +397,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
     def initialize(self):
 
+        Menu.Game = Game
         self.rg = 0.0
         self.rb = 0.0
         self.rs = 0.0
@@ -414,6 +415,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         self.prebuffer = 0
         self.camera         = self.create_tickable( DungeonCamera( p = [0.0,0.0], zoom = 0.28 ) )
         self.controllers    = self.create_tickable( Controllers() )
+        Menu.controllers = self.controllers
+
         self.player         = self.create_tickable( self.create_player() )
 
         ### ENTRY POINT
@@ -471,7 +474,9 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
             with BGL.blendmode.alpha_over:
                 uniform_fade.apply_fadeout( fade_perc, self.fade_color )
-        Menu.render()
+
+        if( Game.main_menu):
+            Menu.render()
 
     def tick(self):
 
