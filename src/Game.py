@@ -29,12 +29,6 @@ from .Universe.LevelEffects.AttackInfo import AttackInfo
 
 from .Menu.Menu import Menu
 
-
-def nopt():
-    pass
-
-print=nopt
-
 class Game( BaseGame ):
 
     god_buffer = BGL.framebuffer.from_screen()
@@ -340,11 +334,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             area_name = self.area_name
         if (self.area_name is not area_name) or reset:
             #self.tickables.remove( self.floor )
-            print("DESTROYING FLOOR")
             self.floor.destroy()
-            print("FLOOR IS NONE")
             result = gc.collect()
-            print("GC result",result)
 
             self.floor = self.create_tickable( self.load_floor(area_name) )
             self.player.trigger_title( self.floor.title )
@@ -403,6 +394,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
     def initialize(self):
 
+        self.over2s = 0
         Menu.Game = Game
         self.rg = 0.0
         self.rb = 0.0
@@ -492,6 +484,11 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         if self.main_menu:
             return Menu.tick()
+        else:
+            if self.floor.camera.cinema_target:
+                self.over2s = (self.over2s+1)%3
+                if self.over2s == 0:
+                    return
 
         if(self.fade_amt< self.max_fade_amt):
             self.fade_amt += 1.0

@@ -2,10 +2,9 @@ from Beagle import API as BGL
 from ..KSounds import KSounds
 import audio
 
-
 def start_game():
     Menu.Game.main_menu = False
-    audio.baudy_play_music( BGL.assets.get("KT-player/path/gameplay1"))
+    #audio.baudy_play_music( BGL.assets.get("KT-player/path/gameplay1"))
     Menu.initialized = False
 
 def quit_game():
@@ -79,7 +78,7 @@ class Menu:
     def render():
 
         if not Menu.initialized:
-            audio.baudy_play_music( BGL.assets.get("KT-player/path/vectormenu"))
+            #audio.baudy_play_music( BGL.assets.get("KT-player/path/vectormenu"))
             Menu.initialized = True
             
         with BGL.context.render_target( Menu.texbuffer ):
