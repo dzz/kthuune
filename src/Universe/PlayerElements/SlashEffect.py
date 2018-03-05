@@ -1,6 +1,7 @@
 from Beagle import API as BGL
 from Newfoundland.Object import Object
 from math import sin,cos
+from random import choice
 
 class SlashEffect(Object):
     textures = [
