@@ -10,6 +10,7 @@
         "KT-forest"     : "resources/forest/forest.json",
         "KT-props"      : "resources/props/props.json",
         "KT-editor"     : "resources/editor/editor.json",
-        "KT-city"     : "resources/city/city.json"
+        "KT-city"     : "resources/city/city.json",
+        "KT-lw"     : "resources/learningworld/lw.json"
     }
 }
