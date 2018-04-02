@@ -28,6 +28,13 @@ class ToolTip(Object): #must pass in message, width, owner
 
     def tick(self):
         return self.alive
+
+    def get_shader_params(self):
+        base_params = Object.get_shader_params(self)
+        base_params['translation_world'][0] -= self.owner.size[0]*1.7
+        base_params['translation_world'][1] -= self.owner.size[1]*1.7
+
+        return base_params
         
 
 class SpeechBubble(Object):

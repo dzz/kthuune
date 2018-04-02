@@ -292,6 +292,7 @@ class DungeonFloor( Floor ):
     def synch_tooltips(self):
         tooltip_garbage = []
         newtooltips = []
+        width = 20
 
         for obj in self.objects:
             if "tooltip" in obj.__dict__:
@@ -301,12 +302,12 @@ class DungeonFloor( Floor ):
                     if(obj.tooltip != obj._tooltip.message):
                         tooltip_garbage.append(obj._tooltip) #garbage the old tooltip
                         if obj.tooltip is not None:
-                            tt = ToolTip( floor=self,owner=obj, p = obj.p, message=obj.tooltip, width=30)
+                            tt = ToolTip( floor=self,owner=obj, p = obj.p, message=obj.tooltip, width=width)
                             obj._tooltip = tt
                             newtooltips.append(tt)
                 else:
                     if obj.tooltip is not None:
-                        tt = ToolTip( floor=self,owner=obj, p = obj.p, message=obj.tooltip, width=30)
+                        tt = ToolTip( floor=self,owner=obj, p = obj.p, message=obj.tooltip, width=width)
                         obj._tooltip = tt
                         newtooltips.append(tt)
             
