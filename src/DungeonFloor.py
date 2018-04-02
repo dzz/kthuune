@@ -5,6 +5,7 @@ from Newfoundland.Tilemap import Tilemap
 from Newfoundland.Object import Object
 from random import choice
 from .Universe.AreaCompiler import AreaCompiler
+from .Universe.LevelProps.SpeechBubble import ToolTip
 from .Renderers.DFRenderer import DFRenderer
 from random import uniform
 from math import sin,cos,hypot
@@ -26,6 +27,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "renderable_tooltips" : [],
             "genocide_flash_timeout" : 60.0,
             "genocide_show_seconds" : 0.0,
             "_tick" : 0.0,
@@ -287,8 +289,32 @@ class DungeonFloor( Floor ):
         if md < 250:
             self.fog_level_impulse = self.fog_level_impulse + amt
 
-    def tick(self):
+    def synch_tooltips(self):
+        tooltip_garbage = []
+        newtooltips = []
 
+        for obj in self.objects:
+            if "tooltip" in obj.__dict__:
+                if not ("_tooltip" in obj.__dict__):
+                    obj._tooltip = None
+                if obj._tooltip in self.renderable_tooltips:
+                    if(obj.tooltip != obj._tooltip.message):
+                        tooltip_garbage.append(obj._tooltip) #garbage the old tooltip
+                        if obj.tooltip is not None:
+                            tt = ToolTip( floor=self,owner=obj, p = obj.p, message=obj.tooltip, width=30)
+                            obj._tooltip = tt
+                            newtooltips.append(tt)
+                else:
+                    if obj.tooltip is not None:
+                        tt = ToolTip( floor=self,owner=obj, p = obj.p, message=obj.tooltip, width=30)
+                        obj._tooltip = tt
+                        newtooltips.append(tt)
+            
+        self.renderable_tooltips = [tt for tt in self.renderable_tooltips if tt not in tooltip_garbage and tt.owner in self.objects]
+        self.renderable_tooltips.extend(newtooltips)
+
+    def tick(self):
+        self.synch_tooltips()
         #def make_follower(enemy):
         #    def h():
         #        enemy.floor.camera.grab_cinematic( enemy, 30 )

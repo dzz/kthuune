@@ -170,6 +170,7 @@ class DFRenderer( FloorRenderer ):
                     BGL.context.clear(0.0,0.0,0.0,0.0)
             with BGL.blendmode.alpha_over:
                 self.render_objects("popup")
+                self.render_arb_objects( self.renderable_tooltips)
 
 
         with BGL.context.render_target( self.hittable_buffer ):
@@ -196,6 +197,10 @@ class DFRenderer( FloorRenderer ):
             self.guppyRenderer.renderObjects( renderable_objects )
         else:
             self.guppyRenderer.renderTexturePriorityObjects( renderable_objects )
+
+    def render_arb_objects(self, renderable_objects):
+        """ Render floor objects """
+        self.guppyRenderer.renderObjects( renderable_objects )
 
 
     def render_canopy(self):

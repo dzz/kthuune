@@ -561,6 +561,7 @@ class KPlayer(Player):
 
     def customize(self):
 
+        #self.tooltip = "I'm the PLAYER!"
         self.health_count = 2
         self.dch_cooldown = 0
         self.active_invslot = None
