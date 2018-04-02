@@ -24,6 +24,7 @@ class Chargeplate(Object):
         return o
         
     def customize(self):
+        self.tooltip = "Stand on me!"
         self.size = [ 2.0, 2.0 ]
         self.buftarget = "popup"
         self.tick_type = Object.TickTypes.PURGING
@@ -60,6 +61,7 @@ class Chargeplate(Object):
 
         if(self.charged):
 
+            self.tooltip = "I'm charged, find more of me!"
             self.flash_color[3] = 0.0 
             notify_timeout = 30
 
