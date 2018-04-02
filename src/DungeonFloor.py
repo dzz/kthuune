@@ -1,3 +1,14 @@
+####
+#
+# The Evil Emperor ZORDIUS has unleashed his army of CEPHLAPOADS on to the Bubble Worlds of
+# KTHUNIA. They have taken the LIMIT BABIES - emobodiments of pure potential - hostage.
+
+#
+# Only VECTORLORD can stop the corruption, so YOU can get back to physics class
+#
+# YOU are the messiah. Do your job, QUICKLY.
+#
+
 import audio
 from Beagle import API as BGL
 from Newfoundland.Floor import createFloorClass
