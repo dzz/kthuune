@@ -2,6 +2,33 @@ from Newfoundland.Object import Object
 from Beagle import API as BGL
 from ...KSounds import KSounds
 from random import choice
+import textwrap
+
+class ToolTip(Object): #must pass in message, width, owner
+    
+    def customize(self):
+
+        if(len(self.message)<self.width):
+            self.width = len(self.message)
+        self.lines = textwrap.wrap( self.message, self.width )
+        self.buffer = BGL.framebuffer.from_dims( self.width*8, len(self.lines)*8)
+        self.texture = self.buffer
+        with BGL.context.render_target(self.buffer):
+            with BGL.blendmode.alpha_over:
+                BGL.context.clear(0.0,0.0,0.0,1.0)
+                for y,line in enumerate(self.lines):
+                    BGL.lotext.render_text_pixels(line, 0,y*8, [ 1.0,1.0,1.0] )
+        self.visible = True
+        self.alive = True
+        self.tick_type = Object.TickTypes.PURGING
+        self.size = [ 0.5*self.width, -0.5*len(self.lines) ]
+
+    def kill(self):
+        self.alive = False
+
+    def tick(self):
+        return self.alive
+        
 
 class SpeechBubble(Object):
     instance = None
