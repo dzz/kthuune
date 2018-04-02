@@ -31,8 +31,11 @@ class ToolTip(Object): #must pass in message, width, owner
 
     def get_shader_params(self):
         base_params = Object.get_shader_params(self)
-        base_params['translation_world'][0] -= self.owner.size[0]*1.7
-        base_params['translation_world'][1] -= self.owner.size[1]*1.7
+        dx = self.owner.p[0] - self.floor.player.p[0]
+        dy = self.owner.p[1] - self.floor.player.p[1]
+
+        base_params['translation_world'][0] -= (self.owner.size[0]*1.7) * (1.0+(dx/30.))
+        base_params['translation_world'][1] -= (self.owner.size[1]*1.7) * (1.0+(dy/30.))
 
         return base_params
         
