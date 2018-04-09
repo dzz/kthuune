@@ -8,6 +8,7 @@
             { "name" : "explosion", "directory" : "{package_path}/explosion/", "filtered" : false }
         ],
         "texture" : [
+            { "name" : "lock", "filename" : "{package_path}/lock.png", "filtered" : false },
             { "name" : "menu_title", "filename" : "{package_path}/menu/title.png", "filtered" : false },
             { "name" : "chooseworld_title", "filename" : "{package_path}/menu/cw_title.png", "filtered" : false },
             { "name" : "ship_exterior", "filename" : "{package_path}/ship_exterior.png", "filtered" : false },
