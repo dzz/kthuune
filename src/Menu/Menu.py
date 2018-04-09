@@ -1,18 +1,31 @@
 from Beagle import API as BGL
 from ..KSounds import KSounds
+from .BubbleWorldRenderer import BubbleWorldRenderer
 import audio
 
-def start_game():
+def real_start_game():
     Menu.Game.main_menu = False
     audio.baudy_play_music( BGL.assets.get("KT-player/path/gameplay1"))
     Menu.initialized = False
 
+def start_game():
+    Menu.index="new_world"
+
+def reset_root():
+    Menu.index = "root"    
+    Menu.current_selection = 0
+    
 def quit_game():
     exit()
 
 class Menu:
     initialized = False
-    texture_title = BGL.assets.get("KT-player/texture/menu_title")
+    index = "root"
+    texture_titles = {
+        "root" : BGL.assets.get("KT-player/texture/menu_title"),
+        "new_world" : BGL.assets.get("KT-player/texture/chooseworld_title")
+    }
+
     primitive = BGL.primitive.unit_uv_square
     shader = BGL.assets.get("KT-player/shader/menu_base")
     t = 0.0
@@ -25,18 +38,28 @@ class Menu:
     A_PRESSED = False
     A_STATE = [ False, False ]
 
-    current_options = [
-        { "label" : "Start New Game", "callback" : start_game },
-        { "label" : "The Story So Far" },
-        { "label" : "How To Play" },
-        { "label" : "Settings" },
-        { "label" : "Credits" },
-        { "label" : "Quit", "callback" : quit_game },
-    ]
+    current_options = {
+        "root" : [ 
+            { "label" : "Start New Game", "callback" : start_game },
+            { "label" : "The Story So Far" },
+            { "label" : "How To Play" },
+            { "label" : "Settings" },
+            { "label" : "Credits" },
+            { "label" : "Quit", "callback" : quit_game },
+        ],
+        "new_world" : [ 
+            { "label" : "World of Learning", "callback" : reset_root },
+            { "label" : "World of Discovery", "callback" : reset_root },
+            { "label" : "World of Pain", "callback" : reset_root },
+            { "label" : "World of Redemption", "callback" : reset_root },
+            { "label" : "Back", "callback" : reset_root },
+        ]
+    }
 
     current_selection = 0
 
     def tick():
+        BubbleWorldRenderer.tick()
         Menu.controllers.tick()
         pad = Menu.controllers.get_virtualized_pad(0)
         Menu.A_STATE[0] = Menu.A_STATE[1]
@@ -65,13 +88,16 @@ class Menu:
             Menu.t = 0
 
         if(Menu.DOWN_PRESSED):
-            Menu.current_selection  = (Menu.current_selection+1)%len(Menu.current_options)
+            BubbleWorldRenderer.reset()
+            Menu.current_selection  = (Menu.current_selection+1)%len(Menu.current_options[Menu.index])
             KSounds.play(KSounds.term_updown)
         if(Menu.UP_PRESSED):
-            Menu.current_selection  = (Menu.current_selection-1)%len(Menu.current_options)
+            BubbleWorldRenderer.reset()
+            Menu.current_selection  = (Menu.current_selection-1)%len(Menu.current_options[Menu.index])
             KSounds.play(KSounds.term_updown)
         if(Menu.A_PRESSED):
-            opt = Menu.current_options[Menu.current_selection]
+            BubbleWorldRenderer.reset()
+            opt = Menu.current_options[Menu.index][Menu.current_selection]
             if "callback" in opt: 
                 opt["callback"]()
     
@@ -85,8 +111,7 @@ class Menu:
 
             BGL.context.clear(  0.0,0.0,0.0,0.0 )
             with BGL.blendmode.alpha_over:
-
-                for i,option in enumerate(Menu.current_options):
+                for i,option in enumerate(Menu.current_options[Menu.index]):
                     os = "   "
                     cs = "   "
                     color = [ 0.5, 0.5, 0.5 ]
@@ -98,15 +123,25 @@ class Menu:
                     comp = os + option["label"] + cs
                     l = len(comp)
                     x = (480/2)-(l*4)
-                    BGL.lotext.render_text_pixels(comp, x,1+(120+(11*i)), [0.0,0.0,0.0] )
-                    BGL.lotext.render_text_pixels(comp, x,120+(11*i), color )
+
+                    if Menu.index == 'root':
+                        BGL.lotext.render_text_pixels(comp, x,1+(120+(11*i)), [0.0,0.0,0.0] )
+                        BGL.lotext.render_text_pixels(comp, x,120+(11*i), color )
+                    elif Menu.index == 'new_world':
+                        BGL.lotext.render_text_pixels(comp, 16,1+(120+(11*i)), [0.0,0.0,0.0] )
+                        BGL.lotext.render_text_pixels(comp, 16,120+(11*i), color )
+                
+
+    
 
 
         with BGL.blendmode.alpha_over:
             Menu.primitive.render_shaded( Menu.shader, {
-                "texBuffer" : Menu.texture_title,
+                "texBuffer" : Menu.texture_titles[Menu.index],
                 "tick" : Menu.t
             })
             Menu.texbuffer.render_processed(BGL.assets.get("beagle-2d/shader/passthru"))
+            if( Menu.index != "root" ):
+                BubbleWorldRenderer.render()
 
 

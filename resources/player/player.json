@@ -9,6 +9,7 @@
         ],
         "texture" : [
             { "name" : "menu_title", "filename" : "{package_path}/menu/title.png", "filtered" : false },
+            { "name" : "chooseworld_title", "filename" : "{package_path}/menu/cw_title.png", "filtered" : false },
             { "name" : "ship_exterior", "filename" : "{package_path}/ship_exterior.png", "filtered" : false },
             { "name" : "firefly", "filename" : "{package_path}/firefly.png", "filtered" : true },
             { "name" : "player", "filename" : "{package_path}/player.png", "filtered" : true },
@@ -88,7 +89,8 @@
             { "name" : "card", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/cardp" },
             { "name" : "islot", "vertex_program" : "{package_path}/shader/cardv", "pixel_program" : "{package_path}/shader/islotp" },
             { "name" : "terminal", "vertex_program" : "{package_path}/shader/terminalv", "pixel_program" : "{package_path}/shader/terminalp" },
-            { "name" : "menu_base", "vertex_program" : "{package_path}/shader/menu/menuv", "pixel_program" : "{package_path}/shader/menu/menup" }
+            { "name" : "menu_base", "vertex_program" : "{package_path}/shader/menu/menuv", "pixel_program" : "{package_path}/shader/menu/menup" },
+            { "name" : "worldbubble", "vertex_program" : "{package_path}/menu/shader/worldbubble_v", "pixel_program" : "{package_path}/menu/shader/worldbubble_p" }
         ],
         "path" : [
             { "name" : "sequence", "path" : "{package_path}/sequence/" },
