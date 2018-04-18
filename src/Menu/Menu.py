@@ -14,6 +14,7 @@ def start_game():
 def reset_root():
     Menu.index = "root"    
     Menu.current_selection = 0
+    real_start_game()
     
 def quit_game():
     exit()

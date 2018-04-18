@@ -1,10 +1,11 @@
 from Newfoundland.Object import Object
 from Beagle import API as BGL
 from math import floor
-from random import uniform
+from random import uniform, choice
 
 class Stainglass(Object):
-    textures = BGL.assets.get('KT-forest/animation/stainglass')
+    regular = BGL.assets.get('KT-forest/animation/stainglass')
+    tulip = BGL.assets.get('KT-forest/animation/tulipglass')
 
     def parse(od,df):
         o = Stainglass( p = [ od["x"],od["y"] ] )
@@ -14,16 +15,17 @@ class Stainglass(Object):
         self.size = [ 3.0+uniform(0.0,1.0), 3.0+uniform(0.0,1.0) ]
         self.buftarget = "popup"
         self.tick_type = Object.TickTypes.PURGING
-        self.texture = Stainglass.textures[0]
+        self.textures = choice([Stainglass.regular, Stainglass.tulip ])
+        self.texture = self.textures[0]
         self.color = [ 1.0,1.0,1.0,1.0 ]
         self.fr = 0.0
 
     def tick(self):
         self.fr += 0.05
 
-        if(self.fr>= len (Stainglass.textures)):
+        if(self.fr>= len (self.textures)):
             self.fr = 0
-        self.texture = Stainglass.textures[floor(self.fr)]
+        self.texture = self.textures[floor(self.fr)]
 
         return True
 

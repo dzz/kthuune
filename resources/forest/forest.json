@@ -4,6 +4,7 @@
         "animation" : [
             { "name" : "lantern", "directory" : "{package_path}/lantern/", "filtered" : false },
             { "name" : "stainglass", "directory" : "{package_path}/stainglass/", "filtered" : false },
+            { "name" : "tulipglass", "directory" : "{package_path}/tulipglass/", "filtered" : false },
             { "name" : "chargeplate", "directory" : "{package_path}/discofloor/", "filtered" : false },
             { "name" : "hostage", "directory" : "{package_path}/hostage/", "filtered" : false },
             { "name" : "tumorcrab", "directory" : "{package_path}/tumorcrab/", "filtered" : true },
