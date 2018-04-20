@@ -55,6 +55,7 @@ from .LevelProps.SpeechBubble import SpeechBubble
 from .LevelProps.Telekine import Telekine
 from .LevelProps.Prop import Prop
 from .LevelProps.Stainglass import Stainglass
+from .LevelProps.CableSegment import CableSegment
 from .Pickups.HealthVial import HealthVial
 from .Pickups.SoftwarePickup import SoftwarePickup
 from .Pickups.SwordPickup import SwordPickup
@@ -108,6 +109,8 @@ class AreaCompiler():
         self.ad = ad
         self.generate_tiledata(df)
         df.area_switches = []
+
+        self.objects.extend( CableSegment.generate_cable(-200.0,0.0,200.0,0.0) )
         self.objects.append(SpeechBubble.instance)
         for pd in ad["prop_defs"]:
             self.objects.append( Prop.parse(pd) )
@@ -310,6 +313,8 @@ class AreaCompiler():
 
             if od["key"] in ["bterm"]:
                 self.objects.extend(BTerm.parse(od,df))
+
+
 
 
     def link_doors(self):
