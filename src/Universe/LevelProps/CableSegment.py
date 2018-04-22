@@ -31,9 +31,11 @@ class CableSegment(Object):
         dx/= l
         dy/= l
 
-        mag = l / 32
+        max_seg = 32
+        mag = l / max_seg
 
-        for iter in range(0,32):
+
+        for iter in range(0,max_seg-1):
 
             nx1 = cur_x
             ny1 = cur_y
@@ -41,10 +43,23 @@ class CableSegment(Object):
             nx2 = nx1 + (mag*dx)
             ny2 = ny1 + (mag*dy)
 
+            #rnx2 = nx2 + uniform(-10.0,10.0)
+            #rny2 = ny2 + uniform(-10.0,10.0)
+
             cur_x = nx2
             cur_y = ny2
 
             cum.append( CableSegment( x1 = nx1, y1 = ny1, x2 = nx2, y2=ny2 ) )
+
+            dx = x2-nx2
+            dy = y2-ny1
+            l = hypot(dx,dy)
+
+            dx/= l
+            dy/= l
+
+            max_seg -= 1
+            mag = l / max_seg
 
 
         cum.append(CablePin(p =[x1,y1]))
