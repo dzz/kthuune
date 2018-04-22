@@ -3,69 +3,87 @@ from Beagle import API as BGL
 from math import floor, atan2, hypot, sin, cos
 from random import uniform, choice
 
+class CablePin(Object):
+    texture = BGL.assets.get('KT-forest/texture/registration')
+
+    def customize(self):
+        self.texture = CablePin.texture
+        self.visible = True
+        self.buftarget = "popup"
+        self.size = [3.5,3.5]
+        self.tick_type = Object.TickTypes.STATIC
+
 class CableSegment(Object):
-    regular = BGL.assets.get('KT-forest/animation/stainglass')
+    texture = BGL.assets.get('KT-forest/texture/registration')
+    next_x = 0.0
 
     def generate_cable( x1, y1, x2, y2):
-
+        print("GENERATING CABLE")
 
         cum = [] 
         cur_x = x1
         cur_y = y1
 
-        mag = 8.0
-        nmag = 4.0
-        smag = 5.0
+        dx = x2-x1
+        dy = y2-y1
+        l = hypot(dx,dy)
 
-        sfrq = 3.5 / 24.0
+        dx/= l
+        dy/= l
 
-        sidx = uniform(0.0,3.2)
+        mag = l / 32
 
-        while hypot(x2-cur_x, y1-cur_y)<2.0:
-            nx1 =cur_x
+        for iter in range(0,32):
+
+            nx1 = cur_x
             ny1 = cur_y
 
-            dx = x2-nx1
-            dy = y2-nx1
+            nx2 = nx1 + (mag*dx)
+            ny2 = ny1 + (mag*dy)
 
-            l = hypot(dx,dy)
+            cur_x = nx2
+            cur_y = ny2
 
-            dx/= l
-            dy/= l
+            cum.append( CableSegment( x1 = nx1, y1 = ny1, x2 = nx2, y2=ny2 ) )
 
-            nx2 = ((nx1 + (dx * mag)) + uniform(nmag,-nmag)) + (sin(sidx) * smag)
-            ny2 = ((nx2 + (dy * mag)) + uniform(nmag,-nmag)) + (cos(sidx) * smag)
 
-            mag /= 1.5
-            nmag /= 1.7
-            smag /= 2.2
-
-            sfrq /= 1.3
-            sidx += sfrq
-
-            cum.append( CableSegment( x1 = cur_x, y1 = cur_y, x2 = nx2, y2=ny2 ) )
-            cur_x = nx1
-            cur_y = nx2
-
+        cum.append(CablePin(p =[x1,y1]))
+        cum.append(CablePin(p =[x2,y2]))
         return cum
 
         
     def customize(self):
-        self.p = [
-            (self.x1 + self.x2) / 2.0,
-            (self.y1, + self.y2) / 2.0
-        ]
+
+
+            
+        print("SEGMENT....")
+        print( self.x1, self.y1, self.x2, self.y2 )
+
+        print("NUMERO UNO:")
+        print(self.x1)
+        print("END SEGMENT....")
+
+        #self.p = [
+        #    (self.x1 + self.x2) / 2.0,
+        #    (self.y1 + self.y2) / 2.0
+        #]
+
+        self.p[0] = (self.x1 + self.x2) / 2.0
+        self.p[1] = (self.y1 + self.y2) / 2.0
+
         dx = self.x2 - self.x1
         dy = self.y2 - self.y1
 
-        self.rad = atan2(dx,dy)
+        self.rad = atan2(dy,dx)
 
-        self.size = [ hypot(dx,dy), uniform(1.0,2.0) ]
+        self.size[0] = hypot(dy,dx)/2.0
+        self.size[1] = 1.0 
 
         #self.size = [ 3.0+uniform(0.0,1.0), 3.0+uniform(0.0,1.0) ]
         self.buftarget = "popup"
         self.tick_type = Object.TickTypes.STATIC
-        self.texture = CableSegment.regular
+        self.texture = CableSegment.texture
         self.color = [ 1.0,1.0,1.0,1.0 ]
         self.fr = 0.0
+        self.visible = True
 
