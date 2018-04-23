@@ -110,10 +110,10 @@ class AreaCompiler():
         self.generate_tiledata(df)
         df.area_switches = []
 
-        self.objects.extend( CableSegment.generate_cable(-30.0,0.0,30.0,0.0) )
-        self.objects.extend( CableSegment.generate_cable(0.0,-30.0,0.0,30.0) )
-        self.objects.extend( CableSegment.generate_cable(30.0,30.0,-30.0,-30.0) )
-        self.objects.extend( CableSegment.generate_cable(30.0,-30.0,-30.0,30.0) )
+        #self.objects.extend( CableSegment.generate_cable(-30.0,0.0,30.0,0.0) )
+        #self.objects.extend( CableSegment.generate_cable(0.0,-30.0,0.0,30.0) )
+        #self.objects.extend( CableSegment.generate_cable(30.0,30.0,-30.0,-30.0) )
+        #self.objects.extend( CableSegment.generate_cable(30.0,-30.0,-30.0,30.0) )
 
         self.objects.append(SpeechBubble.instance)
         for pd in ad["prop_defs"]:
@@ -216,6 +216,7 @@ class AreaCompiler():
             if od["key"] in [ "chargeplate" ]:
                 self.objects.append(Chargeplate.parse(od,df ))
                 df.chargeplates.append(self.objects[-1])
+                self.objects.extend( self.objects[-1].generate_cable(df) )
 
             if od["key"] in [ "eglans" ]:
                 for x in range(0,5):

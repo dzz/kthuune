@@ -2,6 +2,7 @@ from Newfoundland.Object import Object
 from Beagle import API as BGL
 from math import floor
 from random import uniform
+from ..LevelProps.CableSegment import CableSegment
 
 from ..LevelEffects.Poof import Poof
 from ..LevelEffects.AttackInfo import AttackInfo
@@ -23,6 +24,11 @@ class Chargeplate(Object):
             o.visible = False
         return o
         
+
+    def generate_cable(self, floor):
+        target = floor.get_owl_p( self.group )
+        return CableSegment.generate_cable( self.p[0], self.p[1], target[0], target[1] )
+
     def customize(self):
         self.tooltip = "Stand on me!"
         self.size = [ 2.0, 2.0 ]

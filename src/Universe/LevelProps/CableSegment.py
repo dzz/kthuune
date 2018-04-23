@@ -9,7 +9,7 @@ class CablePin(Object):
     def customize(self):
         self.texture = CablePin.texture
         self.visible = True
-        self.buftarget = "popup"
+        self.buftarget = "underfloor"
         self.size = [3.5,3.5]
         self.tick_type = Object.TickTypes.STATIC
 
@@ -80,15 +80,6 @@ class CableSegment(Object):
         
     def customize(self):
 
-
-            
-        print("SEGMENT....")
-        print( self.x1, self.y1, self.x2, self.y2 )
-
-        print("NUMERO UNO:")
-        print(self.x1)
-        print("END SEGMENT....")
-
         #self.p = [
         #    (self.x1 + self.x2) / 2.0,
         #    (self.y1 + self.y2) / 2.0
@@ -106,10 +97,11 @@ class CableSegment(Object):
         self.size[1] = 1.0 + self.smod
 
         #self.size = [ 3.0+uniform(0.0,1.0), 3.0+uniform(0.0,1.0) ]
-        self.buftarget = "popup"
+        self.buftarget = "underfloor"
         self.tick_type = Object.TickTypes.STATIC
         self.texture = CableSegment.texture
         self.color = [ 1.0,1.0,1.0,1.0 ]
         self.fr = 0.0
         self.visible = True
+        self.z_index = -9000
 

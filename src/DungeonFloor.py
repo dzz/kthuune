@@ -422,6 +422,9 @@ class DungeonFloor( Floor ):
     def get_light_occluders(self):
         return self.light_occluders
 
+    def get_owl_p(self,idx = 0 ):
+        return ( 0.0,0.0 )        
+
 
 def get_DF():
     return DungeonFloor
