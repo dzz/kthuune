@@ -1,6 +1,6 @@
 from Newfoundland.Object import Object
 from Beagle import API as BGL
-from math import floor, atan2, hypot, sin, cos
+from math import floor, atan2, hypot, sin, cos, pi
 from random import uniform, choice
 
 class CablePin(Object):
@@ -31,25 +31,33 @@ class CableSegment(Object):
         dx/= l
         dy/= l
 
-        max_seg = 32
+        max_seg = (floor(l / 4.0))+1
         mag = l / max_seg
 
 
+        midx = 0.0
+        mincr = pi / max_seg
+
+        wt = 0.0
+        wtincr = ((5+uniform(1.0,3.0))*pi) / max_seg
+
         for iter in range(0,max_seg-1):
+    
+
+            wmag = sin(midx)
 
             nx1 = cur_x
             ny1 = cur_y
 
-            nx2 = nx1 + (mag*dx)
-            ny2 = ny1 + (mag*dy)
-
-            #rnx2 = nx2 + uniform(-10.0,10.0)
-            #rny2 = ny2 + uniform(-10.0,10.0)
+            nx2 = nx1 + (mag*dx) + (sin(wt)*wmag) + (uniform(-wmag,wmag))
+            ny2 = ny1 + (mag*dy) + (cos(wt)*wmag) + (uniform(-wmag,wmag))
 
             cur_x = nx2
             cur_y = ny2
 
-            cum.append( CableSegment( x1 = nx1, y1 = ny1, x2 = nx2, y2=ny2 ) )
+            smod = ((sin(wt*0.5)*1.0)+2.0)*wmag
+
+            cum.append( CableSegment( x1 = nx1, y1 = ny1, x2 = nx2, y2=ny2, smod=smod ) )
 
             dx = x2-nx2
             dy = y2-ny1
@@ -60,6 +68,9 @@ class CableSegment(Object):
 
             max_seg -= 1
             mag = l / max_seg
+
+            midx += mincr
+            wt += wtincr
 
 
         cum.append(CablePin(p =[x1,y1]))
@@ -89,10 +100,10 @@ class CableSegment(Object):
         dx = self.x2 - self.x1
         dy = self.y2 - self.y1
 
-        self.rad = atan2(dy,dx)
+        self.rad = atan2(dy,dx) + uniform( pi/10.0, -1*(pi/10.0))
 
-        self.size[0] = hypot(dy,dx)/2.0
-        self.size[1] = 1.0 
+        self.size[0] = (hypot(dy,dx)/2.0) * 1.15
+        self.size[1] = 1.0 + self.smod
 
         #self.size = [ 3.0+uniform(0.0,1.0), 3.0+uniform(0.0,1.0) ]
         self.buftarget = "popup"
