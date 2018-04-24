@@ -16,6 +16,7 @@ class CablePin(Object):
 class CableSegment(Object):
     texture = BGL.assets.get('KT-forest/texture/registration')
     next_x = 0.0
+    wobble_idx = 0
 
     def generate_cable( x1, y1, x2, y2):
         print("GENERATING CABLE")
@@ -78,6 +79,12 @@ class CableSegment(Object):
         return cum
 
         
+    def tick(self):
+        self.size[0] = self.basex * (1.0+(cos(self.w-self.p[0]-self.p[1])*0.08))
+        self.size[1] = self.basey * (1.0+(sin(self.w+self.p[0]+self.p[1])*0.08))
+        self.w += 0.02
+        return True
+
     def customize(self):
 
         #self.p = [
@@ -95,13 +102,17 @@ class CableSegment(Object):
 
         self.size[0] = (hypot(dy,dx)/2.0) * 1.15
         self.size[1] = 1.0 + self.smod
+        self.basex = self.size[0]
+        self.basey = self.size[1]
 
         #self.size = [ 3.0+uniform(0.0,1.0), 3.0+uniform(0.0,1.0) ]
         self.buftarget = "underfloor"
-        self.tick_type = Object.TickTypes.STATIC
+        self.tick_type = Object.TickTypes.TICK_FOREVER
         self.texture = CableSegment.texture
         self.color = [ 1.0,1.0,1.0,1.0 ]
         self.fr = 0.0
         self.visible = True
         self.z_index = -9000
+        self.w = CableSegment.wobble_idx
+        CableSegment.wobble_idx += 0.2
 

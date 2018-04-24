@@ -110,10 +110,10 @@ class AreaCompiler():
         self.generate_tiledata(df)
         df.area_switches = []
 
-        #self.objects.extend( CableSegment.generate_cable(-30.0,0.0,30.0,0.0) )
-        #self.objects.extend( CableSegment.generate_cable(0.0,-30.0,0.0,30.0) )
-        #self.objects.extend( CableSegment.generate_cable(30.0,30.0,-30.0,-30.0) )
-        #self.objects.extend( CableSegment.generate_cable(30.0,-30.0,-30.0,30.0) )
+        self.objects.extend( CableSegment.generate_cable(-30.0,0.0,30.0,0.0) )
+        self.objects.extend( CableSegment.generate_cable(0.0,-30.0,0.0,30.0) )
+        self.objects.extend( CableSegment.generate_cable(30.0,30.0,-30.0,-30.0) )
+        self.objects.extend( CableSegment.generate_cable(30.0,-30.0,-30.0,30.0) )
 
         self.objects.append(SpeechBubble.instance)
         for pd in ad["prop_defs"]:
