@@ -1,7 +1,7 @@
 from Newfoundland.Object import Object
 from Beagle import API as BGL
 from math import floor
-from random import uniform
+from random import uniform, choice
 from ..LevelProps.CableSegment import CableSegment
 
 from ..LevelEffects.Poof import Poof
@@ -27,7 +27,8 @@ class Chargeplate(Object):
 
     def generate_cable(self, floor):
         target = floor.get_owl_p( self.group )
-        return CableSegment.generate_cable( self.p[0], self.p[1], target[0], target[1] )
+        self.cable_segments = CableSegment.generate_cable( self.p[0], self.p[1], target[0], target[1] )
+        return self.cable_segments
 
     def customize(self):
         self.tooltip = "Stand on me!"
@@ -135,6 +136,8 @@ class Chargeplate(Object):
 
         if(n_lidx!=self.l_idx):
             self.floor.sounds.play(self.floor.sounds.charging)
+            for cable in self.cable_segments:
+                cable.flash_color = [ 1.0,1.0,1.0,1.0 ]
         self.l_idx = n_lidx
 
 
@@ -152,6 +155,10 @@ class Chargeplate(Object):
             self.cv = 1.0
             self.charged = True
             self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="~charged~"))
+
+            for s in self.cable_segments:
+                self.floor.simple_tick_manager.tickables.remove(s)
+                s.flash_color = [ 1.0,1.0,1.0,1.0 ]
 
         return True
 

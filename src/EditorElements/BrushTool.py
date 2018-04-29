@@ -55,6 +55,15 @@ class BrushTool:
             BrushTool.x2 = WorldCursor.x+polyfill.dims[0]
             BrushTool.y2 = WorldCursor.y+polyfill.dims[1]
 
+        if "snap" in polyfill.__dict__ and polyfill.snap:
+            BrushTool.x1 = floor(BrushTool.x1 / polyfill.snap[0]) * polyfill.snap[0]
+            BrushTool.x2 = floor(BrushTool.x2 / polyfill.snap[0]) * polyfill.snap[0]
+            BrushTool.y1 = floor(BrushTool.y1 / polyfill.snap[1]) * polyfill.snap[1]
+            BrushTool.y2 = floor(BrushTool.y2 / polyfill.snap[1]) * polyfill.snap[1]
+
+        #if polyfill.align:
+        #    pass
+
 
     def render(app):
         if(BrushTool.is_defining()):

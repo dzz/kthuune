@@ -47,6 +47,8 @@ from .Locomotion.OnewayFadeSwitch import OnewayFadeSwitch
 from .RangedEnemyAttacks.BasicProjectile import BasicProjectile        
 from .Configuration.vconf import vconf
 from .LevelProps.Egg import Egg
+from .LevelProps.BlindArcade import BlindArcade
+from .LevelProps.TreeTrunk import TreeTrunk
 from .LevelProps.FloatingPlayer import FloatingPlayer
 from .LevelProps.DeadK import DeadK
 from .LevelProps.Lantern import Lantern
@@ -110,10 +112,10 @@ class AreaCompiler():
         self.generate_tiledata(df)
         df.area_switches = []
 
-        self.objects.extend( CableSegment.generate_cable(-30.0,0.0,30.0,0.0) )
-        self.objects.extend( CableSegment.generate_cable(0.0,-30.0,0.0,30.0) )
-        self.objects.extend( CableSegment.generate_cable(30.0,30.0,-30.0,-30.0) )
-        self.objects.extend( CableSegment.generate_cable(30.0,-30.0,-30.0,30.0) )
+        #self.objects.extend( CableSegment.generate_cable(-30.0,0.0,30.0,0.0) )
+        #self.objects.extend( CableSegment.generate_cable(0.0,-30.0,0.0,30.0) )
+        #self.objects.extend( CableSegment.generate_cable(30.0,30.0,-30.0,-30.0) )
+        #self.objects.extend( CableSegment.generate_cable(30.0,-30.0,-30.0,30.0) )
 
         self.objects.append(SpeechBubble.instance)
         for pd in ad["prop_defs"]:
@@ -318,6 +320,12 @@ class AreaCompiler():
 
             if od["key"] in ["bterm"]:
                 self.objects.extend(BTerm.parse(od,df))
+
+            if od["key"] in ["blindarcade"]:
+                self.objects.append(BlindArcade.parse(od,df))
+
+            if od["key"] in ["treetrunk"]:
+                self.objects.append(TreeTrunk.parse(od,df))
 
 
 

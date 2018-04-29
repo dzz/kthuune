@@ -4,14 +4,18 @@ from math import floor, atan2, hypot, sin, cos, pi
 from random import uniform, choice
 
 class CablePin(Object):
-    texture = BGL.assets.get('KT-forest/texture/registration')
+    texture = BGL.assets.get('KT-forest/texture/treeroots')
 
     def customize(self):
         self.texture = CablePin.texture
         self.visible = True
         self.buftarget = "underfloor"
-        self.size = [3.5,3.5]
-        self.tick_type = Object.TickTypes.STATIC
+        self.size = [10.5,10.5]
+        self.tick_type = Object.TickTypes.TICK_FOREVER
+        self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
+
+    def tick(self):
+        self.flash_color[3] *= 0.97
 
 class CableSegment(Object):
     texture = BGL.assets.get('KT-forest/texture/rootsegment')
@@ -40,7 +44,7 @@ class CableSegment(Object):
         mincr = pi / max_seg
 
         wt = 0.0
-        wtincr = ((5+uniform(1.0,3.0))*pi) / max_seg
+        wtincr = ((5+uniform(1.0,3.7))*pi) / max_seg
 
         for iter in range(0,max_seg-1):
 
@@ -78,6 +82,7 @@ class CableSegment(Object):
         return cum
 
     def tick(self):
+        self.flash_color[3] *= 0.8
         if choice([True,False,False,False]):
             return
         self.size[0] = self.basex * (1.0+(cos(self.w)*0.08))
@@ -91,6 +96,7 @@ class CableSegment(Object):
         #    (self.x1 + self.x2) / 2.0,
         #    (self.y1 + self.y2) / 2.0
         #]
+        self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
 
         self.p[0] = (self.x1 + self.x2) / 2.0
         self.p[1] = (self.y1 + self.y2) / 2.0
@@ -114,5 +120,6 @@ class CableSegment(Object):
         self.visible = True
         self.z_index = -9000
         self.w = CableSegment.wobble_idx
+        self.scale_uv = [ 0.5+uniform(0.0,1.2),1.0 ]
         CableSegment.wobble_idx += 0.9
 
