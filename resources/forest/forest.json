@@ -12,6 +12,7 @@
         ],
         "texture" : [
             { "name" : "registration", "filename" : "{package_path}/registration.png", "filtered" : false },
+            { "name" : "rootsegment", "filename" : "{package_path}/rootsegment.png", "filtered" : false },
             { "name" : "icon1", "filename" : "{package_path}/icon1.png", "filtered" : false },
             { "name" : "icon2", "filename" : "{package_path}/icon2.png", "filtered" : false },
             { "name" : "eglanblob1", "filename" : "{package_path}/eglanblob1.png", "filtered" : false },

@@ -14,7 +14,7 @@ class CablePin(Object):
         self.tick_type = Object.TickTypes.STATIC
 
 class CableSegment(Object):
-    texture = BGL.assets.get('KT-forest/texture/registration')
+    texture = BGL.assets.get('KT-forest/texture/rootsegment')
     next_x = 0.0
     wobble_idx = 0
 
@@ -32,7 +32,7 @@ class CableSegment(Object):
         dx/= l
         dy/= l
 
-        max_seg = (floor(l / 2.0))+1
+        max_seg = (floor(l / 3.7))+1
         mag = l / max_seg
 
 
