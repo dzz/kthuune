@@ -21,7 +21,7 @@ class CableSegment(Object):
     def generate_cable( x1, y1, x2, y2):
         print("GENERATING CABLE")
 
-        cum = [] 
+        cum = []
         cur_x = x1
         cur_y = y1
 
@@ -32,7 +32,7 @@ class CableSegment(Object):
         dx/= l
         dy/= l
 
-        max_seg = (floor(l / 4.0))+1
+        max_seg = (floor(l / 2.0))+1
         mag = l / max_seg
 
 
@@ -43,7 +43,6 @@ class CableSegment(Object):
         wtincr = ((5+uniform(1.0,3.0))*pi) / max_seg
 
         for iter in range(0,max_seg-1):
-    
 
             wmag = sin(midx)
 
@@ -56,7 +55,7 @@ class CableSegment(Object):
             cur_x = nx2
             cur_y = ny2
 
-            smod = ((sin(wt*0.5)*1.0)+2.0)*wmag
+            smod = ((sin(wt*0.5)*2.6)+2.0)*wmag
 
             cum.append( CableSegment( x1 = nx1, y1 = ny1, x2 = nx2, y2=ny2, smod=smod ) )
 
@@ -78,11 +77,12 @@ class CableSegment(Object):
         cum.append(CablePin(p =[x2,y2]))
         return cum
 
-        
     def tick(self):
-        self.size[0] = self.basex * (1.0+(cos(self.w-self.p[0]-self.p[1])*0.08))
-        self.size[1] = self.basey * (1.0+(sin(self.w+self.p[0]+self.p[1])*0.08))
-        self.w += 0.02
+        if choice([True,False,False,False]):
+            return
+        self.size[0] = self.basex * (1.0+(cos(self.w)*0.08))
+        self.size[1] = self.basey * (1.0+(sin(self.w)*0.08))
+        self.w += 0.07
         return True
 
     def customize(self):
@@ -102,7 +102,7 @@ class CableSegment(Object):
 
         self.size[0] = (hypot(dy,dx)/2.0) * 1.15
         self.size[1] = 1.0 + self.smod
-        self.basex = self.size[0]
+        self.basex = self.size[0] * 1.5
         self.basey = self.size[1]
 
         #self.size = [ 3.0+uniform(0.0,1.0), 3.0+uniform(0.0,1.0) ]
@@ -114,5 +114,5 @@ class CableSegment(Object):
         self.visible = True
         self.z_index = -9000
         self.w = CableSegment.wobble_idx
-        CableSegment.wobble_idx += 0.2
+        CableSegment.wobble_idx += 0.9
 

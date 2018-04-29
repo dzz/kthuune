@@ -18,4 +18,3 @@ class checker_floor:
         Factory.make_light( area, wsb.cx, wsb.cy, "shipfill" )
 
 
-        
