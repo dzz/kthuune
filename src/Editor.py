@@ -14,11 +14,14 @@ from .EditorElements.PolyFills.layer_map import layer_map
 from .ParallaxBackground import ParallaxBackground
 
 class Editor:
+    decorator_id = 0
     instance = None
     ui_fb = BGL.framebuffer.from_dims(960, 540)
     cursor_tex = BGL.assets.get('KT-player/texture/cursor')
+    decorators = BGL.assets.get('KT-forest/animation/decorators')
 
     def __init__(self):
+
         Editor.instance = self
 
         self.mouse_context = "camera"
@@ -159,6 +162,9 @@ class Editor:
             BrushTool.update_brush()
         pass
 
+    def get_decorator_str():
+        return Editor.decorators[ Editor.decorator_id ].animation_id
+
     def get_title_str(self):
         return "EDITOR. screen({0:0.2f},{1:0.2f}, world({2:0.2f},{3:0.2f})".format( self.nmx, self.nmy, self.wmx, self.wmy)
     def get_status_str(self):
@@ -174,7 +180,7 @@ class Editor:
             gup_count = LevelPreview.floor.gup_count
             ptlen = len(LevelPreview.floor.purging_tick_manager.tickables)
             stlen = len(LevelPreview.floor.simple_tick_manager.tickables)
-        return "LAYER:{0} GFX_1:{1} PTLEN:{2} STLEN:{3}".format( layername, gup_count, ptlen, stlen )
+        return "LAYER:{0} GFX_1:{1} PTLEN:{2} STLEN:{3}    DEC:{4}".format( layername, gup_count, ptlen, stlen, Editor.get_decorator_str() )
 
     def render(self):
 
@@ -222,6 +228,12 @@ class Editor:
         for brush in Brushes.selected_brushes:
             brush.group = x
 
+    def prev_decorator():
+        Editor.decorator_id = (Editor.decorator_id - 1) % len(Editor.decorators)
+
+    def next_decorator():
+        Editor.decorator_id = (Editor.decorator_id + 1) % len(Editor.decorators)
+
 
 BGL.keyboard.register_keydown_handler('p', World.reduce)
 BGL.keyboard.register_keydown_handler('r', Brushes.cycle_size)
@@ -251,3 +263,6 @@ BGL.keyboard.register_keydown_handler("7", lambda: Editor.set_group(7))
 BGL.keyboard.register_keydown_handler("8", lambda: Editor.set_group(8))
 BGL.keyboard.register_keydown_handler("9", lambda: Editor.set_group(9))
 
+
+BGL.keyboard.register_keydown_handler("comma", lambda: Editor.prev_decorator())
+BGL.keyboard.register_keydown_handler("period", lambda: Editor.next_decorator())

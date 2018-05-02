@@ -8,7 +8,8 @@
             { "name" : "chargeplate", "directory" : "{package_path}/discofloor/", "filtered" : false },
             { "name" : "hostage", "directory" : "{package_path}/hostage/", "filtered" : false },
             { "name" : "tumorcrab", "directory" : "{package_path}/tumorcrab/", "filtered" : true },
-            { "name" : "clouds_compressed", "directory" : "{package_path}/clouds_compressed/", "filtered" : true }
+            { "name" : "clouds_compressed", "directory" : "{package_path}/clouds_compressed/", "filtered" : true },
+            { "name" : "decorators", "directory" : "{package_path}/decorators/", "filtered" : true }
         ],
         "texture" : [
             { "name" : "registration", "filename" : "{package_path}/registration.png", "filtered" : false },

@@ -145,7 +145,7 @@ class Chargeplate(Object):
         if(self.mdist( self.floor.player)<2.27):
             self.cv += 0.03
             self.flash_color[3] = 0.0
-            #self.floor.create_object(Poof( p = list(self.p)))
+            self.floor.create_object(Poof( p = list(self.p)))
             #self.floor.objects.remove(self)
             #return False            
         else:
