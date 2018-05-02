@@ -49,6 +49,7 @@ from .Configuration.vconf import vconf
 from .LevelProps.Egg import Egg
 from .LevelProps.BlindArcade import BlindArcade
 from .LevelProps.TreeTrunk import TreeTrunk
+from .LevelProps.Decorator import Decorator
 from .LevelProps.FloatingPlayer import FloatingPlayer
 from .LevelProps.DeadK import DeadK
 from .LevelProps.Lantern import Lantern
@@ -326,6 +327,9 @@ class AreaCompiler():
 
             if od["key"] in ["treetrunk"]:
                 self.objects.append(TreeTrunk.parse(od,df))
+
+            if od["key"] in ["decorator"]:
+                self.objects.append(Decorator.parse(od,df))
 
 
 

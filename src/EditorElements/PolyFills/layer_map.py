@@ -8,7 +8,8 @@ class layer_map:
                 "wall",
                 "npc",
                 "decorator",
-                "hazards"
+                "hazards",
+                "tex_decorator"
             ]
 
     def get_layer_id(key):

@@ -24,6 +24,7 @@ class BrushTool:
         BrushTool.x1 = WorldCursor.x
         BrushTool.y1 = WorldCursor.y
         BrushTool.layer = app.layer
+        BrushTool.decorator_id = app.decorator_id
 
     def end_brush():
         if(BrushTool.x1-BrushTool.x2) == 0:

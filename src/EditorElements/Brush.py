@@ -15,10 +15,14 @@ class Brush:
         self.y2 = None 
         self.layer = 0
         self.group = 0
+        self.decorator_id = 0
         self.polyfill_key = Brush.template_polyfill
 
     def set_template_polyfill(key):
         Brush.template_polyfill = key
+
+    def should_render_texture_name(self):
+        return self.polyfill_key == 'decorator'
 
     def from_tool(tool):
         b = Brush()
@@ -27,6 +31,7 @@ class Brush:
         b.x2 = tool.x2
         b.y2 = tool.y2
         b.layer = tool.layer
+        b.decorator_id = tool.decorator_id
         return b
 
 

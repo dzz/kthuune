@@ -71,9 +71,15 @@ class Brushes:
                         cny*=60
                         cnx += 480
                         cny += 270
-                        label = "{0}:{1}({2})".format(brush.id, brush.polyfill_key, brush.group)
-                        BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny-8, [1.0,1.0,1.0])
-                        BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny, [0.0,0.0,0.0])
+
+                        if not brush.should_render_texture_name():
+                            label = "{0}({1})".format(brush.polyfill_key, brush.group)
+                            BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny-8, [1.0,1.0,1.0])
+                            BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny, [0.0,0.0,0.0])
+                        else:
+                            label = "*{0}*".format(app.type.decorators[ brush.decorator_id ].animation_id)
+                            BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny, [0.0,0.0,0.0])
+                            BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny+1, [0.0,1.0,0.0])
 
         with BGL.blendmode.alpha_over:
             Brushes.ui_fb.render_processed(BGL.assets.get("beagle-2d/shader/passthru"))
