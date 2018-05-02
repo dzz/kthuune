@@ -18,6 +18,13 @@ class Editor:
     ui_fb = BGL.framebuffer.from_dims(960, 540)
     cursor_tex = BGL.assets.get('KT-player/texture/cursor')
     decorators = BGL.assets.get('KT-forest/animation/decorators')
+    show_grid = True
+
+    def toggle_grid():
+        if Editor.show_grid:
+            Editor.show_grid = False
+        else:
+            Editor.show_grid = True
 
     def __init__(self):
 
@@ -201,8 +208,10 @@ class Editor:
 
         BGL.context.clear(0.0,0.0,0.0,0.0)
 
-        Grid.render(self)
-        #ParallaxBackground.render( (Grid.cx*2)*0.01 )
+        Grid.render(self) # i don't really know why ( i mean..i probably do...) but this is required to update the camera
+
+        if not Editor.show_grid:
+            ParallaxBackground.render( (Grid.cx*2)*0.1 )
 
         if(self.show_preview):
             LevelPreview.render(self)
@@ -255,7 +264,8 @@ BGL.keyboard.register_keydown_handler('w', Brushes.move_up)
 BGL.keyboard.register_keydown_handler('s', Brushes.move_down)
 BGL.keyboard.register_keydown_handler('f', Brushes.reflow)
 BGL.keyboard.register_keydown_handler('r', Brushes.collapse)
-BGL.keyboard.register_keydown_handler('g', Editor.LevelGenerate)
+#BGL.keyboard.register_keydown_handler('g', Editor.LevelGenerate)
+BGL.keyboard.register_keydown_handler('g', Editor.toggle_grid)
 
 BGL.keyboard.register_keydown_handler("0", lambda: Editor.set_group(0))
 BGL.keyboard.register_keydown_handler("1", lambda: Editor.set_group(1))
