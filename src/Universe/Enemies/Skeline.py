@@ -57,9 +57,37 @@ class Skeline(SnapEnemy):
         self.iframes = 0
         SnapEnemy.set_combat_vars(self)
         self.hp = 50
+        self.tooltip_time = choice([10,20,50,150,300])
+        self.next_tooltip = 250
         
 
     def tick(self):
+
+        self.tooltip_time = self.tooltip_time +1 
+
+        if self.tooltip_time > 200:
+            self.tooltip = None
+        if self.tooltip_time > self.next_tooltip:
+            self.next_tooltip = choice([250,200,333])
+            self.tooltip = choice([
+                #"come get me!",
+                #"you suck!",
+                #"i hate your face!",
+                #"i hate your sword!",
+                #"i am going to kill you!",
+                "hey, get blasted!",
+                "suck my eggs!",
+                "hasta lavsita... baby",
+                "!@#$!",
+                "eat my shorts",
+                "sinner!",
+                "blasphemer!"
+                #"hey, you can call me rip",
+                #"hey you can call me YOU'RE DEAD" 
+                ])
+            self.tooltip_time = 0
+
+
         if(self.floor.player.title_card.displaying()):
             return True
         if(SnapEnemy.handle_tick_disabled(self)):

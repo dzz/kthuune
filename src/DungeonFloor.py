@@ -29,6 +29,7 @@ import client.system.keyboard as keyboard
 Floor = createFloorClass( DFRenderer )
 class DungeonFloor( Floor ):
 
+    NO_SHADOWS = True #it's all caps coz its a hax
     def playing_genocide(self):
         return self.game_mode == 1
 
@@ -326,6 +327,9 @@ class DungeonFloor( Floor ):
         self.renderable_tooltips.extend(newtooltips)
 
     def tick(self):
+        if DungeonFloor.NO_SHADOWS:
+            self.light_occluders = []
+
         self.synch_tooltips()
         #def make_follower(enemy):
         #    def h():

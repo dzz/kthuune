@@ -211,7 +211,7 @@ class Editor:
         Grid.render(self) # i don't really know why ( i mean..i probably do...) but this is required to update the camera
 
         if not Editor.show_grid:
-            ParallaxBackground.render( (Grid.cx*2)*0.1 )
+            ParallaxBackground.render( (Grid.cx*2)*0.01 )
 
         if(self.show_preview):
             LevelPreview.render(self)
