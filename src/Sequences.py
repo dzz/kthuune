@@ -111,39 +111,34 @@ class Sequences:
             "VECTORLORD!",
             "You are needed...",
             "find your sword.",
-            "the contagion is spreading...",
-            "be good, VECTORLORD!"
         ]
         Elder.floor_script = [
             "(an elderbeast)"
         ]
         floor = Sequences.buildarea_default( Game, area_def, sequence )
-        Abilities.Sword = False
-        Abilities.Telekine = False
-        Abilities.Dash = False
+        #Abilities.Sword = False
+        #Abilities.Telekine = False
+        #Abilities.Dash = False
         return floor
 
     def buildarea_3(Game,area_def,sequence):
         floor = Sequences.buildarea_default( Game, area_def, sequence )
-        Abilities.Dash = True
+        #Abilities.Dash = True
         return floor
 
     def buildarea_4(Game,area_def,sequence):
         Elder.script = [
             "VECTORLORD,",
             "you are not yet at full strength...",
-            "I grant you,",
-            "TELEKINE powers.",
-            "Use this power to transport to a totem...",
-            "...or an enemy!",
-            "combine with sword attacks for CRITICAL DAMAGE."
+            "the contagion is spreading, you will need to use TELEKINE powers.",
+            "BEND TIME to reach WARP TOTEMS and inflict damage on ENEMIES!",
         ]
         Elder.floor_script = [
-            "(a funny elderbeast)",
-            "push (X) to TELEKINE"
+            "(an elderbeast)",
+            "(X) = TELEKINE"
         ]
         floor = Sequences.buildarea_default( Game, area_def, sequence )
-        Abilities.Telekine = True
+        #Abilities.Telekine = True
         return floor
 
          
