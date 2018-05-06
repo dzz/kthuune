@@ -116,14 +116,14 @@ class Sequences:
             "(an elderbeast)"
         ]
         floor = Sequences.buildarea_default( Game, area_def, sequence )
-        #Abilities.Sword = False
-        #Abilities.Telekine = False
-        #Abilities.Dash = False
+        Abilities.Sword = False
+        Abilities.Telekine = False
+        Abilities.Dash = False
         return floor
 
     def buildarea_3(Game,area_def,sequence):
         floor = Sequences.buildarea_default( Game, area_def, sequence )
-        #Abilities.Dash = True
+        Abilities.Dash = True
         return floor
 
     def buildarea_4(Game,area_def,sequence):
@@ -138,7 +138,7 @@ class Sequences:
             "(X) = TELEKINE"
         ]
         floor = Sequences.buildarea_default( Game, area_def, sequence )
-        #Abilities.Telekine = True
+        Abilities.Telekine = True
         return floor
 
          
