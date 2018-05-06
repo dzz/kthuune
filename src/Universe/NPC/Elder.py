@@ -25,10 +25,12 @@ class Elder(Object):
         self.z_index = 1
         self.sensed = False
         self.talking = False
-        self.script = [
-            "I see you, vectorlord",
-            "you must find your sword."
-        ]
+        #self.script = [
+        #    "I see you, vectorlord",
+        #    "you must find your sword."
+        #]
+        self.script = Elder.script
+        self.floor_script = Elder.floor_script
         self.script_item = -1
         self.script_t = 0
         self.script_char = 1
@@ -61,7 +63,7 @@ class Elder(Object):
             if(dst<30):
                 self.sensed = True
                 self.talking = True
-                SpeechBubble.instance.set_script(["(an elder)"],  self.p)
+                SpeechBubble.instance.set_script(self.floor_script,  self.p)
             ###    self.floor.player.set_hud_message("HELLO I TALK")
             ###    if self.floor.player.get_pad().button_down( BGL.gamepads.buttons.X ):
             ###        pass

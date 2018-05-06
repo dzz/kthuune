@@ -5,25 +5,26 @@ from os.path import basename, splitext
 from .DungeonFloor import DungeonFloor
 from .Universe.AreaLoader import get_area_data
 from .Abilities import Abilities
+from .Universe.NPC.Elder import Elder
 
 class Sequences:
     titles = {
-        "1" : "First, we cut.",
-        "2" : "Then, we cut some more.",
-        "3" : "THE UNNAMED SWORD",
-        "4" : "PALACE OF PHASE",
-        "5" : "EMERGE, THE SWAN",
-        "6" : "NIGHT TERROR",
-        "7" : "MECHANICAL IN DEFEAT",
-        "8" : "RESTLESS SPIRITS",
-        "9" : "GIBBOUS MOON",
-        "A0" : "FORTUITOUS SHATTERING",
-        "A1" : "A FETAL MEMORY",
-        "A2" : "LURKING IMMEMORIAL",
-        "A3" : "MANIFEST SHUDDER",
-        "A4" : "VERSIONLESS MOMENT",
-        "A5" : "FUNCTIONAL COLLAPSE",
-        "A6" : "DIGITAL OCEANS"
+        "1" : "First, we cut...",
+        "2" : "...Then, we cut some more.",
+        "3" : "Runners high",
+        "4" : "Kinetic Energy",
+        "5" : "",
+        "6" : "",
+        "7" : "",
+        "8" : "",
+        "9" : "",
+        "A0" : "",
+        "A1" : "",
+        "A2" : "",
+        "A3" : "",
+        "A4" : "",
+        "A5" : "",
+        "A6" : ""
     }
     found = []
     current_index = 0
@@ -106,8 +107,43 @@ class Sequences:
         return floor
 
     def buildarea_1(Game,area_def,sequence):
+        Elder.script = [
+            "VECTORLORD!",
+            "You are needed...",
+            "find your sword.",
+            "the contagion is spreading...",
+            "be good, VECTORLORD!"
+        ]
+        Elder.floor_script = [
+            "(an elderbeast)"
+        ]
         floor = Sequences.buildarea_default( Game, area_def, sequence )
         Abilities.Sword = False
+        Abilities.Telekine = False
+        Abilities.Dash = False
+        return floor
+
+    def buildarea_3(Game,area_def,sequence):
+        floor = Sequences.buildarea_default( Game, area_def, sequence )
+        Abilities.Dash = True
+        return floor
+
+    def buildarea_4(Game,area_def,sequence):
+        Elder.script = [
+            "VECTORLORD,",
+            "you are not yet at full strength...",
+            "I grant you,",
+            "TELEKINE powers.",
+            "Use this power to transport to a totem...",
+            "...or an enemy!",
+            "combine with sword attacks for CRITICAL DAMAGE."
+        ]
+        Elder.floor_script = [
+            "(a funny elderbeast)",
+            "push (X) to TELEKINE"
+        ]
+        floor = Sequences.buildarea_default( Game, area_def, sequence )
+        Abilities.Telekine = True
         return floor
 
          

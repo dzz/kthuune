@@ -1037,7 +1037,7 @@ class KPlayer(Player):
             if not pad.button_down( BGL.gamepads.buttons.B ):
                 self.can_backstep = True
 
-            if(pad.button_down( BGL.gamepads.buttons.B ) and self.can_backstep and self.sword.state == Sword.STATE_IDLE):
+            if(Abilities.Dash and pad.button_down( BGL.gamepads.buttons.B ) and self.can_backstep and self.sword.state == Sword.STATE_IDLE):
 
                 if(self.stimer > 30 ):
                     if(self.run_stamina>5):
@@ -1052,19 +1052,15 @@ class KPlayer(Player):
                             self.link_count = 1
 
                         self.flash_color = [1.0,1.0,1.0,1.0]
-                        #KSounds.play( KSounds.dash )
+                        KSounds.play( KSounds.dash )
                     
-
-
-                
-
             calc_speed = self.speed
 
             
             if(self.run_stamina<1.0):
                 self.flash_color = [ 1.0,0.6,0.6,1.0 ]
                 calc_speed *= 0.2
-            if(pad.button_down( BGL.gamepads.buttons.RIGHT_BUMPER)):
+            if(pad.button_down( BGL.gamepads.buttons.RIGHT_BUMPER) and Abilities.Dash):
                 if(self.run_stamina>0.0):
                     self.running = True
                     self.stamina_recharge_buffer = 10.0
