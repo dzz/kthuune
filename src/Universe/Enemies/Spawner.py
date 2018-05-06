@@ -16,6 +16,7 @@ class Spawner(Object):
         self.color = [ 0.0,0.0,1.0,1.0 ]
         self.fr = 0.0
         self.fv = uniform(0.03,0.08)
+        self.tooltip_layout = 1
         
 
     def spawn(self):
@@ -48,6 +49,9 @@ class Spawner(Object):
             self.floor.remove_object(self)
             self.spawn()
             return False
+        else:
+            self.tooltip_layout = 1
+            self.tooltip = "respawning {0} in {1:.2f}".format( self.loser, len(Spawner.textures)-self.fr )
         self.texture = Spawner.textures[floor(self.fr)]
         return True
 

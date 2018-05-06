@@ -12,6 +12,7 @@
             { "name" : "decorators", "directory" : "{package_path}/decorators/", "filtered" : false }
         ],
         "texture" : [
+            { "name" : "owl", "filename" : "{package_path}/owl.png", "filtered" : false },
             { "name" : "registration", "filename" : "{package_path}/registration.png", "filtered" : false },
             { "name" : "blindarcade", "filename" : "{package_path}/blindarcade.png", "filtered" : false },
             { "name" : "treetrunk", "filename" : "{package_path}/treetrunk.png", "filtered" : false },

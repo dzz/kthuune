@@ -5,7 +5,7 @@ import audio
 
 def real_start_game():
     Menu.Game.main_menu = False
-    audio.baudy_play_music( BGL.assets.get("KT-player/path/gameplay1"))
+    audio.baudy_play_music( BGL.assets.get("KT-player/path/ship_music"))
     Menu.initialized = False
 
 def start_game():

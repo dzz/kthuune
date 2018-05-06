@@ -6,6 +6,8 @@ from ..LevelProps.CableSegment import CableSegment
 
 from ..LevelEffects.Poof import Poof
 from ..LevelEffects.AttackInfo import AttackInfo
+from ..Particles.SplatterParticle import SplatterParticle
+from ..LevelEffects.Explosion import Explosion
 
 class Chargeplate(Object):
     PLATES = 0
@@ -79,6 +81,16 @@ class Chargeplate(Object):
                     break
 
             if check:
+                if self.group in self.floor.group_to_owl:
+                    owl = self.floor.group_to_owl[self.group]
+                    owl.visible = False
+                    self.floor.sounds.play( choice([ self.floor.sounds.enemy_killed, self.floor.sounds.enemy_killed2 ]) )
+                    self.floor.create_object(Explosion(p=list(owl.p)))
+                    for x in range(0,20):
+                        spltr = SplatterParticle( p = list(owl.p), size = [ 5.0,5.0],rad = uniform(-3.14,3.14))
+                        self.floor.create_object(spltr)
+                    
+
                 for chargeplate in self.floor.chargeplates:
                     if chargeplate.group == self.group + 1:
                         if not(chargeplate.visible):
@@ -138,6 +150,8 @@ class Chargeplate(Object):
             self.floor.sounds.play(self.floor.sounds.charging)
             for cable in self.cable_segments:
                 cable.flash_color = [ 1.0,1.0,1.0,1.0 ]
+            if self.group in self.floor.group_to_owl:
+                self.floor.group_to_owl[self.group].flash_color = [ 0.0,1.0,0.0,1.0]
         self.l_idx = n_lidx
 
 

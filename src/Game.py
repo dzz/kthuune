@@ -545,7 +545,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         
         if self.floor.playing_genocide() and self.genocide_trigger_available:
             passed_genocide = True
-            for enemy in self.floor.snap_enemies:
+            merged =self.floor.snap_enemies + self.floor.suspended_enemies
+            for enemy in merged:
                 if enemy.snap_type == 1:
                     if not enemy.skips_genocide():
                         passed_genocide = False

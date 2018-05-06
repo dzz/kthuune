@@ -88,6 +88,8 @@ class CableSegment(Object):
         self.size[0] = self.basex * (1.0+(cos(self.w)*0.08))
         self.size[1] = self.basey * (1.0+(sin(self.w)*0.08))
         self.w += 0.07
+
+        self.rad += sin(self.w)*0.01
         return True
 
     def customize(self):
@@ -110,6 +112,7 @@ class CableSegment(Object):
         self.size[1] = 1.0 + self.smod
         self.basex = self.size[0] * 1.5
         self.basey = self.size[1]
+
 
         #self.size = [ 3.0+uniform(0.0,1.0), 3.0+uniform(0.0,1.0) ]
         self.buftarget = "underfloor"

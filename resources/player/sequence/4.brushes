@@ -9,7 +9,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 -6
 -9
@@ -18,7 +18,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 -7
 -2
@@ -27,7 +27,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 -3
 -2
@@ -36,7 +36,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 0
 0
@@ -45,7 +45,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 2
 -6
@@ -54,7 +54,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 5
 -2
@@ -63,7 +63,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 5
 -8
@@ -72,7 +72,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 8
 -3
@@ -81,7 +81,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 -10
 -4
@@ -90,7 +90,7 @@ BRUSH
 playerstart
 0
 0
-False
+True
 BRUSH
 5
 -16
@@ -108,7 +108,7 @@ BRUSH
 telekine
 0
 4
-False
+True
 BRUSH
 15
 -8
@@ -117,7 +117,7 @@ BRUSH
 telekine
 0
 4
-False
+True
 BRUSH
 3
 -12
@@ -126,7 +126,7 @@ BRUSH
 telekine
 0
 4
-False
+True
 BRUSH
 15
 -12
@@ -135,7 +135,7 @@ BRUSH
 telekine
 0
 4
-False
+True
 BRUSH
 8
 -7
@@ -144,7 +144,7 @@ BRUSH
 elder
 0
 4
-False
+True
 BRUSH
 -2
 -18
@@ -153,7 +153,7 @@ BRUSH
 decorator
 0
 2
-False
+True
 BRUSH
 15
 -16
@@ -162,7 +162,7 @@ BRUSH
 telekine
 0
 2
-False
+True
 BRUSH
 3
 -16
@@ -171,7 +171,7 @@ BRUSH
 telekine
 0
 2
-False
+True
 BRUSH
 3
 -20
@@ -180,7 +180,7 @@ BRUSH
 telekine
 0
 2
-False
+True
 BRUSH
 15
 -20
@@ -189,7 +189,7 @@ BRUSH
 telekine
 0
 2
-False
+True
 BRUSH
 7
 -23
@@ -198,7 +198,7 @@ BRUSH
 telekine
 0
 2
-False
+True
 BRUSH
 11
 -23
@@ -207,7 +207,7 @@ BRUSH
 telekine
 0
 2
-False
+True
 BRUSH
 21
 -8
@@ -216,7 +216,7 @@ BRUSH
 platform_floor
 0
 2
-False
+True
 BRUSH
 23
 -10
@@ -225,7 +225,7 @@ BRUSH
 platform_floor
 0
 2
-False
+True
 BRUSH
 21
 -7
@@ -234,7 +234,7 @@ BRUSH
 totem
 0
 2
-False
+True
 BRUSH
 24
 -9
@@ -243,7 +243,7 @@ BRUSH
 skeline
 0
 2
-False
+True
 BRUSH
 29
 -9
@@ -252,7 +252,7 @@ BRUSH
 skeline
 0
 2
-False
+True
 BRUSH
 24
 -5
@@ -261,7 +261,7 @@ BRUSH
 skeline
 0
 2
-False
+True
 BRUSH
 29
 -5
@@ -270,7 +270,7 @@ BRUSH
 skeline
 0
 2
-False
+True
 BRUSH
 0
 3
@@ -279,7 +279,7 @@ BRUSH
 decorator
 0
 3
-False
+True
 BRUSH
 8
 2
@@ -288,7 +288,7 @@ BRUSH
 decorator
 0
 3
-False
+True
 BRUSH
 13
 -3
@@ -297,7 +297,7 @@ BRUSH
 decorator
 0
 3
-False
+True
 BRUSH
 23
 -1
@@ -306,7 +306,7 @@ BRUSH
 decorator
 0
 3
-False
+True
 BRUSH
 21
 -4
@@ -315,4 +315,13 @@ BRUSH
 decorator
 0
 3
-False
+True
+BRUSH
+18
+-21
+29
+-10
+decorator
+0
+9
+True

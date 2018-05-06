@@ -12,6 +12,7 @@ from .EditorElements.LevelPreview import LevelPreview
 from .EditorElements.WorldCursor import WorldCursor
 from .EditorElements.PolyFills.layer_map import layer_map
 from .ParallaxBackground import ParallaxBackground
+from .Abilities import Abilities
 
 class Editor:
     instance = None
@@ -163,6 +164,9 @@ class Editor:
                 self.mouse_context = "camera"
 
     def tick(self):
+        Abilities.Telekine = True
+        Abilities.Dash = True
+        
         LevelPreview.tick(self)
         self.update_mouse_position()
         if BrushTool.is_defining():

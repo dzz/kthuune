@@ -67,6 +67,7 @@ from .Destructables.Crystal import Crystal
 from .Destructables.Slime import Slime
 from .Interaction.Door import Door
 from .NPC.Elder import Elder
+from .NPC.Owl import Owl
 from .NPC.Hostage import Hostage
 from .Interaction.Chargeplate import Chargeplate
 from .Decorators.TreeTop import TreeTop
@@ -230,6 +231,9 @@ class AreaCompiler():
 
             if od["key"] in [ "acolyte" ]:
                 self.objects.append(Acolyte.parse(od,df ))
+
+            if od["key"] in [ "owl" ]:
+                self.objects.append(Owl.parse(od,df ))
 
             if od["key"] in [ "stork" ]:
                 self.objects.append(Stork.parse(od,df ))

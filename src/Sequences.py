@@ -15,7 +15,7 @@ class Sequences:
         "4" : "Kinetic Energy",
         "5" : "Feathers in the wind",
         "6" : "Telephone Pole",
-        "7" : "",
+        "7" : "Not what it seems...",
         "8" : "",
         "9" : "",
         "A0" : "",
@@ -113,7 +113,7 @@ class Sequences:
             "find your sword.",
         ]
         Elder.floor_script = [
-            "(an elderbeast)"
+            "(elderbeast)"
         ]
         floor = Sequences.buildarea_default( Game, area_def, sequence )
         Abilities.Sword = False
@@ -134,11 +134,24 @@ class Sequences:
             "BEND TIME to reach WARP TOTEMS and inflict damage on ENEMIES!",
         ]
         Elder.floor_script = [
-            "(an elderbeast)",
+            "(elderbeast)",
             "(X) = TELEKINE"
         ]
         floor = Sequences.buildarea_default( Game, area_def, sequence )
         Abilities.Telekine = True
         return floor
+
+    def buildarea_7(Game,area_def,sequence):
+        Elder.script = [
+            "An ancient virus...",
+            "...casting a field of resurrection!"
+        ]
+        Elder.floor_script = [
+            "(elderbeast)",
+        ]
+        floor = Sequences.buildarea_default( Game, area_def, sequence )
+        Abilities.Telekine = True
+        return floor
+
 
          

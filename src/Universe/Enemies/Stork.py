@@ -104,6 +104,7 @@ class Stork(SnapEnemy):
                 self.state = Stork.STATE_LEAPING
                 self.physics_suspended = True
                 self.floor.snap_enemies.remove(self)
+                self.floor.suspended_enemies.append(self)
 
         if(self.state == Stork.STATE_LEAPING):
             self.fire_idx = 0
@@ -131,6 +132,7 @@ class Stork(SnapEnemy):
                 self.physics_suspended = False
                 if not self in self.floor.snap_enemies:
                     self.floor.snap_enemies.append(self)
+                    self.floor.suspended_enemies.remove(self)
                 if(self.stimer % 15 == 0):
                     self.fire_circle()
                     self.fire_idx = self.fire_idx + 1

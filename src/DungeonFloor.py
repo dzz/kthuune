@@ -39,6 +39,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "group_to_owl" : {},
             "renderable_tooltips" : [],
             "genocide_flash_timeout" : 60.0,
             "genocide_show_seconds" : 0.0,
@@ -69,6 +70,7 @@ class DungeonFloor( Floor ):
             "freeze_delay" : 0,
             "doors" : [],
             "snap_enemies" : [],
+            "suspended_enemies" : [],
             "enemies" : [],
             "using_tilemap" : True,
             "tilescale" : 3,
@@ -427,7 +429,10 @@ class DungeonFloor( Floor ):
         return self.light_occluders
 
     def get_owl_p(self,idx = 0 ):
-        return ( 0.0,0.0 )        
+        if not idx in self.group_to_owl:
+            return ( 0.0,0.0 )        
+        else:
+            return self.group_to_owl[idx].p
 
 
 def get_DF():
