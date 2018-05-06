@@ -4,10 +4,11 @@ from os.path import basename, splitext
 
 from .DungeonFloor import DungeonFloor
 from .Universe.AreaLoader import get_area_data
+from .Abilities import Abilities
 
 class Sequences:
     titles = {
-        "1" : "BLASPHEME THY WAY",
+        "1" : "First, we cut.",
         "2" : "AMONG CYCLOPEAN FOES",
         "3" : "THE UNNAMED SWORD",
         "4" : "PALACE OF PHASE",
@@ -50,9 +51,10 @@ class Sequences:
         buildername = "{0}_{1}".format("buildarea",sequence)
 
         if buildername in dir(Sequences):
-            return getattr(Seqences,buildername)(Game,area_def,sequence)
+            return getattr(Sequences,buildername)(Game,area_def,sequence)
         else:
              return Sequences.buildarea_default(Game,area_def,sequence)
+
 
 
     def buildarea_default(Game,area_def, sequence):
@@ -101,6 +103,11 @@ class Sequences:
             )
 
         floor.game = Game
+        return floor
+
+    def buildarea_1(Game,area_def,sequence):
+        floor = Sequences.buildarea_default( Game, area_def, sequence )
+        Abilities.Sword = False
         return floor
 
          

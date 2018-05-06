@@ -378,6 +378,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
 
     def next_sequence(self, advance = True ):
+
         self.genocide_trigger_available = True
         self.player.sequence_kills = 0
         if(advance):
@@ -581,7 +582,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         g = 0.0
         if(self.floor.playing_genocide()):
             if(self.genocide_trigger_available):
-                g = 1.0
+                #g = 1.0
+                g = 0.2
         self.rg = g*0.3 + (self.rg*0.7)
         self.rs = s*0.3 + (self.rs*0.7)
         self.rt = t*0.1 + (self.rt*0.9)

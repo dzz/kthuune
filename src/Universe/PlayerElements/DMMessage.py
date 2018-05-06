@@ -15,17 +15,18 @@ class DMMessage():
         self.char_s = 0.08
             
     def render(self, index, log_size):
+        pass
 
-        fpi = (index+1) / log_size
-        shader_params = {
-            "texBuffer"            : self.buffer,
-            "translation_local"    : [ 0, 0 - float(index)*1.5 ],
-            "scale_local"          : [ (self.width*self.char_s)+(fpi*0.2),-1*self.char_s ],
-            "translation_world"    : [ 0.0,-4.5+(fpi*0.2) ],
-            "scale_world"          : [ 1.0,1.0],
-            "view"                 : Hud.view,
-            "rotation_local"       : 0.0,
-            "filter_color"         : [ fpi ,1.0-fpi,fpi,fpi],
-            "uv_translate"         : [ 0,0 ] }
-        DMMessage.primitive.render_shaded( DMMessage.shader, shader_params )
+        #fpi = (index+1) / log_size
+        #shader_params = {
+        #    "texBuffer"            : self.buffer,
+        #    "translation_local"    : [ 0, 0 - float(index)*1.5 ],
+        #    "scale_local"          : [ (self.width*self.char_s)+(fpi*0.2),-1*self.char_s ],
+        #    "translation_world"    : [ 0.0,-4.5+(fpi*0.2) ],
+        #    "scale_world"          : [ 1.0,1.0],
+        #    "view"                 : Hud.view,
+        #    "rotation_local"       : 0.0,
+        #    "filter_color"         : [ fpi ,1.0-fpi,fpi,fpi],
+        #    "uv_translate"         : [ 0,0 ] }
+        #DMMessage.primitive.render_shaded( DMMessage.shader, shader_params )
         

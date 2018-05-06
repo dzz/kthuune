@@ -258,11 +258,12 @@ class AreaCompiler():
                     self.objects.append(SoftwarePickup.parse(od,df))
 
             if od["key"] in ["sword_pickup" ]:
-                if not Abilities.Sword:
-                    self.objects.append(SwordPickup.parse(od,df))
-                else:
-                    for x in range(0,3):
-                        self.objects.append(Skeline.parse(od,df))
+                self.objects.append(SwordPickup.parse(od,df))
+                #if not Abilities.Sword:
+                #    self.objects.append(SwordPickup.parse(od,df))
+                #else:
+                #    for x in range(0,3):
+                #        self.objects.append(Skeline.parse(od,df))
 
 
             if od["key"] in ["firepot", "firepot_right" ]:

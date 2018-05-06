@@ -62,8 +62,10 @@ class Skeline(SnapEnemy):
         
 
     def tick(self):
-
-        self.tooltip_time = self.tooltip_time +1 
+        if(self.triggered):
+            self.tooltip_time = self.tooltip_time +1 
+        else:
+            self.tooltip = None
 
         if self.tooltip_time > 200:
             self.tooltip = None
@@ -71,17 +73,17 @@ class Skeline(SnapEnemy):
             self.next_tooltip = choice([250,200,333])
             self.tooltip = choice([
                 #"come get me!",
-                #"you suck!",
+                "you suck!",
                 #"i hate your face!",
                 #"i hate your sword!",
                 #"i am going to kill you!",
                 "hey, get blasted!",
                 "suck my eggs!",
-                "hasta lavsita... baby",
+                #"hasta lavsita... baby",
                 "!@#$!",
                 "eat my shorts",
-                "sinner!",
-                "blasphemer!"
+                #"sinner!",
+                #"blasphemer!"
                 #"hey, you can call me rip",
                 #"hey you can call me YOU'RE DEAD" 
                 ])
