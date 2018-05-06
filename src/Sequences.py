@@ -11,10 +11,10 @@ class Sequences:
     titles = {
         "1" : "First, we cut...",
         "2" : "...Then, we cut some more.",
-        "3" : "Runners high",
+        "3" : "Runner's High",
         "4" : "Kinetic Energy",
-        "5" : "",
-        "6" : "",
+        "5" : "Feathers in the wind",
+        "6" : "Telephone Pole",
         "7" : "",
         "8" : "",
         "9" : "",

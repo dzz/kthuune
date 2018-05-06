@@ -3,6 +3,7 @@ from Beagle import API as BGL
 from math import sin,cos
 from ..LevelProps.SpeechBubble import SpeechBubble
 from random import choice
+from math import floor
 
 class Elder(Object):
     texture = BGL.assets.get('KT-player/texture/elder0000')
@@ -40,6 +41,11 @@ class Elder(Object):
         if self.talking:
             msg = self.script[self.script_item]
             self.tooltip = msg[0:self.script_char]
+
+            spaces = len(msg) - self.script_char
+            for i in range(0,floor(spaces/2)):
+                self.tooltip = " " + self.tooltip + " "
+                
             if(self.script_t%4==0):
                 if(self.script_char < len(msg)):
                     self.script_char += 1
@@ -51,7 +57,7 @@ class Elder(Object):
                     self.talking = False
                     self.tooltip = None
                 else:
-                    self.script_t = len(self.script[self.script_item]) * 12
+                    self.script_t = len(self.script[self.script_item]) * 9
                 
 
         if not self.sensed:
