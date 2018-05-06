@@ -9,7 +9,7 @@ from .Abilities import Abilities
 class Sequences:
     titles = {
         "1" : "First, we cut.",
-        "2" : "AMONG CYCLOPEAN FOES",
+        "2" : "Then, we cut some more.",
         "3" : "THE UNNAMED SWORD",
         "4" : "PALACE OF PHASE",
         "5" : "EMERGE, THE SWAN",
