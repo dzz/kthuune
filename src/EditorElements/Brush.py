@@ -15,8 +15,8 @@ class Brush:
         self.y2 = None 
         self.layer = 0
         self.group = 0
+        self.self_lit = False
         self.decorator_id = 0
-        self.lit = False
         self.polyfill_key = Brush.template_polyfill
 
     def set_template_polyfill(key):

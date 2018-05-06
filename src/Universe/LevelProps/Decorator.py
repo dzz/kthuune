@@ -22,6 +22,11 @@ class Decorator(Object):
             texture = Decorator.textures[od["meta"]["decorator_id"]]
         else:
             texture = Decorator.textures[0]
+        if "self_lit" in od["meta"]:
+            if od["meta"]["self_lit"]:
+                light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
+            else:
+                light_type = Object.LightTypes.NONE
 
         return Decorator(
             p=[cx,cy],
@@ -30,5 +35,6 @@ class Decorator(Object):
             tick_type = Object.TickTypes.STATIC,
             visible = True,
             buftarget = "floor",
-            texture = texture
+            texture = texture,
+            light_type = light_type
             )

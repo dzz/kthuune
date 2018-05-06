@@ -77,7 +77,11 @@ class Brushes:
                             BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny-8, [1.0,1.0,1.0])
                             BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny, [0.0,0.0,0.0])
                         else:
-                            label = "*{0}*".format(app.type.decorators[ brush.decorator_id ].animation_id)
+                            if(brush.self_lit):
+                                l = "L"
+                            else:
+                                l = ""
+                            label = "*{0}*{1}".format(app.type.decorators[ brush.decorator_id ].animation_id,l )
                             BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny, [0.0,0.0,0.0])
                             BGL.lotext.render_text_pixels( label, cnx-(len(label)*4), cny+1, [0.0,1.0,0.0])
 

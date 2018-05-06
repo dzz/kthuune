@@ -19,6 +19,8 @@ from .PolyFills.playerstart import playerstart
 from .PolyFills.blindarcade import blindarcade
 from .PolyFills.treetrunk import treetrunk
 from .PolyFills.decorator import decorator
+from .PolyFills.elder import elder
+from .PolyFills.stork import stork
 
 class PolyFillList:
     cached_list = None
@@ -53,7 +55,9 @@ class PolyFillList:
                 "playerstart" : playerstart,
                 "blindarcade" : blindarcade,
                 "treetrunk" : treetrunk,
-                "decorator" : decorator
+                "decorator" : decorator,
+                "elder" : elder,
+                "stork" : stork
             }
             PolyFillList.cached_list = polyfill_map
         return PolyFillList.cached_list

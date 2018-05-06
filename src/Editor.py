@@ -68,7 +68,6 @@ class Editor:
         BrushFile.sequence = seqid
         Brushes.load()
         BrushFile.sequence = None
-
         
     def save(self):
         Brushes.save()
@@ -248,6 +247,11 @@ class Editor:
         for brush in Brushes.selected_brushes:
             brush.decorator_id = Editor.instance.decorator_id
 
+    def toggle_lit():
+        for brush in Brushes.selected_brushes:
+            brush.self_lit = not brush.self_lit
+        
+
 
 BGL.keyboard.register_keydown_handler('p', World.reduce)
 BGL.keyboard.register_keydown_handler('r', Brushes.cycle_size)
@@ -266,6 +270,7 @@ BGL.keyboard.register_keydown_handler('f', Brushes.reflow)
 BGL.keyboard.register_keydown_handler('r', Brushes.collapse)
 #BGL.keyboard.register_keydown_handler('g', Editor.LevelGenerate)
 BGL.keyboard.register_keydown_handler('g', Editor.toggle_grid)
+BGL.keyboard.register_keydown_handler('l', Editor.toggle_lit)
 
 BGL.keyboard.register_keydown_handler("0", lambda: Editor.set_group(0))
 BGL.keyboard.register_keydown_handler("1", lambda: Editor.set_group(1))

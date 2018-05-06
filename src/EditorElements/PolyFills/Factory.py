@@ -72,6 +72,26 @@ class Factory:
         area.add_line("0") #width
         area.add_line("0") #height
 
+    def make_elder( area, x, y, group):
+        area.add_line("OBJECT")
+        area.add_line("elder") #object type
+        area.add_line("{0}".format(x))
+        area.add_line("{0}".format(y)) 
+        area.add_line(json.dumps({"group":group}))
+        area.add_line("False") #is region
+        area.add_line("0") #width
+        area.add_line("0") #height
+
+    def make_stork( area, x, y, group):
+        area.add_line("OBJECT")
+        area.add_line("stork") #object type
+        area.add_line("{0}".format(x))
+        area.add_line("{0}".format(y)) 
+        area.add_line(json.dumps({"group":group}))
+        area.add_line("False") #is region
+        area.add_line("0") #width
+        area.add_line("0") #height
+
     def make_cleric( area, x, y, group):
         area.add_line("OBJECT")
         area.add_line("cleric") #object type
@@ -208,12 +228,12 @@ class Factory:
         area.add_line("{0}".format(x2)) #w/h ... but we're abusing it for a position
         area.add_line("{0}".format(y2)) 
 
-    def make_decorator( area, decorator_id, x1,y1,x2,y2):
+    def make_decorator( area, decorator_id, x1,y1,x2,y2, self_lit):
         area.add_line("OBJECT")
         area.add_line("decorator") #object type
         area.add_line("{0}".format(x1))
         area.add_line("{0}".format(y1)) 
-        area.add_line(json.dumps({"decorator_id":decorator_id})) #meta line
+        area.add_line(json.dumps({"decorator_id":decorator_id, "self_lit":self_lit})) #meta line
         area.add_line("True") #is region
         area.add_line("{0}".format(x2)) #w/h ... but we're abusing it for a position
         area.add_line("{0}".format(y2)) 
