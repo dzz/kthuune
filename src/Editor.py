@@ -70,6 +70,12 @@ class Editor:
         Brushes.load()
         BrushFile.sequence = None
         
+    def rebuild_sequences(self,seqs):
+        for seq in seqs:
+            self.load_sequence(seq)
+            World.reduce()
+            self.build_sequence(seq)
+
     def save(self):
         Brushes.save()
     

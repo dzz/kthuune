@@ -15,9 +15,9 @@ class Sequences:
         "4" : "Kinetic Energy",
         "5" : "Feathers in the wind",
         "6" : "Telephone Pole",
-        "7" : "Not what it seems...",
-        "8" : "",
-        "9" : "",
+        "7" : "Not what they seem...",
+        "8" : "Faraday Cage",
+        "9" : "Clerical Error",
         "A0" : "",
         "A1" : "",
         "A2" : "",
@@ -150,7 +150,17 @@ class Sequences:
             "(elderbeast)",
         ]
         floor = Sequences.buildarea_default( Game, area_def, sequence )
-        Abilities.Telekine = True
+        return floor
+
+    def buildarea_9(Game,area_def,sequence):
+        Elder.script = [
+            "Devotees of corruption,",
+            "...they must be taken down in groups!"
+        ]
+        Elder.floor_script = [
+            "(elderbeast)",
+        ]
+        floor = Sequences.buildarea_default( Game, area_def, sequence )
         return floor
 
 

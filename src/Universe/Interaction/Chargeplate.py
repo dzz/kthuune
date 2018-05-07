@@ -24,6 +24,7 @@ class Chargeplate(Object):
 
         if(o.group!=0):
             o.visible = False
+            o.light_type = Object.LightTypes.NONE
         return o
         
 
