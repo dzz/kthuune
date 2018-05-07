@@ -287,20 +287,21 @@ class KPlayer(Player):
 
 
     def pump_timer(self,key):
-        if key=='skeline':
-            self.life_timer += 450
-        if key=='chargeplate':
-            self.life_timer += 300
-        if key=='totem':
-            self.life_timer += 20
-        if key=="completion":
-            self.life_timer += floor(self.completion_bonus)
-            self.completion_bonus *= 1.08
-        if key=="death":
-            self.life_timer -= 500
-            self.completion_bonus*= 0.9
-        if key=="injured":
-            self.life_timer -= 75
+        pass
+        #if key=='skeline':
+        #    self.life_timer += 450
+        #if key=='chargeplate':
+        #    self.life_timer += 300
+        #if key=='totem':
+        #    self.life_timer += 20
+        #if key=="completion":
+        #    self.life_timer += floor(self.completion_bonus)
+        #    self.completion_bonus *= 1.08
+        #if key=="death":
+        #    self.life_timer -= 500
+        #    self.completion_bonus*= 0.9
+        #if key=="injured":
+        #    self.life_timer -= 75
 
 
     def add_sequence_kill(self):
@@ -493,7 +494,10 @@ class KPlayer(Player):
                 #    BGL.lotext.render_text_pixels("CLEAR THE INFECTION".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
                 #else:
                 #    BGL.lotext.render_text_pixels("FIND THE SWITCHES".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
-                #BGL.lotext.render_text_pixels("LIFETIME:{0}".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
+
+                x = uniform(0.8,1.0)
+                BGL.lotext.render_text_pixels("{0}".format(self.disp_life_timer), 3,3,[0.0,0.0,0.0] )
+                BGL.lotext.render_text_pixels("{0}".format(self.disp_life_timer), 2,2,[x,x,x] )
                 pass
 
         with BGL.context.render_target( self.hud_buffer ):
@@ -609,6 +613,9 @@ class KPlayer(Player):
     def link_floor(self):
         self.floor.create_object( self.sword )
         self.floor.create_object( self.slash )
+
+        if "time_limit" in self.floor.__dict__:
+            self.life_timer = self.floor.time_limit
 
     def get_shader_params(self):
         base_params = Player.get_shader_params(self)
@@ -815,21 +822,14 @@ class KPlayer(Player):
         self.title_card.reset(title)
         
     def tick(self):
+        self.life_timer -= 1
 
-        self.lt_tick = (self.lt_tick + 1)%220
-        ad = abs(self.disp_life_timer-self.life_timer)
-        amt = 1
-        if(ad>3): amt = 2
-        if(ad>7): amt = 6
-        if(ad>20): amt = 13
-        if(ad>60): amt = 50
-        if(self.disp_life_timer<self.life_timer):
-            self.disp_life_timer +=amt
-        if(self.disp_life_timer>self.life_timer):
-            self.disp_life_timer -=amt
+        if(self.life_timer<0):
+            self.hp = -1
 
-        if(self.lt_tick==0):
-            self.life_timer -= self.time_penalty
+        self.disp_life_timer = floor(self.life_timer/60)
+        if(self.disp_life_timer<0):
+            self.disp_life_timer = "TIMES UP!>>>>>>>>>>>"
 
         self.title_card.tick()
 

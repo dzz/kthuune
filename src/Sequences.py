@@ -9,22 +9,16 @@ from .Universe.NPC.Elder import Elder
 
 class Sequences:
     titles = {
-        "1" : "First, we cut...",
-        "2" : "...Then, we cut some more.",
-        "3" : "Runner's High",
-        "4" : "Kinetic Energy",
-        "5" : "Feathers in the wind",
-        "6" : "Telephone Pole",
-        "7" : "Not what they seem...",
-        "8" : "Faraday Cage",
-        "9" : "Clerical Error",
-        "A0" : "Pontiff Predicament",
-        "A1" : "",
-        "A2" : "",
-        "A3" : "",
-        "A4" : "",
-        "A5" : "",
-        "A6" : ""
+        "1" : { "title" : "First, we cut...", "time_limit": 120 },
+        "2" : { "title" : "...Then, we cut some more.", "time_limit" : 40},
+        "3" : { "title" : "Runner's High", "time_limit" : 70 },
+        "4" : { "title" : "Kinetic Energy", "time_limit" : 120 },
+        "5" : { "title" : "Feathers in the wind", "time_limit" : 70 },
+        "6" : { "title" : "Telephone Pole", "time_limit" : 90 },
+        "7" : { "title" : "Not what they seem...", "time_limit" : 120 },
+        "8" : { "title" : "Faraday Cage", "time_limit" : 80 },
+        "9" : { "title" : "Clerical Error", "time_limit" : 120 },
+        "A0" :{ "title" :  "Pontiff Predicament", "time_limit" : 100 },
     }
     found = []
     current_index = 0
@@ -61,11 +55,15 @@ class Sequences:
     def buildarea_default(Game,area_def, sequence):
 
         if sequence in Sequences.titles:
-            title = Sequences.titles[sequence]
+            title = Sequences.titles[sequence]['title']
+            time_limit = Sequences.titles[sequence]['time_limit']*60
         else:
             title = "SEQUENCE-{0}".format(sequence)
+            time_limit = 60*120
+
 
         floor = DungeonFloor( 
+            time_limit = time_limit,
             music = BGL.assets.get("KT-player/path/ship_music"),
             title = title,
             god_shader = BGL.assets.get("KT-compositor/shader/sequence_god"),
@@ -148,6 +146,7 @@ class Sequences:
         ]
         Elder.floor_script = [
             "(elderbeast)",
+            "purify OWLS to stop respawns!"
         ]
         floor = Sequences.buildarea_default( Game, area_def, sequence )
         return floor
@@ -159,6 +158,20 @@ class Sequences:
         ]
         Elder.floor_script = [
             "(elderbeast)",
+            "CLERICS unlock TOTEMS"
+        ]
+        floor = Sequences.buildarea_default( Game, area_def, sequence )
+        return floor
+
+    def buildarea_A0(Game,area_def,sequence):
+        Elder.script = [
+            "priests, they spread the word,",
+            "ushering in decay.",
+            "use a shield to get in close."
+        ]
+        Elder.floor_script = [
+            "(elderbeast)",
+            "watch for SHIELD TOTEMS!",
         ]
         floor = Sequences.buildarea_default( Game, area_def, sequence )
         return floor

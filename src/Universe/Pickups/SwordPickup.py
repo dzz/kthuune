@@ -47,7 +47,7 @@ class SwordPickup(Object):
             self.tooltip = 'a sword'
         if (md<1.6):
             sb = SpeechBubble( p = list(self.floor.player.p) )
-            sb.trigger_script = [ "you've found a sword!", "push A to SLASH" ]
+            sb.trigger_script = [ "(A) = SLASH" ]
             sb.mode = 1
             self.floor.create_object( sb )
             self.floor.objects.remove(self)
