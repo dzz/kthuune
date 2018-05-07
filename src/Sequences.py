@@ -18,7 +18,7 @@ class Sequences:
         "7" : "Not what they seem...",
         "8" : "Faraday Cage",
         "9" : "Clerical Error",
-        "A0" : "",
+        "A0" : "Pontiff Predicament",
         "A1" : "",
         "A2" : "",
         "A3" : "",

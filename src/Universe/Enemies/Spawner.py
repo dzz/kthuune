@@ -51,7 +51,7 @@ class Spawner(Object):
             return False
         else:
             self.tooltip_layout = 1
-            self.tooltip = "respawning {0} in {1:.2f}".format( self.loser, len(Spawner.textures)-self.fr )
+            self.tooltip = "respawn in {0:.2f}".format( len(Spawner.textures)-self.fr )
         self.texture = Spawner.textures[floor(self.fr)]
         return True
 

@@ -477,7 +477,7 @@ BRUSH
 totem
 0
 0
-False
+True
 BRUSH
 11
 5
@@ -486,4 +486,4 @@ BRUSH
 totem
 0
 0
-False
+True
