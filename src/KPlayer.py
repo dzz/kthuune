@@ -613,6 +613,7 @@ class KPlayer(Player):
         self.slash = SlashEffect()
     
     def link_floor(self):
+        self.violentally_executed_self = False
         self.floor.create_object( self.sword )
         self.floor.create_object( self.slash )
 
