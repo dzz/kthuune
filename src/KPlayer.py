@@ -32,6 +32,7 @@ from .Universe.PlayerElements.Hud import Hud
 from .Universe.PlayerElements.TerminalRenderer import TerminalRenderer
 from .Universe.PlayerElements.StatusCards import HeartCard, TelekineCard, WandCard, PotionCard, SwordCard
 from .Universe.PlayerElements.PotionCountView import PotionCountView
+from .Universe.Particles.SplatterParticle import SplatterParticle
 
 ## maybe copy this music...
 #
@@ -312,6 +313,7 @@ class KPlayer(Player):
         #PLAYER INIT
         #player init
         
+        self.violentally_executed_self = False
         self.shield_frames = 0 
         self.sequence_kills = 0
         self.life_timer = 2800
@@ -829,7 +831,16 @@ class KPlayer(Player):
 
         self.disp_life_timer = floor(self.life_timer/60)
         if(self.disp_life_timer<0):
-            self.disp_life_timer = "TIMES UP!>>>>>>>>>>>"
+            self.disp_life_timer = "!TIMES UP!"
+            if not self.violentally_executed_self:
+
+                if choice([True,False,False]):
+                    KSounds.play( KSounds.basic_hit )
+                    KSounds.play( KSounds.player_hurt )
+                    for x in range(0,8):
+                        self.floor.create_object(SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14)))
+                    if self.life_timer < - 90:
+                        self.violentally_executed_self = True
 
         self.title_card.tick()
 
