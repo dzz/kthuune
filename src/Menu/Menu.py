@@ -1,6 +1,7 @@
 from Beagle import API as BGL
 from ..KSounds import KSounds
 from .BubbleWorldRenderer import BubbleWorldRenderer
+from ..Sequences import Sequences
 import audio
 
 def real_start_game():

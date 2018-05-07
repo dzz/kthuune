@@ -378,7 +378,6 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
 
     def next_sequence(self, advance = True ):
-
         self.genocide_trigger_available = True
         self.player.sequence_kills = 0
         if(advance):
@@ -424,6 +423,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
     
         #self.floor = self.create_tickable(self.load_floor(loading_floor))
         self.floor = self.create_tickable(self.load_floor(None,"1"))
+        self.floor.music = Sequences.titles['1']['music']
         #self.current_floor_key = loading_floor
         self.current_floor_target = None
         self.player.trigger_title( self.floor.title )

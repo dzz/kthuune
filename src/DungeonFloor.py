@@ -29,6 +29,7 @@ import client.system.keyboard as keyboard
 Floor = createFloorClass( DFRenderer )
 class DungeonFloor( Floor ):
 
+    current_music = None
     NO_SHADOWS = True #it's all caps coz its a hax
     def playing_genocide(self):
         return self.game_mode == 1
@@ -54,8 +55,6 @@ class DungeonFloor( Floor ):
             "override_base_zoom" : None,
             "custom_background" : None,
             "blurring" : False,
-            "music" : None,
-            "music_playing" : False,
             "fuzz_amt" : 0.0,
             "uses_vision" : True,
             "vision_mute" : 0.0,
@@ -203,8 +202,6 @@ class DungeonFloor( Floor ):
         self.tilemap_fg.linkFloor(self)
         self.active_vision_mute = self.vision_mute
 
-
-
     def destroy(self):
         self.game.tickables.remove(self)
         self.game.floor = None
@@ -329,6 +326,10 @@ class DungeonFloor( Floor ):
         self.renderable_tooltips.extend(newtooltips)
 
     def tick(self):
+        if DungeonFloor.current_music is not self.music:
+            DungeonFloor.current_music = self.music
+            audio.baudy_play_music(BGL.assets.get(self.music))
+
         if DungeonFloor.NO_SHADOWS:
             self.light_occluders = []
 
@@ -365,13 +366,8 @@ class DungeonFloor( Floor ):
 
         self.active_vision_mute = (self.active_vision_mute * 0.9) + (target_vision_mute*0.1)
 
-            
         #dungeon floor
 
-        #if(self.music is not None):
-        #    if not self.music_playing:
-        #        audio.baudy_play_music(self.music)
-        #        self.music_playing = True
         if(self.sound_tick==0):
             KSounds.play(choice([KSounds.rain_20sec, KSounds.rain_21sec]))
         self.sound_tick = (self.sound_tick +1)%(60*18)

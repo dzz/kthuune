@@ -6,19 +6,21 @@ from .DungeonFloor import DungeonFloor
 from .Universe.AreaLoader import get_area_data
 from .Abilities import Abilities
 from .Universe.NPC.Elder import Elder
+import audio
 
 class Sequences:
+    active_music_key = None
     titles = {
-        "1" : { "title" : "First, we cut...", "time_limit": 120 },
-        "2" : { "title" : "...Then, we cut some more.", "time_limit" : 40},
-        "3" : { "title" : "Runner's High", "time_limit" : 70 },
-        "4" : { "title" : "Kinetic Energy", "time_limit" : 120 },
-        "5" : { "title" : "Feathers in the wind", "time_limit" : 70 },
-        "6" : { "title" : "Telephone Pole", "time_limit" : 90 },
-        "7" : { "title" : "Not what they seem...", "time_limit" : 120 },
-        "8" : { "title" : "Faraday Cage", "time_limit" : 80 },
-        "9" : { "title" : "Clerical Error", "time_limit" : 120 },
-        "A0" :{ "title" :  "Pontiff Predicament", "time_limit" : 100 },
+        "1" : { "title" : "First, we cut...", "time_limit": 120, "music" : "KT-player/path/ship_music" },
+        "2" : { "title" : "...Then, we cut some more.", "time_limit" : 40, "music" : "KT-player/path/gameplay1" },
+        "3" : { "title" : "Runner's High", "time_limit" : 70, "music" : "KT-player/path/gameplay1", },
+        "4" : { "title" : "Kinetic Energy", "time_limit" : 120, "music" : "KT-player/path/ship_music" },
+        "5" : { "title" : "Feathers in the wind", "time_limit" : 70, "music" : "KT-player/path/gameplay1" },
+        "6" : { "title" : "Telephone Pole", "time_limit" : 90 , "music" : "KT-player/path/gameplay1" },
+        "7" : { "title" : "Not what they seem...", "time_limit" : 120 , "music" : "KT-player/path/ship_music" },
+        "8" : { "title" : "Faraday Cage", "time_limit" : 80, "music" : "KT-player/path/gameplay1" },
+        "9" : { "title" : "Clerical Error", "time_limit" : 120, "music" : "KT-player/path/gameplay1" },
+        "A0" :{ "title" :  "Pontiff Predicament", "time_limit" : 115, "music" : "KT-player/path/ship_music" },
     }
     found = []
     current_index = 0
@@ -54,9 +56,11 @@ class Sequences:
 
     def buildarea_default(Game,area_def, sequence):
 
+        music = None
         if sequence in Sequences.titles:
             title = Sequences.titles[sequence]['title']
             time_limit = Sequences.titles[sequence]['time_limit']*60
+            music = Sequences.titles[sequence]['music']
         else:
             title = "SEQUENCE-{0}".format(sequence)
             time_limit = 60*120
@@ -64,7 +68,7 @@ class Sequences:
 
         floor = DungeonFloor( 
             time_limit = time_limit,
-            music = BGL.assets.get("KT-player/path/ship_music"),
+            music = music,
             title = title,
             god_shader = BGL.assets.get("KT-compositor/shader/sequence_god"),
             fuzz_amt = 0.8,
