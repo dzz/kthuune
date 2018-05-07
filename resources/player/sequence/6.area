@@ -82,7 +82,7 @@ OBJECT
 decorator
 -10.0
 18.0
-{"decorator_id": 10, "self_lit": false}
+{"decorator_id": 10, "self_lit": true}
 True
 0.0
 26.0
@@ -90,7 +90,7 @@ OBJECT
 decorator
 0.0
 20.0
-{"decorator_id": 10, "self_lit": false}
+{"decorator_id": 10, "self_lit": true}
 True
 10.0
 30.0
@@ -98,7 +98,7 @@ OBJECT
 decorator
 10.0
 18.0
-{"decorator_id": 10, "self_lit": false}
+{"decorator_id": 10, "self_lit": true}
 True
 14.0
 26.0
@@ -106,7 +106,7 @@ OBJECT
 decorator
 14.0
 14.0
-{"decorator_id": 10, "self_lit": false}
+{"decorator_id": 10, "self_lit": true}
 True
 16.0
 18.0
@@ -114,7 +114,7 @@ OBJECT
 decorator
 10.0
 6.0
-{"decorator_id": 10, "self_lit": false}
+{"decorator_id": 10, "self_lit": true}
 True
 12.0
 10.0
@@ -122,7 +122,7 @@ OBJECT
 decorator
 -10.0
 6.0
-{"decorator_id": 10, "self_lit": false}
+{"decorator_id": 10, "self_lit": true}
 True
 -8.0
 10.0
@@ -306,7 +306,7 @@ OBJECT
 decorator
 -16.0
 -30.0
-{"decorator_id": 10, "self_lit": false}
+{"decorator_id": 10, "self_lit": true}
 True
 8.0
 -22.0
@@ -314,7 +314,7 @@ OBJECT
 decorator
 -16.0
 -30.0
-{"decorator_id": 10, "self_lit": false}
+{"decorator_id": 10, "self_lit": true}
 True
 8.0
 -16.0
@@ -474,7 +474,7 @@ OBJECT
 decorator
 30.0
 -86.0
-{"decorator_id": 11, "self_lit": false}
+{"decorator_id": 11, "self_lit": true}
 True
 48.0
 -54.0
@@ -482,7 +482,7 @@ OBJECT
 decorator
 14.0
 -80.0
-{"decorator_id": 11, "self_lit": false}
+{"decorator_id": 11, "self_lit": true}
 True
 36.0
 -54.0
@@ -490,7 +490,7 @@ OBJECT
 decorator
 -4.0
 -84.0
-{"decorator_id": 11, "self_lit": false}
+{"decorator_id": 11, "self_lit": true}
 True
 14.0
 -52.0
@@ -498,7 +498,7 @@ OBJECT
 decorator
 4.0
 -88.0
-{"decorator_id": 11, "self_lit": false}
+{"decorator_id": 11, "self_lit": true}
 True
 24.0
 -52.0
@@ -506,7 +506,7 @@ OBJECT
 decorator
 40.0
 -68.0
-{"decorator_id": 11, "self_lit": false}
+{"decorator_id": 11, "self_lit": true}
 True
 50.0
 -54.0
@@ -514,7 +514,7 @@ OBJECT
 decorator
 26.0
 -74.0
-{"decorator_id": 11, "self_lit": false}
+{"decorator_id": 11, "self_lit": true}
 True
 38.0
 -54.0
@@ -522,7 +522,7 @@ OBJECT
 decorator
 12.0
 -78.0
-{"decorator_id": 11, "self_lit": false}
+{"decorator_id": 11, "self_lit": true}
 True
 26.0
 -52.0
@@ -530,7 +530,7 @@ OBJECT
 decorator
 20.0
 -84.0
-{"decorator_id": 11, "self_lit": false}
+{"decorator_id": 11, "self_lit": true}
 True
 36.0
 -54.0
@@ -1972,7 +1972,7 @@ foreground
 TILE
 -8
 -15
-59
+60
 TILE
 -7
 -23
@@ -1985,7 +1985,7 @@ foreground
 TILE
 -7
 -22
-0
+2
 TILE
 -7
 -21
@@ -2022,7 +2022,7 @@ TILE
 TILE
 -6
 -23
-0
+1
 TILE
 -6
 -23
@@ -2039,7 +2039,7 @@ TILE
 TILE
 -6
 -20
-0
+1
 TILE
 -6
 -19
@@ -2055,7 +2055,7 @@ TILE
 TILE
 -6
 -16
-0
+2
 TILE
 -6
 -16
@@ -2068,7 +2068,7 @@ TILE
 TILE
 -5
 -23
-0
+1
 TILE
 -5
 -23
@@ -2110,7 +2110,7 @@ foreground
 TILE
 -5
 -15
-59
+60
 TILE
 -5
 -1
@@ -2150,11 +2150,11 @@ foreground
 TILE
 -5
 3
-60
+59
 TILE
 -5
 6
-43
+45
 TILE
 -5
 6
@@ -2163,7 +2163,7 @@ foreground
 TILE
 -5
 7
-45
+46
 TILE
 -5
 7
@@ -2185,7 +2185,7 @@ TILE
 TILE
 -4
 -23
-0
+1
 TILE
 -4
 -23
@@ -2198,7 +2198,7 @@ TILE
 TILE
 -4
 -21
-0
+1
 TILE
 -4
 -20
@@ -2214,7 +2214,7 @@ TILE
 TILE
 -4
 -17
-0
+2
 TILE
 -4
 -16
@@ -2231,7 +2231,7 @@ TILE
 TILE
 -4
 -1
-0
+1
 TILE
 -4
 -1
@@ -2252,7 +2252,7 @@ TILE
 TILE
 -4
 3
-0
+2
 TILE
 -4
 3
@@ -2270,7 +2270,7 @@ foreground
 TILE
 -4
 5
-32
+31
 TILE
 -4
 5
@@ -2279,15 +2279,15 @@ foreground
 TILE
 -4
 6
+45
+TILE
+-4
+7
 46
 TILE
 -4
-7
-44
-TILE
--4
 8
-44
+46
 TILE
 -4
 8
@@ -2296,7 +2296,7 @@ foreground
 TILE
 -4
 9
-59
+60
 TILE
 -3
 -23
@@ -2309,7 +2309,7 @@ foreground
 TILE
 -3
 -22
-0
+2
 TILE
 -3
 -21
@@ -2359,7 +2359,7 @@ TILE
 TILE
 -3
 1
-0
+2
 TILE
 -3
 2
@@ -2371,23 +2371,23 @@ TILE
 TILE
 -3
 4
-0
+2
 TILE
 -3
 5
-39
+30
 TILE
 -3
 6
-45
+46
 TILE
 -3
 7
-45
+46
 TILE
 -3
 8
-45
+43
 TILE
 -3
 8
@@ -2396,11 +2396,11 @@ foreground
 TILE
 -3
 9
-59
+60
 TILE
 -2
 -23
-0
+1
 TILE
 -2
 -23
@@ -2413,7 +2413,7 @@ TILE
 TILE
 -2
 -21
-0
+1
 TILE
 -2
 -20
@@ -2429,7 +2429,7 @@ TILE
 TILE
 -2
 -17
-0
+1
 TILE
 -2
 -16
@@ -2446,7 +2446,7 @@ TILE
 TILE
 -2
 -6
-0
+1
 TILE
 -2
 -6
@@ -2455,7 +2455,7 @@ foreground
 TILE
 -2
 -5
-0
+2
 TILE
 -2
 -5
@@ -2464,7 +2464,7 @@ foreground
 TILE
 -2
 -4
-0
+2
 TILE
 -2
 -4
@@ -2503,7 +2503,7 @@ TILE
 TILE
 -2
 2
-0
+2
 TILE
 -2
 3
@@ -2511,23 +2511,23 @@ TILE
 TILE
 -2
 4
-0
+1
 TILE
 -2
 5
-39
+31
 TILE
 -2
 6
-40
+33
 TILE
 -2
 7
-41
+35
 TILE
 -2
 8
-39
+31
 TILE
 -2
 8
@@ -2557,11 +2557,11 @@ TILE
 TILE
 -1
 -20
-33
+32
 TILE
 -1
 -19
-37
+34
 TILE
 -1
 -18
@@ -2569,11 +2569,11 @@ TILE
 TILE
 -1
 -17
-32
+37
 TILE
 -1
 -16
-41
+37
 TILE
 -1
 -16
@@ -2586,7 +2586,7 @@ TILE
 TILE
 -1
 -10
-33
+35
 TILE
 -1
 -10
@@ -2604,7 +2604,7 @@ foreground
 TILE
 -1
 -8
-37
+33
 TILE
 -1
 -8
@@ -2613,7 +2613,7 @@ foreground
 TILE
 -1
 -7
-36
+31
 TILE
 -1
 -7
@@ -2622,7 +2622,7 @@ foreground
 TILE
 -1
 -6
-0
+1
 TILE
 -1
 -5
@@ -2634,11 +2634,11 @@ TILE
 TILE
 -1
 -3
-0
+1
 TILE
 -1
 -2
-0
+2
 TILE
 -1
 -1
@@ -2700,7 +2700,7 @@ foreground
 TILE
 0
 -22
-0
+2
 TILE
 0
 -21
@@ -2708,7 +2708,7 @@ TILE
 TILE
 0
 -20
-36
+41
 TILE
 0
 -19
@@ -2716,15 +2716,15 @@ TILE
 TILE
 0
 -18
-43
+46
 TILE
 0
 -17
-44
+43
 TILE
 0
 -16
-31
+41
 TILE
 0
 -16
@@ -2746,15 +2746,15 @@ foreground
 TILE
 0
 -9
-46
+44
 TILE
 0
 -8
-43
+44
 TILE
 0
 -7
-41
+32
 TILE
 0
 -6
@@ -2778,15 +2778,15 @@ TILE
 TILE
 0
 -1
-0
+2
 TILE
 0
 0
-0
+1
 TILE
 0
 1
-0
+1
 TILE
 0
 2
@@ -2806,7 +2806,7 @@ TILE
 TILE
 0
 6
-0
+1
 TILE
 0
 7
@@ -2814,7 +2814,7 @@ TILE
 TILE
 0
 8
-0
+1
 TILE
 0
 9
@@ -2827,11 +2827,11 @@ foreground
 TILE
 0
 10
-59
+60
 TILE
 1
 -23
-0
+1
 TILE
 1
 -23
@@ -2840,7 +2840,7 @@ foreground
 TILE
 1
 -22
-0
+1
 TILE
 1
 -21
@@ -2848,23 +2848,23 @@ TILE
 TILE
 1
 -20
-31
+40
 TILE
 1
 -19
-44
+45
 TILE
 1
 -18
-43
+46
 TILE
 1
 -17
-44
+46
 TILE
 1
 -16
-36
+35
 TILE
 1
 -16
@@ -2873,11 +2873,11 @@ foreground
 TILE
 1
 -15
-60
+59
 TILE
 1
 -10
-45
+44
 TILE
 1
 -10
@@ -2886,19 +2886,19 @@ foreground
 TILE
 1
 -9
-45
+46
 TILE
 1
 -8
-43
+44
 TILE
 1
 -7
-32
+41
 TILE
 1
 -6
-0
+1
 TILE
 1
 -5
@@ -2958,7 +2958,7 @@ TILE
 TILE
 1
 9
-0
+1
 TILE
 1
 9
@@ -2967,11 +2967,11 @@ foreground
 TILE
 1
 10
-60
+59
 TILE
 2
 -23
-0
+1
 TILE
 2
 -23
@@ -2980,7 +2980,7 @@ foreground
 TILE
 2
 -22
-0
+2
 TILE
 2
 -21
@@ -2988,19 +2988,19 @@ TILE
 TILE
 2
 -20
-41
+36
 TILE
 2
 -19
-45
-TILE
-2
--18
 46
 TILE
 2
+-18
+44
+TILE
+2
 -17
-43
+45
 TILE
 2
 -16
@@ -3026,7 +3026,7 @@ foreground
 TILE
 2
 -9
-46
+44
 TILE
 2
 -9
@@ -3035,7 +3035,7 @@ foreground
 TILE
 2
 -8
-44
+46
 TILE
 2
 -8
@@ -3044,7 +3044,7 @@ foreground
 TILE
 2
 -7
-33
+39
 TILE
 2
 -7
@@ -3062,7 +3062,7 @@ foreground
 TILE
 2
 -5
-0
+1
 TILE
 2
 -5
@@ -3107,7 +3107,7 @@ foreground
 TILE
 2
 0
-0
+2
 TILE
 2
 1
@@ -3135,7 +3135,7 @@ TILE
 TILE
 2
 7
-0
+1
 TILE
 2
 8
@@ -3143,7 +3143,7 @@ TILE
 TILE
 2
 9
-0
+1
 TILE
 2
 9
@@ -3173,7 +3173,7 @@ TILE
 TILE
 3
 -20
-30
+37
 TILE
 3
 -20
@@ -3182,7 +3182,7 @@ foreground
 TILE
 3
 -19
-37
+32
 TILE
 3
 -19
@@ -3191,7 +3191,7 @@ foreground
 TILE
 3
 -18
-30
+36
 TILE
 3
 -18
@@ -3200,7 +3200,7 @@ foreground
 TILE
 3
 -17
-39
+36
 TILE
 3
 -17
@@ -3209,7 +3209,7 @@ foreground
 TILE
 3
 -16
-32
+35
 TILE
 3
 -16
@@ -3218,7 +3218,7 @@ foreground
 TILE
 3
 -15
-60
+59
 TILE
 3
 0
@@ -3272,7 +3272,7 @@ foreground
 TILE
 3
 10
-59
+60
 TILE
 4
 -26
@@ -3320,7 +3320,7 @@ foreground
 TILE
 4
 -20
-60
+59
 TILE
 4
 -1
@@ -3354,7 +3354,7 @@ foreground
 TILE
 4
 4
-0
+1
 TILE
 4
 4
@@ -3384,7 +3384,7 @@ TILE
 TILE
 4
 9
-0
+1
 TILE
 4
 9
@@ -3397,7 +3397,7 @@ TILE
 TILE
 5
 -26
-0
+1
 TILE
 5
 -26
@@ -3435,7 +3435,7 @@ TILE
 TILE
 5
 -1
-0
+1
 TILE
 5
 -1
@@ -3452,7 +3452,7 @@ TILE
 TILE
 5
 2
-0
+2
 TILE
 5
 2
@@ -3461,7 +3461,7 @@ foreground
 TILE
 5
 3
-60
+59
 TILE
 5
 6
@@ -3487,11 +3487,11 @@ foreground
 TILE
 5
 9
-60
+59
 TILE
 6
 -26
-0
+2
 TILE
 6
 -26
@@ -3512,7 +3512,7 @@ TILE
 TILE
 6
 -22
-0
+2
 TILE
 6
 -21
@@ -3525,7 +3525,7 @@ foreground
 TILE
 6
 -20
-60
+59
 TILE
 6
 -1
@@ -3550,7 +3550,7 @@ TILE
 TILE
 6
 3
-0
+1
 TILE
 6
 3
@@ -3599,11 +3599,11 @@ foreground
 TILE
 6
 9
-60
+59
 TILE
 7
 -26
-0
+1
 TILE
 7
 -26
@@ -3637,7 +3637,7 @@ foreground
 TILE
 7
 -20
-59
+60
 TILE
 7
 -1
@@ -3677,7 +3677,7 @@ foreground
 TILE
 7
 3
-0
+1
 TILE
 7
 3
@@ -3695,7 +3695,7 @@ foreground
 TILE
 7
 5
-0
+1
 TILE
 7
 5
@@ -3704,7 +3704,7 @@ foreground
 TILE
 7
 6
-0
+1
 TILE
 7
 6
@@ -3717,7 +3717,7 @@ TILE
 TILE
 8
 -26
-0
+1
 TILE
 8
 -26
@@ -3726,11 +3726,11 @@ foreground
 TILE
 8
 -25
-0
+1
 TILE
 8
 -24
-0
+1
 TILE
 8
 -23
@@ -3738,7 +3738,7 @@ TILE
 TILE
 8
 -22
-0
+1
 TILE
 8
 -21
@@ -3764,15 +3764,15 @@ foreground
 TILE
 9
 -25
-0
+1
 TILE
 9
 -24
-0
+1
 TILE
 9
 -23
-0
+1
 TILE
 9
 -22
@@ -3802,7 +3802,7 @@ foreground
 TILE
 10
 -25
-0
+1
 TILE
 10
 -24
@@ -3840,7 +3840,7 @@ foreground
 TILE
 11
 -25
-0
+1
 TILE
 11
 -24
@@ -3848,7 +3848,7 @@ TILE
 TILE
 11
 -23
-0
+2
 TILE
 11
 -22
@@ -3903,7 +3903,7 @@ foreground
 TILE
 12
 -20
-59
+60
 TILE
 13
 -26
@@ -3916,7 +3916,7 @@ foreground
 TILE
 13
 -25
-0
+1
 TILE
 13
 -24
@@ -3941,7 +3941,7 @@ foreground
 TILE
 13
 -20
-59
+60
 TILE
 14
 -26
@@ -3962,11 +3962,11 @@ TILE
 TILE
 14
 -23
-0
+1
 TILE
 14
 -22
-0
+1
 TILE
 14
 -21
@@ -3979,7 +3979,7 @@ foreground
 TILE
 14
 -20
-59
+60
 TILE
 15
 -27
@@ -4000,7 +4000,7 @@ TILE
 TILE
 15
 -24
-0
+2
 TILE
 15
 -23
@@ -4055,7 +4055,7 @@ TILE
 TILE
 16
 -24
-0
+1
 TILE
 16
 -23
@@ -4084,11 +4084,11 @@ foreground
 TILE
 16
 -18
-60
+59
 TILE
 17
 -27
-0
+1
 TILE
 17
 -27
@@ -4117,7 +4117,7 @@ TILE
 TILE
 17
 -21
-0
+1
 TILE
 17
 -20
@@ -4125,7 +4125,7 @@ TILE
 TILE
 17
 -19
-0
+2
 TILE
 17
 -19
@@ -4159,11 +4159,11 @@ TILE
 TILE
 18
 -23
-0
+1
 TILE
 18
 -22
-0
+1
 TILE
 18
 -21
@@ -4183,62 +4183,62 @@ TILE
 foreground
 TILE
 18
--18
-60
-TILE
-19
--27
-0
-TILE
-19
--27
-72
-foreground
-TILE
-19
--26
-0
-TILE
-19
--25
-0
-TILE
-19
--24
-0
-TILE
-19
--23
-0
-TILE
-19
--22
-0
-TILE
-19
--21
-0
-TILE
-19
--20
-0
-TILE
-19
--19
-0
-TILE
-19
--19
-73
-foreground
-TILE
-19
 -18
 59
 TILE
+19
+-27
+1
+TILE
+19
+-27
+72
+foreground
+TILE
+19
+-26
+2
+TILE
+19
+-25
+1
+TILE
+19
+-24
+0
+TILE
+19
+-23
+0
+TILE
+19
+-22
+0
+TILE
+19
+-21
+0
+TILE
+19
+-20
+0
+TILE
+19
+-19
+1
+TILE
+19
+-19
+73
+foreground
+TILE
+19
+-18
+60
+TILE
 20
 -27
-0
+1
 TILE
 20
 -27
@@ -4251,11 +4251,11 @@ TILE
 TILE
 20
 -25
-0
+2
 TILE
 20
 -24
-0
+1
 TILE
 20
 -23
@@ -4284,7 +4284,7 @@ foreground
 TILE
 20
 -18
-60
+59
 TILE
 21
 -27
@@ -4297,11 +4297,11 @@ foreground
 TILE
 21
 -26
-0
+1
 TILE
 21
 -25
-0
+1
 TILE
 21
 -24
@@ -4313,7 +4313,7 @@ TILE
 TILE
 21
 -22
-0
+2
 TILE
 21
 -21
@@ -4351,7 +4351,7 @@ TILE
 TILE
 22
 -25
-0
+1
 TILE
 22
 -24
@@ -4406,7 +4406,7 @@ foreground
 TILE
 23
 -25
-0
+2
 TILE
 23
 -25

@@ -9,7 +9,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 -1
 -10
@@ -18,7 +18,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 -5
 6
@@ -27,7 +27,7 @@ BRUSH
 playerstart
 0
 0
-False
+True
 BRUSH
 -5
 -1
@@ -36,7 +36,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 4
 -1
@@ -45,7 +45,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 4
 6
@@ -54,7 +54,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 6
 3
@@ -63,7 +63,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 0
 8
@@ -72,7 +72,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 -2
 8
@@ -81,7 +81,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 -2
 -6
@@ -90,7 +90,7 @@ BRUSH
 platform_floor
 0
 0
-False
+True
 BRUSH
 -5
 9
@@ -99,7 +99,7 @@ BRUSH
 decorator
 0
 10
-False
+True
 BRUSH
 0
 10
@@ -108,7 +108,7 @@ BRUSH
 decorator
 0
 10
-False
+True
 BRUSH
 5
 9
@@ -117,7 +117,7 @@ BRUSH
 decorator
 0
 10
-False
+True
 BRUSH
 7
 7
@@ -126,7 +126,7 @@ BRUSH
 decorator
 0
 10
-False
+True
 BRUSH
 5
 3
@@ -135,7 +135,7 @@ BRUSH
 decorator
 0
 10
-False
+True
 BRUSH
 -5
 3
@@ -144,7 +144,7 @@ BRUSH
 decorator
 0
 10
-False
+True
 BRUSH
 -5
 -7
@@ -153,7 +153,7 @@ BRUSH
 treetrunk
 0
 10
-False
+True
 BRUSH
 4
 -7
@@ -162,7 +162,7 @@ BRUSH
 treetrunk
 0
 10
-False
+True
 BRUSH
 -17
 -14
@@ -171,7 +171,7 @@ BRUSH
 blindarcade
 0
 10
-False
+True
 BRUSH
 9
 -14
@@ -180,7 +180,7 @@ BRUSH
 blindarcade
 0
 10
-False
+True
 BRUSH
 19
 -14
@@ -189,7 +189,7 @@ BRUSH
 blindarcade
 0
 10
-False
+True
 BRUSH
 -29
 -14
@@ -198,7 +198,7 @@ BRUSH
 blindarcade
 0
 10
-False
+True
 BRUSH
 -10
 -18
@@ -207,7 +207,7 @@ BRUSH
 blindarcade
 0
 10
-False
+True
 BRUSH
 -20
 -18
@@ -216,7 +216,7 @@ BRUSH
 blindarcade
 0
 10
-False
+True
 BRUSH
 -20
 -18
@@ -225,7 +225,7 @@ BRUSH
 blindarcade
 0
 10
-False
+True
 BRUSH
 10
 -17
@@ -234,7 +234,7 @@ BRUSH
 blindarcade
 0
 10
-False
+True
 BRUSH
 19
 -17
@@ -243,7 +243,7 @@ BRUSH
 blindarcade
 0
 10
-False
+True
 BRUSH
 26
 -14
@@ -252,7 +252,7 @@ BRUSH
 blindarcade
 0
 10
-False
+True
 BRUSH
 32
 -17
@@ -261,7 +261,7 @@ BRUSH
 blindarcade
 0
 10
-False
+True
 BRUSH
 -5
 -9
@@ -270,7 +270,7 @@ BRUSH
 trees
 0
 10
-False
+True
 BRUSH
 -5
 -4
@@ -279,7 +279,7 @@ BRUSH
 trees
 0
 10
-False
+True
 BRUSH
 -8
 -23
@@ -288,7 +288,7 @@ BRUSH
 platform_floor
 0
 10
-False
+True
 BRUSH
 -8
 -15
@@ -297,7 +297,7 @@ BRUSH
 decorator
 0
 10
-False
+True
 BRUSH
 -8
 -15
@@ -306,7 +306,7 @@ BRUSH
 decorator
 0
 10
-False
+True
 BRUSH
 0
 -19
@@ -315,7 +315,7 @@ BRUSH
 totem
 0
 10
-False
+True
 BRUSH
 0
 -10
@@ -324,7 +324,7 @@ BRUSH
 totem
 0
 10
-False
+True
 BRUSH
 4
 -26
@@ -333,7 +333,7 @@ BRUSH
 platform_floor
 0
 10
-False
+True
 BRUSH
 15
 -27
@@ -342,7 +342,7 @@ BRUSH
 platform_floor
 0
 10
-False
+True
 BRUSH
 4
 -27
@@ -351,7 +351,7 @@ BRUSH
 firepot_x
 0
 10
-False
+True
 BRUSH
 8
 -27
@@ -360,7 +360,7 @@ BRUSH
 firepot_x
 0
 10
-False
+True
 BRUSH
 12
 -27
@@ -369,7 +369,7 @@ BRUSH
 firepot_x
 0
 10
-False
+True
 BRUSH
 -8
 -29
@@ -414,7 +414,7 @@ BRUSH
 stork
 0
 2
-False
+True
 BRUSH
 17
 -26
@@ -423,7 +423,7 @@ BRUSH
 stork
 0
 2
-False
+True
 BRUSH
 19
 -21
@@ -432,7 +432,7 @@ BRUSH
 stork
 0
 2
-False
+True
 BRUSH
 5
 -25
@@ -441,7 +441,7 @@ BRUSH
 skeline
 0
 2
-False
+True
 BRUSH
 11
 -25
@@ -450,7 +450,7 @@ BRUSH
 skeline
 0
 2
-False
+True
 BRUSH
 15
 -43
@@ -459,7 +459,7 @@ BRUSH
 decorator
 0
 11
-False
+True
 BRUSH
 7
 -40
@@ -468,7 +468,7 @@ BRUSH
 decorator
 0
 11
-False
+True
 BRUSH
 -2
 -42
@@ -477,7 +477,7 @@ BRUSH
 decorator
 0
 11
-False
+True
 BRUSH
 2
 -44
@@ -486,7 +486,7 @@ BRUSH
 decorator
 0
 11
-False
+True
 BRUSH
 20
 -34
@@ -495,7 +495,7 @@ BRUSH
 decorator
 0
 11
-False
+True
 BRUSH
 13
 -37
@@ -504,7 +504,7 @@ BRUSH
 decorator
 0
 11
-False
+True
 BRUSH
 6
 -39
@@ -513,7 +513,7 @@ BRUSH
 decorator
 0
 11
-False
+True
 BRUSH
 10
 -42
@@ -522,4 +522,4 @@ BRUSH
 decorator
 0
 11
-False
+True

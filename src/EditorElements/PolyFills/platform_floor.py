@@ -11,10 +11,9 @@ class platform_floor:
     def reduce( area, brush ):
         for x in range(brush.x1, brush.x2):
             for y in range(brush.y1, brush.y2):
-                area.set_tile(x,y, choice([0,0,0,1,2])
+                area.set_tile(x,y, choice([0,0,0,1,0,0,0,2,0,0,1,0]))
 
         wsb = WorldSpaceBrush.from_brush(brush) 
-
         Factory.make_light( area, wsb.cx, wsb.cy, "shipfill" )
 
 

@@ -76,6 +76,9 @@ class Editor:
             World.reduce()
             self.build_sequence(seq)
 
+    def dz_rebuild(self):
+        self.rebuild_sequences(['1','2','3','4','5','6','7','8','9'])
+
     def save(self):
         Brushes.save()
     
