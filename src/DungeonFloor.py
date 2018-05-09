@@ -40,6 +40,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "music" : None,
             "group_to_owl" : {},
             "renderable_tooltips" : [],
             "genocide_flash_timeout" : 60.0,

@@ -13,22 +13,33 @@ class Sequences:
     titles = {
         "1" : { "title" : "First, we cut...", "time_limit": 120, "music" : "KT-player/path/ship_music" },
         "2" : { "title" : "...Then, we cut some more.", "time_limit" : 40, "music" : "KT-player/path/gameplay1" },
-        "3" : { "title" : "Runner's High", "time_limit" : 70, "music" : "KT-player/path/gameplay1", },
+        "3" : { "title" : "Runner's High", "time_limit" : 160, "music" : "KT-player/path/ship_music", }, #mat didn't see dash tutor
+        "3.1" : { "title" : "Boppin'", "time_limit" : 70, "music" : "KT-player/path/gameplay1", }, #mat didn't see dash tutor
         "4" : { "title" : "Kinetic Energy", "time_limit" : 120, "music" : "KT-player/path/ship_music" },
         "5" : { "title" : "Feathers in the wind", "time_limit" : 70, "music" : "KT-player/path/gameplay1" },
         "6" : { "title" : "Telephone Pole", "time_limit" : 90 , "music" : "KT-player/path/gameplay1" },
         "7" : { "title" : "Not what they seem...", "time_limit" : 120 , "music" : "KT-player/path/ship_music" },
         "8" : { "title" : "Faraday Cage", "time_limit" : 80, "music" : "KT-player/path/gameplay1" },
-        "9" : { "title" : "Clerical Error", "time_limit" : 120, "music" : "KT-player/path/gameplay1" },
+        "9" : { "title" : "Clerical Error", "time_limit" : 120, "music" : "KT-player/path/gameplay1" }, #debug state here, or make failure more quick & reinforcing
         "A0" :{ "title" :  "Pontiff Predicament", "time_limit" : 115, "music" : "KT-player/path/ship_music" },
     }
     found = []
     current_index = 0
 
-    def initialize():
-        sequences = glob("{0}*.area".format(BGL.assets.get('KT-player/path/sequence')))
-        for s in sequences:
-            Sequences.found.append(splitext(basename(s))[0])
+    def initialize(filesystem = False):
+        if filesystem:
+            sequences = glob("{0}*.area".format(BGL.assets.get('KT-player/path/sequence')))
+            for s in sequences:
+                Sequences.found.append(splitext(basename(s))[0])
+        else:
+            for key in Sequences.titles:
+                sequences = glob("{0}{1}.area".format(BGL.assets.get('KT-player/path/sequence'),key))
+                if(len(sequences)>0):
+                    Sequences.found.append(key)
+                else:
+                    Sequences.found.append(None)
+                    #print("missing level...{0}".format(key))
+                    #exit(0)
 
     def next(advance):
         if not advance:
