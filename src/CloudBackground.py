@@ -87,7 +87,7 @@ class CloudBackground:
         d=d*d*d
         d = 1.0 - d
 
-        floor.override_base_zoom = 0.2 * (0.5*(1.0+d))
+        #floor.override_base_zoom = 0.2 * (0.5*(1.0+d))   kinda neat example of fucking with the camera zoom for cinematic effects...why you'd bind this to the background idk
             
         with BGL.context.render_target( CloudBackground.fb):
             with BGL.blendmode.alpha_over:
@@ -112,8 +112,8 @@ class CloudBackground:
                     "lightning" : -1*lightning
                 })
 
-                self.yaomat.render(d)
-                self.malagor.render(d)
+                #self.yaomat.render(d)
+                #self.malagor.render(d)
 
         CloudBackground.fb.render_processed(BGL.assets.get('beagle-2d/shader/passthru'))
 

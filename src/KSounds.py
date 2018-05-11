@@ -51,6 +51,7 @@ class KSounds:
     atmozap2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/atmozap2")) 
     charged = audio.baudy_load_sound(BGL.assets.get("KT-player/path/charged")) 
     sequenced = audio.baudy_load_sound(BGL.assets.get("KT-player/path/sequenced")) 
+    level_start = audio.baudy_load_sound(BGL.assets.get("KT-player/path/level_start")) 
 
     typewriter_keys = [
         audio.baudy_load_sound(BGL.assets.get("KT-player/path/tkey1")) ,

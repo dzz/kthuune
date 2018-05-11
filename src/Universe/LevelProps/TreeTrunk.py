@@ -1,8 +1,15 @@
 from Newfoundland.Object import Object
 from Beagle import API as BGL
+from random import choice
 
 class TreeTrunk(Object):
-    texture = BGL.assets.get('KT-forest/texture/treetrunk')
+    textures =[
+         BGL.assets.get('KT-forest/texture/treetrunk'),
+         BGL.assets.get('KT-forest/texture/shrub0000'),
+         BGL.assets.get('KT-forest/texture/shrub0001'),
+         BGL.assets.get('KT-forest/texture/shrub0002'),
+         BGL.assets.get('KT-forest/texture/shrub0003')
+    ]
 
     def parse(od,df):
 
@@ -25,5 +32,5 @@ class TreeTrunk(Object):
             tick_type = Object.TickTypes.STATIC,
             visible = True,
             buftarget = "floor",
-            texture = TreeTrunk.texture
+            texture = choice(TreeTrunk.textures)
             )

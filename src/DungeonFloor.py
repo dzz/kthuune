@@ -40,6 +40,8 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "CustomBackground" : None,
+            "level_started" : False,
             "music" : None,
             "group_to_owl" : {},
             "renderable_tooltips" : [],
@@ -326,7 +328,15 @@ class DungeonFloor( Floor ):
         self.renderable_tooltips = [tt for tt in self.renderable_tooltips if tt not in tooltip_garbage and tt.owner in self.objects]
         self.renderable_tooltips.extend(newtooltips)
 
+
     def tick(self):
+        if self.CustomBackground:
+            CustomBackground.tick()
+
+        if not self.level_started:
+            self.sounds.play(self.sounds.level_start)
+            self.level_started = True
+
         if DungeonFloor.current_music is not self.music:
             DungeonFloor.current_music = self.music
             audio.baudy_play_music(BGL.assets.get(self.music))

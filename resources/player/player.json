@@ -16,6 +16,7 @@
             { "name" : "player", "filename" : "{package_path}/player.png", "filtered" : true },
             { "name" : "arrow", "filename" : "{package_path}/arrow.png", "filtered" : true },
             { "name" : "elder0000", "filename" : "{package_path}/elder0000.png", "filtered" : false },
+            { "name" : "elder_ii", "filename" : "{package_path}/elder_ii.png", "filtered" : false },
             { "name" : "skeleton", "filename" : "{package_path}/skeleton.png", "filtered" : false },
             { "name" : "beam", "filename" : "{package_path}/beam.png", "filtered" : true },
             { "name" : "birdman0000", "filename" : "{package_path}/birdman0000.png", "filtered" : false },
@@ -153,7 +154,8 @@
             { "name" : "slimecrush", "path" : "{package_path}/sounds/slimecrush.wav" },
             { "name" : "slimekill", "path" : "{package_path}/sounds/slimekill.wav" },
             { "name" : "atmozap1", "path" : "{package_path}/sounds/atmozap1.wav" },
-            { "name" : "atmozap2", "path" : "{package_path}/sounds/atmozap1.wav" }
+            { "name" : "atmozap2", "path" : "{package_path}/sounds/atmozap2.wav" },
+            { "name" : "level_start", "path" : "{package_path}/sounds/level_start.wav" }
         ]
     }
 }

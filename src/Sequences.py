@@ -6,15 +6,17 @@ from .DungeonFloor import DungeonFloor
 from .Universe.AreaLoader import get_area_data
 from .Abilities import Abilities
 from .Universe.NPC.Elder import Elder
+from .CloudBackground import CloudBackground
 import audio
 
 class Sequences:
     active_music_key = None
     titles = {
+        #hard to jump in and test
         "1" : { "title" : "First, we cut...", "time_limit": 120, "music" : "KT-player/path/ship_music" },
         "2" : { "title" : "...Then, we cut some more.", "time_limit" : 40, "music" : "KT-player/path/gameplay1" },
         "3" : { "title" : "Runner's High", "time_limit" : 160, "music" : "KT-player/path/ship_music", }, #mat didn't see dash tutor
-        "3.1" : { "title" : "Boppin'", "time_limit" : 70, "music" : "KT-player/path/gameplay1", }, #mat didn't see dash tutor
+        "3.1" : { "title" : "Boppin'", "time_limit" : 70, "music" : "KT-player/path/gameplay1", }, 
         "4" : { "title" : "Kinetic Energy", "time_limit" : 120, "music" : "KT-player/path/ship_music" },
         "5" : { "title" : "Feathers in the wind", "time_limit" : 70, "music" : "KT-player/path/gameplay1" },
         "6" : { "title" : "Telephone Pole", "time_limit" : 90 , "music" : "KT-player/path/gameplay1" },
@@ -132,14 +134,17 @@ class Sequences:
         Abilities.Sword = False
         Abilities.Telekine = False
         Abilities.Dash = False
+        floor.custom_background = CloudBackground()
         return floor
 
     def buildarea_3(Game,area_def,sequence):
         floor = Sequences.buildarea_default( Game, area_def, sequence )
         Abilities.Dash = True
+        floor.custom_background = CloudBackground()
         return floor
 
     def buildarea_4(Game,area_def,sequence):
+        Elder.texture = BGL.assets.get('KT-player/texture/elder_ii')
         Elder.script = [
             "VECTORLORD,",
             "you are not yet at full strength...",
@@ -152,6 +157,7 @@ class Sequences:
         ]
         floor = Sequences.buildarea_default( Game, area_def, sequence )
         Abilities.Telekine = True
+        floor.custom_background = CloudBackground()
         return floor
 
     def buildarea_7(Game,area_def,sequence):
@@ -164,6 +170,7 @@ class Sequences:
             "purify OWLS to stop respawns!"
         ]
         floor = Sequences.buildarea_default( Game, area_def, sequence )
+        floor.custom_background = CloudBackground()
         return floor
 
     def buildarea_9(Game,area_def,sequence):
@@ -176,6 +183,7 @@ class Sequences:
             "CLERICS unlock TOTEMS"
         ]
         floor = Sequences.buildarea_default( Game, area_def, sequence )
+        floor.custom_background = CloudBackground()
         return floor
 
     def buildarea_A0(Game,area_def,sequence):

@@ -440,17 +440,20 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         self.player_dead_frames = 0
 
     def render(self):
+        if( Game.main_menu):
+            Menu.render()
+            return
+
         if self.active_cinematic:
             self.active_cinematic.render()
         else:
             with BGL.context.render_target( Game.god_buffer):
-
-                ParallaxBackground.render(self.player.p[0]*0.01)
-                #BGL.context.clear( 0.0,0.0,0.0,0.0);
-
-                #if(self.floor.custom_background):
-                #    self.floor.custom_background.camera = self.camera
-                #    self.floor.custom_background.render(self.floor)
+                if not self.floor.custom_background:
+                    ParallaxBackground.render(self.player.p[0]*0.01)
+                else:
+                    BGL.context.clear( 0.0,0.0,0.0,0.0);
+                    self.floor.custom_background.camera = self.camera
+                    self.floor.custom_background.render(self.floor)
                 #else:
                 #    self.background.camera = self.camera
                 #    self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
@@ -474,8 +477,6 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             with BGL.blendmode.alpha_over:
                 uniform_fade.apply_fadeout( fade_perc, self.fade_color )
 
-        if( Game.main_menu):
-            Menu.render()
 
     def tick(self):
 

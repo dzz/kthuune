@@ -620,6 +620,7 @@ class KPlayer(Player):
         if "time_limit" in self.floor.__dict__:
             self.life_timer = self.floor.time_limit
 
+
     def get_shader_params(self):
         base_params = Player.get_shader_params(self)
         if self.hp > 0:
