@@ -24,6 +24,7 @@ from .PolyFills.stork import stork
 from .PolyFills.sword import sword
 from .PolyFills.telekine import telekine
 from .PolyFills.owl import owl
+from .PolyFills.eglan import eglan
 
 class PolyFillList:
     cached_list = None
@@ -63,7 +64,8 @@ class PolyFillList:
                 "stork" : stork,
                 "sword" : sword,
                 "telekine" : telekine,
-                "owl" : owl
+                "owl" : owl,
+                "eglan" : eglan
             }
             PolyFillList.cached_list = polyfill_map
         return PolyFillList.cached_list

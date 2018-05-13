@@ -21,6 +21,7 @@ class Screecher(SnapEnemy):
 
     STATE_SQUATTING = 0
     STATE_DIVING = 1
+    STATE_BIRTHING = 3
 
     textures = BGL.assets.get('KT-forest/animation/screecher')
     def customize(self):
@@ -37,7 +38,7 @@ class Screecher(SnapEnemy):
         self.base_size = [ 1.7, 1.56 ]
         self.size = list(self.base_size)
         self.physics = { "radius" : 0.38, "mass"   : 0.0009, "friction" : 0.0 }
-        self.state =  Screecher.STATE_SQUATTING 
+        self.state =  Screecher.STATE_BIRTHING 
         self.stimer = 0
         self.rvx = None
         self.speed = 3.8
@@ -54,6 +55,10 @@ class Screecher(SnapEnemy):
 
         self.dive_state_trigger = choice ( [ 180,190,203,208,217] )
         self.cyclonic_direction = uniform(0.1,0.3)
+
+        self.birth_burst = [ uniform(-1.0,1.0), uniform(0.5,1.2) ]
+        self.birth_amt = 0.0
+        self.birth_scale = 1.0 + uniform(0.01,0.04)
         
 
     def tick(self):
@@ -99,8 +104,23 @@ class Screecher(SnapEnemy):
 
         self.stimer += 1
         #######
+        if self.state == Screecher.STATE_BIRTHING:
+            self.flash_color = [ 1.0,1.0,0.0,1.0 ]
+            self.rad = uniform(-0.3,0.3)
+            self.v[0] = self.birth_burst[0]*0.2
+            self.v[1] = self.birth_burst[1]*0.2
+            self.birth_burst[1]*=0.9
+            self.size[0] = self.birth_amt*self.base_size[0]
+            self.size[1] = self.birth_amt*self.base_size[1]
+            self.birth_amt += 0.01
+            self.birth_amt *= self.birth_scale
+            if(self.birth_amt>1.0):
+                self.floor.sounds.play(choice([ self.floor.sounds.ree1, self.floor.sounds.ree2 ]) )
+                self.next_state( Screecher.STATE_DIVING )
+
         if self.state == Screecher.STATE_SQUATTING:
             if(self.stimer > self.dive_state_trigger):
+                self.floor.sounds.play(choice([ self.floor.sounds.ree1, self.floor.sounds.ree2 ]) )
                 self.next_state( Screecher.STATE_DIVING )
         if self.state == Screecher.STATE_DIVING:
             self._t += 0.01 # increase shudder

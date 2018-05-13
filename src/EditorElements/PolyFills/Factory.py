@@ -62,6 +62,16 @@ class Factory:
         area.add_line("0") #width
         area.add_line("0") #height
 
+    def make_eglan( area, x, y, group):
+        area.add_line("OBJECT")
+        area.add_line("eglan") #object type
+        area.add_line("{0}".format(x))
+        area.add_line("{0}".format(y)) 
+        area.add_line(json.dumps({"group":group}))
+        area.add_line("False") #is region
+        area.add_line("0") #width
+        area.add_line("0") #height
+
     def make_skeline( area, x, y, group):
         area.add_line("OBJECT")
         area.add_line("skeline") #object type

@@ -7,6 +7,9 @@ from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 from ..LevelEffects.ChromaticWave import ChromaticWave
 from ...KSounds import KSounds
 from ..RangedEnemyAttacks.BasicProjectile import BasicProjectile
+from ..LevelEffects.Blood import Blood
+from ..LevelEffects.Explosion import Explosion
+from .Screecher import Screecher
 
 class EglanBlob(SnapEnemy):
 
@@ -15,15 +18,7 @@ class EglanBlob(SnapEnemy):
         df.snap_enemies.append(eb)
         return eb
 
-    textures = [
-        BGL.assets.get("KT-forest/texture/eglanblob1"),
-        BGL.assets.get("KT-forest/texture/eglanblob2"),
-        BGL.assets.get("KT-forest/texture/eglanblob3"),
-        BGL.assets.get("KT-forest/texture/eglanblob4"),
-        BGL.assets.get("KT-forest/texture/eglanblob5"),
-        BGL.assets.get("KT-forest/texture/eglanblob6"),
-        BGL.assets.get("KT-forest/texture/eglanblob7"),
-    ] 
+    textures = BGL.assets.get('KT-forest/animation/eglan')
 
     def customize(self):
         self.snap_type = SnapEnemy.ENEMY
@@ -31,7 +26,7 @@ class EglanBlob(SnapEnemy):
         self.hp = 160
         self.dead = False
         self.tick_type = Object.TickTypes.PURGING
-        self.physics = { "radius" : 0.5, "mass"   : 0.0003, "friction" : 1.0 }
+        self.physics = { "radius" : 2.0, "mass"   : 0.003, "friction" : 2.0 }
         self.buftarget = "popup"
         self.visible = True
         self.texture = EglanBlob.textures[0]
@@ -55,10 +50,12 @@ class EglanBlob(SnapEnemy):
         KSounds.play_eproj()
 
     def tick(self):
+
+        self.rad = sin(self.fridx)*0.01
         self.fade_flash()
         SnapEnemy.tick(self)
         self.fridx += 1
-        self.texture = EglanBlob.textures[ int(self.fridx/20) % 7 ]
+        self.texture = EglanBlob.textures[ int(self.fridx/30.0) % len(EglanBlob.textures) ]
 
         if(self.firing):
             self.fire_idx += 1
@@ -96,6 +93,7 @@ class EglanBlob(SnapEnemy):
 
         self.light_color = [ abs(sin(self.fridx*0.03)),0.0,abs(cos(self.fridx*0.02)),1.0]
 
+
         if(self.hp < 0):
             SnapEnemy.die(self) #@bug physics not cleaned up
             return False
@@ -103,5 +101,20 @@ class EglanBlob(SnapEnemy):
 
     def get_shader_params(self):
         sp = Object.get_shader_params(self)
-        sp["translation_local"][1] += sin( self.fridx*0.03)*0.08
+        sp["translation_local"][1] += (sin( self.fridx*0.01)*0.1) + -0.8
         return sp
+
+    def get_kill_particles(self):
+        return 20
+
+    def custom_die(self):
+        for x in range(0,5):
+            s = Screecher(group=0, group_active = True, p=[self.p[0]+uniform(-2.0,2.0),self.p[1]+uniform(-2.0,2.0)])
+            self.floor.create_object(s)
+            self.floor.snap_enemies.append(s)
+            SnapEnemy.set_group(s,{"meta":{}})
+
+        for x in range(0,4):
+            b = Blood(p=[self.p[0]+uniform(-2.0,2.0),self.p[1]+uniform(-2.0,2.0)])
+            self.floor.create_object(b)
+            self.floor.create_object(Explosion(p=list(b.p)))

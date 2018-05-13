@@ -210,7 +210,7 @@ class AreaCompiler():
                 self.objects.append(Telekine.parse(od,df ))
 
             if od["key"] in [ "snap_enemy", "skeline"]:
-                self.objects.append(Screecher.parse(od,df ))
+                self.objects.append(Skeline.parse(od,df ))
 
             if od["key"] in [ "hostage" ]:
                 self.objects.append(Hostage.parse(od,df ))
@@ -225,6 +225,9 @@ class AreaCompiler():
 
             if od["key"] in [ "eglans" ]:
                 for x in range(0,5):
+                    self.objects.append(EglanBlob.parse(od,df ))
+
+            if od["key"] in [ "eglan" ]:
                     self.objects.append(EglanBlob.parse(od,df ))
 
             if od["key"] in [ "cleric"]:

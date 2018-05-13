@@ -10,6 +10,7 @@ from ..LevelEffects.SpikeyWave import SpikeyWave
 from ..LevelEffects.Explosion import Explosion
 from ..LevelEffects.SkullDeath import SkullDeath
 from ..Pickups.HealthVial import HealthVial
+from ..LevelEffects.Explosion import Explosion
 
 from .Spawner import Spawner
 
@@ -100,6 +101,7 @@ class SnapEnemy(Object):
 
     def skips_spawn(self):
         return False
+
     def get_kill_particles(self):
         return 15
 
