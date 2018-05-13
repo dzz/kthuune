@@ -845,7 +845,7 @@ class KPlayer(Player):
                 if choice([True,False,False]):
                     KSounds.play( KSounds.basic_hit )
                     KSounds.play( KSounds.player_hurt )
-                    for x in range(0,8):
+                    for x in range(0,4):
                         self.floor.create_object(SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14)))
                     if self.life_timer < - 90:
                         self.violentally_executed_self = True

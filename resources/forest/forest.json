@@ -10,7 +10,8 @@
             { "name" : "tumorcrab", "directory" : "{package_path}/tumorcrab/", "filtered" : true },
             { "name" : "clouds_compressed", "directory" : "{package_path}/clouds_compressed/", "filtered" : true },
             { "name" : "decorators", "directory" : "{package_path}/decorators/", "filtered" : false },
-            { "name" : "screecher", "directory" : "{package_path}/screecher/", "filtered" : false }
+            { "name" : "screecher", "directory" : "{package_path}/screecher/", "filtered" : false },
+            { "name" : "blood", "directory" : "{package_path}/blood/", "filtered" : false }
         ],
         "texture" : [
             { "name" : "owl", "filename" : "{package_path}/owl.png", "filtered" : false },

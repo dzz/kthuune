@@ -108,7 +108,6 @@ class Screecher(SnapEnemy):
             l = abs(dx)+abs(dy) 
             dx,dy = dx/l,dy/l
     
-
             rad = atan2(dx,dy)
             rad += (self.cyclonic_direction)*( (150.0-l)*0.04)
 

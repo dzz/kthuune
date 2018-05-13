@@ -175,6 +175,7 @@ class Sequences:
         return floor
 
     def buildarea_7(Game,area_def,sequence):
+        Elder.texture = BGL.assets.get('KT-player/texture/elder_iii')
         Elder.script = [
             "An ancient virus...",
             "...casting a field of resurrection!"

@@ -18,6 +18,7 @@
             { "name" : "arrow", "filename" : "{package_path}/arrow.png", "filtered" : true },
             { "name" : "elder0000", "filename" : "{package_path}/elder0000.png", "filtered" : false },
             { "name" : "elder_ii", "filename" : "{package_path}/elder_ii.png", "filtered" : false },
+            { "name" : "elder_iii", "filename" : "{package_path}/elderbeast_iii.png", "filtered" : false },
             { "name" : "skeleton", "filename" : "{package_path}/skeleton.png", "filtered" : false },
             { "name" : "beam", "filename" : "{package_path}/beam.png", "filtered" : true },
             { "name" : "birdman0000", "filename" : "{package_path}/birdman0000.png", "filtered" : false },
