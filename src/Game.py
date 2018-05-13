@@ -460,8 +460,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                 #    self.background.camera = self.camera
                 #    self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
                 self.floor.render()
-                #self.fog.camera = self.camera
-                #self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
+                self.fog.camera = self.camera
+                self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
 
 
             self.floor.god_shader.bind({

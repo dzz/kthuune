@@ -33,6 +33,7 @@ from .Hazards.Firepot import Firepot
 from .Enemies.SnapEnemy import SnapEnemy
 from .Enemies.Acolyte import Acolyte
 from .Enemies.Skeline import Skeline
+from .Enemies.Screecher import Screecher
 from .Enemies.Stork import Stork
 from .Enemies.TumorCrab import TumorCrab
 from .Enemies.Cleric import Cleric
@@ -209,7 +210,7 @@ class AreaCompiler():
                 self.objects.append(Telekine.parse(od,df ))
 
             if od["key"] in [ "snap_enemy", "skeline"]:
-                self.objects.append(Skeline.parse(od,df ))
+                self.objects.append(Screecher.parse(od,df ))
 
             if od["key"] in [ "hostage" ]:
                 self.objects.append(Hostage.parse(od,df ))
