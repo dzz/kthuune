@@ -41,7 +41,7 @@ class SplatterParticle(Object):
 
         
     def tick(self):
-        self.color[3]*=uniform(0.98,0.999)
+        self.color[3]*=0.95
         self.light_radius*=0.95
         self.vx*=0.9
         self.vy*=0.9

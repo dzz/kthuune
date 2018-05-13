@@ -2,7 +2,7 @@ from Newfoundland.Object import Object
 from Beagle import API as BGL
 from random import choice,uniform
 from math import sin,cos
-from ..Particles.SplatterParticle import SplatterParticle
+from ..Particles.Bird import Bird
 
 class TreeTrunk(Object):
     textures =[
@@ -18,7 +18,7 @@ class TreeTrunk(Object):
         self.t += 0.011
         self.size[0] += (sin(self.t)) * 0.001
 
-        if(self.t> 1.3):
+        if(self.t> self.bird_threshold):
             self.t = 0.0
             dx = self.floor.player.p[0] - self.p[0]
             dy = self.floor.player.p[1] - (self.p[1] + (self.size[1]))
@@ -26,8 +26,8 @@ class TreeTrunk(Object):
             sd = abs(dx)+abs(dy)
             if(sd<20):
                 self.flash_color = [ 1.0,1.0,1.0,1.0]
-                for x in range(0,3):
-                    spltr = SplatterParticle( p = [self.p[0], self.p[1]], rad = uniform(-3.14,3.14))
+                for x in range(0,choice([3,5,7,10,20])):
+                    spltr = Bird( p = [self.p[0]+uniform(0.0,self.size[0]), self.p[1]+uniform(-4.0,4.0)])
                     spltr.color = [0.0,0.0,0.0,1.0]
                     spltr.light_color = [ 0.0,1.0,0.0,1.0]
                     spltr.size[0]*=uniform(1.0,1.5)
@@ -48,6 +48,7 @@ class TreeTrunk(Object):
         h = (y2-y1)*0.5
 
         return TreeTrunk(
+            bird_threshold=uniform(1.3,2.1),
             t=uniform(0.0,2.0),
             p=[cx,cy],
             size=[w,h],
