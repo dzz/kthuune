@@ -13,7 +13,7 @@ class Sequences:
     active_music_key = None
     titles = {
         #hard to jump in and test
-        "0" : { "title" : "Debug Area", "time_limit": 999, "music" : "KT-player/path/ship_music" },
+        "0" : { "title" : "Debug Area", "time_limit": 140, "music" : "KT-player/path/ship_music" },
         "1" : { "title" : "First, we cut...", "time_limit": 120, "music" : "KT-player/path/ship_music" },
         "2" : { "title" : "...Then, we cut some more.", "time_limit" : 40, "music" : "KT-player/path/gameplay1" },
         "3" : { "title" : "Runner's High", "time_limit" : 160, "music" : "KT-player/path/ship_music", }, #mat didn't see dash tutor
@@ -75,12 +75,17 @@ class Sequences:
             title = Sequences.titles[sequence]['title']
             time_limit = Sequences.titles[sequence]['time_limit']*60
             music = Sequences.titles[sequence]['music']
+            if "slash_limit" in Sequences.titles[sequence]:
+                slash_limit = Sequences.titles[sequence]['slash_limit']
+            else:
+                slash_limit = 10
         else:
             title = "SEQUENCE-{0}".format(sequence)
             time_limit = 60*120
 
 
         floor = DungeonFloor( 
+            slash_limit = slash_limit,
             time_limit = time_limit,
             music = music,
             title = title,

@@ -574,7 +574,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                 for x in range(0,7):
                      self.floor.add_timeout( [ ms, 5+(x*x) ] )
                 self.floor.add_timeout( [ ns, 250 ] )
-                self.floor.game.trigger_fade( 270, [ 0.0,0.0,0.0] )
+                self.floor.game.trigger_fade( SummaryPage.Time, [ 0.0,0.0,0.0] )
                 self.summary_page = SummaryPage( self.floor )
                 self.floor.player.beat_level = True
 

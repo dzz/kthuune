@@ -619,7 +619,7 @@ class KPlayer(Player):
 
         self.total_kills = 0
         self.beat_level = False
-        self.slashes = 0
+        self.total_slashes = 0
 
         if "time_limit" in self.floor.__dict__:
             self.life_timer = self.floor.time_limit

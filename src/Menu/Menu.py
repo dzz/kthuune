@@ -110,7 +110,6 @@ class Menu:
             Menu.initialized = True
             
         with BGL.context.render_target( Menu.texbuffer ):
-
             BGL.context.clear(  0.0,0.0,0.0,0.0 )
             with BGL.blendmode.alpha_over:
                 for i,option in enumerate(Menu.current_options[Menu.index]):

@@ -42,6 +42,7 @@ class SlashEffect(Object):
             self.stagger_cooldown = 0
             self.floor.sounds.play( self.floor.sounds.slash )
             self.floor.player.run_stamina -= 20
+            self.floor.player.total_slashes += 1
 
     def tick(self):
 
