@@ -424,7 +424,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         loading_floor = "ship"
     
         #self.floor = self.create_tickable(self.load_floor(loading_floor))
-        self.floor = self.create_tickable(self.load_floor(None,"0"))
+        self.floor = self.create_tickable(self.load_floor(None,Sequences.start_level))
         self.floor.music = Sequences.titles['1']['music']
         #self.current_floor_key = loading_floor
         self.current_floor_target = None
@@ -573,7 +573,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                 
                 for x in range(0,7):
                      self.floor.add_timeout( [ ms, 5+(x*x) ] )
-                self.floor.add_timeout( [ ns, 250 ] )
+                self.floor.add_timeout( [ ns, SummaryPage.Time ] )
                 self.floor.game.trigger_fade( SummaryPage.Time, [ 0.0,0.0,0.0] )
                 self.summary_page = SummaryPage( self.floor )
                 self.floor.player.beat_level = True

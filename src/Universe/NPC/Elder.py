@@ -9,6 +9,9 @@ class Elder(Object):
     texture = BGL.assets.get('KT-player/texture/elder0000')
     #texture = BGL.assets.get('KT-forest/texture/cave_entrance')
 
+    script = [ "I am an elder" ]
+    floor_script = [ "I am an elder" ]
+
     def parse(od,df):
         o = Elder( p = [ od["x"], od["y"] ] )
         return o 

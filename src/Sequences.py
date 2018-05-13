@@ -10,9 +10,9 @@ from .CloudBackground import CloudBackground
 import audio
 
 class Sequences:
+    start_level = "1"
     active_music_key = None
     titles = {
-        #hard to jump in and test
         "0" : { "title" : "Debug Area", "time_limit": 140, "music" : "KT-player/path/ship_music" },
         "1" : { "title" : "First, we cut...", "time_limit": 120, "music" : "KT-player/path/ship_music" },
         "2" : { "title" : "...Then, we cut some more.", "time_limit" : 40, "music" : "KT-player/path/gameplay1" },
@@ -147,7 +147,7 @@ class Sequences:
         floor = Sequences.buildarea_default( Game, area_def, sequence )
         Abilities.Sword = False
         Abilities.Telekine = False
-        Abilities.Dash = False
+        Abilities.Dash = True
         floor.custom_background = CloudBackground()
         return floor
 
@@ -155,6 +155,12 @@ class Sequences:
         floor = Sequences.buildarea_default( Game, area_def, sequence )
         Abilities.Dash = True
         floor.custom_background = CloudBackground()
+        Elder.script = [ "VECTORLORD, you must move quickly!",
+                         "RUN with [RB] or DASH with (B)",
+                         "combine techniques for precision movement" ]
+        Elder.floor_script = [
+            "[RB] to RUN (B) to DASH"
+        ]
         return floor
 
     def buildarea_4(Game,area_def,sequence):

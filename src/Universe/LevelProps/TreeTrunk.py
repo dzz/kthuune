@@ -1,6 +1,7 @@
 from Newfoundland.Object import Object
 from Beagle import API as BGL
 from random import choice
+from math import sin,cos
 
 class TreeTrunk(Object):
     textures =[
@@ -10,6 +11,10 @@ class TreeTrunk(Object):
          BGL.assets.get('KT-forest/texture/shrub0002'),
          BGL.assets.get('KT-forest/texture/shrub0003')
     ]
+
+    def tick(self):
+        self.t += 0.01
+        self.size[0] += (sin(self.t)) * 0.01
 
     def parse(od,df):
 
@@ -26,10 +31,11 @@ class TreeTrunk(Object):
         h = (y2-y1)*0.5
 
         return TreeTrunk(
+            t=0.0,
             p=[cx,cy],
             size=[w,h],
             scale_uv=[1.0,1.0],
-            tick_type = Object.TickTypes.STATIC,
+            tick_type = Object.TickTypes.TICK_FOREVER,
             visible = True,
             buftarget = "floor",
             texture = choice(TreeTrunk.textures)

@@ -15,7 +15,9 @@ class EglanBlob(SnapEnemy):
 
     def parse(od,df):
         eb = EglanBlob( p = [ od['x'],od['y'] ] )        
+        SnapEnemy.set_group(eb,od)
         df.snap_enemies.append(eb)
+        df.enemies.append(eb)
         return eb
 
     textures = BGL.assets.get('KT-forest/animation/eglan')
@@ -101,7 +103,7 @@ class EglanBlob(SnapEnemy):
 
     def get_shader_params(self):
         sp = Object.get_shader_params(self)
-        sp["translation_local"][1] += (sin( self.fridx*0.01)*0.1) + -0.8
+        sp["translation_local"][1] += (sin( self.fridx*0.01)*0.1) + -0.46
         return sp
 
     def get_kill_particles(self):
