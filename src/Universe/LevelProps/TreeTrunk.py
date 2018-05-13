@@ -1,7 +1,8 @@
 from Newfoundland.Object import Object
 from Beagle import API as BGL
-from random import choice
+from random import choice,uniform
 from math import sin,cos
+from ..Particles.SplatterParticle import SplatterParticle
 
 class TreeTrunk(Object):
     textures =[
@@ -13,8 +14,24 @@ class TreeTrunk(Object):
     ]
 
     def tick(self):
-        self.t += 0.01
-        self.size[0] += (sin(self.t)) * 0.01
+        self.flash_color[3]*=0.93
+        self.t += 0.011
+        self.size[0] += (sin(self.t)) * 0.001
+
+        if(self.t> 1.3):
+            self.t = 0.0
+            dx = self.floor.player.p[0] - self.p[0]
+            dy = self.floor.player.p[1] - (self.p[1] + (self.size[1]))
+
+            sd = abs(dx)+abs(dy)
+            if(sd<20):
+                self.flash_color = [ 1.0,1.0,1.0,1.0]
+                for x in range(0,3):
+                    spltr = SplatterParticle( p = [self.p[0], self.p[1]], rad = uniform(-3.14,3.14))
+                    spltr.color = [0.0,0.0,0.0,1.0]
+                    spltr.light_color = [ 0.0,1.0,0.0,1.0]
+                    spltr.size[0]*=uniform(1.0,1.5)
+                    self.floor.create_object(spltr)
 
     def parse(od,df):
 
@@ -31,7 +48,7 @@ class TreeTrunk(Object):
         h = (y2-y1)*0.5
 
         return TreeTrunk(
-            t=0.0,
+            t=uniform(0.0,2.0),
             p=[cx,cy],
             size=[w,h],
             scale_uv=[1.0,1.0],
