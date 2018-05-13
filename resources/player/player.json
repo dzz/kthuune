@@ -10,6 +10,7 @@
         "texture" : [
             { "name" : "lock", "filename" : "{package_path}/lock.png", "filtered" : false },
             { "name" : "menu_title", "filename" : "{package_path}/menu/title.png", "filtered" : false },
+            { "name" : "level_summary", "filename" : "{package_path}/menu/level_summary.png", "filtered" : false },
             { "name" : "chooseworld_title", "filename" : "{package_path}/menu/cw_title.png", "filtered" : false },
             { "name" : "ship_exterior", "filename" : "{package_path}/ship_exterior.png", "filtered" : false },
             { "name" : "firefly", "filename" : "{package_path}/firefly.png", "filtered" : true },

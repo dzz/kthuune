@@ -28,6 +28,7 @@ from .ParallaxBackground import ParallaxBackground
 from .Universe.LevelEffects.AttackInfo import AttackInfo
 
 from .Menu.Menu import Menu
+from .Menu.SummaryPage import SummaryPage
 
 class Game( BaseGame ):
 
@@ -394,6 +395,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
     def initialize(self):
 
+        self.summary_page = None
         self.over2s = 0
         Menu.Game = Game
         self.rg = 0.0
@@ -458,6 +460,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                 #    self.background.camera = self.camera
                 #    self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
                 self.floor.render()
+                if self.summary_page:
+                    self.summary_page.render()
                 #self.fog.camera = self.camera
                 #self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
 
@@ -479,6 +483,9 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
 
     def tick(self):
+
+        if(self.summary_page):
+            self.summary_page = self.summary_page.tick()
 
         if(self.prebuffer < 30):
             self.prebuffer += 1
@@ -554,20 +561,21 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                         break
 
             if passed_genocide:
-               self.floor.passed_genocide = True
-               self.genocide_trigger_available = False
-               dfloor = self.floor
-               def ns():
-                   dfloor.game.next_sequence()
-               def ms():
-                   ai = AttackInfo( p=[ self.camera.p[0]+uniform(-15.0,15.0), self.camera.p[1]+uniform(-15.0,15.0) ], message="~!purified!~")
-                   self.floor.sounds.play(self.floor.sounds.sequenced)
-                   dfloor.create_object(ai)
-
-               for x in range(0,7):
-                    self.floor.add_timeout( [ ms, 5+(x*x) ] )
-               self.floor.add_timeout( [ ns, 250 ] )
-               self.floor.game.trigger_fade( 270, [ 1.0,1.0,1.0] )
+                self.floor.passed_genocide = True
+                self.genocide_trigger_available = False
+                dfloor = self.floor
+                def ns():
+                    dfloor.game.next_sequence()
+                def ms():
+                    ai = AttackInfo( p=[ self.camera.p[0]+uniform(-15.0,15.0), self.camera.p[1]+uniform(-15.0,15.0) ], message="~!purified!~")
+                    self.floor.sounds.play(self.floor.sounds.sequenced)
+                    dfloor.create_object(ai)
+                
+                for x in range(0,7):
+                     self.floor.add_timeout( [ ms, 5+(x*x) ] )
+                self.floor.add_timeout( [ ns, 250 ] )
+                self.floor.game.trigger_fade( 270, [ 0.0,0.0,0.0] )
+                self.summary_page = SummaryPage( self.floor )
 
 
         s = 0.0
