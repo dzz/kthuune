@@ -13,6 +13,7 @@ class Sequences:
     active_music_key = None
     titles = {
         #hard to jump in and test
+        "0" : { "title" : "Debug Area", "time_limit": 999, "music" : "KT-player/path/ship_music" },
         "1" : { "title" : "First, we cut...", "time_limit": 120, "music" : "KT-player/path/ship_music" },
         "2" : { "title" : "...Then, we cut some more.", "time_limit" : 40, "music" : "KT-player/path/gameplay1" },
         "3" : { "title" : "Runner's High", "time_limit" : 160, "music" : "KT-player/path/ship_music", }, #mat didn't see dash tutor
@@ -40,8 +41,8 @@ class Sequences:
                     Sequences.found.append(key)
                 else:
                     Sequences.found.append(None)
-                    #print("missing level...{0}".format(key))
-                    #exit(0)
+                    print("missing level...{0}".format(key))
+                    exit(0)
 
     def next(advance):
         if not advance:
@@ -119,6 +120,14 @@ class Sequences:
             )
 
         floor.game = Game
+        return floor
+
+    def buildarea_0(Game,area_def,sequence):
+        floor = Sequences.buildarea_default( Game, area_def, sequence )
+        Abilities.Sword = True
+        Abilities.Telekine = True
+        Abilities.Dash = True
+        floor.custom_background = CloudBackground()
         return floor
 
     def buildarea_1(Game,area_def,sequence):

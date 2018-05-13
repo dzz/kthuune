@@ -7,10 +7,13 @@ class SummaryPage():
         self.floor = floor
         self.t = 0
         self._t = 0 
+        self.alpha = 0.0
 
     def tick(self):
         self.t = self.t + 1
         self._t += 0.003;
+        if(self.alpha<1.0):
+            self.alpha += 1.0/120.0
 
         if(self.t<270):
             return self
@@ -19,6 +22,7 @@ class SummaryPage():
         with BGL.blendmode.alpha_over:
             Menu.primitive.render_shaded( Menu.shader, {
                 "texBuffer" : SummaryPage.texture_header,
-                "tick" : self.t
+                "tick" : self._t,
+                "alpha" : self.alpha
             })
 

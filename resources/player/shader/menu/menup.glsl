@@ -2,11 +2,13 @@
 
 uniform sampler2D texBuffer;
 uniform float tick;
+uniform float alpha;
 in vec2 uv;
 
 
 void main(void) {
 
+    float final_alpha = alpha;
     vec2 frq = uv.xy * vec2(30,40);
     vec2 offs = (vec2(sin(tick+frq.x),cos(tick+frq.y))*0.01)*uv.y*2;
 
@@ -23,6 +25,7 @@ void main(void) {
         float modp = modv/10.0f;
         float idx1 = (1.0+sin((uv.y*6)+(tick*3.0)+(modp*3.14)))/2.0;
         smpl_base = vec4(0.1*idx1,0.0,idx1*0.3,1.0);
+        final_alpha *= 2.0; 
     } else {
         float idx1 = abs(sin(((uv.y*45*(1.0-l))+(tick*2))));
         float idx2 = abs(sin(((uv.y*25*(1.0-l))+(tick*3))));
@@ -31,6 +34,9 @@ void main(void) {
         smpl_base = (smpl_base*idx2)+vec4(0.0,1.0,1.0,1.0)*(1.0-cos(idx1));
     }
 
+    if(final_alpha>1.0) final_alpha = 1.0;
+
     gl_FragColor = smpl_base;
+    gl_FragColor.a = final_alpha;
 
 }

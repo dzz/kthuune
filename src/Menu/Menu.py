@@ -140,7 +140,8 @@ class Menu:
         with BGL.blendmode.alpha_over:
             Menu.primitive.render_shaded( Menu.shader, {
                 "texBuffer" : Menu.texture_titles[Menu.index],
-                "tick" : Menu.t
+                "tick" : Menu.t,
+                "alpha" : 1.0,
             })
             Menu.texbuffer.render_processed(BGL.assets.get("beagle-2d/shader/passthru"))
             if( Menu.index != "root" ):

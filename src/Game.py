@@ -424,7 +424,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         loading_floor = "ship"
     
         #self.floor = self.create_tickable(self.load_floor(loading_floor))
-        self.floor = self.create_tickable(self.load_floor(None,"1"))
+        self.floor = self.create_tickable(self.load_floor(None,"0"))
         self.floor.music = Sequences.titles['1']['music']
         #self.current_floor_key = loading_floor
         self.current_floor_target = None
@@ -460,8 +460,6 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                 #    self.background.camera = self.camera
                 #    self.background.render( self.floor.vision_lightmap.get_lightmap_texture()) 
                 self.floor.render()
-                if self.summary_page:
-                    self.summary_page.render()
                 #self.fog.camera = self.camera
                 #self.fog.render(self.floor, self.floor.vision_lightmap.get_lightmap_texture(),self.floor.fog_level_real+self.floor.fog_level_base) 
 
@@ -480,6 +478,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
             with BGL.blendmode.alpha_over:
                 uniform_fade.apply_fadeout( fade_perc, self.fade_color )
+        if self.summary_page:
+            self.summary_page.render()
 
 
     def tick(self):
@@ -576,6 +576,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
                 self.floor.add_timeout( [ ns, 250 ] )
                 self.floor.game.trigger_fade( 270, [ 0.0,0.0,0.0] )
                 self.summary_page = SummaryPage( self.floor )
+                self.floor.player.beat_level = True
 
 
         s = 0.0

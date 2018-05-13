@@ -617,6 +617,10 @@ class KPlayer(Player):
         self.floor.create_object( self.sword )
         self.floor.create_object( self.slash )
 
+        self.total_kills = 0
+        self.beat_level = False
+        self.slashes = 0
+
         if "time_limit" in self.floor.__dict__:
             self.life_timer = self.floor.time_limit
 
@@ -694,6 +698,7 @@ class KPlayer(Player):
     def notify_enemy_killed(self):
         KSounds.play( choice([ KSounds.enemy_killed, KSounds.enemy_killed2 ]) )
         self.kill_success = True
+        self.total_kills += 1
         pass
 
     def deal_with_buttons(self,pad):
@@ -826,10 +831,11 @@ class KPlayer(Player):
         self.title_card.reset(title)
         
     def tick(self):
-        self.life_timer -= 1
+        if not self.beat_level: #set in game
+            self.life_timer -= 1
 
-        if(self.life_timer<0):
-            self.hp = -1
+            if(self.life_timer<0):
+                self.hp = -1
 
         self.disp_life_timer = floor(self.life_timer/60)
         if(self.disp_life_timer<0):
