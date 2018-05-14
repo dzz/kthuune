@@ -30,8 +30,8 @@ void main(void) {
     float l=length(uv-vec2(0.5,0.5));
     if(smpl_base.r <1.0) {
 
-        int ii = int(uv.x*1920)%16;
-        int jj = int(uv.y*1080)%16;
+        int ii = int(uv.x*1920)%32;
+        int jj = int(uv.y*1080)%32;
 
         if(ii<9) {
             smpl_base = vec4(0.0,0.0,0.0,1.0);
@@ -40,7 +40,7 @@ void main(void) {
             smpl_base = vec4(0.0,0.0,0.0,1.0);
         } else
         if(shadow_base.r>0.9) {
-            smpl_base = vec4(0.2,0.0,0.25,1.0);
+            smpl_base = vec4(0.0,0.15,0.0,1.0);
         } else
         /*if(si%2==0)
             smpl_base = vec4(0.0,0.0,0.0,1.0);
