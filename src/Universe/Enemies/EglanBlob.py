@@ -28,7 +28,7 @@ class EglanBlob(SnapEnemy):
         self.hp = 160
         self.dead = False
         self.tick_type = Object.TickTypes.PURGING
-        self.physics = { "radius" : 2.3, "mass"   : 0.005, "friction" : 4.0 }
+        self.physics = { "radius" : 2.0, "mass"   : 0.003, "friction" : 2.0 }
         self.buftarget = "popup"
         self.visible = True
         self.texture = EglanBlob.textures[0]

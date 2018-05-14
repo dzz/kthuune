@@ -60,7 +60,7 @@ class Elder(Object):
                     self.talking = False
                     self.tooltip = None
                 else:
-                    self.script_t = len(self.script[self.script_item]) * 9
+                    self.script_t = len(self.script[self.script_item]) * 7
                 
 
         if not self.sensed:
