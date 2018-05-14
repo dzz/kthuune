@@ -43,6 +43,7 @@ class LevelPreview:
     def tick(app):
         if LevelPreview.floor:
             LevelPreview.player.tick()
+            LevelPreview.player.life_timer = 9999
             LevelPreview.controllers.tick()
             if(LevelPreview.floor.freeze_delay < 0):
                 if(LevelPreview.floor.freeze_frames > 0):

@@ -143,6 +143,7 @@
             { "name" : "vectormenu", "path" : "{package_path}/music/vectormenu.ogg" },
             { "name" : "ship_music", "path" : "{package_path}/music/space_station.ogg" },
             { "name" : "polydrone", "path" : "{package_path}/music/polydrone.ogg" },
+            { "name" : "trixymixy", "path" : "{package_path}/music/trixymixy.ogg" },
             { "name" : "lacuna_canal", "path" : "{package_path}/music/lacuna_canal.ogg" },
             { "name" : "terminal_open", "path" : "{package_path}/sounds/terminal_open.wav" },
             { "name" : "terminal_close", "path" : "{package_path}/sounds/terminal_close.wav" },

@@ -14,6 +14,7 @@ class DungeonCamera (Camera):
     def __init__(self, **kwargs):
         Camera.__init__(self,**kwargs)
         self.base_zoom = self.zoom
+        self.base_zoom*=1.1
         self.filtered_zoom = self.zoom
         self.cinema_target = None
         self.cinema_timeout = 0

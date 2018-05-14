@@ -3,11 +3,11 @@ from Beagle import API as BGL
 from ...KSounds import KSounds
 from random import choice
 import textwrap
+from math import sin,cos
 
 class ToolTip(Object): #must pass in message, width, owner
     
     def customize(self):
-
         if(len(self.message)<self.width):
             self.width = len(self.message)
         self.lines = textwrap.wrap( self.message, self.width )
@@ -21,12 +21,17 @@ class ToolTip(Object): #must pass in message, width, owner
         self.visible = True
         self.alive = True
         self.tick_type = Object.TickTypes.PURGING
-        self.size = [ 0.5*self.width, -0.5*len(self.lines) ]
+        self.base_size = [ 0.5*self.width, -0.5*len(self.lines) ]
+        self.size = list(self.base_size)
+        self.t = 0
 
     def kill(self):
         self.alive = False
 
     def tick(self):
+        self.t += 0.1
+        self.size[0] = self.base_size[0] + (sin(self.t)*0.1)
+        self.size[1] = self.base_size[1] + (cos(self.t)*0.1)
         return self.alive
 
     def get_shader_params(self):
@@ -42,6 +47,12 @@ class ToolTip(Object): #must pass in message, width, owner
         
 
 class SpeechBubble(Object):
+    scroll_in_chars = [
+        "_",
+        "-",
+        "^",
+        "."
+    ]
     instance = None
     MODE_PERSISTANT_TRIGGERED = 1
 
@@ -59,7 +70,7 @@ class SpeechBubble(Object):
 
         self.buffer = BGL.framebuffer.from_dims( 8*20, 8*3)
         self.texture = self.buffer
-        self.buftarget = "floor"
+        self.buftarget = "popup"
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.size = [ 8,-1.2 ]
         self.visible = False
@@ -71,6 +82,7 @@ class SpeechBubble(Object):
         self.current_string_char = 0
         self.current_char_timer = 7
         self.script_queue = []
+        self.t = 0.0
 
         
     def render_string(self, string):
@@ -80,7 +92,8 @@ class SpeechBubble(Object):
         with BGL.context.render_target( self.buffer ):
             BGL.context.clear( 0.0,0.0,0.0,1.0)
             with BGL.blendmode.alpha_over:
-                BGL.lotext.render_text_pixels(string,1,1,[ 1.0,0.5,0.8 ])
+                BGL.lotext.render_text_pixels(string,1,0,[ 0.3,0.3,0.3 ])
+                BGL.lotext.render_text_pixels(string,1,1,[ 0.5,0.0,0.9 ])
 
     def set_script(self,script, p):
 
@@ -90,7 +103,7 @@ class SpeechBubble(Object):
             self.current_string_timer = 0
 
             self.p[0] = p[0]
-            self.p[1] = p[1] + 5
+            self.p[1] = p[1] + 7
             self.visible = True
 
     
@@ -98,7 +111,10 @@ class SpeechBubble(Object):
         if(self.current_string):
             if(self.current_string_char<=len(self.current_string)):
                 KSounds.play(choice(KSounds.typewriter_keys))
+
                 renderable_string = self.current_string[0:self.current_string_char]
+                if(len(renderable_string) != len(self.current_string)):
+                    renderable_string = renderable_string + SpeechBubble.scroll_in_chars[self.current_string_char%len(SpeechBubble.scroll_in_chars)]
                 self.render_string( renderable_string )
                 self.current_string_char+=1
                 if(len(renderable_string)>=1):
@@ -123,6 +139,9 @@ class SpeechBubble(Object):
 
 
     def tick(self):
+
+        self.t+=0.01
+        self.rad = sin(self.t)*0.01
 
         if(self.floor.player.title_card.displaying()):
             return

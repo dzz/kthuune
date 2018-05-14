@@ -8,6 +8,7 @@ def real_start_game():
     Menu.Game.main_menu = False
     audio.baudy_play_music( BGL.assets.get("KT-player/path/ship_music"))
     Menu.initialized = False
+    Menu.alpha = 0.0
 
 def start_game():
     Menu.index="new_world"
@@ -21,6 +22,7 @@ def quit_game():
     exit()
 
 class Menu:
+    alpha = 0.0
     initialized = False
     index = "root"
     texture_titles = {
@@ -61,6 +63,11 @@ class Menu:
     current_selection = 0
 
     def tick():
+        if(Menu.alpha<1.0):
+            Menu.alpha += 0.001
+            Menu.alpha *= 1.011
+        else:
+            Menu.alphas = 1.0
         BubbleWorldRenderer.tick()
         Menu.controllers.tick()
         pad = Menu.controllers.get_virtualized_pad(0)
@@ -106,7 +113,7 @@ class Menu:
     def render():
 
         if not Menu.initialized:
-            #audio.baudy_play_music( BGL.assets.get("KT-player/path/vectormenu"))
+            audio.baudy_play_music( BGL.assets.get("KT-player/path/vectormenu"))
             Menu.initialized = True
             
         with BGL.context.render_target( Menu.texbuffer ):
@@ -121,6 +128,8 @@ class Menu:
                         cs = "]*~ "
                         color = [ 1.0,1.0,1.0 ]
 
+
+                    for ii,f in enumerate(color):color[ii]=f*Menu.alpha
                     comp = os + option["label"] + cs
                     l = len(comp)
                     x = (480/2)-(l*4)
@@ -139,8 +148,8 @@ class Menu:
         with BGL.blendmode.alpha_over:
             Menu.primitive.render_shaded( Menu.shader, {
                 "texBuffer" : Menu.texture_titles[Menu.index],
-                "tick" : Menu.t,
-                "alpha" : 1.0,
+                "tick" : Menu.t * Menu.alpha,
+                "alpha" : Menu.alpha,
             })
             Menu.texbuffer.render_processed(BGL.assets.get("beagle-2d/shader/passthru"))
             if( Menu.index != "root" ):

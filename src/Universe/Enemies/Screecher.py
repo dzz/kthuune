@@ -126,6 +126,8 @@ class Screecher(SnapEnemy):
             self._t += 0.01 # increase shudder
             dx,dy = self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1],
             l = abs(dx)+abs(dy) 
+            if(l<0.1):
+                l = 0.1
             dx,dy = dx/l,dy/l
     
             rad = atan2(dx,dy)

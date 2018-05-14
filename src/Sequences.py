@@ -13,16 +13,17 @@ class Sequences:
     start_level = "1"
     active_music_key = None
     titles = {
-        "0" : { "title" : "Debug Area", "time_limit": 140, "music" : "KT-player/path/ship_music" },
-        "1" : { "title" : "First, we cut...", "time_limit": 120, "music" : "KT-player/path/ship_music" },
-        "2" : { "title" : "...Then, we cut some more.", "time_limit" : 40, "music" : "KT-player/path/gameplay1" },
+        #"0" : { "title" : "Debug Area", "time_limit": 140, "music" : "KT-player/path/ship_music" },
+        "1" : { "title" : "First, Cut!", "time_limit": 120, "music" : "KT-player/path/ship_music" },
+        "2" : { "title" : "Kindergarten", "time_limit" : 40, "music" : "KT-player/path/gameplay1" },
         "3" : { "title" : "Runner's High", "time_limit" : 160, "music" : "KT-player/path/ship_music", }, #mat didn't see dash tutor
         "3.1" : { "title" : "Boppin'", "time_limit" : 70, "music" : "KT-player/path/gameplay1", }, 
-        "4" : { "title" : "Kinetic Energy", "time_limit" : 120, "music" : "KT-player/path/ship_music" },
+        "4" : { "title" : "Kinetic Energy", "time_limit" : 120, "music" : "KT-player/path/trixymixy" },
+        "4.1" : { "title" : "Oxytoxicity", "time_limit" : 120, "music" : "KT-player/path/trixymixy" },
         "5" : { "title" : "Feathers in the wind", "time_limit" : 70, "music" : "KT-player/path/gameplay1" },
         "6" : { "title" : "Telephone Pole", "time_limit" : 90 , "music" : "KT-player/path/gameplay1" },
-        "7" : { "title" : "Not what they seem...", "time_limit" : 120 , "music" : "KT-player/path/ship_music" },
-        "8" : { "title" : "Faraday Cage", "time_limit" : 80, "music" : "KT-player/path/gameplay1" },
+        "7" : { "title" : "Not what they seem...", "time_limit" : 120 , "music" : "KT-player/path/trixymixy" },
+        "8" : { "title" : "Faraday Cage", "time_limit" : 80, "music" : "KT-player/path/trixymixy" },
         "9" : { "title" : "Clerical Error", "time_limit" : 120, "music" : "KT-player/path/gameplay1" }, #debug state here, or make failure more quick & reinforcing
         "A0" :{ "title" :  "Pontiff Predicament", "time_limit" : 115, "music" : "KT-player/path/ship_music" },
     }
@@ -59,7 +60,7 @@ class Sequences:
 
         area_def = get_area_data(data)
 
-        buildername = "{0}_{1}".format("buildarea",sequence)
+        buildername = "{0}_{1}".format("buildarea",sequence.replace('.','_'))
 
         if buildername in dir(Sequences):
             return getattr(Sequences,buildername)(Game,area_def,sequence)
@@ -152,15 +153,15 @@ class Sequences:
         return floor
 
     def buildarea_3(Game,area_def,sequence):
-        floor = Sequences.buildarea_default( Game, area_def, sequence )
         Abilities.Dash = True
-        floor.custom_background = CloudBackground()
         Elder.script = [ "VECTORLORD, you must move quickly!",
                          "RUN with [RB] or DASH with (B)",
                          "combine techniques for precision movement" ]
         Elder.floor_script = [
             "[RB] to RUN (B) to DASH"
         ]
+        floor = Sequences.buildarea_default( Game, area_def, sequence )
+        floor.custom_background = CloudBackground()
         return floor
 
     def buildarea_4(Game,area_def,sequence):
@@ -178,6 +179,14 @@ class Sequences:
         floor = Sequences.buildarea_default( Game, area_def, sequence )
         Abilities.Telekine = True
         floor.custom_background = CloudBackground()
+        return floor
+
+    def buildarea_4_1(Game,area_def,sequence):
+        Elder.texture = BGL.assets.get('KT-player/texture/elder_i')
+        Elder.script = [ "...strange mutations in the source these days...",
+                         "the key, perhaps, to reproduction!" ]
+        Elder.floor_script = [ "(elderbeast)" ]
+        floor = Sequences.buildarea_default( Game, area_def, sequence )
         return floor
 
     def buildarea_7(Game,area_def,sequence):

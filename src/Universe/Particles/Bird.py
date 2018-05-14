@@ -42,7 +42,7 @@ class Bird(Object):
         self.size[1] *= 1.015
         self.fr += 1
         if self.fr<self.delay:
-            self.flash_color = [ 1.0,1.0,1.0,1.0 ]
+            self.flash_color = [ 0.15,0.1,0.2,1.0 ]
             return True
 
         self.flash_color[3]*=0.9
