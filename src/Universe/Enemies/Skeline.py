@@ -44,10 +44,6 @@ class Skeline(SnapEnemy):
         self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
         #self.state = Skeline.STATE_SEEKING_RANDOM
         self.stimer = 0
-        self.rvx = None
-        self.speed = 3.8
-        self.invert_seek = False
-        self.flip_pxy = False
 
         self.snap_effect_emit = 0
         self.iframes = 0
@@ -55,11 +51,14 @@ class Skeline(SnapEnemy):
         self.hp = 50
         self.tooltip_time = choice([10,20,50,150,300])
         self.next_tooltip = 250
-        
+
+        self.rvx = None
+        self.speed = 3.8
+        self.run_away = False
 
     def tick(self):
         if(self.triggered):
-            self.tooltip_time = self.tooltip_time +1 
+            self.tooltip_time = self.tooltip_time +1
         else:
             self.tooltip = None
 
@@ -81,7 +80,7 @@ class Skeline(SnapEnemy):
                 #"sinner!",
                 #"blasphemer!"
                 #"hey, you can call me rip",
-                #"hey you can call me YOU'RE DEAD" 
+                #"hey you can call me YOU'RE DEAD"
                 ])
             self.tooltip_time = 0
 
@@ -105,11 +104,6 @@ class Skeline(SnapEnemy):
         if( md < 300 ):
             if not self.triggered:
                 self.triggered = True
-                test_segment = [ [ self.floor.player.p[0], self.floor.player.p[1] ], [self.p[0], self.p[1] ] ]
-                for segment in self.floor.get_light_occluders():
-                    if segments_intersect( segment, test_segment ):
-                        self.triggered = False
-                        break 
         if( md > 300 ):
             self.triggered = False
 
@@ -122,60 +116,52 @@ class Skeline(SnapEnemy):
 
         self.visible = True
 
-        self.stimer = self.stimer + 1
-
-        if self.invert_seek:
-            calc_speed = self.speed * -0.4
-        else:
-            calc_speed = self.speed * 1.2
+        self.stimer += 1
 
         if self.state == Skeline.STATE_SEEKING_PLAYER:
 
-            ### hack acolyte seek
+            #seek player unless acolyte is closer
             p = self.floor.player.p
             pscore = abs(p[0] - self.p[0]) + abs(p[1]-self.p[1])
             for enemy in self.floor.snap_enemies:
-                if not self.invert_seek and "is_acolyte" in enemy.__dict__ and enemy.triggered:
-                    apscore = abs(enemy.p[0] - self.p[0]) + abs(enemy.p[1]-self.p[1])
-                    if apscore<pscore:
+                if not self.run_away and "is_acolyte" in enemy.__dict__ and enemy.triggered:
+                    ascore = abs(enemy.p[0] - self.p[0]) + abs(enemy.p[1]-self.p[1]) * 0.8
+                    if ascore<pscore:
+                        self.run_away = False
                         p=enemy.p
                         break
-        
-                        
 
-            self.rvx = None
-            if self.flip_pxy:
-                y = p[0] - self.p[0]
-                x = p[1] - self.p[1]
-            else:
-                x = p[0] - self.p[0]
-                y = p[1] - self.p[1]
-    
-
+            x = p[0] - self.p[0]
+            y = p[1] - self.p[1]
 
             rad = atan2(y,x)
-            vx = cos(rad) * calc_speed
-            vy = sin(rad) * calc_speed
-            self.v = [ vx,vy]
+            vx = cos(rad) * self.speed
+            vy = sin(rad) * self.speed
+            if self.run_away:
+                self.v = [vx*-1, vy*-1]
+            else:
+                self.v = [vx, vy]
 
-            if(self.stimer > 12 ):
+
+            if self.stimer > 25:
                 self.stimer = 0
-                self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER, Skeline.STATE_SEEKING_PLAYER ] )
-                self.invert_seek = choice( [ False, True, False ] )
-                if( self.state == Skeline.STATE_SEEKING_RANDOM ):
-                    self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_CHARGING_SHOT, Skeline.STATE_SEEKING_PLAYER ] )
-                    self.flip_pxy = choice( [ True, True, True, False ] )
+                self.state = choice( [Skeline.STATE_CHARGING_SHOT, Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER, Skeline.STATE_SEEKING_PLAYER ] )
+                if self.state == Skeline.STATE_SEEKING_PLAYER:
+                    #if its still seeking the player have a chance of running away
+                    self.run_away = choice( [ False, True, False ] )
         if self.state == Skeline.STATE_SEEKING_RANDOM:
             if not self.rvx:
                 self.rvx = [ uniform(-1.0,1.0), uniform(-1.0,1.0) ]
-                self.flip_pxy = choice( [ True, False ] )
-            self.v = [ self.rvx[0] * calc_speed, self.rvx[1] * calc_speed ]
-            if(self.stimer > 5 ):
+            self.v = [ self.rvx[0] * self.speed, self.rvx[1] * self.speed ]
+            if self.stimer > 10:
                 self.stimer = 0
-                self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER, Skeline.STATE_CHARGING_SHOT ] )
-                self.invert_seek = choice( [ True, False ] )
+                self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER, Skeline.STATE_SEEKING_PLAYER ] )
+                if self.state == Skeline.STATE_SEEKING_PLAYER:
+                    #if its still seeking the player have a chance of running away
+                    self.run_away = choice( [ False, True, False ] )
+
         if self.state == Skeline.STATE_CHARGING_SHOT:
-            if(self.stimer==1):
+            if self.stimer == 1:
                 KSounds.play(KSounds.charging_projectile)
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             self.light_color = [1.0,0.4,0.1,1.0]
@@ -205,7 +191,7 @@ class Skeline(SnapEnemy):
         y = (self.floor.player.p[1] - self.p[1])+self.floor.player.v[1]
         rad = atan2(y,x)
         self.target_rad = rad
-        
+
     def fireRanged(self):
         self.flash(1.0,0.8,0.0)
         #x = self.floor.player.p[0] - self.p[0]
