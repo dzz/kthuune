@@ -1,12 +1,13 @@
 from Newfoundland.Object import Object
 from Beagle import API as BGL
-from math import floor
+from math import floor, sin
 from random import uniform, choice
 from ..LevelProps.CableSegment import CableSegment
 
 from ..LevelEffects.Poof import Poof
 from ..LevelEffects.AttackInfo import AttackInfo
 from ..Particles.SplatterParticle import SplatterParticle
+from ..Particles.Bird import Bird
 from ..LevelEffects.Explosion import Explosion
 
 class Chargeplate(Object):
@@ -35,7 +36,7 @@ class Chargeplate(Object):
 
     def customize(self):
         #self.tooltip = "Stand on me!"
-        self.size = [ 2.0, 2.0 ]
+        self.size = [ 2.3, 2.3 ]
         self.buftarget = "popup"
         self.tick_type = Object.TickTypes.PURGING
         self.texture = Chargeplate.textures[0]
@@ -46,9 +47,13 @@ class Chargeplate(Object):
         self.incr_frames = 0
         self.decr_frames = 0
         self.l_idx = 0
+        self._t = 0
+        self._t_offs = uniform(0.0,100.0)
 
     def tick(self):
 
+        self._t += 0.1
+        self.rad = sin( self._t + self._t_offs ) * 0.1
         if(self.visible):
             self.color = [
                 1.0+self.cv,
@@ -59,18 +64,17 @@ class Chargeplate(Object):
             self.light_radius = 2.0 + (self.cv*3.0)
             self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
 
-            self.flash_color[3] *= 0.95;
+            self.flash_color[3] *= 0.98;
             
             if not self.charged:
-                if( uniform(0.0,1.0)>0.9):
+                if( uniform(0.0,1.0)>0.98):
                     i = uniform(0.8,1.5)
-                    self.flash_color = [ 0,0,i,1.0]
+                    self.flash_color = [ 0,0.0,i,1.0]
 
         if(not self.visible):
             return True
 
         if(self.charged):
-
             #self.tooltip = "I'm charged, find more of me!"
             self.flash_color[3] = 0.0 
             notify_timeout = 30
@@ -138,7 +142,7 @@ class Chargeplate(Object):
                 #self.floor.game.trigger_fade( 242, [ 1.0,1.0,1.0] )
             return False
 
-        self.fr += self.cv
+        self.fr += self.cv*0.1
 
         if(self.fr>= len (Chargeplate.textures)):
             self.fr = 0
@@ -155,12 +159,17 @@ class Chargeplate(Object):
                 self.floor.group_to_owl[self.group].flash_color = [ 0.0,1.0,0.0,1.0]
         self.l_idx = n_lidx
 
-
-
         if(self.mdist( self.floor.player)<2.27):
             self.cv += 0.03
             self.flash_color[3] = 0.0
-            self.floor.create_object(Poof( p = list(self.p)))
+            if( uniform(0.0,1.0) >  0.9 ):
+                self.floor.create_object(Poof( p = list(self.p)))
+                for x in range(0,1):
+                    spltr = Bird( p = [self.p[0]+uniform(0.0,self.size[0]), self.p[1]+uniform(-4.0,4.0)])
+                    spltr.color = [0.0,0.0,0.0,1.0]
+                    spltr.light_color = [ 0.0,1.0,0.0,1.0]
+                    spltr.size[0]*=uniform(1.0,1.5)
+                    self.floor.create_object(spltr)
             #self.floor.objects.remove(self)
             #return False            
         else:

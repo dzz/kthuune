@@ -10,7 +10,7 @@ from .CloudBackground import CloudBackground
 import audio
 
 class Sequences:
-    start_level = "1"
+    start_level = "8"
     active_music_key = None
     titles = {
         #"0" : { "title" : "Debug Area", "time_limit": 140, "music" : "KT-player/path/ship_music" },

@@ -100,8 +100,6 @@ class Screecher(SnapEnemy):
             return True
 
         self.visible = True
-        self.stimer = self.stimer + 1
-
         self.stimer += 1
         #######
         if self.state == Screecher.STATE_BIRTHING:
@@ -124,16 +122,17 @@ class Screecher(SnapEnemy):
                 self.next_state( Screecher.STATE_DIVING )
         if self.state == Screecher.STATE_DIVING:
             self._t += 0.01 # increase shudder
-            dx,dy = self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1],
+            dx = (self.floor.player.p[0] - self.p[0])+self.floor.player.v[0]
+            dy = (self.floor.player.p[1] - self.p[1])+self.floor.player.v[1]
             l = abs(dx)+abs(dy) 
             if(l<0.1):
                 l = 0.1
             dx,dy = dx/l,dy/l
     
-            rad = atan2(dx,dy)
-            rad += (self.cyclonic_direction)*( (150.0-l)*0.04)
-
-            dx,dy = sin(rad),cos(rad)
+            if(l<90):
+                rad = atan2(dy,dx)
+                rad += (self.cyclonic_direction)*( (90.0-l)*0.04)
+                dx,dy = cos(rad),sin(rad)
 
             self.v[0] = dx*10.0
             self.v[1] = dy*10.0
