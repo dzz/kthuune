@@ -115,8 +115,8 @@ class DungeonFloor( Floor ):
                 "name" : None,
                 "spacing" : 0,
                 "tilecount" : 70,
-                "tileheight" : 32,
-                "tilewidth" : 32
+                "tileheight" : 64,
+                "tilewidth" : 64
             },
         )
 

@@ -63,13 +63,12 @@ class CloudBackground:
         self.lightning = 0.0
 
     def tick(self):
-
         if uniform(0.0,120.0)<1.0:
             self.lightning = uniform(12,24.0)
             KSounds.play(KSounds.atmozap1)
-        if uniform(0.0,120.0)<1.0:
+        elif uniform(0.0,120.0)<1.0:
             KSounds.play(KSounds.atmozap2)
-            self.lightning = uniform(-12,-24)
+            self.lightning = uniform(5,34)
         self.fr0 += 0.14
         self.fr1 += 0.3
 

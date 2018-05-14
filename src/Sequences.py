@@ -182,7 +182,7 @@ class Sequences:
         return floor
 
     def buildarea_4_1(Game,area_def,sequence):
-        Elder.texture = BGL.assets.get('KT-player/texture/elder_i')
+        Elder.texture = BGL.assets.get('KT-player/texture/elder0000')
         Elder.script = [ "...strange mutations in the source these days...",
                          "the key, perhaps, to reproduction!" ]
         Elder.floor_script = [ "(elderbeast)" ]

@@ -53,11 +53,11 @@ class EglanBlob(SnapEnemy):
 
     def tick(self):
 
-        self.rad = sin(self.fridx)*0.01
+        self.rad = sin(self.fridx*0.001)*0.02
         self.fade_flash()
         SnapEnemy.tick(self)
         self.fridx += 1
-        self.texture = EglanBlob.textures[ int(self.fridx/30.0) % len(EglanBlob.textures) ]
+        self.texture = EglanBlob.textures[ int(self.fridx/22.0) % len(EglanBlob.textures) ]
 
         if(self.firing):
             self.fire_idx += 1
@@ -79,8 +79,8 @@ class EglanBlob(SnapEnemy):
             if(uniform(0.0,1.0)<0.01) and self.mdist(self.floor.player)<40:
                 self.firing = True
             if choice([True,False,False]):
-                self.v[0] = uniform(-8.0,8.0)
-                self.v[1] = uniform(-8.0,8.0)
+                self.v[0] = uniform(-3.0,3.0)
+                self.v[1] = uniform(-3.0,3.0)
                 if(self.v[1] >0 ):
                     self.size[0] = -7.0
                 else:
