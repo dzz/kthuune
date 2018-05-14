@@ -64,7 +64,7 @@ class Menu:
 
     def tick():
         if(Menu.alpha<1.0):
-            Menu.alpha += 0.001
+            Menu.alpha += 0.003
             Menu.alpha *= 1.011
         else:
             Menu.alphas = 1.0

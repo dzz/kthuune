@@ -5,7 +5,9 @@
             { "name" : "transporter_flash", "directory" : "{package_path}/transporter_flash/", "filtered" : false },
             { "name" : "worldbubble", "directory" : "{package_path}/menu/worldbubble/", "filtered" : false },
             { "name" : "dust", "directory" : "{package_path}/dust/", "filtered" : false },
-            { "name" : "explosion", "directory" : "{package_path}/explosion/", "filtered" : false }
+            { "name" : "explosion", "directory" : "{package_path}/explosion/", "filtered" : false },
+            { "name" : "knight", "directory" : "{package_path}/knight/", "filtered" : false },
+            { "name" : "knight_sword", "directory" : "{package_path}/knight_sword/", "filtered" : false }
         ],
         "texture" : [
             { "name" : "lock", "filename" : "{package_path}/lock.png", "filtered" : false },

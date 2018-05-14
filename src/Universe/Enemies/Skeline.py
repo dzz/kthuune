@@ -26,12 +26,8 @@ class Skeline(SnapEnemy):
     STATE_CHARGING_SHOT = 2
     STATE_FIRING_SHOT = 3
 
-    textures = [
-        BGL.assets.get("KT-forest/texture/skeline0000"),
-        BGL.assets.get("KT-forest/texture/skeline0001"),
-        BGL.assets.get("KT-forest/texture/skeline0002"),
-        BGL.assets.get("KT-forest/texture/skeline0003"),
-    ] 
+    textures = BGL.assets.get("KT-forest/animation/skeline")
+
     def customize(self):
 
         self.op = list(self.p)
@@ -43,7 +39,7 @@ class Skeline(SnapEnemy):
         self.buftarget = "popup"
         self.texture = Skeline.textures[0]
         self.widx = int(uniform(0.0,40.0))
-        self.size = [ 2.5, 2.5 ]
+        self.size = [ 2.8, 2.8 ]
         self.physics = { "radius" : 0.35, "mass"   : 0.0005, "friction" : 0.0 }
         self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
         #self.state = Skeline.STATE_SEEKING_RANDOM

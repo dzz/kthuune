@@ -29,9 +29,8 @@ class ToolTip(Object): #must pass in message, width, owner
         self.alive = False
 
     def tick(self):
-        self.t += 0.1
-        self.size[0] = self.base_size[0] + (sin(self.t)*0.1)
-        self.size[1] = self.base_size[1] + (cos(self.t)*0.1)
+        self.t += 0.03
+        self.rad = sin(self.t)*0.2
         return self.alive
 
     def get_shader_params(self):
@@ -42,6 +41,7 @@ class ToolTip(Object): #must pass in message, width, owner
         if self.owner.tooltip_layout==0:
             base_params['translation_world'][0] -= (self.owner.size[0]*1.2) * (1.0+(dx/30.))
             base_params['translation_world'][1] -= (self.owner.size[1]*1.2) * (1.0+(dy/30.))
+
 
         return base_params
         
@@ -140,8 +140,8 @@ class SpeechBubble(Object):
 
     def tick(self):
 
-        self.t+=0.01
-        self.rad = sin(self.t)*0.01
+        self.t+=0.06
+        self.rad = sin(self.t)*0.03
 
         if(self.floor.player.title_card.displaying()):
             return

@@ -376,53 +376,57 @@ class KPlayer(Player):
         overrides.update(kwargs)
         Player.__init__(self, **overrides)
         self.base_light_color = self.light_color
-        KPlayer.swing_textures = [
-            BGL.assets.get('KT-player/texture/knight_sword0000'),
-            BGL.assets.get('KT-player/texture/knight_sword0001'),
-            BGL.assets.get('KT-player/texture/knight_sword0002'),
-            BGL.assets.get('KT-player/texture/knight_sword0003'),
-            BGL.assets.get('KT-player/texture/knight_sword0004'),
-            BGL.assets.get('KT-player/texture/knight_sword0005'),
-            BGL.assets.get('KT-player/texture/knight_sword0006'),
-            BGL.assets.get('KT-player/texture/knight_sword0007'),
-            BGL.assets.get('KT-player/texture/knight_sword0008'),
-            BGL.assets.get('KT-player/texture/knight_sword0009'),
-            BGL.assets.get('KT-player/texture/knight_sword0010'),
-            BGL.assets.get('KT-player/texture/knight_sword0011'),
-            BGL.assets.get('KT-player/texture/knight_sword0012'),
-            BGL.assets.get('KT-player/texture/knight_sword0013'),
-            BGL.assets.get('KT-player/texture/knight_sword0014'),
-            BGL.assets.get('KT-player/texture/knight_sword0015'),
-            BGL.assets.get('KT-player/texture/knight_sword0016'),
-            BGL.assets.get('KT-player/texture/knight_sword0017')
-        ]
 
-        KPlayer.textures = [
-            BGL.assets.get('KT-player/texture/knight0000'),
-            BGL.assets.get('KT-player/texture/knight0001'),
-            BGL.assets.get('KT-player/texture/knight0002'),
-            BGL.assets.get('KT-player/texture/knight0003'),
-            BGL.assets.get('KT-player/texture/knight0004'),
-            BGL.assets.get('KT-player/texture/knight0005'),
-            BGL.assets.get('KT-player/texture/knight0006'),
-            BGL.assets.get('KT-player/texture/knight0007'),
-            BGL.assets.get('KT-player/texture/knight0008'),
-            BGL.assets.get('KT-player/texture/knight0009'),
-            BGL.assets.get('KT-player/texture/knight0010'),
-            BGL.assets.get('KT-player/texture/knight0011'),
-            BGL.assets.get('KT-player/texture/knight0012'),
-            BGL.assets.get('KT-player/texture/knight0013'),
-            BGL.assets.get('KT-player/texture/knight0014'),
-            BGL.assets.get('KT-player/texture/knight0015'),
-            BGL.assets.get('KT-player/texture/knight0016'),
-            BGL.assets.get('KT-player/texture/knight0017'),
-            BGL.assets.get('KT-player/texture/knight0018'),
-            BGL.assets.get('KT-player/texture/knight0019'),
-            BGL.assets.get('KT-player/texture/knight0020'),
-            BGL.assets.get('KT-player/texture/knight0021'),
-            BGL.assets.get('KT-player/texture/knight0022'),
-            BGL.assets.get('KT-player/texture/knight0023')
-        ]
+        KPlayer.textures = BGL.assets.get('KT-player/animation/knight')
+        KPlayer.swing_textures = BGL.assets.get('KT-player/animation/knight_sword')
+
+        #KPlayer.swing_textures = [
+        #    BGL.assets.get('KT-player/texture/knight_sword0000'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0001'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0002'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0003'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0004'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0005'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0006'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0007'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0008'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0009'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0010'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0011'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0012'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0013'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0014'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0015'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0016'),
+        #    BGL.assets.get('KT-player/texture/knight_sword0017')
+        #]
+
+        #KPlayer.textures = [
+        #    BGL.assets.get('KT-player/texture/knight0000'),
+        #    BGL.assets.get('KT-player/texture/knight0001'),
+        #    BGL.assets.get('KT-player/texture/knight0002'),
+        #    BGL.assets.get('KT-player/texture/knight0003'),
+        #    BGL.assets.get('KT-player/texture/knight0004'),
+        #    BGL.assets.get('KT-player/texture/knight0005'),
+        #    BGL.assets.get('KT-player/texture/knight0006'),
+        #    BGL.assets.get('KT-player/texture/knight0007'),
+        #    BGL.assets.get('KT-player/texture/knight0008'),
+        #    BGL.assets.get('KT-player/texture/knight0009'),
+        #    BGL.assets.get('KT-player/texture/knight0010'),
+        #    BGL.assets.get('KT-player/texture/knight0011'),
+        #    BGL.assets.get('KT-player/texture/knight0012'),
+        #    BGL.assets.get('KT-player/texture/knight0013'),
+        #    BGL.assets.get('KT-player/texture/knight0014'),
+        #    BGL.assets.get('KT-player/texture/knight0015'),
+        #    BGL.assets.get('KT-player/texture/knight0016'),
+        #    BGL.assets.get('KT-player/texture/knight0017'),
+        #    BGL.assets.get('KT-player/texture/knight0018'),
+        #    BGL.assets.get('KT-player/texture/knight0019'),
+        #    BGL.assets.get('KT-player/texture/knight0020'),
+        #    BGL.assets.get('KT-player/texture/knight0021'),
+        #    BGL.assets.get('KT-player/texture/knight0022'),
+        #    BGL.assets.get('KT-player/texture/knight0023')
+        #]
 
         self.filtered_speed = self.speed
         self.attacked = False

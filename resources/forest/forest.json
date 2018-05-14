@@ -13,7 +13,8 @@
             { "name" : "screecher", "directory" : "{package_path}/screecher/", "filtered" : false },
             { "name" : "blood", "directory" : "{package_path}/blood/", "filtered" : false },
             { "name" : "eglan", "directory" : "{package_path}/eglan/", "filtered" : false },
-            { "name" : "bird", "directory" : "{package_path}/bird/", "filtered" : true }
+            { "name" : "bird", "directory" : "{package_path}/bird/", "filtered" : true },
+            { "name" : "skeline", "directory" : "{package_path}/skeline/", "filtered" : true }
         ],
         "texture" : [
             { "name" : "owl", "filename" : "{package_path}/owl.png", "filtered" : false },
