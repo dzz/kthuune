@@ -23,6 +23,7 @@ void main(void) {
     uv2 += vec2(0.5,0.5);
  
     vec4 smpl_base = texture(texBuffer,uv2+offs);
+    vec4 shadow_base = texture(texBuffer,uv2+offs+vec2(0.0,-0.01));
 
     int si = int(floor(uv.y*900));
 
@@ -38,6 +39,9 @@ void main(void) {
         if(jj<9) {
             smpl_base = vec4(0.0,0.0,0.0,1.0);
         } else
+        if(shadow_base.r>0.9) {
+            smpl_base = vec4(0.2,0.0,0.25,1.0);
+        } else
         /*if(si%2==0)
             smpl_base = vec4(0.0,0.0,0.0,1.0);
         else */{
@@ -47,6 +51,7 @@ void main(void) {
             float idx1 = (1.0+sin((uv.y*6)+(tick*3.0)+(modp*3.14)))/2.0;
             smpl_base = vec4(0.1*idx1,0.0,idx1*0.3,1.0);
         }
+
 
         final_alpha *= final_alpha;
         final_alpha *= final_alpha;
