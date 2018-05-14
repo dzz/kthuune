@@ -11,6 +11,8 @@
         ],
         "texture" : [
             { "name" : "lock", "filename" : "{package_path}/lock.png", "filtered" : false },
+            { "name" : "world1_icon", "filename" : "{package_path}/menu/world1_icon.png", "filtered" : false },
+            { "name" : "main_menu_back", "filename" : "{package_path}/menu/back.png", "filtered" : false },
             { "name" : "menu_title", "filename" : "{package_path}/menu/title.png", "filtered" : false },
             { "name" : "level_summary", "filename" : "{package_path}/menu/level_summary2.png", "filtered" : false },
             { "name" : "chooseworld_title", "filename" : "{package_path}/menu/cw_title.png", "filtered" : false },

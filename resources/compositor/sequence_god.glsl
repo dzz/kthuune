@@ -59,7 +59,7 @@ void main() {
 
     float mg=g*((sin(tick*0.01)+1.0)/2.0);
     gl_FragColor.rgb = (comp*(1.0-mg))+(inv*mg);
-    gl_FragColor.rgb*=vec3(1.0,1.0,1.0)+vec3(b*50,b*40,b*20);
+    gl_FragColor.rgb*=vec3(1.0,1.0,1.0)+vec3(b*45,b*40,b*30);
 
     gl_FragColor.rgb = ((1.0-s)*gl_FragColor.rgb)+(s*vec3(comp.r,1.0-l,1.0-l));
 

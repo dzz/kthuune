@@ -28,7 +28,7 @@ class EglanBlob(SnapEnemy):
         self.hp = 160
         self.dead = False
         self.tick_type = Object.TickTypes.PURGING
-        self.physics = { "radius" : 2.0, "mass"   : 0.003, "friction" : 2.0 }
+        self.physics = { "radius" : 2.3, "mass"   : 0.005, "friction" : 4.0 }
         self.buftarget = "popup"
         self.visible = True
         self.texture = EglanBlob.textures[0]
@@ -52,12 +52,29 @@ class EglanBlob(SnapEnemy):
         KSounds.play_eproj()
 
     def tick(self):
+        if(self.floor.camera.cinema_target):
+            return True
+        if(SnapEnemy.handle_tick_disabled(self)):
+            return True
 
         self.rad = sin(self.fridx*0.001)*0.02
         self.fade_flash()
         SnapEnemy.tick(self)
         self.fridx += 1
         self.texture = EglanBlob.textures[ int(self.fridx/22.0) % len(EglanBlob.textures) ]
+
+        y = self.floor.player.p[0] - self.p[0]
+        x = self.floor.player.p[1] - self.p[1]
+
+        md = (x*x)+(y*y)
+        if( md < 300 ):
+            if not self.triggered:
+                self.triggered = True
+        if( md > 300 ):
+            self.triggered = False
+
+        if not self.triggered:
+            return True
 
         if(self.firing):
             self.fire_idx += 1
@@ -94,6 +111,8 @@ class EglanBlob(SnapEnemy):
                 self.v[1] = dy*0.25
 
         self.light_color = [ abs(sin(self.fridx*0.03)),0.0,abs(cos(self.fridx*0.02)),1.0]
+        self.v[0]*=0.12
+        self.v[1]*=0.12
 
 
         if(self.hp < 0):

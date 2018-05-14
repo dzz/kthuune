@@ -10,22 +10,22 @@ from .CloudBackground import CloudBackground
 import audio
 
 class Sequences:
-    start_level = "2"
+    start_level = "1"
     active_music_key = None
     titles = {
         #"0" : { "title" : "Debug Area", "time_limit": 140, "music" : "KT-player/path/ship_music" },
-        "1" : { "title" : "First, Cut!", "time_limit": 120, "music" : "KT-player/path/ship_music" },
-        "2" : { "title" : "Kindergarten", "time_limit" : 40, "music" : "KT-player/path/gameplay1" },
-        "3" : { "title" : "Runner's High", "time_limit" : 160, "music" : "KT-player/path/ship_music", }, #mat didn't see dash tutor
-        "3.1" : { "title" : "Boppin'", "time_limit" : 70, "music" : "KT-player/path/gameplay1", }, 
-        "4" : { "title" : "Kinetic Energy", "time_limit" : 120, "music" : "KT-player/path/trixymixy" },
-        "4.1" : { "title" : "Oxytoxicity", "time_limit" : 120, "music" : "KT-player/path/trixymixy" },
-        "5" : { "title" : "Feathers in the wind", "time_limit" : 70, "music" : "KT-player/path/gameplay1" },
-        "6" : { "title" : "Telephone Pole", "time_limit" : 90 , "music" : "KT-player/path/gameplay1" },
-        "7" : { "title" : "Not what they seem...", "time_limit" : 120 , "music" : "KT-player/path/trixymixy" },
+        "1" : { "title" : "First, Cut!", "time_limit": 165, "music" : "KT-player/path/ship_music" },
+        "2" : { "title" : "Kindergarten", "time_limit" : 55, "music" : "KT-player/path/polydrone" },
+        "3" : { "title" : "Runner's High", "time_limit" : 165, "music" : "KT-player/path/lacuna_canal", }, #mat didn't see dash tutor
+        "3.1" : { "title" : "Boppin'", "time_limit" : 55, "music" : "KT-player/path/trixymixy", }, 
+        "4" : { "title" : "Kinetic Energy", "time_limit" : 165, "music" : "KT-player/path/trixymixy" },
+        "4.1" : { "title" : "Oxytoxicity", "time_limit" : 165, "music" : "KT-player/path/polydrone" },
+        "5" : { "title" : "Feathers in the wind", "time_limit" : 70, "music" : "KT-player/path/lacuna_canal" },
+        "6" : { "title" : "Telephone Pole", "time_limit" : 85 , "music" : "KT-player/path/lacuna_canal" },
+        "7" : { "title" : "Not what they seem...", "time_limit" : 165 , "music" : "KT-player/path/ship_music" },
         "8" : { "title" : "Faraday Cage", "time_limit" : 80, "music" : "KT-player/path/trixymixy" },
-        "9" : { "title" : "Clerical Error", "time_limit" : 120, "music" : "KT-player/path/gameplay1" }, #debug state here, or make failure more quick & reinforcing
-        "A0" :{ "title" :  "Pontiff Predicament", "time_limit" : 115, "music" : "KT-player/path/ship_music" },
+        "9" : { "title" : "Clerical Error", "time_limit" : 95, "music" : "KT-player/path/trixymixy" }, #debug state here, or make failure more quick & reinforcing
+        "A0" :{ "title" :  "Pontiff Predicament", "time_limit" : 165, "music" : "KT-player/path/polydrone" },
     }
     found = []
     current_index = 0

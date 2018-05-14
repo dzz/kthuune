@@ -32,7 +32,7 @@ class BubbleWorldRenderer():
 
 
 
-    def render():
+    def render(lock_texture):
 
         if not BubbleWorldRenderer.visible:
             BubbleWorldRenderer.primitive.render_shaded( BubbleWorldRenderer.shader, {
@@ -44,8 +44,8 @@ class BubbleWorldRenderer():
                 "rotation_local" : 0.0,
                 "filter_color" : [ 1.0,1.0,1.0,1.0],
                 "uv_translate" : [ 0.0,0.0],
-                "scale_x" : abs(sin(BubbleWorldRenderer.fidx)),
-                "texBuffer" : BubbleWorldRenderer.lock_texture } 
+                "scale_x" : 0.9+(abs(sin(BubbleWorldRenderer.fidx*0.1))*0.2),
+                "texBuffer" : lock_texture } 
             )
             return
 

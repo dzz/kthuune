@@ -102,10 +102,13 @@ class Worm(SnapEnemy):
 
         self.fade_flash()
         self.lifetime+=1
-        if(self.lifetime>10):
+        if(self.lifetime>23):
             self.triggered = True
         if(self.floor.player.kill_success):
             return True
+
+        if(self.lifetime>120):
+            self.hp = -1.0
 
         if(self.dead):
             self.color = [0.0,0.0,0.0,1.0]
@@ -177,6 +180,7 @@ class Worm(SnapEnemy):
                 self.vx = self.v[0] * 0.4
                 self.vy = self.v[1] * 0.4
                 self.floor.player.receive_ranged_attack(self)
+                self.hp = -1.0
 
         if (not self.biting):
             if hypot(self.floor.player.p[0] - self.p[0], self.floor.player.p[1] - self.p[1] ) < 7.0:

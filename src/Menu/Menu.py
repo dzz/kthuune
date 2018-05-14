@@ -52,11 +52,11 @@ class Menu:
             { "label" : "Quit", "callback" : quit_game },
         ],
         "new_world" : [ 
-            { "label" : "World of Learning", "callback" : reset_root },
-            { "label" : "World of Discovery", "callback" : reset_root },
-            { "label" : "World of Pain", "callback" : reset_root },
-            { "label" : "World of Redemption", "callback" : reset_root },
-            { "label" : "Back", "callback" : reset_root },
+            { "label" : "RING 0", "callback" : reset_root, "texture" : BGL.assets.get("KT-player/texture/world1_icon") },
+            { "label" : "kernel module", "callback" : reset_root , "texture": BubbleWorldRenderer.lock_texture },
+            { "label" : "127.0.0.1", "callback" : reset_root, "texture" : BubbleWorldRenderer.lock_texture },
+            { "label" : "IDEA?", "callback" : reset_root, "texture" : BubbleWorldRenderer.lock_texture },
+            { "label" : "Back", "callback" : reset_root, "texture" : BGL.assets.get("KT-player/texture/main_menu_back") },
         ]
     }
 
@@ -152,7 +152,7 @@ class Menu:
                 "alpha" : Menu.alpha,
             })
             Menu.texbuffer.render_processed(BGL.assets.get("beagle-2d/shader/passthru"))
-            if( Menu.index != "root" ):
-                BubbleWorldRenderer.render()
+            if( Menu.index == "new_world" ):
+                BubbleWorldRenderer.render(Menu.current_options["new_world"][Menu.current_selection]["texture"])
 
 

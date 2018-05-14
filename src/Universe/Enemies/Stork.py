@@ -64,7 +64,7 @@ class Stork(SnapEnemy):
         self.iframes = 0
         SnapEnemy.set_combat_vars(self)
 
-        self.hp = 250
+        self.hp = 155
         
 
     def tick(self):
