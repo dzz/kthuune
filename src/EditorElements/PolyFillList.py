@@ -4,7 +4,7 @@ from .PolyFills.checker_floor import checker_floor
 from .PolyFills.hard_wall import hard_wall
 from .PolyFills.soft_wall import soft_wall
 from .PolyFills.church_wall import church_wall
-from .PolyFills.totem import totem, shield_totem
+from .PolyFills.totem import totem, shield_totem, time_totem
 from .PolyFills.lantern import lantern
 from .PolyFills.door import door
 from .PolyFills.skeline import skeline
@@ -38,7 +38,7 @@ class PolyFillList:
                 def reduce(area,brush):
                     pass
             polyfill_map = {
-                "None" : no_polyfill,
+                #"None" : no_polyfill,
                 "platform_floor" : platform_floor,
                 "checker_floor" : checker_floor,
                 "hard_wall" : hard_wall,
@@ -65,12 +65,14 @@ class PolyFillList:
                 "sword" : sword,
                 "telekine" : telekine,
                 "owl" : owl,
-                "eglan" : eglan
+                "eglan" : eglan,
+                "time_totem" : time_totem
             }
             PolyFillList.cached_list = polyfill_map
         return PolyFillList.cached_list
 
     def getPolyFill(key):
+        print(key)
         return PolyFillList.getPolyFillMap()[key]
 
     def getPolyFills(layer = None):

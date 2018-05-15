@@ -31,8 +31,10 @@ class Totem(Object):
         "~reentrance~" ]
     texture = BGL.assets.get('KT-forest/texture/totem')
     shield_texture = BGL.assets.get('KT-forest/texture/shield_totem')
+    time_texture = BGL.assets.get('KT-forest/texture/time_totem')
 
     def customize(self):
+        self.time_totem = False
         self.shield_totem = False
         self.snap_type = SnapEnemy.TOTEM
         self.texture = Totem.texture
@@ -54,6 +56,8 @@ class Totem(Object):
     def tick(self):
         if(self.shield_totem):
             self.texture = self.shield_texture
+        if(self.time_totem):
+            self.texture = Totem.time_texture
         if self.active:
             self.reset_timer = self.reset_timer+1
         if(self.reset_timer == - 50):
@@ -72,11 +76,14 @@ class Totem(Object):
     def sleep_totem(self, player = None):
 
         if player:
+            if self.time_totem:
+                player.add_time(15)
+                self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ],
+                        message="TIME++"))
             if self.shield_totem:
                 player.shield_frames += 60*5
                 self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ],
-                        # message=choice(Totem.alive_statements)))
-                        message="~!SHIELDED!~"))
+                        message="SHIELD"))
         KSounds.play(KSounds.totem_hit)
         self.floor.snap_enemies.remove(self)
 

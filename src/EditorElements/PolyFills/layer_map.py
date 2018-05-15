@@ -12,4 +12,5 @@ class layer_map:
             ]
 
     def get_layer_id(key):
+        print(key)
         return layer_map.key_order.index(key)
