@@ -20,8 +20,8 @@ class Spawner(Object):
         
 
     def spawn(self):
+        self.floor.spawners.remove(self)
         self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="~respawn~"))
-        self.floor.sounds.play(self.floor.sounds.spawned)
         new_object = self.loser.__class__( p = list(self.p) )
         new_object.group = self.loser.group
         new_object.group_active = self.loser.group_active
@@ -29,6 +29,7 @@ class Spawner(Object):
         self.floor.create_object( new_object )
         self.floor.snap_enemies.append( new_object )
         self.floor.enemies.append( new_object )
+        self.floor.sounds.play(self.floor.sounds.spawned)
 
     def tick(self):
 

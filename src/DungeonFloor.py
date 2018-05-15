@@ -40,6 +40,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "spawners" : [],
             "CustomBackground" : None,
             "level_started" : False,
             "music" : None,

@@ -82,7 +82,9 @@ class SnapEnemy(Object):
 
         if not self.floor.playing_genocide():
             if not self.skips_spawn():
-                self.floor.create_object( Spawner( p = list(self.p), loser = self ) )
+                spwn = Spawner( p = list(self.p), loser = self ) 
+                self.floor.create_object(spwn)
+                self.floor.spawners.append(spwn)
         for x in range(0,self.get_kill_particles()):
             spltr = SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14))
             spltr.color = [0.0,0.0,0.0,1.0]

@@ -47,7 +47,9 @@ void main() {
     vec4 light_texel = texture( light_buffer, floor_uv )*vision_texel;
     vec4 shadow_texel = texture( shadow_buffer, floor_uv);
 
+    vec4 object_drop_hint = texture( object_buffer, floor_uv - (vec2(0.01,0.01)*length(floor_uv)));
 
+    light_texel *= 1.0-(object_drop_hint.a*0.25);
 
     light_texel.rgb*= (shadow_texel.a*shadow_texel.rgb);
 

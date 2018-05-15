@@ -107,6 +107,17 @@ class Cleric(SnapEnemy):
 
         self.floor.create_object(ai)
 
+        garbage_spawners = []
+        for spawner in self.floor.spawners:
+            if spawner.loser.is_cleric():
+                if spawner.loser.group == self.group:
+                    garbage_spawners.append(spawner)
+
+        for spawner in garbage_spawners:
+            self.floor.remove_object(spawner)
+            self.floor.purging_tick_manager.tickables.remove(spawner)
+            self.floor.spawners.remove(spawner)
+
         self.floor.activated_totem_groups.append(key_group)
         for totem in self.floor.totems:
             if totem.group == key_group:
