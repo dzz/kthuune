@@ -3,7 +3,8 @@ from Beagle import API as BGL
 from ..Enemies.SnapEnemy import SnapEnemy
 from ...KSounds import KSounds
 from ..LevelEffects.AttackInfo import AttackInfo
-from random import choice
+from ..Particles.Bird import Bird
+from random import choice, uniform
 
 from math import sin
 
@@ -74,6 +75,12 @@ class Totem(Object):
         self.light_radius = 7 + (3*sin(self.anim_index))
 
     def sleep_totem(self, player = None):
+        for x in range(0,5):
+            spltr = Bird( p = [self.p[0]+uniform(0.0,self.size[0]), self.p[1]+uniform(-4.0,4.0)])
+            spltr.color = [0.0,0.0,0.0,1.0]
+            spltr.light_color = [ 0.0,1.0,0.0,1.0]
+            spltr.size[0]*=uniform(1.0,1.5)
+            self.floor.create_object(spltr)
 
         if player:
             if self.time_totem:

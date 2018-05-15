@@ -72,7 +72,6 @@ class PolyFillList:
         return PolyFillList.cached_list
 
     def getPolyFill(key):
-        print(key)
         return PolyFillList.getPolyFillMap()[key]
 
     def getPolyFills(layer = None):
