@@ -65,6 +65,10 @@ class KPlayer(Player):
         if(self.run_stamina>100):
             self.run_stamina = 100 
 
+    def add_time(self,amt):
+            self.life_timer += amt*60
+            self.floor.sounds.play(self.floor.sounds.time_totem)
+
     def has_inv(self):
         for x in self.inventory:
             if x is None:

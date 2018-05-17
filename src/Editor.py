@@ -263,6 +263,11 @@ class Editor:
     def toggle_lit():
         for brush in Brushes.selected_brushes:
             brush.self_lit = not brush.self_lit
+
+    def center_player():
+        if LevelPreview.floor:
+            LevelPreview.floor.player.p[0] = Editor.instance.wmx * 2
+            LevelPreview.floor.player.p[1] = Editor.instance.wmy * 2
         
 
 
@@ -298,3 +303,4 @@ BGL.keyboard.register_keydown_handler("9", lambda: Editor.set_group(9))
 
 BGL.keyboard.register_keydown_handler("comma", lambda: Editor.prev_decorator())
 BGL.keyboard.register_keydown_handler("period", lambda: Editor.next_decorator())
+BGL.keyboard.register_keydown_handler("u", lambda: Editor.center_player())

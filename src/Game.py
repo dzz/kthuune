@@ -487,7 +487,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         if(self.summary_page):
             self.summary_page = self.summary_page.tick()
 
-        if(self.prebuffer < 30):
+        if(self.prebuffer < 120):
             self.prebuffer += 1
             return
 

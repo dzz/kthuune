@@ -84,7 +84,7 @@ class Totem(Object):
 
         if player:
             if self.time_totem:
-                player.add_time(15)
+                player.add_time(20)
                 self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ],
                         message="TIME++"))
             if self.shield_totem:

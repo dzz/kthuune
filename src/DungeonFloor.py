@@ -386,9 +386,9 @@ class DungeonFloor( Floor ):
 
         self.fog_level_impulse = 0.0
         geometry = self.get_light_occluders()[:]
-        geometry.extend( self.get_dynamic_light_occluders())
+        #geometry.extend( self.get_dynamic_light_occluders())
 
-        self.vision_lightmap.update( geometry )
+        #self.vision_lightmap.update( geometry )
         self.dynamic_lightmap.update( geometry )
         if not KTState.paused:
             if(self.player.snap_animation_buffer<=0) or (self.player.snap_animation_buffer%5==0):

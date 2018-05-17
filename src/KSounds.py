@@ -54,6 +54,7 @@ class KSounds:
     level_start = audio.baudy_load_sound(BGL.assets.get("KT-player/path/level_start")) 
     ree1 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/ree1")) 
     ree2 = audio.baudy_load_sound(BGL.assets.get("KT-player/path/ree2")) 
+    time_totem = audio.baudy_load_sound(BGL.assets.get("KT-player/path/time_totem")) 
 
     typewriter_keys = [
         audio.baudy_load_sound(BGL.assets.get("KT-player/path/tkey1")) ,

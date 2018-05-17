@@ -10,7 +10,7 @@ from .CloudBackground import CloudBackground
 import audio
 
 class Sequences:
-    start_level = "1"
+    start_level = "tt"
     active_music_key = None
     titles = {
         #"0" : { "title" : "Debug Area", "time_limit": 140, "music" : "KT-player/path/ship_music" },
@@ -25,6 +25,7 @@ class Sequences:
         "7" : { "title" : "Not what they seem...", "time_limit" : 50 , "music" : "KT-player/path/polydrone" },
         "8" : { "title" : "Faraday Cage", "time_limit" : 50, "music" : "KT-player/path/trixymixy" },
         "9" : { "title" : "Clerical Error", "time_limit" : 95, "music" : "KT-player/path/trixymixy" }, #debug state here, or make failure more quick & reinforcing
+        "tt" : { "title" : "Instant Cooking", "time_limit" : 30, "music" : "KT-player/path/trixymixy" }, #debug state here, or make failure more quick & reinforcing
         "A0" :{ "title" :  "Pontiff Predicament", "time_limit" : 85, "music" : "KT-player/path/trixymixy" },
         "A1" :{ "title" :  "Slapped on the Wrist", "time_limit" : 60, "music" : "KT-player/path/trixymixy" },
     }

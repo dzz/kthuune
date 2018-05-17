@@ -141,9 +141,9 @@ class AreaCompiler():
                 if "shield" in od["meta"]:
                     if od["meta"]["shield"]:
                         self.objects[-1].shield_totem = True
-                if "totem" in od["meta"]:
-                    if od["meta"]["totem"]:
-                        self.objects[-1].totem_totem = True
+                if "time" in od["meta"]:
+                    if od["meta"]["time"]:
+                        self.objects[-1].time_totem = True
             if od["key"] == "light":
                 self.objects.append(FactoryLight( factory_def = od ))
             if od["key"] == "door_pin":
