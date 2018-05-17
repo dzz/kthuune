@@ -31,6 +31,10 @@ class DungeonFloor( Floor ):
 
     current_music = None
     NO_SHADOWS = True #it's all caps coz its a hax
+
+    def create_tickable(self,tickable):
+        Floor.create_tickable(self,tickable)
+ 
     def playing_genocide(self):
         return self.game_mode == 1
 

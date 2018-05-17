@@ -317,6 +317,7 @@ class KPlayer(Player):
         #PLAYER INIT
         #player init
         
+        self.suspend_time_penalty = False
         self.violentally_executed_self = False
         self.shield_frames = 0 
         self.sequence_kills = 0
@@ -839,8 +840,16 @@ class KPlayer(Player):
         self.title_card.reset(title)
         
     def tick(self):
+        print("PLAYER TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("PLAYER TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("PLAYER TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("PLAYER TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("PLAYER TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         if not self.beat_level: #set in game
-            self.life_timer -= 1
+            if not self.suspend_time_penalty:
+                self.life_timer -= 1
+            else:
+                self.suspend_time_penalty = False
 
             if(self.life_timer<0):
                 self.hp = -1

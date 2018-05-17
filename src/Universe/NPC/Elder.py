@@ -40,6 +40,14 @@ class Elder(Object):
         self.script_char = 1
 
     def tick(self):
+        dx = self.p[0] - self.floor.player.p[0]
+        dy = self.p[1] - self.floor.player.p[1]
+        
+        dst = (dx*dx+dy*dy)
+
+        if(dst<40):
+            self.floor.player.suspend_time_penalty = True
+
 
         if self.talking:
             msg = self.script[self.script_item]
@@ -64,10 +72,6 @@ class Elder(Object):
                 
 
         if not self.sensed:
-            dx = self.p[0] - self.floor.player.p[0]
-            dy = self.p[1] - self.floor.player.p[1]
-
-            dst = (dx*dx+dy*dy)
 
             if(dst<30):
                 self.sensed = True

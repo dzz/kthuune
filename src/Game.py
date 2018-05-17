@@ -418,6 +418,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         Menu.controllers = self.controllers
 
         self.player         = self.create_tickable( self.create_player() )
+        #self.player         = ( self.create_player() )
 
         ### ENTRY POINT
 ###########################
@@ -484,6 +485,12 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
     def tick(self):
 
+
+        print("GAME TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("GAME TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("GAME TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("GAME TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("GAME TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         if(self.summary_page):
             self.summary_page = self.summary_page.tick()
 
