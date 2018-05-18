@@ -1043,7 +1043,7 @@ class KPlayer(Player):
             self.dv[1]*=0.6
 
             if(self.sword.state is not Sword.STATE_IDLE):
-                self.set_statj(KPlayer.STATE_DEFAULT)
+                self.set_state(KPlayer.STATE_DEFAULT)
             if(self.stimer > 6 ):
                 self.set_state(KPlayer.STATE_DEFAULT)
 
