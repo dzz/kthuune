@@ -138,7 +138,7 @@ class KPlayer(Player):
 
         self.telekineFlash = 1.0
         #teleportCost = 10.0
-        teleportCost = 0.0
+        teleportCost = 20.27
         if(self.teleportAmt<teleportCost):
             self.add_dm_message("You don't have enough Telekine Power!!")
             return
@@ -548,6 +548,8 @@ class KPlayer(Player):
 
 
             self.heartcard.render()
+            if(Abilities.Telekine):
+                self.telekinecard.render()
 
         #for x in reversed(range(0,self.max_invslots)):
         #    if x is not self.sel_invslot:
@@ -555,8 +557,6 @@ class KPlayer(Player):
         #PlayerInvSlot.render(self.sel_invslot, self.inventory[self.sel_invslot], True, self.sel_invslot == self.active_invslot)
 
         
-        #if(Abilities.Telekine):
-        #    self.telekinecard.render()
 
         #self.potioncard.render()
         #self.potioncountview.render()
