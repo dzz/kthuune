@@ -53,11 +53,12 @@ class SnapEnemy(Object):
             o.p[1] -= 99999
 
     def can_see_player(self):
-        test_segment = [ [ self.floor.player.p[0], self.floor.player.p[1] ], [self.p[0], self.p[1] ] ]
-        for segment in self.floor.get_light_occluders():
-            if segments_intersect( segment, test_segment ):
-                return False
         return True
+        #test_segment = [ [ self.floor.player.p[0], self.floor.player.p[1] ], [self.p[0], self.p[1] ] ]
+        #for segment in self.floor.get_light_occluders():
+        #    if segments_intersect( segment, test_segment ):
+        #        return False
+        #return True
 
     def die(self):
 
@@ -121,8 +122,17 @@ class SnapEnemy(Object):
         self.flash_color = [ r,g,b,1.0 ]
 
     def receive_snap_attack(self, was_crit):
+        for x in range(0,2):
+            spltr = SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14))
+            spltr.color = [0.0,0.0,0.0,1.0]
+            spltr.light_color = [ 0.0,1.0,0.0,1.0]
+            spltr.size[0]*=uniform(1.0,1.5)
+            self.floor.create_object(spltr)
 
-        self.iframes = 20
+        for x in range(0, 2):
+            self.floor.create_object( Firefly( p = [ self.p[0], self.p[1] ] ))
+
+        self.iframes = 17
         self.snap_effect_emit = 10
 
         crit = 1

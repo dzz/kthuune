@@ -320,7 +320,7 @@ class KPlayer(Player):
         #playerinit
         #PLAYER INIT
         #player init
-        
+        self.invisible_frames = 0  
         self.got_time = 0
         self.subtick = 0
         self.total_points = 0
@@ -1057,7 +1057,7 @@ class KPlayer(Player):
                 self.set_state( KPlayer.STATE_DEFAULT )
 
         if(self.state == KPlayer.STATE_DODGING ):
-
+            self.invisible_frames = 19 #also makes invuln
             for x in range(0,5):
                 spltr = Bird( p = [self.p[0]+uniform(0.0,self.size[0]), self.p[1]+uniform(-4.0,4.0)])
                 spltr.color = [0.0,0.0,0.0,1.0]
@@ -1220,4 +1220,10 @@ class KPlayer(Player):
                     self.floor.create_object(Dust( p=[ self.p[0], self.p[1]+0.8]))
 
             Object.tick(self)
+            if self.invisible_frames > 0:
+                self.invisible_frames -= 1
+                self.invuln_frames = 2
+                self.visible = False
+            else:
+                self.visible = True
 
