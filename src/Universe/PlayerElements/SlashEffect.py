@@ -37,7 +37,7 @@ class SlashEffect(Object):
             self.orig_rad = self.floor.player.rad
             self.floor.player.sword.visible = False
             self.attacked_enemies = []
-            self.cooldown = 51 
+            self.cooldown = 41 
             self.stagger_cooldown = 0
             self.floor.sounds.play( self.floor.sounds.slash )
             self.floor.player.run_stamina -= 20
@@ -49,8 +49,8 @@ class SlashEffect(Object):
         if(self.cooldown>0):
             self.cooldown -= 1
 
-        offsx = cos(self.rad+self.floor.player.rad)*0.9
-        offsy = sin(self.rad+self.floor.player.rad)*1
+        offsx = cos(self.rad)*0.9
+        offsy = sin(self.rad)*1
 
         if self.stagger_cooldown==0:
             self.rad+=0.04
@@ -80,7 +80,7 @@ class SlashEffect(Object):
                             else:
                                 enemy.receive_snap_attack( choice([False, False, True]) )
                             self.attacked_enemies.append(enemy)
-                            self.stagger_cooldown += 25
+                            self.stagger_cooldown += 7
             if self.stagger_cooldown==0:
                 self.fr+=1 
 

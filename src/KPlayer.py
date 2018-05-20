@@ -75,8 +75,9 @@ class KPlayer(Player):
                 return True
 
     def add_inv(self,inv):
-
         if(inv=="hp_vial"):
+            self.hp += 50
+            self.hp = min(self.hp,100)
             self.health_count += 1
         #for i, o in enumerate(self.inventory):
         #    if o is None:
@@ -119,7 +120,7 @@ class KPlayer(Player):
 
         if(self.invuln_frames>0):
             return 
-        self.snap_cooldown = 40
+        self.snap_cooldown = 10
         self.hp = self.hp - attack.attack_str
         self.flash_color = [ 1.0,0.0,0.0,1.0 ]
         self.attack_object = attack
@@ -138,7 +139,7 @@ class KPlayer(Player):
 
         self.telekineFlash = 1.0
         #teleportCost = 10.0
-        teleportCost = 20.27
+        teleportCost = 20
         if(self.teleportAmt<teleportCost):
             self.add_dm_message("You don't have enough Telekine Power!!")
             return
@@ -243,7 +244,7 @@ class KPlayer(Player):
                     
                 self.sword.state = Sword.STATE_DISCHARGING
                 self.sword.stimer = 11 #short circuit the 'snap' window
-                self.snap_cooldown = 30
+                self.snap_cooldown = 7
                 hit = True
                 target = se
                 break
@@ -1152,8 +1153,6 @@ class KPlayer(Player):
 
             self.rad = atan2( self.v[1], self.v[0] )
             self.texture = self.determine_texture()
-
-
 
             if(self.snap_cooldown>0):
                 self.v[0] = 0

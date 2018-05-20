@@ -45,6 +45,8 @@ class Worm(SnapEnemy):
         self.iframes = 0
         self.defense = 3
         self.lifetime = 0
+        self.min_lifetime = uniform(5,10)
+        self.max_lifetime = uniform(20,30)
         self.group = 0
         self.group_active = True
         
@@ -102,7 +104,7 @@ class Worm(SnapEnemy):
 
         self.fade_flash()
         self.lifetime+=1
-        if(self.lifetime>23):
+        if(self.lifetime>self.max_lifetime ):
             self.triggered = True
         if(self.floor.player.kill_success):
             return True
@@ -161,6 +163,10 @@ class Worm(SnapEnemy):
         self.v[0] = self.fworm_target[0] * (float((tidx)+0.1)*0.25)
         self.v[1] = self.fworm_target[1] * (float((tidx)+0.1)*0.25)
 
+
+        #short circuit
+        if(self.lifetime<self.min_lifetime):
+            self.biting = False
 
         self.color = [1.0,1.0,1.0,1.0]
         self.light_type = Object.LightTypes.NONE

@@ -24,7 +24,7 @@ class SummaryPage():
         self.total_points = 0
 
     def compute_total(self):
-        return self.time_bonus + self.kill_bonus * (self.slash_bonus+1)
+        return self.time_bonus + self.kill_bonus
 
     def tick(self):
 
@@ -58,6 +58,8 @@ class SummaryPage():
 
         if(self.t<SummaryPage.Time):
             return self
+        else:
+            self.player.total_points += self.total_points
 
     def render(self):
         with BGL.context.render_target( SummaryPage.texbuffer ):
@@ -74,10 +76,10 @@ class SummaryPage():
                     BGL.lotext.render_text_pixels(bonus, 35, 50, [ 0.0,0.0,0.0] )
                     BGL.lotext.render_text_pixels(bonus, 36, 51, [ 1.0,1.0,1.0] )
 
-                if(self.slash_bonus>0):
-                    bonus = "SLASH MUL:{0:.2f}X!".format(self.slash_bonus)
-                    BGL.lotext.render_text_pixels(bonus, 35, 60, [ 0.0,0.0,0.0] )
-                    BGL.lotext.render_text_pixels(bonus, 36, 61, [ 1.0,1.0,1.0] )
+                #if(self.slash_bonus>0):
+                #    bonus = "SLASH MUL:{0:.2f}X!".format(self.slash_bonus)
+                #    BGL.lotext.render_text_pixels(bonus, 35, 60, [ 0.0,0.0,0.0] )
+                #    BGL.lotext.render_text_pixels(bonus, 36, 61, [ 1.0,1.0,1.0] )
 
                 if(self.total_points>0):
                     bonus = "total purity:{0}".format(self.total_points)

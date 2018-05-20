@@ -25,6 +25,6 @@ void main() {
 
     float famt = samp.a;
 
-    gl_FragColor = vec4( 1.0,0.8,0.5,1.0) * famt * modamt;
+    gl_FragColor = vec4( 1.0,0.8,0.5,1.0) * famt * modamt * 0.25;
     //gl_FragColor = vec4( halo.r,samp.g, samp.b, 1.0) * famt * amt;
 }

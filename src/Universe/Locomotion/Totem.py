@@ -75,6 +75,7 @@ class Totem(Object):
         self.light_radius = 7 + (3*sin(self.anim_index))
 
     def sleep_totem(self, player = None):
+        self.floor.player.teleportAmt = 100
         for x in range(0,5):
             spltr = Bird( p = [self.p[0]+uniform(0.0,self.size[0]), self.p[1]+uniform(-4.0,4.0)])
             spltr.color = [0.0,0.0,0.0,1.0]
@@ -90,7 +91,7 @@ class Totem(Object):
             if self.shield_totem:
                 player.shield_frames += 60*5
                 self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ],
-                        message="SHIELD"))
+                        message="+INVINCIBLE+"))
         KSounds.play(KSounds.totem_hit)
         self.floor.snap_enemies.remove(self)
 
