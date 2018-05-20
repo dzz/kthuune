@@ -396,7 +396,7 @@ BRUSH
 eglan
 0
 0
-False
+True
 BRUSH
 11
 -4
@@ -405,7 +405,7 @@ BRUSH
 decorator
 0
 3
-False
+True
 BRUSH
 13
 -4
@@ -414,7 +414,7 @@ BRUSH
 decorator
 0
 3
-False
+True
 BRUSH
 17
 -5
@@ -423,7 +423,7 @@ BRUSH
 decorator
 0
 3
-False
+True
 BRUSH
 12
 -23
@@ -432,7 +432,7 @@ BRUSH
 church_wall
 0
 3
-False
+True
 BRUSH
 16
 -21
@@ -441,4 +441,4 @@ BRUSH
 church_wall
 0
 3
-False
+True

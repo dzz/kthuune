@@ -14,7 +14,8 @@
             { "name" : "blood", "directory" : "{package_path}/blood/", "filtered" : false },
             { "name" : "eglan", "directory" : "{package_path}/eglan/", "filtered" : true },
             { "name" : "bird", "directory" : "{package_path}/bird/", "filtered" : true },
-            { "name" : "skeline", "directory" : "{package_path}/skeline/", "filtered" : false }
+            { "name" : "skeline", "directory" : "{package_path}/skeline/", "filtered" : false },
+            { "name" : "spike", "directory" : "{package_path}/spike/", "filtered" : false }
         ],
         "texture" : [
             { "name" : "owl", "filename" : "{package_path}/owl.png", "filtered" : false },
