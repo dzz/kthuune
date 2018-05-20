@@ -3,15 +3,15 @@ from random import choice
 from .WorldSpaceBrush import WorldSpaceBrush
 from .layer_map import layer_map
 
-class telekine:
-    dims = (2,2)
+class spike_field:
+    dims = None
     mesh_key = None
-    layer = layer_map.get_layer_id("floor_interactions")
+    layer = layer_map.get_layer_id("hazards")
 
     def reduce(area, brush):
         wsb = WorldSpaceBrush.from_brush(brush) 
-        Factory.make_telekine( area, wsb.cx, wsb.cy, brush.group)
-        Factory.make_light( area, wsb.cx, wsb.cy, "shortwave" )
+        Factory.make_spikes( area, brush )
+
 
 
 

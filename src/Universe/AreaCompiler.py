@@ -30,6 +30,7 @@ from ..Abilities import Abilities
 
 from .Hazards.WormField import WormField
 from .Hazards.Firepot import Firepot
+from .Hazards.Spike import Spike
 from .Enemies.SnapEnemy import SnapEnemy
 from .Enemies.Acolyte import Acolyte
 from .Enemies.Skeline import Skeline
@@ -276,6 +277,9 @@ class AreaCompiler():
                 #    for x in range(0,3):
                 #        self.objects.append(Skeline.parse(od,df))
 
+
+            if od["key"] in ["spike"]:
+                self.objects.append(Spike.parse(od,df))
 
             if od["key"] in ["firepot", "firepot_right" ]:
                 self.objects.append(Firepot.parse(od,df))

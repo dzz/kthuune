@@ -25,6 +25,7 @@ from .PolyFills.sword import sword
 from .PolyFills.telekine import telekine
 from .PolyFills.owl import owl
 from .PolyFills.eglan import eglan
+from .PolyFills.spike_field import spike_field
 
 class PolyFillList:
     cached_list = None
@@ -66,7 +67,8 @@ class PolyFillList:
                 "telekine" : telekine,
                 "owl" : owl,
                 "eglan" : eglan,
-                "time_totem" : time_totem
+                "time_totem" : time_totem,
+                "spike_field" : spike_field,
             }
             PolyFillList.cached_list = polyfill_map
         return PolyFillList.cached_list
