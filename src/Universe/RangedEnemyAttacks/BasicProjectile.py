@@ -47,7 +47,7 @@ class BasicProjectile(Object):
             return False
 
         deadly = False
-        if(self.size[0] < 1.5):
+        if(self.size[0] < 1.27):
             growth = 1.2
             self.size[0] *= growth
             self.size[1] *= growth

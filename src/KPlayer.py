@@ -123,7 +123,7 @@ class KPlayer(Player):
         if(self.invuln_frames>0):
             return 
         self.snap_cooldown = 10
-        self.hp = self.hp - attack.attack_str
+        self.hp = self.hp - (attack.attack_str*1.6)
         self.flash_color = [ 1.0,0.0,0.0,1.0 ]
         self.attack_object = attack
         self.attack_physics_timer = 25 

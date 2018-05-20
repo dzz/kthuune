@@ -10,24 +10,24 @@ from .CloudBackground import CloudBackground
 import audio
 
 class Sequences:
-    start_level = "tt"
+    start_level = "1"
     active_music_key = None
     titles = {
         #"0" : { "title" : "Debug Area", "time_limit": 140, "music" : "KT-player/path/ship_music" },
-        "1" : { "title" : "First, Cut!", "time_limit": 120, "music" : "KT-player/path/ship_music" },
-        "2" : { "title" : "Kindergarten", "time_limit" : 55, "music" : "KT-player/path/polydrone" },
-        "3" : { "title" : "Runner's High", "time_limit" : 70, "music" : "KT-player/path/polydrone", }, #mat didn't see dash tutor
-        "3.1" : { "title" : "Boppin'", "time_limit" : 45, "music" : "KT-player/path/trixymixy", }, 
-        "4" : { "title" : "Kinetic Energy", "time_limit" : 60, "music" : "KT-player/path/trixymixy" },
-        "4.1" : { "title" : "Oxytoxicity", "time_limit" : 60, "music" : "KT-player/path/trixymixy" },
-        "5" : { "title" : "Feathers in the wind", "time_limit" : 45, "music" : "KT-player/path/lacuna_canal" },
-        "6" : { "title" : "Telephone Pole", "time_limit" : 50 , "music" : "KT-player/path/polydrone" },
-        "7" : { "title" : "Not what they seem...", "time_limit" : 50 , "music" : "KT-player/path/polydrone" },
-        "8" : { "title" : "Faraday Cage", "time_limit" : 50, "music" : "KT-player/path/trixymixy" },
-        "9" : { "title" : "Clerical Error", "time_limit" : 95, "music" : "KT-player/path/trixymixy" }, #debug state here, or make failure more quick & reinforcing
-        "tt" : { "title" : "Instant Cooking", "time_limit" : 30, "music" : "KT-player/path/trixymixy" }, #debug state here, or make failure more quick & reinforcing
-        "A0" :{ "title" :  "Pontiff Predicament", "time_limit" : 85, "music" : "KT-player/path/trixymixy" },
-        "A1" :{ "title" :  "Slapped on the Wrist", "time_limit" : 60, "music" : "KT-player/path/trixymixy" },
+        "1" : { "title" : "First, Cut!", "time_limit": 35, "music" : "KT-player/path/ship_music" },
+        "2" : { "title" : "Kindergarten", "time_limit" : 25, "music" : "KT-player/path/polydrone" },
+        "3" : { "title" : "Runner's High", "time_limit" : 25, "music" : "KT-player/path/polydrone", }, #mat didn't see dash tutor
+        "3.1" : { "title" : "Boppin'", "time_limit" : 25, "music" : "KT-player/path/trixymixy", }, 
+        "4" : { "title" : "Kinetic Energy", "time_limit" : 30, "music" : "KT-player/path/trixymixy" },
+        "4.1" : { "title" : "Oxytoxicity", "time_limit" : 25, "music" : "KT-player/path/trixymixy" },
+        "5" : { "title" : "Feathers in the wind", "time_limit" : 20, "music" : "KT-player/path/lacuna_canal" },
+        "6" : { "title" : "Telephone Pole", "time_limit" : 25 , "music" : "KT-player/path/polydrone" },
+        "7" : { "title" : "Not what they seem...", "time_limit" : 25 , "music" : "KT-player/path/polydrone" }, # can fuck yourself up
+        "8" : { "title" : "Faraday Cage", "time_limit" : 25, "music" : "KT-player/path/trixymixy" },
+        "9" : { "title" : "Clerical Error", "time_limit" : 35, "music" : "KT-player/path/trixymixy" }, #debug state here, or make failure more quick & reinforcing
+        "tt" : { "title" : "Instant Cooking", "time_limit" : 15, "music" : "KT-player/path/trixymixy" }, #debug state here, or make failure more quick & reinforcing
+        "A0" :{ "title" :  "Pontiff Predicament", "time_limit" : 35, "music" : "KT-player/path/trixymixy" },
+        "A1" :{ "title" :  "Slapped on the Wrist", "time_limit" : 40, "music" : "KT-player/path/trixymixy" },
     }
     found = []
     current_index = 0
