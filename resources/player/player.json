@@ -125,7 +125,8 @@
             { "name" : "level_start", "path" : "{package_path}/sounds/level_start.wav" },
             { "name" : "ree1", "path" : "{package_path}/sounds/ree1.wav" },
             { "name" : "ree2", "path" : "{package_path}/sounds/ree2.wav" },
-            { "name" : "time_totem", "path" : "{package_path}/sounds/time_totem.wav" }
+            { "name" : "time_totem", "path" : "{package_path}/sounds/time_totem.wav" },
+            { "name" : "tk_fail", "path" : "{package_path}/sounds/tk_fail.wav" }
         ]
     }
 }

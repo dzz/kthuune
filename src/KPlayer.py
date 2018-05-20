@@ -33,6 +33,7 @@ from .Universe.PlayerElements.TerminalRenderer import TerminalRenderer
 from .Universe.PlayerElements.StatusCards import HeartCard, TelekineCard, WandCard, PotionCard, SwordCard
 from .Universe.PlayerElements.PotionCountView import PotionCountView
 from .Universe.Particles.SplatterParticle import SplatterParticle
+from .Universe.Particles.Bird import Bird
 
 ## maybe copy this music...
 #
@@ -66,6 +67,7 @@ class KPlayer(Player):
             self.run_stamina = 100 
 
     def add_time(self,amt):
+            self.got_time = 15
             self.life_timer += amt*60
             self.floor.sounds.play(self.floor.sounds.time_totem)
 
@@ -141,7 +143,7 @@ class KPlayer(Player):
         #teleportCost = 10.0
         teleportCost = 20
         if(self.teleportAmt<teleportCost):
-            self.add_dm_message("You don't have enough Telekine Power!!")
+            self.floor.sounds.play(self.floor.sounds.tk_fail)
             return
 
         self.teleportAmt -= teleportCost
@@ -249,6 +251,7 @@ class KPlayer(Player):
                 target = se
                 break
             else:
+                self.floor.sounds.play(self.floor.sounds.tk_fail)
                 pass
 
         if hit:
@@ -318,6 +321,9 @@ class KPlayer(Player):
         #PLAYER INIT
         #player init
         
+        self.got_time = 0
+        self.subtick = 0
+        self.total_points = 0
         self.suspend_time_penalty = False
         self.violentally_executed_self = False
         self.shield_frames = 0 
@@ -508,11 +514,22 @@ class KPlayer(Player):
                 #    BGL.lotext.render_text_pixels("CLEAR THE INFECTION".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
                 #else:
                 #    BGL.lotext.render_text_pixels("FIND THE SWITCHES".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
+                x = (60-self.subtick) / 60.0
+                nstr = "{0}s".format(self.disp_life_timer)
+                cx = 80 - (len(nstr)//2*8)
+                BGL.lotext.render_text_pixels(nstr, cx,102,[0.0,0.0,0.0] )
 
-                x = uniform(0.8,1.0)
-                BGL.lotext.render_text_pixels("{0}".format(self.disp_life_timer), 3,3,[0.0,0.0,0.0] )
-                BGL.lotext.render_text_pixels("{0}".format(self.disp_life_timer), 2,2,[x,x,x] )
-                pass
+                if(self.got_time>0):
+                    _ca = uniform(0.0,1.0)
+                    _cb = uniform(0.0,1.0)
+                    BGL.lotext.render_text_pixels(nstr, cx-1,103,[_ca,_cb,_ca])
+                else:
+                    BGL.lotext.render_text_pixels(nstr, cx-1,103,[x,x,x] )
+
+                #x = 1.0
+                #nstr = "{0} purity".format(self.total_points)
+                #BGL.lotext.render_text_pixels(nstr, cx,3,[0.0,0.0,0.0] )
+                #BGL.lotext.render_text_pixels(nstr, cx-1,2,[x,x,x] )
 
         with BGL.context.render_target( self.hud_buffer ):
             BGL.context.clear(0.0,0.0,0.0,0.0)
@@ -544,7 +561,6 @@ class KPlayer(Player):
 
         with BGL.blendmode.alpha_over:
             self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
-            self.time_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
             self.floor.render_objects("hud", True)
 
 
@@ -572,6 +588,7 @@ class KPlayer(Player):
                 if self.get_camera().cinema_target is None:
                     TerminalRenderer.render(self.terminal_size, self.cardtick,self.active_terminal)
 
+            self.time_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
             if(render_titlecard):
                 self.title_card.render()
 
@@ -845,11 +862,7 @@ class KPlayer(Player):
         self.title_card.reset(title)
         
     def tick(self):
-        print("PLAYER TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        print("PLAYER TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        print("PLAYER TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        print("PLAYER TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        print("PLAYER TICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
         if not self.beat_level: #set in game
             if not self.suspend_time_penalty:
                 self.life_timer -= 1
@@ -867,7 +880,7 @@ class KPlayer(Player):
                 if choice([True,False,False]):
                     KSounds.play( KSounds.basic_hit )
                     KSounds.play( KSounds.player_hurt )
-                    for x in range(0,4):
+                    for x in range(0,2):
                         self.floor.create_object(SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14)))
                     if self.life_timer < - 90:
                         self.violentally_executed_self = True
@@ -945,6 +958,9 @@ class KPlayer(Player):
             
 
         #player tick
+        if self.got_time > 0:
+            self.got_time -= 1
+        self.subtick = (self.subtick + 1) % 60
 
         #if(self.run_stamina<=1.0):
         #    self.add_dm_message("You over exerted yourself")
@@ -1029,8 +1045,8 @@ class KPlayer(Player):
             self.walk_tick = 0
  
         if(self.state == KPlayer.STATE_STUNNED ):
-            self.v[0] = self.v[0] * 0.2
-            self.v[1] = self.v[1] * 0.2
+            self.v[0] = self.v[0] * 0.4
+            self.v[1] = self.v[1] * 0.4
 
             #if(self.attack_object):
             #    self.v[0] = self.v[0] + (self.attack_object.v[0]*4)
@@ -1041,6 +1057,16 @@ class KPlayer(Player):
                 self.set_state( KPlayer.STATE_DEFAULT )
 
         if(self.state == KPlayer.STATE_DODGING ):
+
+            for x in range(0,5):
+                spltr = Bird( p = [self.p[0]+uniform(0.0,self.size[0]), self.p[1]+uniform(-4.0,4.0)])
+                spltr.color = [0.0,0.0,0.0,1.0]
+                spltr.light_color = [ 0.0,1.0,0.0,1.0]
+                spltr.size[0]*=uniform(1.0,1.5)
+                self.floor.create_object(spltr)
+
+            #self.visible = False
+            #self.invuln_frames = 1
             self.v[0] += self.dv[0]*2.8
             self.v[1] += self.dv[1]*2.8
             
@@ -1050,6 +1076,7 @@ class KPlayer(Player):
             if(self.sword.state is not Sword.STATE_IDLE):
                 self.set_state(KPlayer.STATE_DEFAULT)
             if(self.stimer > 6 ):
+                self.visible = True
                 self.set_state(KPlayer.STATE_DEFAULT)
 
         if(self.state == KPlayer.STATE_FIRING):

@@ -58,8 +58,6 @@ class SummaryPage():
 
         if(self.t<SummaryPage.Time):
             return self
-        else:
-            self.player.total_points += self.total_points
 
     def render(self):
         with BGL.context.render_target( SummaryPage.texbuffer ):
@@ -82,9 +80,13 @@ class SummaryPage():
                 #    BGL.lotext.render_text_pixels(bonus, 36, 61, [ 1.0,1.0,1.0] )
 
                 if(self.total_points>0):
-                    bonus = "total purity:{0}".format(self.total_points)
+                    bonus = "purity:{0}".format(self.total_points)
                     BGL.lotext.render_text_pixels(bonus, 35, 80, [ 0.0,0.0,0.0] )
                     BGL.lotext.render_text_pixels(bonus, 36, 81, [ 1.0,1.0,1.0] )
+
+                #bonus = "lifetime purity:{0}".format(self.total_points+self.floor.player.total_points)
+                #BGL.lotext.render_text_pixels(bonus, 35, 89, [ 0.0,0.0,0.0] )
+                #BGL.lotext.render_text_pixels(bonus, 36, 90, [ 1.0,1.0,1.0] )
 
         with BGL.blendmode.alpha_over:
             Menu.primitive.render_shaded( Menu.shader, {
