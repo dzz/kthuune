@@ -43,7 +43,7 @@ class Sword(Object):
 
     def tick(self):
 
-        self.visible = Abilities.Sword and not self.floor.player.slash.visible and self.floor.player.visible
+        self.visible = Abilities.Sword and not self.floor.player.slash.visible and self.floor.player.visible and self.floor.player.slash.cooldown<=0
 
         if not self.visible:
             return True

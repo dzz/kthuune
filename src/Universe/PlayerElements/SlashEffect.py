@@ -26,7 +26,6 @@ class SlashEffect(Object):
 
 
     def slash(self):
-
         if(self.floor.player.run_stamina>0):
             self.floor.player.sword_swing = self.floor.player.sword_swing_cooldown
             if(self.cooldown>0):
@@ -50,8 +49,8 @@ class SlashEffect(Object):
         if(self.cooldown>0):
             self.cooldown -= 1
 
-        offsx = cos(self.rad)*1
-        offsy = sin(self.rad)*1
+        offsx = cos(self.rad+self.floor.player.rad)*0.9
+        offsy = sin(self.rad+self.floor.player.rad)*1
 
         if self.stagger_cooldown==0:
             self.rad+=0.04
@@ -65,11 +64,10 @@ class SlashEffect(Object):
             if self.fr>13 and self.fr < 19 and (self.stagger_cooldown==0):
                 for enemy in self.floor.snap_enemies:
                     if enemy.snap_type==1 and enemy not in self.attacked_enemies and len(self.attacked_enemies)<3:
-                        dx = (self.p[0] - enemy.p[0]) 
-                        dy = (self.p[1] - enemy.p[1]) 
+                        dx = ((self.p[0]+(self.floor.player.v[0]*0.2)) - enemy.p[0]) 
+                        dy = ((self.p[1]+(self.floor.player.v[1]*0.2)) - enemy.p[1]) 
                         md = (dx*dx) + (dy*dy)
-                        if md < 10:
-
+                        if md < 11.0:
                             self.floor.player.v[0] = -1*dx*0.3
                             self.floor.player.v[1] = -1*dy*0.3
                             #self.floor.player.p[0] = enemy.p[0]
@@ -78,7 +76,7 @@ class SlashEffect(Object):
                             #enemy.floor.player.add_dm_message("You slashed an enemy")
 
                             if(self.floor.player.running):
-                                enemy.receive_snap_attack( True )
+                                enemy.receive_snap_attack( choice([True,False]) )
                             else:
                                 enemy.receive_snap_attack( choice([False, False, True]) )
                             self.attacked_enemies.append(enemy)

@@ -2,6 +2,10 @@ from Beagle import API as BGL
 from random import choice
 from .Hud import Hud
 
+class Bar():
+    texbar1 = BGL.assets.get('KT-player/texture/bar1')
+    texbar2 = BGL.assets.get('KT-player/texture/bar2')
+
 class Card():
     shader = BGL.assets.get("KT-player/shader/card")
     primitive = BGL.primitive.unit_uv_square
@@ -18,9 +22,23 @@ class HeartCard(Card):
     def __init__(self, player):
         self.fridx = choice( range(0,180) )
         self.player = player
+        self.statusamt = self.compute_value()
+        self.impulse = 0.0
+        self.real_impulse = 0.0
+
+    def compute_value(self):
+        return self.player.hp / 100
 
     def tick(self): 
+        self.impulse *= 0.99
         self.fridx = (self.fridx + 1) %180
+        last_value = self.statusamt
+        self.statusamt = self.compute_value()
+        if(self.statusamt!=last_value):
+            if(self.impulse<3.0):
+                self.impulse += 1.0
+        self.real_impulse = min( 1.0, self.impulse )
+        
 
     def get_shader_params(self):
 
@@ -28,13 +46,14 @@ class HeartCard(Card):
             "statusamt" : [ self.player.hp / 100.0 ],
             "statuscolor" : [ 1.0,0.0,0.0,1.0 ],
             "tick" : [ self.player.cardtick ],
-            "texBuffer"            : HeartCard.textures[int(self.fridx/90)],
+            "impulse" : self.real_impulse,
+            "texBuffer"            : Bar.texbar1,
             "translation_local"    : [ 0, 0 ],
-            "scale_local"          : [ 1.0*0.4,1.5*0.4],
-            "translation_world"    : [ 7.5,-3.75],
+            "scale_local"          : [ 4.0,1.0],
+            "translation_world"    : [ 0.0,4.0 ],
             "scale_world"          : [1.0,1.0],
             "view"                 : Hud.view,
-            "rotation_local"       : 0.0,
+            "rotation_local"       : (self.real_impulse-0.5)*0.1,
             "filter_color"         : [1.0,1.0,1.0,1.0],
             "uv_translate"         : [ 0,0 ] }
 
@@ -47,23 +66,36 @@ class SwordCard(Card):
     def __init__(self, player):
         self.fridx = choice( range(0,180) )
         self.player = player
+        self.statusamt = self.compute_value()
+        self.impulse = 0.0
+        self.real_impulse = 0.0
+
+    def compute_value(self):
+        return self.player.run_stamina / 100.0
 
     def tick(self):
+        self.impulse *= 0.99
         self.fridx = (self.fridx + 1) %180
+        last_value = self.statusamt
+        self.statusamt = self.compute_value()
+        if(self.statusamt!=last_value):
+            if(self.impulse<3.0):
+                self.impulse += 1.0
+        self.real_impulse = min( 1.0, self.impulse )
 
     def get_shader_params(self):
-
         return {
-            "statusamt" : [ self.player.run_stamina/100.0 ],
+            "statusamt" : [ self.statusamt ],
             "statuscolor" : [ 0.0,1.0,0.0,1.0 ],
             "tick" : [self.player.cardtick+10.0],
-            "texBuffer"            : SwordCard.textures[int(self.fridx/90)],
+            "impulse" : self.real_impulse,
+            "texBuffer"            : Bar.texbar2,
             "translation_local"    : [ 0, 0 ],
-            "scale_local"          : [ 1.0*0.4,1.5*0.4],
-            "translation_world"    : [ 7.5,-2.5],
+            "scale_local"          : [ 1.0, 0.4 ],
+            "translation_world"    : [ 5.0,4.0],
             "scale_world"          : [1.0,1.0],
             "view"                 : Hud.view,
-            "rotation_local"       : 0.0,
+            "rotation_local"       : (self.real_impulse-0.5)*-0.1,
             "filter_color"         : [1.0,1.0,1.0,1.0],
             "uv_translate"         : [ 0,0 ] }
 

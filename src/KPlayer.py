@@ -362,6 +362,8 @@ class KPlayer(Player):
         self.ability_timeout = 0
         self.active_ability = -1
 
+        self.run_stamina = 100.0
+
         overrides =  {
             "light_type" : Object.LightTypes.DYNAMIC_SHADOWCASTER,
             "light_radius" : 15.0,
@@ -545,13 +547,12 @@ class KPlayer(Player):
             self.floor.render_objects("hud", True)
 
 
-        self.heartcard.render()
+            self.heartcard.render()
 
-        for x in reversed(range(0,self.max_invslots)):
-            if x is not self.sel_invslot:
-                PlayerInvSlot.render(x, self.inventory[x], False, x == self.active_invslot)
-        PlayerInvSlot.render(self.sel_invslot, self.inventory[self.sel_invslot], True, self.sel_invslot == self.active_invslot)
-        self.swordcard.render()
+        #for x in reversed(range(0,self.max_invslots)):
+        #    if x is not self.sel_invslot:
+        #        PlayerInvSlot.render(x, self.inventory[x], False, x == self.active_invslot)
+        #PlayerInvSlot.render(self.sel_invslot, self.inventory[self.sel_invslot], True, self.sel_invslot == self.active_invslot)
 
         
         #if(Abilities.Telekine):
@@ -565,6 +566,7 @@ class KPlayer(Player):
 
         
         with BGL.blendmode.alpha_over:
+            self.swordcard.render()
             if(self.terminal_size>0):
                 if self.get_camera().cinema_target is None:
                     TerminalRenderer.render(self.terminal_size, self.cardtick,self.active_terminal)
@@ -823,6 +825,8 @@ class KPlayer(Player):
                 
             
     def consume_inventory(self):
+        pass
+
         inv = self.inventory[ self.sel_invslot]
         self.inventory[self.sel_invslot] = None
         if(inv is "hp_vial"):
