@@ -671,6 +671,17 @@ class KPlayer(Player):
 
 
         return base_params
+
+    def get_guppy_batch(self):
+        batch = [ Object.get_shader_params(self), self.get_shader_params() ]
+
+        r = self.physics["radius"]
+        batch[0]["scale_local"] = [ r,r ]
+        batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/registration2")
+
+        batch[1]["translation_local"][1] -= 0.5
+        return batch
+    
         
 
     def determine_texture(self):

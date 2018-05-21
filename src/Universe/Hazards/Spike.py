@@ -27,12 +27,18 @@ class Spike(Object):
             self.fr = 0
         self.texture = Spike.textures[self.fr//10]
 
+        self.flash_color[3]*=0.94
+
+        if(self.fr==29):
+            self.flash_color = [ 1.0,0.4,0.0,1.0 ]
+        if(self.fr==49):
+            self.flash_color = [ 1.0,0.4,0.0,1.0 ]
         if(self.fr>=30) and (self.fr<=70):
             dx = self.p[0] - self.floor.player.p[0]
             dy = self.p[1] - self.floor.player.p[1]
             md = (dx*dx) + (dy*dy)
 
-            if(md<4.5):
+            if(md<3.5):
                 self.vx = uniform(-1.0,1.0)
                 self.vy = uniform(-1.0,1.0)
                 self.floor.player.receive_ranged_attack(self)

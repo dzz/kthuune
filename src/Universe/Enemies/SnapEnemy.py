@@ -206,3 +206,13 @@ class SnapEnemy(Object):
     def set_combat_vars(self):
         self.hp = 85
         self.defense = 10
+
+    def get_guppy_batch(self):
+        batch = [ Object.get_shader_params(self), self.get_shader_params() ]
+        r = self.physics["radius"]
+        batch[0]["scale_local"] = [ r,r ]
+        batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/registration2")
+        return batch
+
+
+

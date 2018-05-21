@@ -17,8 +17,7 @@ class Stork(SnapEnemy):
 
     def get_shader_params(self):
         bp = SnapEnemy.get_shader_params(self)
-        bp['translation_local'][0] = 0.1
-        bp['translation_local'][1] = -0.4
+        bp['translation_local'][1] = -0.7
         return bp
 
     def receive_snap_attack(self, was_crit):
@@ -50,7 +49,7 @@ class Stork(SnapEnemy):
         self.texture = Stork.textures[0]
         self.widx = int(uniform(0.0,40.0))
         self.size = [ 4, 4 ]
-        self.physics = { "radius" : 0.35, "mass"   : 0.0005, "friction" : 0.0 }
+        self.physics = { "radius" : 1.7, "mass"   : 0.0005, "friction" : 0.3 }
         #self.state = choice( [ Stork.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
         self.state = Stork.STATE_WAITING
         self.stimer = 0

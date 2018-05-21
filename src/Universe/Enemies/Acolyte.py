@@ -86,7 +86,7 @@ class Acolyte(SnapEnemy):
         self.texture = Acolyte.textures[0]
         self.widx = int(uniform(0.0,40.0))
         self.size = [ 4, 4 ]
-        self.physics = { "radius" : 0.35, "mass"   : 0.0005, "friction" : 0.3 }
+        self.physics = { "radius" : 1.5, "mass"   : 0.0005, "friction" : 0.3 }
         #self.state = choice( [ Acolyte.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
         self.state = Acolyte.STATE_SEEKING_RANDOM
         self.stimer = 0
@@ -228,6 +228,6 @@ class Acolyte(SnapEnemy):
 
     def get_shader_params(self):
         bp = SnapEnemy.get_shader_params(self)
-        bp['translation_local'][0] = 0.1
-        bp['translation_local'][1] = -0.4 + (sin( self.wavidx )*0.2)
+        bp['translation_local'][0] = 0.0
+        bp['translation_local'][1] = -0.7 + (sin( self.wavidx*2.0 )*0.1)
         return bp

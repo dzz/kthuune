@@ -40,7 +40,7 @@ class Skeline(SnapEnemy):
         self.texture = Skeline.textures[0]
         self.widx = int(uniform(0.0,40.0))
         self.size = [ 2.8, 2.8 ]
-        self.physics = { "radius" : 0.35, "mass"   : 0.0005, "friction" : 0.0 }
+        self.physics = { "radius" : 1.3, "mass"   : 0.0005, "friction" : 0.0 }
         self.state = choice( [ Skeline.STATE_SEEKING_RANDOM, Skeline.STATE_SEEKING_PLAYER ] )
         #self.state = Skeline.STATE_SEEKING_RANDOM
         self.stimer = 0
@@ -202,6 +202,7 @@ class Skeline(SnapEnemy):
 
     def get_shader_params(self):
         bp = SnapEnemy.get_shader_params(self)
-        bp['translation_local'][0] = 0.1
-        bp['translation_local'][1] = -0.4
+        bp['translation_local'][0] = 0.0
+        bp['translation_local'][1] = -0.7
         return bp
+

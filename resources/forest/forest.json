@@ -20,6 +20,7 @@
         "texture" : [
             { "name" : "owl", "filename" : "{package_path}/owl.png", "filtered" : false },
             { "name" : "registration", "filename" : "{package_path}/registration.png", "filtered" : false },
+            { "name" : "registration2", "filename" : "{package_path}/registration2.png", "filtered" : false },
             { "name" : "blindarcade", "filename" : "{package_path}/blindarcade.png", "filtered" : false },
             { "name" : "treetrunk", "filename" : "{package_path}/treetrunk.png", "filtered" : false },
             { "name" : "rootsegment", "filename" : "{package_path}/rootsegment.png", "filtered" : false },

@@ -28,7 +28,7 @@ class EglanBlob(SnapEnemy):
         self.hp = 160
         self.dead = False
         self.tick_type = Object.TickTypes.PURGING
-        self.physics = { "radius" : 2.0, "mass"   : 0.003, "friction" : 2.0 }
+        self.physics = { "radius" : 2.3, "mass"   : 0.001, "friction" : 2.0 }
         self.buftarget = "popup"
         self.visible = True
         self.texture = EglanBlob.textures[0]
@@ -122,7 +122,7 @@ class EglanBlob(SnapEnemy):
 
     def get_shader_params(self):
         sp = Object.get_shader_params(self)
-        sp["translation_local"][1] += (sin( self.fridx*0.01)*0.1) + -0.46
+        sp["translation_local"][1] += ((sin( self.fridx*0.01)*0.05)) + -0.8
         return sp
 
     def get_kill_particles(self):
