@@ -151,4 +151,8 @@ class Sword(Object):
 
         bp["translation_local"][0] = 1.1
         bp["translation_local"][1] = 0.1
+        bp["filter_color"][3] = 0.0
         return bp
+
+    def get_guppy_batch(self):
+        return []

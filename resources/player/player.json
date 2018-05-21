@@ -2,6 +2,8 @@
     "preload": true,
     "resources" : {
         "animation" : [
+            { "name" : "vl3d_run", "directory" : "{package_path}/vl3d_run/", "filtered" : true },
+            { "name" : "vl3d_idle", "directory" : "{package_path}/vl3d_idle/", "filtered" : true },
             { "name" : "transporter_flash", "directory" : "{package_path}/transporter_flash/", "filtered" : false },
             { "name" : "worldbubble", "directory" : "{package_path}/menu/worldbubble/", "filtered" : false },
             { "name" : "dust", "directory" : "{package_path}/dust/", "filtered" : false },

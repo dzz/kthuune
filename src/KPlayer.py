@@ -48,7 +48,8 @@ def rad_2_index(rad, segments):
 
 
 class KPlayer(Player):
-
+    vl3d_run = BGL.assets.get("KT-player/animation/vl3d_run")
+    vl3d_idle = BGL.assets.get("KT-player/animation/vl3d_idle")
     BirdmanTick = 0
     BirdmanTextures = [
         BGL.assets.get("KT-player/texture/birdman0000"),
@@ -320,9 +321,11 @@ class KPlayer(Player):
         #playerinit
         #PLAYER INIT
         #player init
+        
         self.invisible_frames = 0  
         self.got_time = 0
         self.subtick = 0
+        self.run_animation_subtick = 0
         self.total_points = 0
         self.suspend_time_penalty = False
         self.violentally_executed_self = False
@@ -686,6 +689,20 @@ class KPlayer(Player):
 
     def determine_texture(self):
 
+        idx = (
+            ((0-rad_2_index(self.rad,8))+5) % 8
+        )*16
+        offs = self.run_animation_subtick//4
+        if(abs(self.v[0])+abs(self.v[1]))<4.0:
+            return KPlayer.vl3d_idle[idx+offs]
+        else:
+            if(abs(self.v[0])+abs(self.v[1]))>7.0:
+                offs = (self.run_animation_subtick//2)%16
+            return KPlayer.vl3d_run[idx+offs]
+
+
+    def _determine_texture(self):
+
         #if self.title_card.displaying():
         #    return KPlayer.textures[21]
 
@@ -873,6 +890,11 @@ class KPlayer(Player):
         self.title_card.reset(title)
         
     def tick(self):
+        self.size = [ 3.8,3.8 ]
+        self.run_animation_subtick = self.run_animation_subtick + 1
+        if(self.run_animation_subtick == 64 ):
+            self.run_animation_subtick = 0
+
 
         if not self.beat_level: #set in game
             if not self.suspend_time_penalty:
