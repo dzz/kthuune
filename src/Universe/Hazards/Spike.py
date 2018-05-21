@@ -18,6 +18,7 @@ class Spike(Object):
         self.size = [2.0,2.0]
         self.fire_rad = 0
         self.attack_str = 5
+        self.timeout = 0
     
         self.fr = int(((self.p[0] * 4)+(self.p[1]*4))) % 66
 
@@ -38,10 +39,15 @@ class Spike(Object):
             dy = self.p[1] - self.floor.player.p[1]
             md = (dx*dx) + (dy*dy)
 
-            if(md<3.5):
-                self.vx = uniform(-1.0,1.0)
-                self.vy = uniform(-1.0,1.0)
-                self.floor.player.receive_ranged_attack(self)
+
+            if(self.timeout==0):
+                if(md<3.5):
+                    self.vx = uniform(-1.0,1.0)
+                    self.vy = uniform(-1.0,1.0)
+                    self.floor.player.receive_ranged_attack(self)
+                    self.timeout = 4
+            else:
+                self.timeout-=1
         
         return True
 

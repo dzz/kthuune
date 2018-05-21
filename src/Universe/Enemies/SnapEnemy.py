@@ -210,8 +210,8 @@ class SnapEnemy(Object):
     def get_guppy_batch(self):
         batch = [ Object.get_shader_params(self), self.get_shader_params() ]
         r = self.physics["radius"]
-        batch[0]["scale_local"] = [ r,r ]
-        batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/registration2")
+        batch[0]["scale_local"] = [ r*1.5,r*1.5 ]
+        batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/alpha_shadow")
         return batch
 
 

@@ -26,7 +26,7 @@ class Sequences:
         "8" : { "title" : "Faraday Cage", "time_limit" : 25, "music" : "KT-player/path/trixymixy" },
         "9" : { "title" : "Clerical Error", "time_limit" : 35, "music" : "KT-player/path/trixymixy" }, #debug state here, or make failure more quick & reinforcing
         "tt" : { "title" : "Instant Cooking", "time_limit" : 15, "music" : "KT-player/path/trixymixy" }, #debug state here, or make failure more quick & reinforcing
-        "A0" :{ "title" :  "Pontiff Predicament", "time_limit" : 35, "music" : "KT-player/path/trixymixy" },
+        "A0" :{ "title" :  "Pontiff Predicament", "time_limit" : 45, "music" : "KT-player/path/trixymixy" },
         "A1" :{ "title" :  "Slapped on the Wrist", "time_limit" : 40, "music" : "KT-player/path/trixymixy" },
     }
     found = []

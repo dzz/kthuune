@@ -24,9 +24,11 @@ class SlashEffect(Object):
         self.cooldown = 0
         self.stagger_cooldown = 0
         self.base_extension = 0.6
+        self.alpha = 0.0
 
 
     def slash(self):
+        self.alpha = 1.0
         if(self.floor.player.run_stamina>0):
             self.floor.player.sword_swing = self.floor.player.sword_swing_cooldown
             if(self.cooldown>0):
@@ -52,11 +54,12 @@ class SlashEffect(Object):
         if(self.cooldown>0):
             self.cooldown -= 1
 
-        offsx = cos(self.rad)*2.0
-        offsy = sin(self.rad)*2.0
+        offsx = ((cos(self.rad)*2.0)+(self.floor.player.v[0]*0.4))*0.5
+        offsy = ((sin(self.rad)*2.0)+(self.floor.player.v[1]*0.4))*0.5
 
         if self.stagger_cooldown==0:
             self.rad=(self.rad*0.8)+(self.floor.player.rad*0.2)
+            self.alpha *= 0.9
 
         self.p[0] = self.floor.player.p[0] + offsx
         self.p[1] = self.floor.player.p[1] + offsy
@@ -77,8 +80,6 @@ class SlashEffect(Object):
                             #self.floor.player.p[1] = enemy.p[1]
                             self.floor.sounds.play( self.floor.sounds.slashhit )
                             #enemy.floor.player.add_dm_message("You slashed an enemy")
-
-                            enemy.p[0], enemy.p[1] = self.p[0], self.p[1]
                             if(self.floor.player.running):
                                 enemy.receive_snap_attack( choice([True,False]) )
                             else:
@@ -109,6 +110,7 @@ class SlashEffect(Object):
         batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/registration2")
         batch[0]["rotation_local"] = 0.0
         batch[0]["scale_local"] = [ 2.0,2.0]
+        batch[0]["filter_color"][3] = self.alpha
 
         return batch
         

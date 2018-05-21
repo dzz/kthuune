@@ -676,8 +676,8 @@ class KPlayer(Player):
         batch = [ Object.get_shader_params(self), self.get_shader_params() ]
 
         r = self.physics["radius"]
-        batch[0]["scale_local"] = [ r,r ]
-        batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/registration2")
+        batch[0]["scale_local"] = [ r*2,r*2 ]
+        batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/alpha_shadow")
 
         batch[1]["translation_local"][1] -= 0.5
         return batch
