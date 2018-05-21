@@ -10,10 +10,10 @@ from .CloudBackground import CloudBackground
 import audio
 
 class Sequences:
-    start_level = "1"
+    start_level = "0"
     active_music_key = None
     titles = {
-        #"0" : { "title" : "Debug Area", "time_limit": 140, "music" : "KT-player/path/ship_music" },
+        "0" : { "title" : "Debug Area", "time_limit": 140, "music" : "KT-player/path/ship_music" },
         "1" : { "title" : "First, Cut!", "time_limit": 40, "music" : "KT-player/path/ship_music" },
         "2" : { "title" : "Kindergarten", "time_limit" : 35, "music" : "KT-player/path/polydrone" },
         "3" : { "title" : "Runner's High", "time_limit" : 30, "music" : "KT-player/path/polydrone", }, #mat didn't see dash tutor
