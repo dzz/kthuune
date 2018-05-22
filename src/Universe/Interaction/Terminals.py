@@ -111,20 +111,22 @@ class Terminal(Object):
 
     def tick(self):
         if(self.mdist(self.floor.player)<6.5): 
-
-            if(self.install_percent<100) and self.term_installed:
-                self.install_percent += choice([0.1,0.5,0.25])
-                if self.install_percent >= 100:
-                    if self.title == "Telekine Biometrics":
-                        Abilities.Telekine = True
-                        Telekine.instance.enable()
-                    if self.title == "Central Processing":
-                        Abilities.CentralInstalled = True
+            #if(self.install_percent<100) and self.term_installed:
+            #    self.install_percent += choice([0.1,0.5,0.25])
+            #    if self.install_percent >= 100:
+            #        if self.title == "Telekine Biometrics":
+            #            Abilities.Telekine = True
+            #            Telekine.instance.enable()
+            #        if self.title == "Central Processing":
+            #            Abilities.CentralInstalled = True
             if(self.floor.player.active_terminal != self):
                 self.floor.player.active_terminal = self
                 self.ui.setup_options()
+                self.ui.reset_tick()
                 #self.floor.player.add_dm_message("You opened the {0} terminal".format(self.title))
                 KSounds.play(KSounds.terminal_open)
+            else:
+                self.ui.tick()
         else:
             if self.floor.player.active_terminal == self:
                 KSounds.play(KSounds.terminal_close)

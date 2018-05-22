@@ -60,7 +60,6 @@ class MenuTerminal:
         BGL.lotext.render_text_pixels("INSTALLING... {0:.2f}%".format(self.owner.install_percent),90,120,[ 1.0,1.0,1.0 ])
 
     def render(self):
-
         if not self.owner.term_installed:
             self.render_uninstalled()
             return
@@ -307,7 +306,21 @@ class ElderMessage(MenuTerminal):
         self.in_menu = True
         self.synch_secondary_items()
         self.selected_destination = None
+        self.message = "!!!HELLO WORLD!!!"
+        self.t = 0
 
     def custom_render(self):
-        BGL.lotext.render_text_pixels("HELLO WORLD!!!",90,120,[ 1.0,1.0,1.0 ])
+        char = min(self.t // 4, len(self.message))
+        BGL.lotext.render_text_pixels(self.message,90,120,[ 0.0,0.0,0.0 ])
+        BGL.lotext.render_text_pixels(self.message[0:char],90,121,[ 1.0,1.0,1.0 ])
+
+    def tick(self):
+        self.t = self.t + 1
+        if(self.t <= len(self.message)*4):
+            self.t = self.t + 1
+        pass
+
+    def reset_tick(self):
+        self.t = 0
+        pass
 
