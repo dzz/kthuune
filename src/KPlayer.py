@@ -301,7 +301,6 @@ class KPlayer(Player):
         self.stimer = 0
         self.state = state
 
-
     def pump_timer(self,key):
         pass
         #if key=='skeline':
@@ -521,27 +520,28 @@ class KPlayer(Player):
 
         with BGL.context.render_target( self.time_buffer ):
             BGL.context.clear(0.0,0.0,0.0,0.0)
-            with BGL.blendmode.alpha_over:
-                #if(self.floor.playing_genocide()):
-                #    BGL.lotext.render_text_pixels("CLEAR THE INFECTION".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
-                #else:
-                #    BGL.lotext.render_text_pixels("FIND THE SWITCHES".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
-                x = (60-self.subtick) / 60.0
-                nstr = "{0}s".format(self.disp_life_timer)
-                cx = 80 - (len(nstr)//2*8)
-                BGL.lotext.render_text_pixels(nstr, cx,102,[0.0,0.0,0.0] )
+            if self.floor.genocide_enabled:
+                with BGL.blendmode.alpha_over:
+                    #if(self.floor.playing_genocide()):
+                    #    BGL.lotext.render_text_pixels("CLEAR THE INFECTION".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
+                    #else:
+                    #    BGL.lotext.render_text_pixels("FIND THE SWITCHES".format(self.disp_life_timer), 20,2,[1.0,1.0,0.0] )
+                    x = (60-self.subtick) / 60.0
+                    nstr = "{0}s".format(self.disp_life_timer)
+                    cx = 80 - (len(nstr)//2*8)
+                    BGL.lotext.render_text_pixels(nstr, cx,102,[0.0,0.0,0.0] )
 
-                if(self.got_time>0):
-                    _ca = uniform(0.0,1.0)
-                    _cb = uniform(0.0,1.0)
-                    BGL.lotext.render_text_pixels(nstr, cx-1,103,[_ca,_cb,_ca])
-                else:
-                    BGL.lotext.render_text_pixels(nstr, cx-1,103,[x,x,x] )
+                    if(self.got_time>0):
+                        _ca = uniform(0.0,1.0)
+                        _cb = uniform(0.0,1.0)
+                        BGL.lotext.render_text_pixels(nstr, cx-1,103,[_ca,_cb,_ca])
+                    else:
+                        BGL.lotext.render_text_pixels(nstr, cx-1,103,[x,x,x] )
 
-                #x = 1.0
-                #nstr = "{0} purity".format(self.total_points)
-                #BGL.lotext.render_text_pixels(nstr, cx,3,[0.0,0.0,0.0] )
-                #BGL.lotext.render_text_pixels(nstr, cx-1,2,[x,x,x] )
+                    #x = 1.0
+                    #nstr = "{0} purity".format(self.total_points)
+                    #BGL.lotext.render_text_pixels(nstr, cx,3,[0.0,0.0,0.0] )
+                    #BGL.lotext.render_text_pixels(nstr, cx-1,2,[x,x,x] )
 
         with BGL.context.render_target( self.hud_buffer ):
             BGL.context.clear(0.0,0.0,0.0,0.0)
@@ -932,7 +932,7 @@ class KPlayer(Player):
             self.run_animation_alt = 0
 
 
-        if not self.beat_level: #set in game
+        if not self.beat_level and self.floor.genocide_enabled: #set in game
             if not self.suspend_time_penalty:
                 self.life_timer -= 1
             else:

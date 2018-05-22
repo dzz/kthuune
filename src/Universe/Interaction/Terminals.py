@@ -77,6 +77,10 @@ class Terminal(Object):
             self.ui = CommenceBirth(self)
             self.term_installed = True
             self.install_percent = 100
+        if self.title == "Elder Message":
+            self.ui = ElderMessage(self)
+            self.term_installed = True
+            self.install_percent = 100
         elif self.title == "Teleport to Ship":
             self.ui = ReturnToShip(self)
             self.term_installed = True

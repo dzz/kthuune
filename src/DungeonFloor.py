@@ -45,6 +45,7 @@ class DungeonFloor( Floor ):
         BGL.auto_configurable.__init__(self,
         {
             "spawners" : [],
+            "genocide_enabled" : True,
             "CustomBackground" : None,
             "level_started" : False,
             "music" : None,

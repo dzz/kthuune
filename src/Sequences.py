@@ -137,6 +137,7 @@ class Sequences:
         Abilities.Dash = True
         #floor.custom_background = CloudBackground()
         floor.parallax_skin = "city"
+        floor.genocide_enabled = False
         return floor
 
     def buildarea_1(Game,area_def,sequence):

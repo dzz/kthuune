@@ -91,11 +91,15 @@ class MenuTerminal:
         pass
 
     def key_up(self):
+        if len(self.second_level_items)==0:
+            return
         if(self.in_menu):
             self.second_level_item = (self.second_level_item-1) % len(self.second_level_items)
             KSounds.play(KSounds.term_updown)
 
     def key_down(self):
+        if len(self.second_level_items)==0:
+            return
         if(self.in_menu):
             self.second_level_item = (self.second_level_item+1) % len(self.second_level_items)
             KSounds.play(KSounds.term_updown)
@@ -288,4 +292,22 @@ class SwordControl(MenuTerminal):
             ]
         }
         self.synch_secondary_items()
+
+##########################################
+
+class ElderMessage(MenuTerminal):
+    def setup_options(self):
+        self.top_level_items = [ "INBOX.bin", "SYSOP.nfo" ]
+
+        self.second_level_items_map = {
+            "INBOX.bin" : [],
+            "SYSOP.nfo" : []
+        }
+
+        self.in_menu = True
+        self.synch_secondary_items()
+        self.selected_destination = None
+
+    def custom_render(self):
+        BGL.lotext.render_text_pixels("HELLO WORLD!!!",90,120,[ 1.0,1.0,1.0 ])
 
