@@ -19,6 +19,7 @@
         ],
         "texture" : [
             { "name" : "owl", "filename" : "{package_path}/owl.png", "filtered" : false },
+            { "name" : "LORD-127", "filename" : "{package_path}/LORD.png", "filtered" : false },
             { "name" : "registration", "filename" : "{package_path}/registration.png", "filtered" : false },
             { "name" : "registration2", "filename" : "{package_path}/registration2.png", "filtered" : false },
             { "name" : "alpha_shadow", "filename" : "{package_path}/shadow.png", "filtered" : false },

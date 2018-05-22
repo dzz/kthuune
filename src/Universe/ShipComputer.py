@@ -2,6 +2,7 @@ from Beagle import API as BGL
 from ..KSounds import KSounds
 from ..Abilities import Abilities
 from Newfoundland.Object import Object
+import textwrap
 
 class TransporterFlash(Object):
     textures = BGL.assets.get("KT-player/animation/transporter_flash")
@@ -295,6 +296,7 @@ class SwordControl(MenuTerminal):
 ##########################################
 
 class ElderMessage(MenuTerminal):
+    icon_view = BGL.assets.get("KT-player/coordsys/terminal_view") 
     def setup_options(self):
         self.top_level_items = [ "INBOX.bin", "SYSOP.nfo" ]
 
@@ -306,17 +308,35 @@ class ElderMessage(MenuTerminal):
         self.in_menu = True
         self.synch_secondary_items()
         self.selected_destination = None
-        self.message = "!!!HELLO WORLD!!!"
+        self.message = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. "
+
         self.t = 0
 
+    icon_shader = BGL.assets.get("beagle-2d/shader/beagle-2d")
+
     def custom_render(self):
-        char = min(self.t // 4, len(self.message))
-        BGL.lotext.render_text_pixels(self.message,90,120,[ 0.0,0.0,0.0 ])
-        BGL.lotext.render_text_pixels(self.message[0:char],90,121,[ 1.0,1.0,1.0 ])
+        char = min(self.t // 2, len(self.message))
+        x = max(1.0,float(self.t) / (len(self.message)*4))
+
+        light_message = textwrap.wrap(self.message[0:char], 20 )
+
+        for i,msg in enumerate(light_message):
+            BGL.lotext.render_text_pixels(msg,15,61+(i*9),[ x,x,x ])
+
+        BGL.primitive.unit_uv_square.render_shaded(ElderMessage.icon_shader,{
+            "texBuffer" : BGL.assets.get("KT-forest/texture/LORD-127"),
+            "translation_local" : [ 0.0,0.0],
+            "scale_local" : [ 4.0,4.0 ],
+            "translation_world" : [ 8.0, 0.0 ],
+            "scale_world" : [ 1.0, 1.0 ],
+            "filter_color" : [ 1.0,1.0,1.0,1.0 ],
+            "rotation_local" : 0.0,
+            "view" : ElderMessage.icon_view
+        })
 
     def tick(self):
         self.t = self.t + 1
-        if(self.t <= len(self.message)*4):
+        if(self.t <= len(self.message)*2):
             self.t = self.t + 1
         pass
 

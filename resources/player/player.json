@@ -1,6 +1,15 @@
 {
     "preload": true,
     "resources" : {
+        "coordsys" : [ 
+            {
+                "name"              : "terminal_view",
+                "mode"              : "centered_view",
+                "width"             : 32,
+                "height"            : 24,
+                "y_axis"            : "down"
+            }
+        ],
         "animation" : [
             { "name" : "vl3d_run", "directory" : "{package_path}/vl3d_run/", "filtered" : true },
             { "name" : "vl3d_walk", "directory" : "{package_path}/vl3d_walk/", "filtered" : true },
