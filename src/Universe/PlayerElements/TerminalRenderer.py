@@ -1,4 +1,5 @@
 from Beagle import API as BGL
+from .Hud import Hud
 
 class TerminalRenderer():
     shader = BGL.assets.get("KT-player/shader/terminal")

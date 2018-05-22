@@ -8,9 +8,13 @@ from random import choice
 class FTerm(Object):
     def parse(od,df):
         ret = []
+
+        title = "Commence Birth"
+        if "title" in od["meta"]: title=od["meta"]["title"]
+
         ret.append(FTerm(p=[od["x"],od["y"]]))
         ret.append(FTermStand(p=[od["x"],od["y"]]))
-        ret.append(Terminal(title="Teleport to Ship", p=[od["x"],od["y"]]))
+        ret.append(Terminal(title=title, p=[od["x"],od["y"]]))
         return ret
 
     textures = [

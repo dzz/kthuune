@@ -24,7 +24,6 @@ class ParallaxBackground:
      }
 
     def render(x, skin = None ):
-
         if not skin:
             skin = "lw"
         with BGL.blendmode.alpha_over:

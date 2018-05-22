@@ -62,6 +62,7 @@ class DungeonFloor( Floor ):
             "hostages" : [],
             "override_base_zoom" : None,
             "custom_background" : None,
+            "parallax_skin" : None,
             "blurring" : False,
             "fuzz_amt" : 0.0,
             "uses_vision" : True,

@@ -328,9 +328,8 @@ class AreaCompiler():
                 vision_region = ( od["x"], od["y"], od["x"]+od["w"], od["y"]+od["h"] )
                 df.vision_regions.append( vision_region )
                 
-
             if od["key"] in ["terminal"]:
-                self.objects.append(Terminal.parse(od,df))
+                self.objects.extend(FTerm.parse(od,df))
 
             if od["key"] in ["fterm"]:
                 self.objects.extend(FTerm.parse(od,df))

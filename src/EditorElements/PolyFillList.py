@@ -1,4 +1,5 @@
 import importlib
+
 from .PolyFills.platform_floor import platform_floor
 from .PolyFills.checker_floor import checker_floor
 from .PolyFills.hard_wall import hard_wall
@@ -26,6 +27,7 @@ from .PolyFills.telekine import telekine
 from .PolyFills.owl import owl
 from .PolyFills.eglan import eglan
 from .PolyFills.spike_field import spike_field
+from .PolyFills.terminal import terminal
 
 class PolyFillList:
     cached_list = None
@@ -69,6 +71,7 @@ class PolyFillList:
                 "eglan" : eglan,
                 "time_totem" : time_totem,
                 "spike_field" : spike_field,
+                "terminal" : terminal
             }
             PolyFillList.cached_list = polyfill_map
         return PolyFillList.cached_list

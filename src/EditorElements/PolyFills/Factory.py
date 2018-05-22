@@ -52,6 +52,16 @@ class Factory:
         area.add_line("0") #width
         area.add_line("0") #height
 
+    def make_terminal( area, x, y, group):
+        area.add_line("OBJECT")
+        area.add_line("terminal") #object type
+        area.add_line("{0}".format(x))
+        area.add_line("{0}".format(y)) 
+        area.add_line(json.dumps({"group":group, "title" : "Commence Birth"}))
+        area.add_line("False") #is region
+        area.add_line("0") #width
+        area.add_line("0") #height
+
     def make_telekine( area, x, y, group):
         area.add_line("OBJECT")
         area.add_line("telekine") #object type

@@ -10,7 +10,7 @@ from .CloudBackground import CloudBackground
 import audio
 
 class Sequences:
-    start_level = "4.1"
+    start_level = "0"
     active_music_key = None
     titles = {
         "0" : { "title" : "Debug Area", "time_limit": 999, "music" : "KT-player/path/ship_music" },
@@ -19,7 +19,7 @@ class Sequences:
         "3" : { "title" : "Runner's High", "time_limit" : 30, "music" : "KT-player/path/polydrone", }, #mat didn't see dash tutor
         "3.1" : { "title" : "Boppin'", "time_limit" : 30, "music" : "KT-player/path/trixymixy", }, 
         "4" : { "title" : "Kinetic Energy", "time_limit" : 30, "music" : "KT-player/path/trixymixy" },
-        "4.1" : { "title" : "Oxytoxicity", "time_limit" : 25, "music" : "KT-player/path/trixymixy" },
+        "4.1" : { "title" : "Oxytoxicity", "time_limit" : 30, "music" : "KT-player/path/trixymixy" },
         "5" : { "title" : "Feathers in the wind", "time_limit" : 25, "music" : "KT-player/path/lacuna_canal" },
         "6" : { "title" : "Telephone Pole", "time_limit" : 25 , "music" : "KT-player/path/polydrone" },
         "7" : { "title" : "Not what they seem...", "time_limit" : 25 , "music" : "KT-player/path/polydrone" }, # can fuck yourself up
@@ -135,7 +135,8 @@ class Sequences:
         Abilities.Sword = True
         Abilities.Telekine = True
         Abilities.Dash = True
-        floor.custom_background = CloudBackground()
+        #floor.custom_background = CloudBackground()
+        floor.parallax_skin = "city"
         return floor
 
     def buildarea_1(Game,area_def,sequence):
