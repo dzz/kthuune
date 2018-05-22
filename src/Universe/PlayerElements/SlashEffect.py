@@ -1,13 +1,14 @@
 from Beagle import API as BGL
 from Newfoundland.Object import Object
-from math import sin,cos
+from math import sin,cos,atan2
 from random import choice
+from ..LevelEffects.SwordCrit import SwordCrit
 
 class SlashEffect(Object):
     textures = [
-        BGL.assets.get('KT-player/texture/slash0000'),
-        BGL.assets.get('KT-player/texture/slash0001'),
-        BGL.assets.get('KT-player/texture/slash0002'),
+        BGL.assets.get('KT-player/texture/sword'),
+        BGL.assets.get('KT-player/texture/sword'),
+        BGL.assets.get('KT-player/texture/sword'),
     ]
 
     def customize(self):
@@ -32,11 +33,15 @@ class SlashEffect(Object):
         if(self.floor.player.run_stamina>0):
             self.floor.player.sword_swing = self.floor.player.sword_swing_cooldown
             if(self.cooldown>0):
-                return
+                return False
             self.texture = SlashEffect.textures[0]
             self.fr = 0
             self.visible = True
-            self.rad = self.floor.player.rad
+
+            pad = self.floor.player.controllers.get_virtualized_pad(0)
+    
+            self.rad = atan2( pad.left_stick[1], pad.left_stick[0]) - (3.14/2)
+
             self.orig_rad = self.rad
             self.floor.player.sword.visible = False
             self.attacked_enemies = []
@@ -46,25 +51,29 @@ class SlashEffect(Object):
             self.floor.player.run_stamina -= 20
             self.floor.player.total_slashes += 1
 
-            self.base_extension = 0.6
+            self.base_extension = 1.0
+            return True
 
     def tick(self):
-
 
         if(self.cooldown>0):
             self.cooldown -= 1
 
-        offsx = ((cos(self.rad)*2.0)+(self.floor.player.v[0]*0.4))*0.5
-        offsy = ((sin(self.rad)*2.0)+(self.floor.player.v[1]*0.4))*0.5
+        offsx = ((cos(self.rad)*(1.8+self.base_extension))+(self.floor.player.v[0]*0.4))*0.5
+        offsy = ((sin(self.rad)*(1.8+self.base_extension))+(self.floor.player.v[1]*0.4))*0.5
 
         if self.stagger_cooldown==0:
-            self.rad=(self.rad*0.8)+(self.floor.player.rad*0.2)
-            self.alpha *= 0.9
+            self.rad=self.rad+(3.14/17)
+            self.alpha *= 0.95
+            self.base_extension += 0.14
 
         self.p[0] = self.floor.player.p[0] + offsx
         self.p[1] = self.floor.player.p[1] + offsy
 
         Object.light_type = Object.LightTypes.NONE
+
+
+
         if self.visible:
             Object.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
             if self.fr>3 and self.fr < 19 and (self.stagger_cooldown==0):
@@ -86,6 +95,7 @@ class SlashEffect(Object):
                                 enemy.receive_snap_attack( choice([False, False, True]) )
                             self.attacked_enemies.append(enemy)
                             self.stagger_cooldown += 7
+                            self.floor.create_object( SwordCrit( p = [ self.p[0], self.p[1]-15 ]))
             if self.stagger_cooldown==0:
                 self.fr+=1 
 
@@ -107,7 +117,7 @@ class SlashEffect(Object):
     def get_guppy_batch(self):
         batch = [ Object.get_shader_params(self), self.get_shader_params() ]
 
-        batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/registration2")
+        batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/alpha_shadow")
         batch[0]["rotation_local"] = 0.0
         batch[0]["scale_local"] = [ 2.0,2.0]
         batch[0]["filter_color"][3] = self.alpha

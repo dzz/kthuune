@@ -1,6 +1,6 @@
 from Beagle import API as BGL
 from Newfoundland.Object import Object
-from math import sin
+from math import sin,cos
 from random import uniform
 from ...Abilities import Abilities
 
@@ -117,42 +117,15 @@ class Sword(Object):
             return
 
         self.bob_index = self.bob_index + 0.04
-        self.p[0] = self.player.p[0]
-        self.p[1] = self.player.p[1]+0.001
-
-        self.size = [1.0,1.0]
-
-        if self.state == Sword.STATE_IDLE or self.state == Sword.STATE_AWAITING_RELEASE:
-            bob = sin(self.bob_index)
-            if(self.player.rad >= 0.0): self.rad = (-2.9-3.14) + (0.1*bob)
-            if(self.player.rad < 0.0): self.rad = (2.7) - (0.1*bob)
-            if(self.player.rad > 0.0): self.z_index = 1
-            if(self.player.rad < 0.0): self.z_index = 0
-
-        if self.state == Sword.STATE_SPIN_ATTACK:
-            nchrg = self.stimer / self.max_spin_attack
-            self.rad = (-4.2) + (6.28*nchrg)
-
-        if self.state == Sword.STATE_CHARGING:
-            nchrg = self.stimer / self.max_charge
-            self.rad = -(4.2)+(4.2*(nchrg*nchrg*nchrg))
-
-        if self.state == Sword.STATE_ATTACK_PENDING:
-            self.rad = 3.14+1.07 + uniform(-0.2,0.2)
-            self.z_index = 2
-            self.size = [1.5,1.5]
-
-        if self.state == Sword.STATE_DISCHARGING:
-            self.rad = self.player.rad
-            self.size = [1.7,1.0]
+        self.p[0] = self.player.p[0] + (cos(self.player.rad-1.57)*1.4)
+        self.p[1] = (self.player.p[1] + (sin(self.player.rad-1.57)*0.6)) 
+        self.rad = -1.57
+        self.size = [1.5,1.5]
 
     def get_shader_params(self):
         bp = Object.get_shader_params(self)
-
-        bp["translation_local"][0] = 1.1
-        bp["translation_local"][1] = 0.1
-        bp["filter_color"][3] = 0.0
+        bp["translation_local"][0] = 0.0
+        bp["translation_local"][1] += 0.1*sin(self.bob_index)
+        #bp["translation_local"][1] -= 0.0
         return bp
 
-    def get_guppy_batch(self):
-        return []

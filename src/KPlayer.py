@@ -29,6 +29,7 @@ from .Universe.PlayerElements.HealthBubble import HealthBubble
 from .Universe.PlayerElements.Sword import Sword
 from .Universe.PlayerElements.PlayerInvSlot import PlayerInvSlot
 from .Universe.PlayerElements.Hud import Hud
+from .Universe.PlayerElements.Cooldowns import Cooldown,SwordCooldown,TelekineCooldown
 from .Universe.PlayerElements.TerminalRenderer import TerminalRenderer
 from .Universe.PlayerElements.StatusCards import HeartCard, TelekineCard, WandCard, PotionCard, SwordCard
 from .Universe.PlayerElements.PotionCountView import PotionCountView
@@ -49,7 +50,10 @@ def rad_2_index(rad, segments):
 
 class KPlayer(Player):
     vl3d_run = BGL.assets.get("KT-player/animation/vl3d_run")
+    vl3d_walk = BGL.assets.get("KT-player/animation/vl3d_walk")
     vl3d_idle = BGL.assets.get("KT-player/animation/vl3d_idle")
+    vl3d_sword = BGL.assets.get("KT-player/animation/vl3d_sword")
+    vl3d_hit = BGL.assets.get("KT-player/animation/vl3d_hit")
     BirdmanTick = 0
     BirdmanTextures = [
         BGL.assets.get("KT-player/texture/birdman0000"),
@@ -137,6 +141,8 @@ class KPlayer(Player):
         self.sword.stimer = 0
         KSounds.play( KSounds.player_hurt )
         self.pump_timer("injured")
+        self.run_animation_alt = 2
+        self.run_animation_subtick = 0
  
     def attempt_snap_attack(self, snap = True):
 
@@ -322,6 +328,7 @@ class KPlayer(Player):
         #PLAYER INIT
         #player init
         
+        self.run_animation_alt = 0
         self.invisible_frames = 0  
         self.got_time = 0
         self.subtick = 0
@@ -392,6 +399,8 @@ class KPlayer(Player):
         self.set_combat_vars()
         overrides.update(kwargs)
         Player.__init__(self, **overrides)
+
+        self.physics["radius"] = 1.85
         self.base_light_color = self.light_color
 
         KPlayer.textures = BGL.assets.get('KT-player/animation/knight')
@@ -570,6 +579,10 @@ class KPlayer(Player):
             self.heartcard.render()
             if(Abilities.Telekine):
                 self.telekinecard.render()
+                TelekineCooldown.render()
+
+            if(Abilities.Sword):
+                SwordCooldown.render()
 
         #for x in reversed(range(0,self.max_invslots)):
         #    if x is not self.sel_invslot:
@@ -676,28 +689,38 @@ class KPlayer(Player):
         return base_params
 
     def get_guppy_batch(self):
+        return [ self.get_shader_params() ]
         batch = [ Object.get_shader_params(self), self.get_shader_params() ]
-
         r = self.physics["radius"]
-        batch[0]["scale_local"] = [ r*2,r*2 ]
-        batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/alpha_shadow")
-
+        #batch[0]["scale_local"] = [ r*2,r*2 ]
+        #batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/alpha_shadow")
+        #batch[0]["scale_local"] = [ r,r ]
+        #batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/registration2")
         batch[1]["translation_local"][1] -= 0.5
         return batch
     
-        
-
     def determine_texture(self):
-
+        md = (self.v[0]*self.v[0])+(self.v[1]*self.v[1])
         idx = (
             ((0-rad_2_index(self.rad,8))+5) % 8
         )*16
         offs = self.run_animation_subtick//4
-        if(abs(self.v[0])+abs(self.v[1]))<4.0:
+
+        #self.run_animation_alt = 1
+        if self.run_animation_alt == 1:
+            offs = (self.run_animation_subtick//2)%16
+            return KPlayer.vl3d_sword[idx+offs]
+        elif self.run_animation_alt == 2:
+            return KPlayer.vl3d_hit[idx+self.run_animation_subtick]
+        elif md<16.0:
             return KPlayer.vl3d_idle[idx+offs]
+        elif md<80.0:
+            return KPlayer.vl3d_walk[idx+offs]
         else:
-            if(abs(self.v[0])+abs(self.v[1]))>7.0:
+            if md>130.0:
                 offs = (self.run_animation_subtick//2)%16
+
+        
             return KPlayer.vl3d_run[idx+offs]
 
 
@@ -890,10 +913,23 @@ class KPlayer(Player):
         self.title_card.reset(title)
         
     def tick(self):
+        Cooldown.tick(self)
         self.size = [ 3.8,3.8 ]
+        if(self.snap_animation_buffer>0):
+            self.size = [ 2.2,2.2 ]
+
         self.run_animation_subtick = self.run_animation_subtick + 1
+
+        if(self.run_animation_subtick == 16 ):
+            if self.run_animation_alt == 2:
+                self.run_animation_subtick = 0
+                self.run_animation_alt = 0
+        if(self.run_animation_subtick == 32 ):
+            if self.run_animation_alt == 1:
+                self.run_animation_alt = 0
         if(self.run_animation_subtick == 64 ):
             self.run_animation_subtick = 0
+            self.run_animation_alt = 0
 
 
         if not self.beat_level: #set in game
@@ -1054,7 +1090,9 @@ class KPlayer(Player):
             self.RIGHT_PRESSED = False
         if self.A_PRESSED:
             if Abilities.Sword:
-                self.slash.slash()
+                if self.slash.slash():
+                    self.run_animation_subtick = 0
+                    self.run_animation_alt = 1
             #self.add_dm_message("You swung your sword")
             #print("a pressed")
             #self.state = KPlayer.STATE_FIRING
@@ -1066,6 +1104,7 @@ class KPlayer(Player):
             if (self.X_PRESSED) or ( (self.sword.state == Sword.STATE_CHARGING) and (self.sword.stimer == 10)) or (self.sword.state == Sword.STATE_DISCHARGING and self.dch_cooldown == 0):
                 self.dch_cooldown = 17
                 self.attempt_snap_attack()
+                self.snap_cooldown = 4
 
         
         if(abs(pad.left_stick[0])>0.003) or (abs(pad.left_stick[1])>0.003):

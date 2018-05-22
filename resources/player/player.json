@@ -3,7 +3,10 @@
     "resources" : {
         "animation" : [
             { "name" : "vl3d_run", "directory" : "{package_path}/vl3d_run/", "filtered" : true },
+            { "name" : "vl3d_walk", "directory" : "{package_path}/vl3d_walk/", "filtered" : true },
+            { "name" : "vl3d_hit", "directory" : "{package_path}/vl3d_hit/", "filtered" : true },
             { "name" : "vl3d_idle", "directory" : "{package_path}/vl3d_idle/", "filtered" : true },
+            { "name" : "vl3d_sword", "directory" : "{package_path}/vl3d_sword/", "filtered" : true, "reverse" : true },
             { "name" : "transporter_flash", "directory" : "{package_path}/transporter_flash/", "filtered" : false },
             { "name" : "worldbubble", "directory" : "{package_path}/menu/worldbubble/", "filtered" : false },
             { "name" : "dust", "directory" : "{package_path}/dust/", "filtered" : false },
@@ -40,6 +43,8 @@
             { "name" : "heartcard0001", "filename" : "{package_path}/heartcard0001.png", "filtered" : false },
             { "name" : "swordcard0000", "filename" : "{package_path}/swordcard0000.png", "filtered" : false },
             { "name" : "swordcard0001", "filename" : "{package_path}/swordcard0001.png", "filtered" : false },
+            { "name" : "warpcard0000", "filename" : "{package_path}/warpcard0000.png", "filtered" : false },
+            { "name" : "warpcard0001", "filename" : "{package_path}/warpcard0001.png", "filtered" : false },
             { "name" : "wandcard0000", "filename" : "{package_path}/wandcard0000.png", "filtered" : false },
             { "name" : "wandcard0001", "filename" : "{package_path}/wandcard0001.png", "filtered" : false },
             { "name" : "healthvial0000", "filename" : "{package_path}/healthvial0000.png", "filtered" : false },
