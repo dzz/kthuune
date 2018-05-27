@@ -22,7 +22,7 @@ class Sequences:
         "4.1" : { "title" : "Oxytoxicity", "time_limit" : 30, "music" : "KT-player/path/trixymixy" },
         "5" : { "title" : "Feathers in the wind", "time_limit" : 25, "music" : "KT-player/path/lacuna_canal" },
         "6" : { "title" : "Telephone Pole", "time_limit" : 25 , "music" : "KT-player/path/polydrone" },
-        "7" : { "title" : "Not what they seem...", "time_limit" : 25 , "music" : "KT-player/path/polydrone" }, # can fuck yourself up
+        "7" : { "title" : "Not what they seem...", "time_limit" : 45 , "music" : "KT-player/path/polydrone" }, # can fuck yourself up
         "8" : { "title" : "Faraday Cage", "time_limit" : 25, "music" : "KT-player/path/trixymixy" },
         "9" : { "title" : "Clerical Error", "time_limit" : 35, "music" : "KT-player/path/trixymixy" }, #debug state here, or make failure more quick & reinforcing
         "tt" : { "title" : "Instant Cooking", "time_limit" : 15, "music" : "KT-player/path/trixymixy" }, #debug state here, or make failure more quick & reinforcing

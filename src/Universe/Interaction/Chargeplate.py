@@ -93,6 +93,9 @@ class Chargeplate(Object):
                     owl.visible = False
                     self.floor.sounds.play( choice([ self.floor.sounds.enemy_killed, self.floor.sounds.enemy_killed2 ]) )
                     self.floor.create_object(Explosion(p=list(owl.p)))
+                    self.floor.create_object(AttackInfo( p=[ owl.p[0], owl.p[1] ],
+                            message="TIME++"))
+                    self.floor.player.add_time(3)
                     for x in range(0,20):
                         spltr = SplatterParticle( p = list(owl.p), size = [ 5.0,5.0],rad = uniform(-3.14,3.14))
                         self.floor.create_object(spltr)

@@ -718,10 +718,9 @@ class KPlayer(Player):
         md = (self.v[0]*self.v[0])+(self.v[1]*self.v[1])
         idx = (
             ((0-rad_2_index(self.rad,8))+5) % 8
-        )*4
-        offs = self.run_animation_subtick//4
+        )*8
+        offs = (self.run_animation_subtick//2) % 8
 
-        print(offs)
 
         if(md>15):
             return KPlayer.vl2d_walk[idx + offs]
@@ -925,14 +924,16 @@ class KPlayer(Player):
 
         self.run_animation_subtick = self.run_animation_subtick + 1
 
-        if(self.run_animation_subtick==16):
+        if(self.run_animation_subtick==32):
             self.run_animation_subtick = 0
             self.run_animation_alt = 0
 
 
         if not self.beat_level and self.floor.genocide_enabled: #set in game
             if not self.suspend_time_penalty:
-                self.life_timer -= 1
+                if not self.title_card.displaying():
+                    if not self.floor.camera.cinema_target:
+                        self.life_timer -= 1
             else:
                 self.suspend_time_penalty = False
 
