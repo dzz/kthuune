@@ -448,6 +448,12 @@ class DungeonFloor( Floor ):
         else:
             return self.group_to_owl[idx].p
 
+    def get_owl(self,idx = 0 ):
+        if not idx in self.group_to_owl:
+            return None
+        else:
+            return self.group_to_owl[idx]
+
 
 def get_DF():
     return DungeonFloor

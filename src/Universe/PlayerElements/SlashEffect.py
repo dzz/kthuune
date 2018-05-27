@@ -13,7 +13,7 @@ class SlashEffect(Object):
 
     def customize(self):
         self.buftarget = "popup"
-        self.size = [2.5,2.5]
+        self.size = [1.7,1.7]
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.light_type = Object.LightTypes.NONE
         self.light_radius = 7.0
@@ -40,7 +40,7 @@ class SlashEffect(Object):
 
             pad = self.floor.player.controllers.get_virtualized_pad(0)
     
-            self.rad = atan2( pad.left_stick[1], pad.left_stick[0]) - (3.14/2)
+            self.rad = atan2( pad.left_stick[1], pad.left_stick[0]) + (3.14/2)
 
             self.orig_rad = self.rad
             self.floor.player.sword.visible = False
@@ -51,7 +51,7 @@ class SlashEffect(Object):
             self.floor.player.run_stamina -= 20
             self.floor.player.total_slashes += 1
 
-            self.base_extension = 1.0
+            self.base_extension = 0.4
             return True
 
     def tick(self):
@@ -59,11 +59,11 @@ class SlashEffect(Object):
         if(self.cooldown>0):
             self.cooldown -= 1
 
-        offsx = ((cos(self.rad)*(1.8+self.base_extension))+(self.floor.player.v[0]*0.4))*0.5
-        offsy = ((sin(self.rad)*(1.8+self.base_extension))+(self.floor.player.v[1]*0.4))*0.5
+        offsx = ((cos(self.rad)*(1.6+self.base_extension))+(self.floor.player.v[0]*0.4))*0.5
+        offsy = ((sin(self.rad)*(1.6+self.base_extension))+(self.floor.player.v[1]*0.4))*0.5
 
         if self.stagger_cooldown==0:
-            self.rad=self.rad+(3.14/17)
+            self.rad=self.rad-(3.14/17)
             self.alpha *= 0.95
             self.base_extension += 0.14
 
@@ -72,10 +72,13 @@ class SlashEffect(Object):
 
         Object.light_type = Object.LightTypes.NONE
 
-
-
         if self.visible:
+            self.flash_color[3]*=0.9
             Object.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
+
+            if self.fr == 3:
+                self.flash_color = [1.0,0.0,0.0,1.0]
+
             if self.fr>3 and self.fr < 19 and (self.stagger_cooldown==0):
                 for enemy in self.floor.snap_enemies:
                     if enemy.snap_type==1 and enemy not in self.attacked_enemies and len(self.attacked_enemies)<3:
@@ -115,12 +118,10 @@ class SlashEffect(Object):
             
 
     def get_guppy_batch(self):
-        batch = [ Object.get_shader_params(self), self.get_shader_params() ]
+        batch = [ self.get_shader_params() ]
 
-        batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/alpha_shadow")
-        batch[0]["rotation_local"] = 0.0
-        batch[0]["scale_local"] = [ 2.0,2.0]
-        batch[0]["filter_color"][3] = self.alpha
+        batch[0]["rotation_local"] = self.orig_rad - 1.57
+
 
         return batch
         

@@ -8,6 +8,7 @@ class Firefly(Object):
     texture = BGL.assets.get('KT-player/texture/firefly')
 
     def __init__(self,**kwargs):
+        self.flash_color = [ 1.0,1.0,0.0,1.0 ]
         Object.__init__(self,**kwargs)
         self.light_type = Object.LightTypes.DYNAMIC_TEXTURE_OVERLAY
         self.light_texture = BGL.assets.get('NL-lights/texture/radial')
@@ -33,6 +34,7 @@ class Firefly(Object):
         self.vy = sin(d)*spd
 
     def tick(self):
+        self.flash_color[3]*=0.9
         self.life += 1
 
         self.p[0] = (self.p[0] *0.6) + (self.base_p[0]*0.4)

@@ -87,7 +87,9 @@ class Chargeplate(Object):
 
             if check:
                 if self.group in self.floor.group_to_owl:
+    
                     owl = self.floor.group_to_owl[self.group]
+                    self.floor.camera.grab_cinematic(owl,3,None)
                     owl.visible = False
                     self.floor.sounds.play( choice([ self.floor.sounds.enemy_killed, self.floor.sounds.enemy_killed2 ]) )
                     self.floor.create_object(Explosion(p=list(owl.p)))
@@ -160,6 +162,9 @@ class Chargeplate(Object):
         self.l_idx = n_lidx
 
         if(self.mdist( self.floor.player)<2.27):
+            if self.group in self.floor.group_to_owl:
+                self.floor.camera.grab_cinematic(self.floor.group_to_owl[self.group],1,None)
+
             self.cv += 0.03
             self.flash_color[3] = 0.0
             if( uniform(0.0,1.0) >  0.9 ):
@@ -178,6 +183,12 @@ class Chargeplate(Object):
         if(self.cv>1.0):
             self.cv = 1.0
             self.charged = True
+            self.floor.sounds.play( choice([ self.floor.sounds.enemy_killed, self.floor.sounds.enemy_killed2 ]) )
+            for cable in self.cable_segments:
+                cable.tick = lambda : False
+                cable.visible = False
+                spltr = Explosion( p = list(cable.p), rad = cable.rad )
+                self.floor.create_object(spltr)
             self.floor.create_object(AttackInfo( p=[ self.p[0], self.p[1] ], message="~charged~"))
 
             for s in self.cable_segments:

@@ -49,6 +49,13 @@ def rad_2_index(rad, segments):
 
 
 class KPlayer(Player):
+    rainbow = [ 
+        [ 148/256, 0.0, 211/256, 1.0 ],
+        [ 75/256, 0.0, 130.0/256, 1.0 ],
+        [ 0.0, 0.0, 256/256, 1.0 ],
+        [ 255/256, 255/256, 0.0, 1.0 ],
+        [ 255/256, 127, 0.0, 1.0 ]
+    ]
     vl2d_walksword = BGL.assets.get("KT-player/animation/vl2d_walksword")
     vl3d_run = BGL.assets.get("KT-player/animation/vl3d_run")
     vl3d_walk = BGL.assets.get("KT-player/animation/vl3d_walk")
@@ -332,6 +339,7 @@ class KPlayer(Player):
         #PLAYER INIT
         #player init
         
+        self.rainbow_val = 0
         self.in_editor = False
         self.run_animation_alt = 0
         self.invisible_frames = 0  
@@ -405,7 +413,7 @@ class KPlayer(Player):
         overrides.update(kwargs)
         Player.__init__(self, **overrides)
 
-        self.physics["radius"] = 1.85
+        self.physics["radius"] = 1.65
         self.base_light_color = self.light_color
 
         KPlayer.textures = BGL.assets.get('KT-player/animation/knight')
@@ -490,7 +498,8 @@ class KPlayer(Player):
     def add_firefly(self):
         self.hittable_hint_real += 0.01
         self.hittable_hint_impulse = 0.7
-        self.flash_color = [ 0.0,0.8,1.0,1.0]
+        self.flash_color = KPlayer.rainbow[self.rainbow_val]
+        self.rainbow_val = (self.rainbow_val+1)%len(KPlayer.rainbow)
 
         fireflyTeleportBonus = 10.0/12.0
         self.teleportAmt += fireflyTeleportBonus
@@ -700,9 +709,9 @@ class KPlayer(Player):
         r = self.physics["radius"]
         #batch[0]["scale_local"] = [ r*2,r*2 ]
         #batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/alpha_shadow")
-        #batch[0]["scale_local"] = [ r,r ]
-        #batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/registration2")
-        batch[1]["translation_local"][1] -= 0.5
+        batch[0]["scale_local"] = [ r,r ]
+        batch[0]["texBuffer"]=BGL.assets.get("KT-forest/texture/registration2")
+        batch[1]["translation_local"][1] -= 0.0
         return batch
     
     def determine_texture(self):
@@ -910,7 +919,7 @@ class KPlayer(Player):
         
     def tick(self):
         Cooldown.tick(self)
-        self.size = [ 6.5,6.5 ]
+        self.size = [ 6.7,6.7 ]
         if(self.snap_animation_buffer>0):
             self.size = [ 2.2,2.2 ]
 

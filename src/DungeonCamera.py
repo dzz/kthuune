@@ -69,8 +69,8 @@ class DungeonCamera (Camera):
 
 
             if not self.cinema_target:
-                pX = self.player.p[0]
-                pY = self.player.p[1]
+                pX = self.player.p[0] + (self.player.v[0]*0.15)
+                pY = self.player.p[1] + (self.player.v[1]*0.15)
             else:
                 pX = self.cinema_target.p[0]
                 pY = self.cinema_target.p[1]
@@ -112,7 +112,7 @@ class DungeonCamera (Camera):
             else:
                 bz = self.base_zoom
 
-            calc_zoom = (bz + (self.zoom*(-0.33)*isAiming) + sc)*0.6
+            calc_zoom = (bz + (self.zoom*(-0.33)*isAiming) + sc)*0.8
 
             if(self.player.snap_animation_buffer>0):
                 calc_zoom *= 2.7

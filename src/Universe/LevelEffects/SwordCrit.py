@@ -25,6 +25,7 @@ class SwordCrit(Object):
         self.anim_tick = 0.2
 
     def tick(self):
+        return False
 
         if(self.delay> 5):
             self.visible = True
