@@ -49,11 +49,16 @@ def rad_2_index(rad, segments):
 
 
 class KPlayer(Player):
+    vl2d_walksword = BGL.assets.get("KT-player/animation/vl2d_walksword")
     vl3d_run = BGL.assets.get("KT-player/animation/vl3d_run")
     vl3d_walk = BGL.assets.get("KT-player/animation/vl3d_walk")
     vl3d_idle = BGL.assets.get("KT-player/animation/vl3d_idle")
     vl3d_sword = BGL.assets.get("KT-player/animation/vl3d_sword")
     vl3d_hit = BGL.assets.get("KT-player/animation/vl3d_hit")
+
+    vl2d_walk = BGL.assets.get("KT-player/animation/vl2d_walk")
+    vl2d_idle = BGL.assets.get("KT-player/animation/vl2d_idle")
+
     BirdmanTick = 0
     BirdmanTextures = [
         BGL.assets.get("KT-player/texture/birdman0000"),
@@ -327,6 +332,7 @@ class KPlayer(Player):
         #PLAYER INIT
         #player init
         
+        self.in_editor = False
         self.run_animation_alt = 0
         self.invisible_frames = 0  
         self.got_time = 0
@@ -703,25 +709,15 @@ class KPlayer(Player):
         md = (self.v[0]*self.v[0])+(self.v[1]*self.v[1])
         idx = (
             ((0-rad_2_index(self.rad,8))+5) % 8
-        )*16
+        )*4
         offs = self.run_animation_subtick//4
 
-        #self.run_animation_alt = 1
-        if self.run_animation_alt == 1:
-            offs = (self.run_animation_subtick//2)%16
-            return KPlayer.vl3d_sword[idx+offs]
-        elif self.run_animation_alt == 2:
-            return KPlayer.vl3d_hit[idx+self.run_animation_subtick]
-        elif md<16.0:
-            return KPlayer.vl3d_idle[idx+offs]
-        elif md<80.0:
-            return KPlayer.vl3d_walk[idx+offs]
-        else:
-            if md>130.0:
-                offs = (self.run_animation_subtick//2)%16
+        print(offs)
 
-        
-            return KPlayer.vl3d_run[idx+offs]
+        if(md>15):
+            return KPlayer.vl2d_walk[idx + offs]
+        else:
+            return KPlayer.vl2d_idle[idx + offs]
 
 
     def _determine_texture(self):
@@ -914,20 +910,13 @@ class KPlayer(Player):
         
     def tick(self):
         Cooldown.tick(self)
-        self.size = [ 3.8,3.8 ]
+        self.size = [ 6.5,6.5 ]
         if(self.snap_animation_buffer>0):
             self.size = [ 2.2,2.2 ]
 
         self.run_animation_subtick = self.run_animation_subtick + 1
 
-        if(self.run_animation_subtick == 16 ):
-            if self.run_animation_alt == 2:
-                self.run_animation_subtick = 0
-                self.run_animation_alt = 0
-        if(self.run_animation_subtick == 32 ):
-            if self.run_animation_alt == 1:
-                self.run_animation_alt = 0
-        if(self.run_animation_subtick == 64 ):
+        if(self.run_animation_subtick==16):
             self.run_animation_subtick = 0
             self.run_animation_alt = 0
 
@@ -957,12 +946,13 @@ class KPlayer(Player):
         self.title_card.tick()
 
         if(self.title_card.displaying()):
-            self.determine_texture()
+            self.texture = self.determine_texture()
             self.physics_suspended = True
             self.vx = 0
             self.vy = 0
             self.v = [0.0,0.0]
-            return True
+            if not self.in_editor:
+                return True
 
         self.telekineFlash *= 0.95
         self.potionFlash *= 0.95

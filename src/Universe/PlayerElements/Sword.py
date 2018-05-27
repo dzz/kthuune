@@ -116,16 +116,18 @@ class Sword(Object):
                 self.collected = True
             return
 
-        self.bob_index = self.bob_index + 0.04
-        self.p[0] = self.player.p[0] + (cos(self.player.rad-1.57)*1.4)
-        self.p[1] = (self.player.p[1] + (sin(self.player.rad-1.57)*0.6)) 
+        self.bob_index = self.bob_index + 0.4
+        self.p[0] = self.player.p[0] + (cos(self.player.rad-1.57)*0.6)
+        self.p[1] = (self.player.p[1] + (sin(self.player.rad-1.57)*0.2)) - 2.0
         self.rad = -1.57
-        self.size = [1.5,1.5]
+        self.size = [0.8,0.8]
 
     def get_shader_params(self):
         bp = Object.get_shader_params(self)
-        bp["translation_local"][0] = 0.0
-        bp["translation_local"][1] += 0.1*sin(self.bob_index)
+        bp["translation_local"][1] = 0.0
+        bp["translation_local"][0] += 0.1*sin(self.bob_index)
+        bp["scale_local"][1] *= -1.0
         #bp["translation_local"][1] -= 0.0
+        bp["filter_color"] = [ 0.0,0.0,0.0,0.0 ]
         return bp
 

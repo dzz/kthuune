@@ -42,6 +42,7 @@ class LevelPreview:
 
     def tick(app):
         if LevelPreview.floor:
+            LevelPreview.player.in_editor = True
             LevelPreview.player.tick()
             LevelPreview.player.life_timer = 9999
             LevelPreview.controllers.tick()

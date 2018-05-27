@@ -11,6 +11,9 @@
             }
         ],
         "animation" : [
+            { "name" : "vl2d_walksword", "directory" : "{package_path}/vl2d_walksword/", "filtered" : false , "debug" : true },
+            { "name" : "vl2d_idle", "directory" : "{package_path}/vl2d_idle/", "filtered" : false , "debug" : true },
+            { "name" : "vl2d_walk", "directory" : "{package_path}/vl2d_walk/", "filtered" : false },
             { "name" : "vl3d_run", "directory" : "{package_path}/vl3d_run/", "filtered" : true },
             { "name" : "vl3d_walk", "directory" : "{package_path}/vl3d_walk/", "filtered" : true },
             { "name" : "vl3d_hit", "directory" : "{package_path}/vl3d_hit/", "filtered" : true },
@@ -81,7 +84,7 @@
             { "name" : "charged", "path" : "{package_path}/sounds/charged.wav" },
             { "name" : "charging", "path" : "{package_path}/sounds/charging.wav" },
             { "name" : "spawned", "path" : "{package_path}/sounds/spawned.wav" },
-            { "name" : "sequenced", "path" : "{package_path}/sounds/sequenced.wav" },
+            { "name" : "sequenced", "path" : "{package_path}/sounds/sequenced2.wav" },
             { "name" : "charge_initiated", "path" : "{package_path}/sounds/charge_initiated.wav" },
             { "name" : "charge_executed", "path" : "{package_path}/sounds/charge_executed.wav" },
             { "name" : "snap_landed", "path" : "{package_path}/sounds/snap_landed.wav" },

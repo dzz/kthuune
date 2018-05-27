@@ -48,7 +48,9 @@ class Editor:
         self.type = Editor
 
         BGL.console.attach(self)
-        pass
+
+        Editor.instance.load_sequence('0')
+        World.reduce()
 
 
     def set_name(self,name):
@@ -304,3 +306,4 @@ BGL.keyboard.register_keydown_handler("9", lambda: Editor.set_group(9))
 BGL.keyboard.register_keydown_handler("comma", lambda: Editor.prev_decorator())
 BGL.keyboard.register_keydown_handler("period", lambda: Editor.next_decorator())
 BGL.keyboard.register_keydown_handler("u", lambda: Editor.center_player())
+
