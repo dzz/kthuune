@@ -11,7 +11,7 @@
         ],
         "shader" : [
             {
-                "name" : "city",
+                "name" : "lw",
                 "vertex_program" : "{beagle-2d}/vertex/no_transform",
                 "pixel_program" : "{package_path}/lw"
             }

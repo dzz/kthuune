@@ -7,6 +7,7 @@ from .Universe.AreaLoader import get_area_data
 from .Abilities import Abilities
 from .Universe.NPC.Elder import Elder
 from .CloudBackground import CloudBackground
+from .Universe.LevelProps.SpeechBubble import SpeechBubble
 import audio
 
 class Sequences:
@@ -14,6 +15,8 @@ class Sequences:
     active_music_key = None
     titles = {
         "0" : { "title" : "Debug Area", "time_limit": 999, "music" : "KT-player/path/ship_music" },
+        #"0.1" : { "title" : "RootKit 1.0", "time_limit": 999, "music" : "KT-player/path/ship_music" },
+
         "1" : { "title" : "First, Cut!", "time_limit": 40, "music" : "KT-player/path/ship_music" },
         "2" : { "title" : "Kindergarten", "time_limit" : 35, "music" : "KT-player/path/polydrone" },
         "3" : { "title" : "Runner's High", "time_limit" : 30, "music" : "KT-player/path/polydrone", }, #mat didn't see dash tutor
@@ -140,7 +143,10 @@ class Sequences:
         floor.genocide_enabled = False
 
         def test_trigger(owner):
-            exit()
+            SpeechBubble.spawn(owner, [ "LEFT STICK to Move"] )
+            #bubble = SpeechBubble( triggered = True, visible = True, p = list(owner.p), mode = 1 ) 
+            #owner.floor.create_object(bubble)
+            #bubble.set_script( [ "LEFT STICK to Move" ], owner.p, False )
         
         floor.trigger_callbacks[0] = test_trigger
         return floor

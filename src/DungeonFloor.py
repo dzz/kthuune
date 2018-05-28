@@ -347,7 +347,7 @@ class DungeonFloor( Floor ):
 
         if DungeonFloor.current_music is not self.music:
             DungeonFloor.current_music = self.music
-            audio.baudy_play_music(BGL.assets.get(self.music))
+            #audio.baudy_play_music(BGL.assets.get(self.music))
 
         if DungeonFloor.NO_SHADOWS:
             self.light_occluders = []

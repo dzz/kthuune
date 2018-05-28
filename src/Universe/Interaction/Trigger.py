@@ -31,7 +31,6 @@ class Trigger(Object):
             )
 
     def tick(self):
-        print("TRIGGER TICK")
         if(self.floor.player.p[0] > self.p[0]-self.size[0]):
             if(self.floor.player.p[0] < self.p[0]+self.size[0]):
                 if(self.floor.player.p[1] > self.p[1]-self.size[1]):

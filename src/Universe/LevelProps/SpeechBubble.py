@@ -47,6 +47,12 @@ class ToolTip(Object): #must pass in message, width, owner
         
 
 class SpeechBubble(Object):
+
+    def spawn(owner, script):
+        bubble = SpeechBubble( triggered = True, visible = True, p = list(owner.p), mode = 1 ) 
+        owner.floor.create_object(bubble)
+        bubble.set_script( script, owner.p, False )
+
     scroll_in_chars = [
         "_",
         "-",
@@ -95,7 +101,7 @@ class SpeechBubble(Object):
                 BGL.lotext.render_text_pixels(string,1,0,[ 0.3,0.3,0.3 ])
                 BGL.lotext.render_text_pixels(string,1,1,[ 0.5,0.0,0.9 ])
 
-    def set_script(self,script, p):
+    def set_script(self,script, p, offs = True):
 
         if(self.script is None):
             self.script = script
@@ -103,7 +109,8 @@ class SpeechBubble(Object):
             self.current_string_timer = 0
 
             self.p[0] = p[0]
-            self.p[1] = p[1] + 7
+            if offs:
+                self.p[1] = p[1] + 7
             self.visible = True
 
     

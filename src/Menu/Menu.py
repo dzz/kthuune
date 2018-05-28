@@ -6,7 +6,7 @@ import audio
 
 def real_start_game():
     Menu.Game.main_menu = False
-    audio.baudy_play_music( BGL.assets.get("KT-player/path/ship_music"))
+    #audio.baudy_play_music( BGL.assets.get("KT-player/path/ship_music"))
     Menu.initialized = False
     Menu.alpha = 0.0
 
@@ -113,7 +113,7 @@ class Menu:
     def render():
 
         if not Menu.initialized:
-            audio.baudy_play_music( BGL.assets.get("KT-player/path/vectormenu"))
+            #audio.baudy_play_music( BGL.assets.get("KT-player/path/vectormenu"))
             Menu.initialized = True
             
         with BGL.context.render_target( Menu.texbuffer ):
