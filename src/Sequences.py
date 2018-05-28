@@ -165,9 +165,29 @@ class Sequences:
 
         def look_trigger(owner):
             SpeechBubble.spawn(owner, [ "RIGHT STICK to Look"] )
+
+        def run_trigger(owner):
+            SpeechBubble.spawn(owner, [ "RB to Sprint"] )
+
+        def gj_trigger(owner):
+            SpeechBubble.spawn(owner, [ "...", "good!"] )
+
+        def dash_trigger(owner):
+            SpeechBubble.spawn(owner, [ "B to Tele-Dash"] )
         
         floor.trigger_callbacks[0] = move_trigger
         floor.trigger_callbacks[1] = look_trigger
+        floor.trigger_callbacks[2] = run_trigger
+        floor.trigger_callbacks[3] = gj_trigger
+        floor.trigger_callbacks[4] = dash_trigger
+
+        Elder.script = [ 
+            "VECTORLORD...",
+            "I am a greybeard, from the place known as User Space...",
+            "You are one of our Subprocesses, and if you do not succeed..."
+            "...our Systems will fail."
+        ]
+        Elder.floor_script = [] 
         return floor
 
     def buildarea_1(Game,area_def,sequence):

@@ -76,7 +76,8 @@ class Elder(Object):
             if(dst<30):
                 self.sensed = True
                 self.talking = True
-                SpeechBubble.instance.set_script(self.floor_script,  self.p)
+                if( len(self.floor_script)>0):
+                    SpeechBubble.instance.set_script(self.floor_script,  self.p)
             ###    self.floor.player.set_hud_message("HELLO I TALK")
             ###    if self.floor.player.get_pad().button_down( BGL.gamepads.buttons.X ):
             ###        pass

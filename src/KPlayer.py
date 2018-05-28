@@ -1143,8 +1143,8 @@ class KPlayer(Player):
 
             #self.visible = False
             #self.invuln_frames = 1
-            self.v[0] += self.dv[0]*2.8
-            self.v[1] += self.dv[1]*2.8
+            self.v[0] += self.dv[0]*1.8
+            self.v[1] += self.dv[1]*1.8
             
             self.dv[0]*=0.6
             self.dv[1]*=0.6
