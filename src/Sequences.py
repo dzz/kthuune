@@ -138,6 +138,11 @@ class Sequences:
         #floor.custom_background = CloudBackground()
         floor.parallax_skin = "ks"
         floor.genocide_enabled = False
+
+        def test_trigger(owner):
+            exit()
+        
+        floor.trigger_callbacks[0] = test_trigger
         return floor
 
     def buildarea_1(Game,area_def,sequence):

@@ -52,6 +52,7 @@ from .LevelProps.Egg import Egg
 from .LevelProps.BlindArcade import BlindArcade
 from .LevelProps.TreeTrunk import TreeTrunk
 from .LevelProps.Decorator import Decorator
+from .Interaction.Trigger import Trigger
 from .LevelProps.FloatingPlayer import FloatingPlayer
 from .LevelProps.DeadK import DeadK
 from .LevelProps.Lantern import Lantern
@@ -345,6 +346,9 @@ class AreaCompiler():
 
             if od["key"] in ["decorator"]:
                 self.objects.append(Decorator.parse(od,df))
+
+            if od["key"] in ["trigger"]:
+                self.objects.append(Trigger.parse(od,df))
 
 
 

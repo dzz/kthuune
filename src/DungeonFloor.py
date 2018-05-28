@@ -44,6 +44,7 @@ class DungeonFloor( Floor ):
     def __init__(self,**kwargs):
         BGL.auto_configurable.__init__(self,
         {
+            "trigger_callbacks" : {},
             "spawners" : [],
             "genocide_enabled" : True,
             "CustomBackground" : None,
