@@ -301,8 +301,8 @@ class ElderMessage(MenuTerminal):
         self.top_level_items = [ "INBOX.bin", "SYSOP.nfo" ]
 
         self.second_level_items_map = {
-            "INBOX.bin" : [],
-            "SYSOP.nfo" : []
+            "INBOX.bin" : [ "One", "Two"],
+            "SYSOP.nfo" : [ "Three", "Four"]
         }
 
         self.in_menu = True

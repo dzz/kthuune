@@ -1,7 +1,10 @@
 from Beagle import API as BGL
 
 class ParallaxBackground:
-    shader = BGL.assets.get("KT-city/shader/city")
+    shaders = {
+        "city" : BGL.assets.get("KT-city/shader/city"),
+        "lw" : BGL.assets.get("KT-lw/shader/lw"),
+        "ks" : BGL.assets.get("KT-ks/shader/ks") }
     primitive = BGL.primitive.unit_uv_square
     layers = { "city" : [
         ( BGL.assets.get('KT-city/texture/city2_background'), 1.0 ),
@@ -20,6 +23,15 @@ class ParallaxBackground:
         ( BGL.assets.get('KT-lw/texture/lw_buildings_middle'), 1.4 ),
         ( BGL.assets.get('KT-lw/texture/lw_buildings_near'), 1.5 ),
 
+        ],
+        "ks" : [
+        ( BGL.assets.get('KT-ks/texture/ks0'), 1.0 ),
+        ( BGL.assets.get('KT-ks/texture/ks1'), 1.1 ),
+        ( BGL.assets.get('KT-ks/texture/ks2'), 1.2 ),
+        ( BGL.assets.get('KT-ks/texture/ks3'), 1.3 ),
+        ( BGL.assets.get('KT-ks/texture/ks4'), 1.4 ),
+        ( BGL.assets.get('KT-ks/texture/ks5'), 1.5 ),
+        ( BGL.assets.get('KT-ks/texture/ks6'), 1.8 )
         ]
      }
 
@@ -28,5 +40,5 @@ class ParallaxBackground:
             skin = "lw"
         with BGL.blendmode.alpha_over:
             for layer in ParallaxBackground.layers[skin]:
-                ParallaxBackground.primitive.render_shaded(ParallaxBackground.shader,  { "texBuffer" : layer[0], "offs": x*layer[1]*0.6 } )
+                ParallaxBackground.primitive.render_shaded(ParallaxBackground.shaders[skin],  { "texBuffer" : layer[0], "offs": x*layer[1]*0.6 } )
 

@@ -719,7 +719,7 @@ class KPlayer(Player):
         idx = (
             ((0-rad_2_index(self.rad,8))+5) % 8
         )*8
-        offs = (self.run_animation_subtick//2) % 8
+        offs = (self.run_animation_subtick//4) % 8
 
 
         if(md>15):
@@ -924,10 +924,13 @@ class KPlayer(Player):
 
         self.run_animation_subtick = self.run_animation_subtick + 1
 
-        if(self.run_animation_subtick==32):
+        if(self.run_animation_subtick==64):
             self.run_animation_subtick = 0
             self.run_animation_alt = 0
 
+
+        if(self.in_editor):
+            self.title_card.abort()
 
         if not self.beat_level and self.floor.genocide_enabled: #set in game
             if not self.suspend_time_penalty:

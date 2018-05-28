@@ -10,7 +10,7 @@ from .CloudBackground import CloudBackground
 import audio
 
 class Sequences:
-    start_level = "7"
+    start_level = "0"
     active_music_key = None
     titles = {
         "0" : { "title" : "Debug Area", "time_limit": 999, "music" : "KT-player/path/ship_music" },
@@ -136,7 +136,7 @@ class Sequences:
         Abilities.Telekine = True
         Abilities.Dash = True
         #floor.custom_background = CloudBackground()
-        floor.parallax_skin = "city"
+        floor.parallax_skin = "ks"
         floor.genocide_enabled = False
         return floor
 

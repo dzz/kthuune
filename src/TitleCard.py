@@ -52,4 +52,7 @@ class TitleCard():
 
     def tick(self):
         self.tval = self.tval+1
+    
+    def abort(self):
+        self.tval = 701
 

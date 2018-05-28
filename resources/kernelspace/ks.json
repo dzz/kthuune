@@ -1,0 +1,21 @@
+{
+    "preload": true,
+    "resources" : {
+        "texture" : [
+            { "name" : "ks0", "filename" : "{package_path}/ks0.png", "filtered" : false },
+            { "name" : "ks1", "filename" : "{package_path}/ks1.png", "filtered" : false },
+            { "name" : "ks2", "filename" : "{package_path}/ks2.png", "filtered" : false },
+            { "name" : "ks3", "filename" : "{package_path}/ks3.png", "filtered" : false },
+            { "name" : "ks4", "filename" : "{package_path}/ks4.png", "filtered" : false },
+            { "name" : "ks5", "filename" : "{package_path}/ks5.png", "filtered" : false },
+            { "name" : "ks6", "filename" : "{package_path}/ks6.png", "filtered" : false }
+        ],
+        "shader" : [
+            {
+                "name" : "ks",
+                "vertex_program" : "{beagle-2d}/vertex/no_transform",
+                "pixel_program" : "{package_path}/ks"
+            }
+        ]
+    }
+}
