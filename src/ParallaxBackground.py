@@ -1,6 +1,11 @@
 from Beagle import API as BGL
 
 class ParallaxBackground:
+    animate = {
+        "city" : 0.0,   
+        "lw" : 0.0,
+        "ks" : 0.001,
+    }
     shaders = {
         "city" : BGL.assets.get("KT-city/shader/city"),
         "lw" : BGL.assets.get("KT-lw/shader/lw"),
@@ -35,10 +40,10 @@ class ParallaxBackground:
         ]
      }
 
-    def render(x, skin = None ):
+    def render(x, skin = None, tick = 0.0 ):
         if not skin:
             skin = "lw"
         with BGL.blendmode.alpha_over:
             for layer in ParallaxBackground.layers[skin]:
-                ParallaxBackground.primitive.render_shaded(ParallaxBackground.shaders[skin],  { "texBuffer" : layer[0], "offs": x*layer[1]*0.6 } )
+                ParallaxBackground.primitive.render_shaded(ParallaxBackground.shaders[skin],  { "texBuffer" : layer[0], "offs": (x+(tick*ParallaxBackground.animate[skin]))*layer[1]*0.6 } )
 

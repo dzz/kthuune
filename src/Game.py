@@ -452,7 +452,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         else:
             with BGL.context.render_target( Game.god_buffer):
                 if not self.floor.custom_background:
-                    ParallaxBackground.render(self.player.p[0]*0.01,self.floor.parallax_skin)
+                    ParallaxBackground.render(self.player.p[0]*0.01,self.floor.parallax_skin, self.floor._tick)
                 else:
                     BGL.context.clear( 0.0,0.0,0.0,0.0);
                     self.floor.custom_background.camera = self.camera
