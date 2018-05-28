@@ -46,6 +46,7 @@ class Brushes:
     def remove_selected():
         for brush in Brushes.selected_brushes:
             Brushes.brushes.remove(brush)
+        Brushes.selected_brushes = []
 
     def reflow():
         for brush in Brushes.brushes:

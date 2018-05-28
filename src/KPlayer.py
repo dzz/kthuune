@@ -413,7 +413,8 @@ class KPlayer(Player):
         overrides.update(kwargs)
         Player.__init__(self, **overrides)
 
-        self.physics["radius"] = 1.65
+        #self.physics["radius"] = 1.65
+        self.physics["radius"] = 1.0
         self.base_light_color = self.light_color
 
         KPlayer.textures = BGL.assets.get('KT-player/animation/knight')

@@ -80,7 +80,7 @@ class SpeechBubble(Object):
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.size = [ 8,-1.2 ]
         self.visible = False
-        self.z_index = 9000
+        self.z_index = -9000
         self.script = None
 
         self.current_string = None

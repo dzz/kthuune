@@ -11,11 +11,11 @@ from .Universe.LevelProps.SpeechBubble import SpeechBubble
 import audio
 
 class Sequences:
-    start_level = "0"
+    start_level = "0.1"
     active_music_key = None
     titles = {
         "0" : { "title" : "Debug Area", "time_limit": 999, "music" : "KT-player/path/ship_music" },
-        #"0.1" : { "title" : "RootKit 1.0", "time_limit": 999, "music" : "KT-player/path/ship_music" },
+        "0.1" : { "title" : "RootKit 1.0", "time_limit": 999, "music" : "KT-player/path/ship_music" },
 
         "1" : { "title" : "First, Cut!", "time_limit": 40, "music" : "KT-player/path/ship_music" },
         "2" : { "title" : "Kindergarten", "time_limit" : 35, "music" : "KT-player/path/polydrone" },
@@ -149,6 +149,25 @@ class Sequences:
             #bubble.set_script( [ "LEFT STICK to Move" ], owner.p, False )
         
         floor.trigger_callbacks[0] = test_trigger
+        return floor
+
+    def buildarea_0_1(Game,area_def,sequence):
+        floor = Sequences.buildarea_default( Game, area_def, sequence )
+        Abilities.Sword = False
+        Abilities.Telekine = False
+        Abilities.Dash = True
+        #floor.custom_background = CloudBackground()
+        floor.parallax_skin = "ks"
+        floor.genocide_enabled = False
+
+        def move_trigger(owner):
+            SpeechBubble.spawn(owner, [ "LEFT STICK to Move"] )
+
+        def look_trigger(owner):
+            SpeechBubble.spawn(owner, [ "RIGHT STICK to Look"] )
+        
+        floor.trigger_callbacks[0] = move_trigger
+        floor.trigger_callbacks[1] = look_trigger
         return floor
 
     def buildarea_1(Game,area_def,sequence):

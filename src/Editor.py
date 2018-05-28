@@ -49,7 +49,7 @@ class Editor:
 
         BGL.console.attach(self)
 
-        Editor.instance.load_sequence('0')
+        Editor.instance.load_sequence('0.1')
         World.reduce()
 
 

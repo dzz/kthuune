@@ -5,7 +5,7 @@ from .layer_map import layer_map
 
 class trigger:
     dims = None
-    mesh_key = "platform"
+    mesh_key = None
     layer = layer_map.get_layer_id("floor_interactions")
 
     def reduce(area, brush):
