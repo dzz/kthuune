@@ -723,7 +723,7 @@ class KPlayer(Player):
         offs = (self.run_animation_subtick//4) % 8
 
 
-        if(md>15):
+        if(md>5):
             return KPlayer.vl2d_walk[idx + offs]
         else:
             return KPlayer.vl2d_idle[idx + offs]

@@ -296,49 +296,87 @@ class SwordControl(MenuTerminal):
 ##########################################
 
 class ElderMessage(MenuTerminal):
+
+    #messages = [ "README.txt" ]
+    #message_content = { "README.txt" : "ASDFASDFASDF" }
+
+    messages = [ ]
+    message_content = { }
+    binaries = []
+    binary_callbacks = { }
+
     icon_view = BGL.assets.get("KT-player/coordsys/terminal_view") 
     def setup_options(self):
-        self.top_level_items = [ "INBOX.bin", "SYSOP.nfo" ]
+        self.top_level_items = [ ]
+        self.second_level_items_map = { }
 
-        self.second_level_items_map = {
-            "INBOX.bin" : [ "One", "Two"],
-            "SYSOP.nfo" : [ "Three", "Four"]
-        }
+        if len(ElderMessage.messages)>0:
+            self.top_level_items.append("INBOX.bin")
+            self.second_level_items_map["INBOX.bin"] = ElderMessage.messages
+        if len(ElderMessage.binaries)>0:
+            self.top_level_items.append("/usr/bin/")
+            self.second_level_items_map["/usr/bin/"] = ElderMessage.binaries
 
         self.in_menu = True
         self.synch_secondary_items()
         self.selected_destination = None
-        self.message = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. "
-
+        self.message = None
+        self.inbox = False
+        self.bins = False
         self.t = 0
 
     icon_shader = BGL.assets.get("beagle-2d/shader/beagle-2d")
 
     def custom_render(self):
-        char = min(self.t // 2, len(self.message))
-        x = max(1.0,float(self.t) / (len(self.message)*4))
 
-        light_message = textwrap.wrap(self.message[0:char], 20 )
+        if not self.in_menu:
+            if self.message:
+                char = min(self.t // 2, len(self.message))
+                x = max(1.0,float(self.t) / (len(self.message)*4))
 
-        for i,msg in enumerate(light_message):
-            BGL.lotext.render_text_pixels(msg,15,61+(i*9),[ x,x,x ])
+                light_message = textwrap.wrap(self.message[0:char], 25 )
 
-        BGL.primitive.unit_uv_square.render_shaded(ElderMessage.icon_shader,{
-            "texBuffer" : BGL.assets.get("KT-forest/texture/LORD-127"),
-            "translation_local" : [ 0.0,0.0],
-            "scale_local" : [ 4.0,4.0 ],
-            "translation_world" : [ 8.0, 0.0 ],
-            "scale_world" : [ 1.0, 1.0 ],
-            "filter_color" : [ 1.0,1.0,1.0,1.0 ],
-            "rotation_local" : 0.0,
-            "view" : ElderMessage.icon_view
-        })
+                for i,msg in enumerate(light_message):
+                    BGL.lotext.render_text_pixels(msg,15,24+(i*9),[ x,x,x ])
+
+            BGL.primitive.unit_uv_square.render_shaded(ElderMessage.icon_shader,{
+                "texBuffer" : BGL.assets.get("KT-forest/texture/LORD-127"),
+                "translation_local" : [ 0.0,0.0],
+                "scale_local" : [ 3.8,3.8 ],
+                "translation_world" : [ 10.0, -3.2 ],
+                "scale_world" : [ 1.0, 1.0 ],
+                "filter_color" : [ 1.0,1.0,1.0,1.0 ],
+                "rotation_local" : 0.0,
+                "view" : ElderMessage.icon_view
+            })
+
+
+    def key_select(self):
+        self.reset_tick()
+        KSounds.play( KSounds.term_select )
+
+        if self.in_menu:
+            self.inbox, self.bins = False, False
+            if self.get_top_level_selection() == "INBOX.bin": self.inbox = True
+            if self.get_top_level_selection() == "/usr/bin/": self.bins = True
+            if self.inbox:
+                self.in_menu = False
+                self.message = ElderMessage.message_content[ self.get_second_level_selection() ]
+            if self.bins:
+                ElderMessage.binary_callbacks[ self.get_second_level_selection() ](self.owner)
+
+
+    def key_back(self):
+        if not (self.in_menu):
+            self.in_menu = True
+            KSounds.play( KSounds.term_back )
 
     def tick(self):
-        self.t = self.t + 1
-        if(self.t <= len(self.message)*2):
+        if not self.in_menu:
             self.t = self.t + 1
-        pass
+            if(self.t <= len(self.message)*2):
+                self.t = self.t + 1
+            pass
 
     def reset_tick(self):
         self.t = 0

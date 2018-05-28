@@ -37,7 +37,7 @@ class Screecher(SnapEnemy):
         self.widx = int(uniform(0.0,40.0))
         self.base_size = [ 1.7, 1.56 ]
         self.size = list(self.base_size)
-        self.physics = { "radius" : 1.2, "mass"   : 0.0009, "friction" : 0.0 }
+        self.physics = { "radius" : 0.8, "mass"   : 0.0004, "friction" : 0.0 }
         self.state =  Screecher.STATE_BIRTHING 
         self.stimer = 0
         self.rvx = None

@@ -8,10 +8,11 @@ from .Abilities import Abilities
 from .Universe.NPC.Elder import Elder
 from .CloudBackground import CloudBackground
 from .Universe.LevelProps.SpeechBubble import SpeechBubble
+from .Universe.ShipComputer import ElderMessage
 import audio
 
 class Sequences:
-    start_level = "0.1"
+    start_level = "0"
     active_music_key = None
     titles = {
         "0" : { "title" : "Debug Area", "time_limit": 999, "music" : "KT-player/path/ship_music" },
@@ -149,6 +150,10 @@ class Sequences:
             #bubble.set_script( [ "LEFT STICK to Move" ], owner.p, False )
         
         floor.trigger_callbacks[0] = test_trigger
+        ElderMessage.binaries = [ "continue" ]
+        def bin_continue(owner):
+            owner.floor.player.game.next_sequence()
+        ElderMessage.binary_callbacks["continue"] = bin_continue
         return floor
 
     def buildarea_0_1(Game,area_def,sequence):
@@ -188,6 +193,18 @@ class Sequences:
             "...our Systems will fail."
         ]
         Elder.floor_script = [] 
+
+        ElderMessage.messages = [ "README.nfo", "skeline.txt", "worm.txt" ]
+        ElderMessage.message_content = { "README.nfo" : 
+        "Thank you for purchasing VECTORLORD, the world's first artificially intelligent antivirus for business class QPUs! We're certain your corporation will be satisfied with it's performance. Our SLA ensures bad sectors will be purified within guaranteed time-limits. If the AI Agent fails, its will be permanently terminated!\n\n Have a happy Tuesday!",
+            "skeline.txt" : "Us at RUSKER have identified the Skeline as the primary infectant that targets Q-Processes. Typically seen in packs, they can be a nuisance when they get into the crevices of a sector.",
+            "worm.txt" : "Worms are an annoyance, but not technically quantum and therefore ignored by purification checks." } 
+
+        ElderMessage.binaries = [ "continue" ]
+        def bin_continue(owner):
+            owner.floor.player.game.next_sequence()
+        ElderMessage.binary_callbacks["continue"] = bin_continue
+
         return floor
 
     def buildarea_1(Game,area_def,sequence):
