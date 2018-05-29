@@ -192,7 +192,8 @@ class Sequences:
 
         Elder.script = [ 
             "VECTORLORD...",
-            "I am a greybeard, from the place known as User Space...",
+            "I am a greybeard.",
+            "...",
             "You are one of our Subprocesses, and if you do not succeed..."
             "...our Systems will fail."
         ]
@@ -209,6 +210,7 @@ class Sequences:
             owner.floor.player.terminal_size = 0.0
             owner.floor.player.active_terminal = None
             owner.floor.player.tick()
+            owner.floor.player.game.trigger_cinematic("warp")
             owner.floor.player.game.next_sequence()
 
         ElderMessage.binary_callbacks["continue"] = bin_continue
