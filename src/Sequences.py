@@ -152,7 +152,11 @@ class Sequences:
         floor.trigger_callbacks[0] = test_trigger
         ElderMessage.binaries = [ "continue" ]
         def bin_continue(owner):
+            owner.floor.player.terminal_size = 0.0
+            owner.floor.player.active_terminal = None
+            owner.floor.player.tick()
             owner.floor.player.game.next_sequence()
+
         ElderMessage.binary_callbacks["continue"] = bin_continue
         return floor
 
@@ -202,7 +206,11 @@ class Sequences:
 
         ElderMessage.binaries = [ "continue" ]
         def bin_continue(owner):
+            owner.floor.player.terminal_size = 0.0
+            owner.floor.player.active_terminal = None
+            owner.floor.player.tick()
             owner.floor.player.game.next_sequence()
+
         ElderMessage.binary_callbacks["continue"] = bin_continue
 
         return floor
