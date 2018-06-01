@@ -11,6 +11,7 @@ from .Universe.LevelProps.SpeechBubble import SpeechBubble
 from .Universe.ShipComputer import ElderMessage
 import audio
 
+
 class Sequences:
     start_level = "0"
     active_music_key = None

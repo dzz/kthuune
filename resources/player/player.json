@@ -14,6 +14,7 @@
             { "name" : "vl2d_walksword", "directory" : "{package_path}/vl2d_walksword/", "filtered" : false , "debug" : true },
             { "name" : "vl2d_idle", "directory" : "{package_path}/vl2d_idle/", "filtered" : false , "debug" : true },
             { "name" : "vl2d_walk", "directory" : "{package_path}/vl2d_walk/", "filtered" : false },
+            { "name" : "vl2d_swipe", "directory" : "{package_path}/vl2d_swipe/", "filtered" : false },
             { "name" : "vl3d_run", "directory" : "{package_path}/vl3d_run/", "filtered" : true },
             { "name" : "vl3d_walk", "directory" : "{package_path}/vl3d_walk/", "filtered" : true },
             { "name" : "vl3d_hit", "directory" : "{package_path}/vl3d_hit/", "filtered" : true },
