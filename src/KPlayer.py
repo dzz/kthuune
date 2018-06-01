@@ -57,6 +57,7 @@ class KPlayer(Player):
         [ 255/256, 127, 0.0, 1.0 ]
     ]
     vl2d_walksword = BGL.assets.get("KT-player/animation/vl2d_walksword")
+    vl2d_swipe = BGL.assets.get("KT-player/animation/vl2d_swipe")
     vl3d_run = BGL.assets.get("KT-player/animation/vl3d_run")
     vl3d_walk = BGL.assets.get("KT-player/animation/vl3d_walk")
     vl3d_idle = BGL.assets.get("KT-player/animation/vl3d_idle")
@@ -720,9 +721,15 @@ class KPlayer(Player):
         idx = (
             ((0-rad_2_index(self.rad,8))+5) % 8
         )*8
-        offs = (self.run_animation_subtick//4) % 8
+
+        if self.run_animation_alt == 0:
+            offs = (self.run_animation_subtick//4) % 8
+        else:
+            offs = (self.run_animation_subtick//2) % 8
 
 
+        if self.run_animation_alt == 1:
+            return KPlayer.vl2d_swipe[idx + offs]
         if(md>5):
             return KPlayer.vl2d_walk[idx + offs]
         else:
@@ -925,7 +932,7 @@ class KPlayer(Player):
 
         self.run_animation_subtick = self.run_animation_subtick + 1
 
-        if(self.run_animation_subtick==64):
+        if(self.run_animation_subtick==16):
             self.run_animation_subtick = 0
             self.run_animation_alt = 0
 

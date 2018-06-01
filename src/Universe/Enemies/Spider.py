@@ -105,7 +105,6 @@ class Spider(SnapEnemy):
         ##########################################
         ##########################################
 
-        
         if(self.hp < 0):
             SnapEnemy.die(self)
             return False
