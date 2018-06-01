@@ -2,6 +2,7 @@
     "preload": true,
     "resources" : {
         "animation" : [
+            { "name" : "spider", "directory" : "{package_path}/spider/", "filtered" : false },
             { "name" : "lantern", "directory" : "{package_path}/lantern/", "filtered" : false },
             { "name" : "stainglass", "directory" : "{package_path}/stainglass/", "filtered" : false },
             { "name" : "tulipglass", "directory" : "{package_path}/tulipglass/", "filtered" : false },

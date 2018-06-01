@@ -29,6 +29,7 @@ from .PolyFills.eglan import eglan
 from .PolyFills.spike_field import spike_field
 from .PolyFills.terminal import terminal
 from .PolyFills.trigger import trigger
+from .PolyFills.spider import spider
 
 class PolyFillList:
     cached_list = None
@@ -73,7 +74,8 @@ class PolyFillList:
                 "time_totem" : time_totem,
                 "spike_field" : spike_field,
                 "terminal" : terminal,
-                "trigger" : trigger
+                "trigger" : trigger,
+                "spider" : spider
             }
             PolyFillList.cached_list = polyfill_map
         return PolyFillList.cached_list

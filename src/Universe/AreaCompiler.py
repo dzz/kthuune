@@ -33,6 +33,7 @@ from .Hazards.Firepot import Firepot
 from .Hazards.Spike import Spike
 from .Enemies.SnapEnemy import SnapEnemy
 from .Enemies.Acolyte import Acolyte
+from .Enemies.Spider import Spider
 from .Enemies.Skeline import Skeline
 from .Enemies.Screecher import Screecher
 from .Enemies.Stork import Stork
@@ -216,6 +217,9 @@ class AreaCompiler():
 
             if od["key"] in [ "snap_enemy", "skeline"]:
                 self.objects.append(Skeline.parse(od,df ))
+
+            if od["key"] in [ "spider" ]:
+                self.objects.append(Spider.parse(od,df ))
 
             if od["key"] in [ "hostage" ]:
                 self.objects.append(Hostage.parse(od,df ))
