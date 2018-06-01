@@ -1,7 +1,7 @@
 from Newfoundland.Object import Object
 from .SnapEnemy import SnapEnemy
 from random import uniform, choice, randint
-from math import sin,cos,atan2,floor,tanh
+from math import sin,cos,atan2,floor
 from Beagle import API as BGL
 from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 from ..LevelEffects.ChromaticWave import ChromaticWave
@@ -45,7 +45,6 @@ class Spider(SnapEnemy):
         self.stimer = 0
         self.speed = 4.0
         self.circle_dir = 0
-        self.distance_mod = 1
 
         self.snap_effect_emit = 0
         self.iframes = 0
@@ -83,32 +82,29 @@ class Spider(SnapEnemy):
         y = self.floor.player.p[0] - self.p[0]
         x = self.floor.player.p[1] - self.p[1]
         md = (x*x)+(y*y)
-        if md < 300:
+        if( md < 300 ):
             if not self.triggered:
                 self.triggered = True
-        if md > 300:
+        if( md > 300 ):
             self.triggered = False
 
         if not self.triggered:
-            if self.hp < 0:
+            if(self.hp < 0):
                 SnapEnemy.die(self)
                 return False
             return True
 
         self.visible = True
 
-        #get the distance as a factor between 1 and 2
-        self.distance_mod = 0.2 * (5 - tanh(md/300))
-
         if self.state == Spider.STATE_WAITING:
-            if self.stimer > 120:
+            if self.stimer > 30:
                 self.state = choice([Spider.STATE_WAITING, Spider.STATE_CIRCLING, Spider.STATE_CIRCLING, Spider.STATE_CHARGING])
                 self.stimer = 0
         if self.state == Spider.STATE_CIRCLING:
             self.pickTarget()
             if self.stimer % 10 == 0:
                 old_dir = self.circle_dir
-                self.circle_dir = choice([1.57-(self.distance_mod-1), 4.71+(self.distance_mod-1)])
+                self.circle_dir = choice([1.57, 4.71])
                 if self.circle_dir != old_dir:
                     self.size[0] *= -1
             
@@ -124,11 +120,16 @@ class Spider(SnapEnemy):
                 self.state = choice([Spider.STATE_CIRCLING,Spider.STATE_CHARGING])
                 self.stimer = 0
 
+        #if youre close just charge or circle the time for waiting is past
+        if md < 40:
+            self.state = choice([Spider.STATE_CIRCLING,Spider.STATE_CHARGING])
+            self.stimer = 0
+        
         if self.state == Spider.STATE_CHARGING:
             self.pickTarget()
 
-            if md <= 50:
-                speed_mod = 2.5 * self.distance_mod
+            if md < 41:
+                speed_mod = 1 * (0.1 * (40 / (41-md)))
             else:
                 speed_mod = 1
 
@@ -138,8 +139,8 @@ class Spider(SnapEnemy):
             self.v[0] = vx
             self.v[1] = vy
 
-            if self.stimer > 20:
-                self.state = choice([Spider.STATE_WAITING,Spider.STATE_CHARGING,Spider.STATE_CIRCLING])
+            if self.stimer > 15:
+                self.state = choice([Spider.STATE_CIRCLING,Spider.STATE_WAITING,Spider.STATE_CHARGING])
                 self.stimer = 0
             pass
 
