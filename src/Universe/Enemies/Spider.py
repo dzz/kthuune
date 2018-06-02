@@ -97,11 +97,17 @@ class Spider(SnapEnemy):
 
         self.visible = True
 
-        #get the distance as a factor between 1 and 2
-        self.distance_mod = 0.2 * (5 - tanh(md/300))
+        #get the distance as a factor between 0:1
+        self.distance_mod = 1-tanh(md/300)
 
         if self.state == Spider.STATE_WAITING:
-            if self.stimer > 120:
+            #this is to halt rapidly increasing the unpredictability of their movement
+            if self.v[0] > 0.01:
+                self.v[0] /= 2
+            if self.v[1] > 0.01:
+                self.v[1] /= 2
+
+            if self.stimer > 60:
                 self.state = choice([Spider.STATE_WAITING, Spider.STATE_CIRCLING, Spider.STATE_CIRCLING, Spider.STATE_CHARGING])
                 self.stimer = 0
         if self.state == Spider.STATE_CIRCLING:
@@ -128,7 +134,8 @@ class Spider(SnapEnemy):
             self.pickTarget()
 
             if md <= 50:
-                speed_mod = 2.5 * self.distance_mod
+                speed_mod = 3 * self.distance_mod
+                self.attempt_melee()
             else:
                 speed_mod = 1
 
@@ -141,7 +148,6 @@ class Spider(SnapEnemy):
             if self.stimer > 20:
                 self.state = choice([Spider.STATE_WAITING,Spider.STATE_CHARGING,Spider.STATE_CIRCLING])
                 self.stimer = 0
-            pass
 
 
 
@@ -152,7 +158,12 @@ class Spider(SnapEnemy):
             return False
 
         return True
-    
+
+    def attempt_melee(self):
+        # if the state is charging then it should check for melee attack to me in range
+        # only the charging state is one that will be them attempting attack
+        pass
+
     def pickTarget(self):
         x = (self.floor.player.p[0] - self.p[0])+self.floor.player.v[0]
         y = (self.floor.player.p[1] - self.p[1])+self.floor.player.v[1]
