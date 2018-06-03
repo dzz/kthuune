@@ -16,9 +16,13 @@
             { "name" : "eglan", "directory" : "{package_path}/eglan/", "filtered" : true },
             { "name" : "bird", "directory" : "{package_path}/bird/", "filtered" : true },
             { "name" : "skeline", "directory" : "{package_path}/skeline/", "filtered" : false },
-            { "name" : "spike", "directory" : "{package_path}/spike/", "filtered" : false }
+            { "name" : "spike", "directory" : "{package_path}/spike/", "filtered" : false },
+            { "name" : "directional_bullet_bright", "directory" : "{package_path}/directional_bullet_bright/", "filtered" : false },
+            { "name" : "directional_bullet_orange", "directory" : "{package_path}/directional_bullet_orange/", "filtered" : false },
+            { "name" : "directional_bullet_pink", "directory" : "{package_path}/directional_bullet_pink/", "filtered" : false }
         ],
         "texture" : [
+            { "name" : "icebullet", "filename" : "{package_path}/icebullet.png", "filtered" : false },
             { "name" : "owl", "filename" : "{package_path}/owl.png", "filtered" : false },
             { "name" : "LORD-127", "filename" : "{package_path}/LORD.png", "filtered" : false },
             { "name" : "registration", "filename" : "{package_path}/registration.png", "filtered" : false },
