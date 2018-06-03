@@ -80,6 +80,7 @@ class DungeonFloor( Floor ):
             "freeze_delay" : 0,
             "doors" : [],
             "snap_enemies" : [],
+            "yellers" : [], # the bucket for yeller specific snap enemy lookups
             "suspended_enemies" : [],
             "enemies" : [],
             "using_tilemap" : True,
