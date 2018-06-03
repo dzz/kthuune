@@ -43,8 +43,7 @@ class Yeller(SnapEnemy):
         self.physics = { "radius" : 0.2, "mass"   : 0.0001, "friction" : 0.0 }
         self.state =  Yeller.STATE_PACKING
         self.stimer = 0
-        self.speed = 4.0
-        self.circle_dir = 0
+        self.speed = 7.0
 
         self.snap_effect_emit = 0
         self.iframes = 0
@@ -89,6 +88,7 @@ class Yeller(SnapEnemy):
         if self.state == Yeller.STATE_PACKING:
             # find a pack and move towards it and slighty away from the player
             closest = self.packYeller()
+            self.target_rad += 3.14/2
 
             vx = cos(self.target_rad) * self.speed
             vy = sin(self.target_rad) * self.speed
@@ -147,7 +147,7 @@ class Yeller(SnapEnemy):
             yx = abs(yell.p[0] - self.p[0])
             yy = abs(yell.p[1] - self.p[1])
             ymd = (yx*yx)+(yy*yy)
-            if ymd < 40:
+            if ymd < 40 and ymd > 10:
                 ax += yell.p[0]
                 ay += yell.p[1]
                 i += 1
