@@ -64,17 +64,12 @@ class Sequences:
         f = open( afile, 'r')
         data = f.read()
         f.close()
-
         area_def = get_area_data(data)
-
         buildername = "{0}_{1}".format("buildarea",sequence.replace('.','_'))
-
         if buildername in dir(Sequences):
             return getattr(Sequences,buildername)(Game,area_def,sequence)
         else:
              return Sequences.buildarea_default(Game,area_def,sequence)
-
-
 
     def buildarea_default(Game,area_def, sequence):
 

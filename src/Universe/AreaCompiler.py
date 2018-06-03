@@ -354,16 +354,12 @@ class AreaCompiler():
             if od["key"] in ["trigger"]:
                 self.objects.append(Trigger.parse(od,df))
 
-
-
-
     def link_doors(self):
         for key in self.door_sensors:
             self.objects.append( Door( door_pin = self.door_pins[key], door_end = self.door_ends[key], sensors = self.door_sensors[key] ) )            
             self.df.doors.append( self.objects[-1] )
 
     def compile(self, dungeon_floor, base_objects ):
-
         if dungeon_floor.area_def:
             self.process_area_def( dungeon_floor, dungeon_floor.area_def )
             self.link_doors()
@@ -407,7 +403,6 @@ class AreaCompiler():
     
             self.generate_edge_trees()
             self.generate_tiledata(  dungeon_floor )
-
 
 
     def generate_edge_trees(self, edges = None):
