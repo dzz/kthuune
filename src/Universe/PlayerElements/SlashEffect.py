@@ -72,11 +72,11 @@ class SlashEffect(Object):
         if(self.cooldown>0):
             self.cooldown -= 1
 
-        #offsx = ((cos(self.rad)*(1.6+self.base_extension))+(self.floor.player.v[0]*0.4))*0.5
-        #offsy = ((sin(self.rad)*(1.6+self.base_extension))+(self.floor.player.v[1]*0.4))*0.5
+        aoffsx = ((cos(self.rad)*(1.6+self.base_extension))+(self.floor.player.v[0]*0.4))*0.1
+        aoffsy = ((sin(self.rad)*(1.6+self.base_extension))+(self.floor.player.v[1]*0.4))*0.1
 
-        offsx = (self.snapped_v[0]*self.base_reg) + (self.snapped_v[0] * self.extension)
-        offsy = ((self.snapped_v[1]*self.base_reg) + (self.snapped_v[1] * self.extension)) - 0.7
+        offsx = ((self.snapped_v[0]*self.base_reg) + (self.snapped_v[0] * self.extension) ) + aoffsx
+        offsy = (((self.snapped_v[1]*self.base_reg) + (self.snapped_v[1] * self.extension)) ) + aoffsy
 
         pad = self.floor.player.controllers.get_virtualized_pad(0)
 
@@ -142,7 +142,7 @@ class SlashEffect(Object):
         batch = [ self.get_shader_params() ]
 
         batch[0]["rotation_local"] = self.orig_rad - 1.57
-
+        batch[0]["translation_world"][1] -= 0.7
 
         return batch
         

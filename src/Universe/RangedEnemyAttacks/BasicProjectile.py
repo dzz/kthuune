@@ -8,28 +8,42 @@ from ..Particles.SplatterParticle import SplatterParticle
 from ...KSounds import KSounds
 
 class BasicProjectile(Object):
-    texture = BGL.assets.get("KT-player/texture/flare")
+    textures =  {
+        "default" : BGL.assets.get("KT-player/texture/flare"),
+        "ice" : BGL.assets.get("KT-forest/texture/icebullet"),
+    }
+    
+    animations = {
+        "orange": BGL.assets.get("KT-forest/animation/directional_bullet_orange"),
+        "bright": BGL.assets.get("KT-forest/animation/directional_bullet_bright"),
+        "pink": BGL.assets.get("KT-forest/animation/directional_bullet_pink")
+    }
+
     def __init__(self,**kwargs):
         Object.__init__(self,**kwargs)
-        self.texture = BasicProjectile.texture
+        self.texture = BasicProjectile.textures["default"]
+        if "texture" in kwargs:
+            self.texture = BasicProjectile.textures[kwargs["texture"]]
+
+        self.animation = None
         self.buftarget = "popup"
         self.tick_type = Object.TickTypes.PURGING
         self.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
         self.light_radius = 5
         self.lifespan = 120
         self.light_color = [ 0.6,1.0,0.3,0.4 ]
-
         self.size = [ 0.5,0.5 ]
         self.snapshot_fields = [ 'p' ]
-
         spd = 0.45 + uniform(0.001, 0.01)
         self.vx = cos( self.rad )*spd
         self.vy = sin( self.rad )*spd
-        
         self.attack_str = 8
         self.player_touch_frames = 0
-
         self.vs_enemy = False
+        self.fr = 0
+        if "animation" in kwargs:
+            self.animation = BasicProjectile.animations[kwargs["animation"]]
+            
         
     def reorient(self):
         self.vs_enemy = True
@@ -40,7 +54,10 @@ class BasicProjectile(Object):
         self.vy = sin( self.rad )*spd
 
     def tick(self):
+        self.fr = (self.fr+1)%1000
 
+        if(self.animation):
+            self.texture = self.animation[ (self.fr//4) % len(self.animation) ]
 
         if(self.floor.camera.cinema_target or self.floor.passed_genocide):
             self.floor.remove_object(self)

@@ -48,7 +48,7 @@ class EglanBlob(SnapEnemy):
         #x = self.floor.player.p[0] - self.p[0]
         #y = self.floor.player.p[1] - self.p[1]
         #rad = atan2(y,x)
-        self.floor.create_object( BasicProjectile( p = [ self.p[0], self.p[1] ], rad = rad ) )
+        self.floor.create_object( BasicProjectile( p = [ self.p[0], self.p[1] ], rad = rad, texture = "ice" ) )
         KSounds.play_eproj()
 
     def tick(self):
