@@ -7,6 +7,7 @@ from client.beagle.Newfoundland.GeometryUtils import segments_intersect
 from ..LevelEffects.ChromaticWave import ChromaticWave
 from ...KSounds import KSounds
 from ..RangedEnemyAttacks.BasicProjectile import BasicProjectile
+from ..LevelEffects.SpikeyWave import SpikeyWave
 
 class Spider(SnapEnemy):
     def receive_snap_attack(self, was_crit):
@@ -132,8 +133,8 @@ class Spider(SnapEnemy):
 
         if self.state == Spider.STATE_CHARGING:
             self.pickTarget()
-
             if md <= 50:
+                self.floor.create_object( SpikeyWave( p = self.p, color=[1.0,0.0,0.0,1.0] ) )
                 speed_mod = 3 * self.distance_mod
                 self.attempt_melee()
             else:
