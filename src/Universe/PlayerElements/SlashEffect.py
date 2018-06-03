@@ -13,7 +13,7 @@ class SlashEffect(Object):
 
     def customize(self):
         self.buftarget = "popup"
-        self.size = [1.7,1.7]
+        self.size = [1.5,1.5]
         self.tick_type = Object.TickTypes.TICK_FOREVER
         self.light_type = Object.LightTypes.NONE
         self.light_radius = 7.0
@@ -25,8 +25,11 @@ class SlashEffect(Object):
         self.cooldown = 0
         self.stagger_cooldown = 0
         self.base_extension = 0.6
+        self.extension = 0.0
         self.alpha = 0.0
-
+        self.snapped_v = ( 0.0,1.0)
+        self.ext_delta = 0.0
+        self.base_reg = 1.2
 
     def slash(self):
         self.alpha = 1.0
@@ -39,28 +42,46 @@ class SlashEffect(Object):
             self.visible = True
 
             pad = self.floor.player.controllers.get_virtualized_pad(0)
-    
+
             self.rad = atan2( pad.left_stick[1], pad.left_stick[0]) + (3.14/2)
+            self.snapped_v = ( sin(self.rad), -1*cos(self.rad) ) 
+            self.extension = 0
+            self.ext_delta = 0.44
 
             self.orig_rad = self.rad
             self.floor.player.sword.visible = False
             self.attacked_enemies = []
             self.cooldown = 41 
-            self.stagger_cooldown = 0
+            self.stagger_cooldown = 4
             self.floor.sounds.play( self.floor.sounds.slash )
             self.floor.player.run_stamina -= 20
             self.floor.player.total_slashes += 1
 
-            self.base_extension = 0.4
+            self.base_extension = 1.2
             return True
 
     def tick(self):
+        self.ext_delta *= 0.92
+        self.extension += self.ext_delta
+
+        if(self.ext_delta > 0) and (self.extension>2.0):
+            self.ext_delta *= -1
+        if(self.extension<0.0):
+            self.ext_delta = 0.0
 
         if(self.cooldown>0):
             self.cooldown -= 1
 
-        offsx = ((cos(self.rad)*(1.6+self.base_extension))+(self.floor.player.v[0]*0.4))*0.5
-        offsy = ((sin(self.rad)*(1.6+self.base_extension))+(self.floor.player.v[1]*0.4))*0.5
+        #offsx = ((cos(self.rad)*(1.6+self.base_extension))+(self.floor.player.v[0]*0.4))*0.5
+        #offsy = ((sin(self.rad)*(1.6+self.base_extension))+(self.floor.player.v[1]*0.4))*0.5
+
+        offsx = (self.snapped_v[0]*self.base_reg) + (self.snapped_v[0] * self.extension)
+        offsy = ((self.snapped_v[1]*self.base_reg) + (self.snapped_v[1] * self.extension)) - 0.7
+
+        pad = self.floor.player.controllers.get_virtualized_pad(0)
+
+        offsx += (pad.left_stick[0]*0.7)
+        offsy += (pad.left_stick[1]*0.7)
 
         if self.stagger_cooldown==0:
             self.rad=self.rad-(3.14/17)
@@ -77,15 +98,15 @@ class SlashEffect(Object):
             Object.light_type = Object.LightTypes.DYNAMIC_SHADOWCASTER
 
             if self.fr == 3:
-                self.flash_color = [1.0,0.0,0.0,1.0]
+                self.flash_color = [1.0,0.5,0.0,1.0]
 
-            if self.fr>3 and self.fr < 19 and (self.stagger_cooldown==0):
+            if self.fr>2 and self.fr < 19 and (self.stagger_cooldown==0):
                 for enemy in self.floor.snap_enemies:
                     if enemy.snap_type==1 and enemy not in self.attacked_enemies and len(self.attacked_enemies)<3:
                         dx = self.p[0] - enemy.p[0] 
                         dy = self.p[1] - enemy.p[1] 
                         md = (dx*dx) + (dy*dy)
-                        if md < ((enemy.physics["radius"]*enemy.physics["radius"])+4.0):
+                        if md < ((enemy.physics["radius"]*enemy.physics["radius"])+6.0):
                             self.floor.player.v[0] = -1*dx*0.3
                             self.floor.player.v[1] = -1*dy*0.3
                             #self.floor.player.p[0] = enemy.p[0]
