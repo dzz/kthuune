@@ -38,6 +38,7 @@ class Stork(SnapEnemy):
         BGL.assets.get("KT-forest/texture/stork0001"),
         BGL.assets.get("KT-forest/texture/stork0002")
     ] 
+
     def customize(self):
         self.fire_count = 0
         self.triggered = False
@@ -124,7 +125,6 @@ class Stork(SnapEnemy):
             self.p[0] = self.p[0] + (dx*0.2)
             self.p[1] = self.p[1] + (dy*0.2)
 
-
             if(self.stimer>40):
                 self.p[0] = self.target_p[0]
                 self.p[1] = self.target_p[1]
@@ -151,4 +151,4 @@ class Stork(SnapEnemy):
         #for x in range(0,num_shots):
         #    self.floor.create_object( BasicProjectile( p = [ self.p[0], self.p[1] ], rad = rad * x ) )
         x = self.fire_idx
-        self.floor.create_object( BasicProjectile( p = [ self.p[0], self.p[1] ], rad = rad * x ) )
+        self.floor.create_object( BasicProjectile( p = [ self.p[0], self.p[1] ], rad = rad * x, animation = "bright" ) )
