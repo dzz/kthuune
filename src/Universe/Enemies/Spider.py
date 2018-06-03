@@ -24,7 +24,7 @@ class Spider(SnapEnemy):
     STATE_CHARGING = 2
     STATE_CLIMBING = 3
 
-    textures = BGL.assets.get('KT-forest/animation/spider')
+    textures = BGL.assets.get('KT-forest/animation/spider')[4:]
 
     #this is the best function ever, its like init...
     # but it happens later.
