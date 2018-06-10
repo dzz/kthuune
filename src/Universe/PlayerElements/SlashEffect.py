@@ -1,9 +1,8 @@
 from Beagle import API as BGL
 from Newfoundland.Object import Object
-from math import sin,cos,atan2, tanh
+from math import sin,cos,atan2
 from random import choice
 from ..LevelEffects.SwordCrit import SwordCrit
-
 
 class SlashEffect(Object):
     textures = [
@@ -59,15 +58,13 @@ class SlashEffect(Object):
             self.floor.player.total_slashes += 1
 
             self.base_extension = 1.2
-            self.p[0] = self.floor.player.p[0]
-            self.p[1] = self.floor.player.p[1] 
             return True
 
     def tick(self):
         self.ext_delta *= 0.92
         self.extension += self.ext_delta
 
-        if(self.ext_delta > 0) and (self.extension>5.0):
+        if(self.ext_delta > 0) and (self.extension>2.0):
             self.ext_delta *= -1
         if(self.extension<0.0):
             self.ext_delta = 0.0
@@ -75,30 +72,24 @@ class SlashEffect(Object):
         if(self.cooldown>0):
             self.cooldown -= 1
 
-        cutoff = 0.2
-        decay = 0.88
-        self.snapped_v = ( self.snapped_v[0] *decay , self.snapped_v[1] *decay )
+        aoffsx = ((cos(self.rad)*(1.6+self.base_extension))+(self.floor.player.v[0]*0.4))*0.1
+        aoffsy = ((sin(self.rad)*(1.6+self.base_extension))+(self.floor.player.v[1]*0.4))*0.1
+
+        offsx = ((self.snapped_v[0]*self.base_reg) + (self.snapped_v[0] * self.extension) ) + aoffsx
+        offsy = (((self.snapped_v[1]*self.base_reg) + (self.snapped_v[1] * self.extension)) ) + aoffsy
 
         pad = self.floor.player.controllers.get_virtualized_pad(0)
 
-        if(abs(self.snapped_v[0])+abs(self.snapped_v[1]))<cutoff:
-            cfa,cfb = 0.8,0.2
-            self.p[0] = (self.p[0] * cfa) + (self.floor.player.p[0] * cfb)
-            self.p[1] = (self.p[1] * cfa) + (self.floor.player.p[1] * cfb)
-        else:
-            def expmod(v):
-                return tanh(v)
-
-            pcf = 0.12
-            damp = 0.8
-            self.p[0] = self.p[0] + ((self.snapped_v[0] +  (expmod(self.floor.player.v[0]*pcf)) )*damp)
-            self.p[1] = self.p[1] + ((self.snapped_v[1] +  (expmod(self.floor.player.v[1]*pcf)) )*damp)
-
+        offsx += (pad.left_stick[0]*0.7)
+        offsy += (pad.left_stick[1]*0.7)
 
         if self.stagger_cooldown==0:
             self.rad=self.rad-(3.14/17)
             self.alpha *= 0.95
             self.base_extension += 0.14
+
+        self.p[0] = self.floor.player.p[0] + offsx
+        self.p[1] = self.floor.player.p[1] + offsy
 
         Object.light_type = Object.LightTypes.NONE
 
@@ -122,8 +113,6 @@ class SlashEffect(Object):
                             #self.floor.player.p[1] = enemy.p[1]
                             self.floor.sounds.play( self.floor.sounds.slashhit )
                             #enemy.floor.player.add_dm_message("You slashed an enemy")
-
-                            self.snapped_v = (0.0,0.0)
                             if(self.floor.player.running):
                                 enemy.receive_snap_attack( choice([True,False]) )
                             else:
@@ -140,19 +129,19 @@ class SlashEffect(Object):
                         self.visible = False
             else: 
                 self.stagger_cooldown -=1
-            if self.fr == 120:
+            if self.fr == 21:
                 self.stagger_cooldown = 0
                 self.visible = False
                 self.attacked_enemies = []
                 self.floor.player.sword.visible = True
                 return
-            self.texture = SlashEffect.textures[0]
+            self.texture = SlashEffect.textures[ self.fr//7 ]
             
 
     def get_guppy_batch(self):
         batch = [ self.get_shader_params() ]
 
-        batch[0]["rotation_local"] = -1.5705
+        batch[0]["rotation_local"] = self.orig_rad - 1.57
         batch[0]["translation_world"][1] -= 0.7
 
         return batch
