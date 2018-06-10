@@ -22,6 +22,7 @@
             { "name" : "directional_bullet_pink", "directory" : "{package_path}/directional_bullet_pink/", "filtered" : false }
         ],
         "texture" : [
+            { "name" : "fireball", "filename" : "{package_path}/fireball.png", "filtered" : false },
             { "name" : "icebullet", "filename" : "{package_path}/icebullet.png", "filtered" : false },
             { "name" : "owl", "filename" : "{package_path}/owl.png", "filtered" : false },
             { "name" : "LORD-127", "filename" : "{package_path}/LORD.png", "filtered" : false },

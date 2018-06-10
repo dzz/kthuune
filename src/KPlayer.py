@@ -21,6 +21,7 @@ from .TitleCard import TitleCard
 
 from .WorldMap import WorldMap
 from .Universe.LevelEffects.PlayerPhantom import PlayerPhantom
+from .Universe.LevelEffects.FireConcentrator import FireConcentrator
 from .Universe.LevelEffects.Dust import Dust
 from .Universe.LevelEffects.Explosion import Explosion
 from .Universe.PlayerElements.DMMessage import DMMessage
@@ -35,6 +36,7 @@ from .Universe.PlayerElements.StatusCards import HeartCard, TelekineCard, WandCa
 from .Universe.PlayerElements.PotionCountView import PotionCountView
 from .Universe.Particles.SplatterParticle import SplatterParticle
 from .Universe.Particles.Bird import Bird
+
 
 ## maybe copy this music...
 #
@@ -158,6 +160,8 @@ class KPlayer(Player):
         self.run_animation_subtick = 0
  
     def attempt_snap_attack(self, snap = True):
+
+        self.floor.create_object(FireConcentrator( p = list(self.p)))
 
         self.telekineFlash = 1.0
         #teleportCost = 10.0
