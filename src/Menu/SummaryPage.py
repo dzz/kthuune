@@ -16,11 +16,11 @@ class SummaryPage():
         self.alpha = 0.0
         self.remaining_time = floor.player.life_timer / 60.0
         self.total_kills = floor.player.total_kills
-        self.slash_remainder = floor.slash_limit - floor.player.total_slashes
+        #self.slash_remainder = floor.slash_limit - floor.player.total_slashes
 
         self.time_bonus = 0
         self.kill_bonus = 0
-        self.slash_bonus = 0
+        #self.slash_bonus = 0
         self.total_points = 0
 
     def compute_total(self):
@@ -47,9 +47,9 @@ class SummaryPage():
             if(self.total_points < (total-100)):
                 self.total_points += 100
 
-        if( self.t> 80 ):
-            if(floor(self.slash_bonus) < self.slash_remainder):
-                self.slash_bonus += 0.1
+        #if( self.t> 80 ):
+        #    if(floor(self.slash_bonus) < self.slash_remainder):
+        #        self.slash_bonus += 0.1
 
         self.t = self.t + 1
         self._t += 0.003;

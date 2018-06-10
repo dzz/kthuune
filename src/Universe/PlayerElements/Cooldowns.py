@@ -13,7 +13,7 @@ class Cooldown:
     def tick(player):
 
         sword_impulse = 0.0
-        if(player.slash.cooldown == 0):
+        if(player.throw_sword_attack.cooldown == 0):
             sword_impulse = 1.0
         else:
             Cooldown.sword_amt = 0.0

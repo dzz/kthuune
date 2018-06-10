@@ -155,7 +155,7 @@ class DFRenderer( FloorRenderer ):
         with BGL.context.render_target( self.object_buffer ):
 
             self.blurring = True
-            if(self.player.dash_flash) or self.player.slash.visible:
+            if(self.player.dash_flash):
                 with BGL.blendmode.alpha_over:
                     uniform_fade.apply_fadeout( 1.0 / 8.0 )
             elif (self.player.hp < 0.0):

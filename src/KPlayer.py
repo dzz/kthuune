@@ -25,7 +25,8 @@ from .Universe.LevelEffects.FireConcentrator import FireConcentrator
 from .Universe.LevelEffects.Dust import Dust
 from .Universe.LevelEffects.Explosion import Explosion
 from .Universe.PlayerElements.DMMessage import DMMessage
-from .Universe.PlayerElements.SlashEffect import SlashEffect
+from .Universe.PlayerElements.ThrowSword import ThrowSword
+from .Universe.PlayerElements.SlashAttack import SlashAttack
 from .Universe.PlayerElements.HealthBubble import HealthBubble
 from .Universe.PlayerElements.Sword import Sword
 from .Universe.PlayerElements.PlayerInvSlot import PlayerInvSlot
@@ -388,6 +389,11 @@ class KPlayer(Player):
         self.DOWN_STATE = [ False, False ]
         self.DOWN_PRESSED = False
 
+        self.LB_PRESSED = False
+        self.LB_STATE = [ False, False ]
+        self.RB_PRESSED = False
+        self.RB_STATE = [ False, False ]
+
         self.stimer = 0
         self.state = KPlayer.STATE_DEFAULT
         self.last_link = None
@@ -676,16 +682,18 @@ class KPlayer(Player):
 
         self.run_stamina = 100.0
         self.stamina_recharge_buffer = 0.0
-        self.slash = SlashEffect()
+        self.throw_sword_attack = ThrowSword()
+        self.slash_attack = SlashAttack()
     
     def link_floor(self):
         self.violentally_executed_self = False
         self.floor.create_object( self.sword )
-        self.floor.create_object( self.slash )
+        self.floor.create_object( self.throw_sword_attack )
+        self.floor.create_object( self.slash_attack )
 
         self.total_kills = 0
         self.beat_level = False
-        self.total_slashes = 0
+        self.total_throw_sword_attackes = 0
 
         if "time_limit" in self.floor.__dict__:
             self.life_timer = self.floor.time_limit
@@ -846,6 +854,20 @@ class KPlayer(Player):
             self.DOWN_PRESSED = True
         else:
             self.DOWN_PRESSED = False
+
+        self.LB_STATE[0] = self.LB_STATE[1]
+        self.LB_STATE[1] = pad.button_down( BGL.gamepads.buttons.LEFT_BUMPER )
+        if self.LB_STATE[1] is True and self.LB_STATE[0] is False:
+            self.LB_PRESSED = True
+        else:
+            self.LB_PRESSED = False
+
+        self.RB_STATE[0] = self.RB_STATE[1]
+        self.RB_STATE[1] = pad.button_down( BGL.gamepads.buttons.RIGHT_BUMPER )
+        if self.RB_STATE[1] is True and self.RB_STATE[0] is False:
+            self.RB_PRESSED = True
+        else:
+            self.RB_PRESSED = False
 
         self.A_STATE[0] = self.A_STATE[1]
         self.A_STATE[1] = pad.button_down( BGL.gamepads.buttons.A )
@@ -1105,7 +1127,12 @@ class KPlayer(Player):
             self.RIGHT_PRESSED = False
         if self.A_PRESSED:
             if Abilities.Sword:
-                if self.slash.slash():
+                if self.throw_sword_attack.throwsword():
+                    self.run_animation_subtick = 0
+                    self.run_animation_alt = 1
+        if self.LB_PRESSED:
+            if Abilities.Sword:
+                if self.slash_attack.slash():
                     self.run_animation_subtick = 0
                     self.run_animation_alt = 1
             #self.add_dm_message("You swung your sword")
@@ -1225,7 +1252,9 @@ class KPlayer(Player):
                     mod1 = 0.8 * rs1 
                     mod2 = 1.1 * rs2
                     calc_speed *= 1.0+(mod1+mod2)
-                    if(self.slash.visible):
+                    if(self.throw_sword_attack.visible):
+                        mod1*=1.5
+                    if(self.slash_attack.visible):
                         mod1*=1.5
             else:
                 self.stamina_recharge_buffer -= 0.2
@@ -1297,7 +1326,7 @@ class KPlayer(Player):
             else:
                 self.color = [1.0,1.0,1.0,1.0]
         
-            if(self.slash.visible):
+            if(self.slash_attack.visible):
                 self.v[0] *= 1.05
                 self.v[1] *= 1.05
 

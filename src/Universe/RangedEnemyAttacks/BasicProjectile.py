@@ -124,10 +124,10 @@ class BasicProjectile(Object):
                         self.floor.create_object(SplatterParticle( p = [self.floor.player.p[0], self.floor.player.p[1]], rad = uniform(-3.14,3.14)))
                     return False
                 else:
-                    if self.floor.player.slash.visible:
-                        self.rad = self.floor.player.slash.rad
-                        self.reorient()
-                        self.player_touch_frames = 0
+                    #if self.floor.player.throw_sword_attack.visible:
+                    #    self.rad = self.floor.player.throw_sword_attack.rad
+                    #    self.reorient()
+                    #    self.player_touch_frames = 0
                     return True
 
         if(self.lifespan>0):

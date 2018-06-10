@@ -5,12 +5,13 @@ from random import choice
 from ..LevelEffects.SwordCrit import SwordCrit
 
 
-class SlashEffect(Object):
+class ThrowSword(Object):
     textures = [
         BGL.assets.get('KT-player/texture/sword'),
         BGL.assets.get('KT-player/texture/sword'),
         BGL.assets.get('KT-player/texture/sword'),
     ]
+    balltexture = BGL.assets.get('KT-player/texture/swordball')
 
     def customize(self):
         self.buftarget = "popup"
@@ -21,7 +22,7 @@ class SlashEffect(Object):
         self.light_color = [1.0,1.0,1.0,1.0]
         self.fr = 0
         self.visible = False
-        self.texture = SlashEffect.textures[0]
+        self.texture = ThrowSword.textures[0]
         self.z_index = -1
         self.cooldown = 0
         self.stagger_cooldown = 0
@@ -31,14 +32,16 @@ class SlashEffect(Object):
         self.snapped_v = ( 0.0,1.0)
         self.ext_delta = 0.0
         self.base_reg = 1.2
+        self.direct_influence = 0.0
 
-    def slash(self):
+    def throwsword(self):
+        self.direct_influence = 1.0
         self.alpha = 1.0
         if(self.floor.player.run_stamina>0):
             self.floor.player.sword_swing = self.floor.player.sword_swing_cooldown
             if(self.cooldown>0):
                 return False
-            self.texture = SlashEffect.textures[0]
+            self.texture = ThrowSword.textures[0]
             self.fr = 0
             self.visible = True
 
@@ -56,7 +59,6 @@ class SlashEffect(Object):
             self.stagger_cooldown = 4
             self.floor.sounds.play( self.floor.sounds.slash )
             self.floor.player.run_stamina -= 20
-            self.floor.player.total_slashes += 1
 
             self.base_extension = 1.2
             self.p[0] = self.floor.player.p[0]
@@ -80,6 +82,14 @@ class SlashEffect(Object):
         self.snapped_v = ( self.snapped_v[0] *decay , self.snapped_v[1] *decay )
 
         pad = self.floor.player.controllers.get_virtualized_pad(0)
+
+        #self.snapped_v[0] += pad.left_stick[0]
+        #self.snapped_v[1] += pad.left_stick[1]
+
+        self.direct_influence*= 0.92
+        self.snapped_v = (
+            self.snapped_v[0] + (pad.left_stick[0]*0.3*self.direct_influence) ,
+            self.snapped_v[1] + (pad.left_stick[1]*0.3*self.direct_influence) )
 
         if(abs(self.snapped_v[0])+abs(self.snapped_v[1]))<cutoff:
             cfa,cfb = 0.8,0.2
@@ -109,21 +119,23 @@ class SlashEffect(Object):
             if self.fr == 3:
                 self.flash_color = [1.0,0.5,0.0,1.0]
 
-            if self.fr>2 and self.fr < 19 and (self.stagger_cooldown==0):
+            if self.fr>0 and self.fr < 9000000 and (self.stagger_cooldown==0):
                 for enemy in self.floor.snap_enemies:
                     if enemy.snap_type==1 and enemy not in self.attacked_enemies and len(self.attacked_enemies)<3:
                         dx = self.p[0] - enemy.p[0] 
                         dy = self.p[1] - enemy.p[1] 
                         md = (dx*dx) + (dy*dy)
-                        if md < ((enemy.physics["radius"]*enemy.physics["radius"])+6.0):
+                        if md < ((enemy.physics["radius"]*enemy.physics["radius"])+9.0):
                             self.floor.player.v[0] = -1*dx*0.3
                             self.floor.player.v[1] = -1*dy*0.3
                             #self.floor.player.p[0] = enemy.p[0]
                             #self.floor.player.p[1] = enemy.p[1]
                             self.floor.sounds.play( self.floor.sounds.slashhit )
-                            #enemy.floor.player.add_dm_message("You slashed an enemy")
+                            #enemy.floor.player.add_dm_message("You throwsworded an enemy")
 
-                            self.snapped_v = (0.0,0.0)
+                            self.snapped_v = ( self.snapped_v[0] * 0.8, self.snapped_v[1] * 0.8 )
+                            self.direct_influence *= 0.6
+
                             if(self.floor.player.running):
                                 enemy.receive_snap_attack( choice([True,False]) )
                             else:
@@ -146,14 +158,26 @@ class SlashEffect(Object):
                 self.attacked_enemies = []
                 self.floor.player.sword.visible = True
                 return
-            self.texture = SlashEffect.textures[0]
+            self.texture = ThrowSword.textures[0]
             
 
     def get_guppy_batch(self):
         batch = [ self.get_shader_params() ]
 
-        batch[0]["rotation_local"] = -1.5705
+        #batch[0]["rotation_local"] = -1.5705
         batch[0]["translation_world"][1] -= 0.7
+
+        chainlen = 10
+
+        for i in range(0, chainlen):
+            batch.append(self.floor.player.get_shader_params())
+            b = batch[-1]
+            b["texBuffer"] = ThrowSword.balltexture
+            b["scale_local"] = [ 0.4,0.4]
+            idx = (1.0 / chainlen)*i
+            b["translation_world"][0] = (batch[0]["translation_world"][0]*idx) + (b["translation_world"][0]*(1.0-idx))
+            b["translation_world"][1] = (batch[0]["translation_world"][1]*idx) + (b["translation_world"][1]*(1.0-idx))
+
 
         return batch
         

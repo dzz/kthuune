@@ -28,6 +28,7 @@
             { "name" : "knight_sword", "directory" : "{package_path}/knight_sword/", "filtered" : false }
         ],
         "texture" : [
+            { "name" : "swordball", "filename" : "{package_path}/swordball.png", "filtered" : false },
             { "name" : "lock", "filename" : "{package_path}/lock.png", "filtered" : false },
             { "name" : "world1_icon", "filename" : "{package_path}/menu/world1_icon.png", "filtered" : false },
             { "name" : "main_menu_back", "filename" : "{package_path}/menu/back.png", "filtered" : false },
