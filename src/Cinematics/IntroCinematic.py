@@ -91,6 +91,7 @@ class IntroCinematic():
         PAR_TER_FAR = 7
         PAR_TER_MID = 8
         PAR_TER_NEAR = 9
+        PAR_TER_NEAREST = 10
 
         #FOREGROUND_FG = 
 
@@ -108,12 +109,17 @@ class IntroCinematic():
                     for i in range (0,3): 
                         plane.filter_color[i] = max(0.0,plane.filter_color[i] - fadein)
 
+
+                if id == 0:
+                    plane.sx *= 1.0003
                 if id == PAR_CLOUDS:
-                    plane.x -= 0.01
+                    plane.x -= 0.004
                     plane.y = sin(plane._t*0.08)*0.04
+                    plane.sx *= 1.00005
                 if id == PAR_CLOUDS2:
-                    plane.x -= 0.008
+                    plane.x -= 0.002
                     plane.y = cos(plane._t*0.04)*0.06
+                    plane.sx *= 1.00004
 
                 if id == PAR_MTNS:
                     plane.x -= 0.0008
@@ -130,6 +136,8 @@ class IntroCinematic():
                     plane.y = cos(plane._t*0.2)*0.02
                 if id == PAR_TER_NEAR:
                     plane.x -= 0.0064
+                if id == PAR_TER_NEAREST:
+                    plane.x -= 0.0098
 
                 plane.x -= 0.008
 
@@ -159,7 +167,9 @@ class IntroCinematic():
                 if id == PAR_TER_MID:
                     plane.x += 15.0
                 if id == PAR_TER_NEAR:
-                    plane.x += 20.0
+                    plane.x += 23.0
+                if id == PAR_TER_NEAREST:
+                    plane.x += 28.0
 
             def default_initializer(plane):
                 set_defaults(plane)
@@ -178,7 +188,8 @@ class IntroCinematic():
             (BGL.assets.get('KT-forest/texture/EarthLayer-parallax_clouds2'), BGL.blendmode.alpha_over ),
             (BGL.assets.get('KT-forest/texture/EarthLayer-ter3'), BGL.blendmode.alpha_over ),
             (BGL.assets.get('KT-forest/texture/EarthLayer-ter2'), BGL.blendmode.alpha_over ),
-            (BGL.assets.get('KT-forest/texture/EarthLayer-ter1'), BGL.blendmode.alpha_over )
+            (BGL.assets.get('KT-forest/texture/EarthLayer-ter1'), BGL.blendmode.alpha_over ),
+            (BGL.assets.get('KT-forest/texture/EarthLayer-ter0'), BGL.blendmode.alpha_over )
         ]
 
         self.cinematic_planes = []

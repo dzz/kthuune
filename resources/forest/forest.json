@@ -32,6 +32,7 @@
             { "name" : "EarthLayer-ter1", "filename" : "{package_path}/cinema_earth/EarthLayer-ter1.png", "filtered" : false },
             { "name" : "EarthLayer-ter2", "filename" : "{package_path}/cinema_earth/EarthLayer-ter2.png", "filtered" : false },
             { "name" : "EarthLayer-ter3", "filename" : "{package_path}/cinema_earth/EarthLayer-ter3.png", "filtered" : false },
+            { "name" : "EarthLayer-ter0", "filename" : "{package_path}/cinema_earth/EarthLayer-ter0.png", "filtered" : false },
             { "name" : "EarthLayer-ter_distant", "filename" : "{package_path}/cinema_earth/EarthLayer-ter_distant.png", "filtered" : false },
 
             { "name" : "fireball", "filename" : "{package_path}/fireball.png", "filtered" : false },
