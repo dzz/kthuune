@@ -101,7 +101,7 @@ class IntroCinematic():
             def default_ticker(plane):
 
                 plane._t += 0.1
-                fadein = float( 0.03 / float((id*2)+1) )
+                fadein = float( 0.06 / float((id*2)+1) )
 
                 if(owner.frame<700) and (owner.frame>200): 
                     for i in range (0,3): 
@@ -212,15 +212,15 @@ class IntroCinematic():
 
         if( self.frame == 400):
             self.title_card.reset("COMPUTATION is supreme,",False)
-        if( self.frame == 600):
+        if( self.frame == 700):
             self.title_card.reset("HUMANITY irrelevant.",False)
-        if( self.frame == 1000):
+        if( self.frame == 1050):
             self.title_card.reset("CASIO CAIN has destroyed the world",False)
-        if( self.frame == 1300):
+        if( self.frame == 1400):
             self.title_card.reset("A world now consumed by DEEP SOVEREIGN",False)
-        if( self.frame == 1600):
+        if( self.frame == 1800):
             self.title_card.reset("NEW ERAs bring NEW CHALLENGES...",False)
-        if( self.frame == 2000):
+        if( self.frame == 2200):
             self.title_card.reset("...NEW kinds of VIRUSES...",False)
 
 
