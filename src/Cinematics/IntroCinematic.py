@@ -33,7 +33,7 @@ class CinematicPlane(Object):
             "translation_local"    : [ 0, 0 ],
             "scale_local"          : [ self.sx, self.sy ],
             "translation_world"    : [ self.x, self.y ],
-            "scale_world"          : [ 1.0,1.0],
+            "scale_world"          : [ 0.8,0.8 ],
             "view"                 : CinematicPlane.view,
             "rotation_local"       : 0.0,
             "filter_color"         : self.filter_color,
@@ -137,7 +137,7 @@ class IntroCinematic():
                 if id == PAR_TER_NEAR:
                     plane.x -= 0.0064
                 if id == PAR_TER_NEAREST:
-                    plane.x -= 0.0098
+                    plane.x -= 0.0110
 
                 plane.x -= 0.008
 
@@ -169,7 +169,9 @@ class IntroCinematic():
                 if id == PAR_TER_NEAR:
                     plane.x += 23.0
                 if id == PAR_TER_NEAREST:
-                    plane.x += 28.0
+                    plane.x += 35.0
+                if not id in [ 0, PAR_MTNS ]:
+                    plane.x -= 10
 
             def default_initializer(plane):
                 set_defaults(plane)

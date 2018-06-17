@@ -30,6 +30,9 @@ from .Universe.LevelEffects.AttackInfo import AttackInfo
 from .Menu.Menu import Menu
 from .Menu.SummaryPage import SummaryPage
 
+PREBUFFER = 600
+PREBUFFER_R = 620
+
 class Game( BaseGame ):
 
     god_buffer = BGL.framebuffer.from_screen()
@@ -450,6 +453,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
     def render(self):
 
+        if(self.prebuffer < PREBUFFER_R ):
+            return
         if self.active_cinematic:
             self.active_cinematic.render()
             return
@@ -491,13 +496,13 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
 
     def tick(self):
+        self.prebuffer += 1
+        if(self.prebuffer < PREBUFFER):
+            return
 
         if(self.summary_page):
             self.summary_page = self.summary_page.tick()
 
-        if(self.prebuffer < 120):
-            self.prebuffer += 1
-            return
 
         if(self.active_cinematic):
             cinematic_running = self.active_cinematic.tick()
