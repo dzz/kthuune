@@ -1,5 +1,7 @@
 from Beagle import API as BGL
 from Newfoundland.Object import Object
+from random import uniform
+from math import sin,cos
 
 class FakeCamera():
     def __init__(self):
@@ -10,7 +12,7 @@ class CinematicPlane(Object):
     view = BGL.view.widescreen_16_9
     shader = BGL.assets.get("beagle-2d/shader/beagle-2d")
 
-    def __init__(self,ticker = lambda : None, texture = None ):
+    def __init__(self,ticker = lambda : None, texture = None, blendmode = None ):
         self.x = 0.0
         self.y = 0.0
         self.vx = 0.01
@@ -23,7 +25,7 @@ class CinematicPlane(Object):
         self.warping = False
         self.ticker = ticker
         self.texture = texture
-        pass
+        self.blendmode = blendmode
 
     def get_shader_params(self):
         return {
@@ -78,41 +80,111 @@ class IntroCinematic():
         self.frame = 0.0
 
 
+        #################
+
+        PAR_CLOUDS = 2
+        PAR_MTNS = 3
+        PAR_REFLCT_MTNS = 4
+        PAR_CLOUDS2 = 6
+        PAR_TERDST = 5
+
+        PAR_TER_FAR = 7
+        PAR_TER_MID = 8
+        PAR_TER_NEAR = 9
+
+        #FOREGROUND_FG = 
+
+        owner = self
         def get_plane_ticker(id):
-            def default_ticker(self):
-                pass
+            def default_ticker(plane):
+
+                plane._t += 0.1
+                fadein = float( 0.05 / float(id+1) )
+
+                if(owner.frame<300): 
+                    for i in range (0,3): 
+                        plane.filter_color[i] = min(1.0,plane.filter_color[i] + fadein)
+                if(owner.frame>2100): 
+                    for i in range (0,3): 
+                        plane.filter_color[i] = max(0.0,plane.filter_color[i] - fadein)
+
+                if id == PAR_CLOUDS:
+                    plane.x -= 0.01
+                    plane.y = sin(plane._t*0.08)*0.04
+                if id == PAR_CLOUDS2:
+                    plane.x -= 0.008
+                    plane.y = cos(plane._t*0.04)*0.06
+
+                if id == PAR_MTNS:
+                    plane.x -= 0.0008
+                if id == PAR_REFLCT_MTNS:
+                    plane.x -= 0.0008
+                if id == PAR_TERDST:
+                    plane.x -= 0.0012
+
+                if id == PAR_TER_FAR:
+                    plane.x -= 0.002
+                    plane.y = sin(plane._t*0.1)*0.03
+                if id == PAR_TER_MID:
+                    plane.x -= 0.0043
+                    plane.y = cos(plane._t*0.2)*0.02
+                if id == PAR_TER_NEAR:
+                    plane.x -= 0.0064
+
+                plane.x -= 0.008
+
             return default_ticker
-            pass
 
         def plane_initializer(id):
-
             def set_defaults(plane):
-                pass
+
+                plane._t = uniform(0.0,6.3)
+
+                plane.x += 5.0
+                plane.sx = 15.0
+                plane.sy = 3.0
+                plane.filter_color = [ 0.0,0.0,0.0,1.0 ]
+
+                if id in [ PAR_CLOUDS, PAR_CLOUDS2 ]:
+                    plane.x += 35.0
+
+                if id == PAR_MTNS:
+                    plane.x += 8.0
+
+                if id == PAR_TERDST:
+                    plane.x += 11.0
+
+                if id == PAR_TER_FAR:
+                    plane.x += 8.0
+                if id == PAR_TER_MID:
+                    plane.x += 15.0
+                if id == PAR_TER_NEAR:
+                    plane.x += 20.0
 
             def default_initializer(plane):
                 set_defaults(plane)
                 return plane
-                pass
             return default_initializer
-            pass
+
+        ################
 
         planes = [
-            BGL.assets.get('KT-forest/texture/EarthLayer-cloudbg'),
-            BGL.assets.get('KT-forest/texture/EarthLayer-sealev'),
-            BGL.assets.get('KT-forest/texture/EarthLayer-parallax_clouds'), 
-            BGL.assets.get('KT-forest/texture/EarthLayer-mountains'), 
-            BGL.assets.get('KT-forest/texture/EarthLayer-reflectmtn'), 
-            BGL.assets.get('KT-forest/texture/EarthLayer-ter_distant'), 
-            BGL.assets.get('KT-forest/texture/EarthLayer-parallax_clouds2'), 
-            BGL.assets.get('KT-forest/texture/EarthLayer-ter3'), 
-            BGL.assets.get('KT-forest/texture/EarthLayer-ter2'), 
-            BGL.assets.get('KT-forest/texture/EarthLayer-ter1'), 
+            (BGL.assets.get('KT-forest/texture/EarthLayer-cloudbg'), BGL.blendmode.alpha_over  ),
+            (BGL.assets.get('KT-forest/texture/EarthLayer-sealev'), BGL.blendmode.alpha_over ),
+            (BGL.assets.get('KT-forest/texture/EarthLayer-parallax_clouds'), BGL.blendmode.add ),
+            (BGL.assets.get('KT-forest/texture/EarthLayer-mountains'), BGL.blendmode.alpha_over ),
+            (BGL.assets.get('KT-forest/texture/EarthLayer-reflectmtn'), BGL.blendmode.alpha_over ),
+            (BGL.assets.get('KT-forest/texture/EarthLayer-ter_distant'), BGL.blendmode.alpha_over ),
+            (BGL.assets.get('KT-forest/texture/EarthLayer-parallax_clouds2'), BGL.blendmode.alpha_over ),
+            (BGL.assets.get('KT-forest/texture/EarthLayer-ter3'), BGL.blendmode.alpha_over ),
+            (BGL.assets.get('KT-forest/texture/EarthLayer-ter2'), BGL.blendmode.alpha_over ),
+            (BGL.assets.get('KT-forest/texture/EarthLayer-ter1'), BGL.blendmode.alpha_over )
         ]
 
         self.cinematic_planes = []
         for id, plane in enumerate(planes):
             self.cinematic_planes.append(
-                plane_initializer(id)(CinematicPlane( texture = plane, ticker = get_plane_ticker(id) ))
+                plane_initializer(id)(CinematicPlane( texture = plane[0], blendmode = plane[1], ticker = get_plane_ticker(id) ))
             )
 
         self.camera = FakeCamera()
@@ -121,13 +193,14 @@ class IntroCinematic():
 
         for plane in self.cinematic_planes: plane.tick()
         self.frame = self.frame + 1.0
-        if self.frame < 47.0*5:
+        if self.frame < 3000:
             return True
         return False
 
     def render(self):
         BGL.context.clear( 0.0,0.0,0.0,1.0);
-        with BGL.blendmode.alpha_over:
-            for plane in self.cinematic_planes: plane.render()
+        for plane in self.cinematic_planes:
+            with plane.blendmode:
+                plane.render()
 
 
