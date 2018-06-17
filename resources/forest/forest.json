@@ -23,6 +23,15 @@
         ],
         "texture" : [
 
+
+            { "name" : "GB-00_bg", "filename" : "{package_path}/cinema_beards/gl (00_bg).png", "filtered" : false },
+            { "name" : "GB-01_light1", "filename" : "{package_path}/cinema_beards/gl (01_light1).png", "filtered" : false },
+            { "name" : "GB-02_light2", "filename" : "{package_path}/cinema_beards/gl (02_light2).png", "filtered" : false },
+            { "name" : "GB-03_beard0shadow", "filename" : "{package_path}/cinema_beards/gl (03_beard0shadow).png", "filtered" : false },
+            { "name" : "GB-03_beard1", "filename" : "{package_path}/cinema_beards/gl (03_beard1).png", "filtered" : false },
+            { "name" : "GB-03_beard2", "filename" : "{package_path}/cinema_beards/gl (03_beard2).png", "filtered" : false },
+            { "name" : "GB-03_beard3", "filename" : "{package_path}/cinema_beards/gl (03_beard3).png", "filtered" : false },
+
             { "name" : "EarthLayer-cloudbg", "filename" : "{package_path}/cinema_earth/EarthLayer-cloudbg.png", "filtered" : false },
             { "name" : "EarthLayer-mountains", "filename" : "{package_path}/cinema_earth/EarthLayer-mountains.png", "filtered" : false },
             { "name" : "EarthLayer-parallax_clouds", "filename" : "{package_path}/cinema_earth/EarthLayer-parallax_clouds.png", "filtered" : false },

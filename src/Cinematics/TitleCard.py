@@ -10,6 +10,8 @@ class TitleCard():
         self.tval = 0
         self.title = "Oort Cloud"
         self.shader_tval = 0
+        self.centerx = 64
+        self.top = 120 
 
     def reset(self, title, shader = True):
         with BGL.context.render_target( self.hud_buffer ):
@@ -17,6 +19,8 @@ class TitleCard():
         self.tval = 0
         if(shader):
             self.shader_tval = 0
+        else:
+            self.shader_tval = 700
         self.title = title
 
     def displaying(self):
@@ -25,7 +29,7 @@ class TitleCard():
         return False
 
     def center_x(self):
-        return 64
+        return self.centerx
 
     def render(self):
 
@@ -49,8 +53,8 @@ class TitleCard():
             TitleCard.primitive.render_shaded( TitleCard.shader, { "tick" : min(float(self.shader_tval),700.0) } )
             if(self.tval<300):
                 with BGL.context.render_target( self.hud_buffer ):
-                    BGL.lotext.render_text_pixels(self.title, self.center_x(),(240/2)-4,shadow_color )
-                    BGL.lotext.render_text_pixels(self.title, self.center_x(),(240/2)-3,fg_color )
+                    BGL.lotext.render_text_pixels(self.title, self.center_x(),self.top-4,shadow_color )
+                    BGL.lotext.render_text_pixels(self.title, self.center_x(),self.top-3,fg_color )
                 self.hud_buffer.render_processed( BGL.assets.get("beagle-2d/shader/passthru") )
 
     def tick(self):

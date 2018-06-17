@@ -248,6 +248,9 @@ class IntroCinematic():
 
         if self.frame < 2850:
             return True
+        else:
+            self.game.trigger_cinematic("beard")
+            return True
         return False
 
     def render(self):

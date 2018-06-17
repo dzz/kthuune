@@ -30,8 +30,8 @@ from .Universe.LevelEffects.AttackInfo import AttackInfo
 from .Menu.Menu import Menu
 from .Menu.SummaryPage import SummaryPage
 
-PREBUFFER = 600
-PREBUFFER_R = 620
+PREBUFFER = 0
+PREBUFFER_R = 0
 
 class Game( BaseGame ):
 
@@ -48,11 +48,14 @@ class Game( BaseGame ):
             from .Cinematics.WarpCinematic import WarpCinematic
             self.active_cinematic = WarpCinematic()
             self.active_cinematic.game = self
-        if key == "intro":
+        elif key == "intro":
             from .Cinematics.IntroCinematic import IntroCinematic
             self.active_cinematic = IntroCinematic()
             self.active_cinematic.game = self
-        pass
+        elif key == "beard":
+            from .Cinematics.BeardCinematic import BeardCinematic
+            self.active_cinematic = BeardCinematic()
+            self.active_cinematic.game = self
 
     def build_area_test(self):
         area_raw = BGL.assets.get("KT-forest/textfile/area_test")
