@@ -3,7 +3,9 @@ from Newfoundland.Object import Object
 from random import uniform
 from math import sin,cos
 from .TitleCard import TitleCard
+from ..CloudBackground import CloudBackground
 
+FADEOUT_START = 2220 
 class FakeCamera():
     def __init__(self):
         self.p = [-100.0,0.0]
@@ -79,6 +81,7 @@ class IntroCinematic():
             BGL.context.clear(1.0,1.0,1.0,1.0)
     
         self.frame = 0.0
+        self.cloud_fade = 1.0
 
 
         #################
@@ -101,14 +104,17 @@ class IntroCinematic():
             def default_ticker(plane):
 
                 plane._t += 0.1
-                fadein = float( 0.06 / float((id*2)+1) )
-
-                if(owner.frame<700) and (owner.frame>200): 
-                    for i in range (0,3): 
-                        plane.filter_color[i] = min(1.0,plane.filter_color[i] + fadein)
-                if(owner.frame>2220): 
-                    for i in range (0,3): 
-                        plane.filter_color[i] = max(0.0,plane.filter_color[i] - fadein)
+                fadein = float( 0.048 / float((id*2)+1) )
+                if(owner.frame<1600) and (owner.frame>200): 
+                    for i in range (0,4): 
+                        val = min(1.0,plane.filter_color[i] + (fadein/float(i+1)))
+                        plane.filter_color[i] = val
+                if(owner.frame>FADEOUT_START): 
+                    for i in range (0,4): 
+                        val = max(0.0,plane.filter_color[i] - (fadein/float(i+1)))
+                        plane.filter_color[i] = val
+                else:
+                    owner.cloud_background.lightning = 0.0
 
 
                 if id == 0:
@@ -165,12 +171,16 @@ class IntroCinematic():
 
                 if id == PAR_TER_FAR:
                     plane.x += 8.0
+                    plane.sx *= 0.98
+                    plane.sy *= 0.98
                 if id == PAR_TER_MID:
                     plane.x += 15.0
                 if id == PAR_TER_NEAR:
                     plane.x += 23.0
                 if id == PAR_TER_NEAREST:
                     plane.x += 35.0
+                    plane.sx *= 1.02
+                    plane.sy *= 1.02
                 if not id in [ 0, PAR_MTNS ]:
                     plane.x -= 10
 
@@ -204,32 +214,42 @@ class IntroCinematic():
         self.camera = FakeCamera()
         self.title_card = TitleCard();
         self.title_card.reset("4199 A.D.")
+        self.cloud_background = CloudBackground()
+        self.cloud_background.camera = self.camera
 
     def tick(self):
+        if( self.frame > FADEOUT_START ):
+            self.cloud_background.tick()
+            self.cloud_background.lightning *= self.cloud_fade
+            self.cloud_fade *= 0.998
         self.title_card.tick()
         for plane in self.cinematic_planes: plane.tick()
         self.frame = self.frame + 1.0
 
-        if( self.frame == 400):
-            self.title_card.reset("COMPUTATION is supreme,",False)
-        if( self.frame == 700):
-            self.title_card.reset("HUMANITY irrelevant.",False)
-        if( self.frame == 1050):
-            self.title_card.reset("CASIO CAIN has destroyed the world",False)
-        if( self.frame == 1400):
-            self.title_card.reset("A world now consumed by DEEP SOVEREIGN",False)
-        if( self.frame == 1800):
-            self.title_card.reset("NEW ERAs bring NEW CHALLENGES...",False)
-        if( self.frame == 2200):
-            self.title_card.reset("...NEW kinds of VIRUSES...",False)
+        if( self.frame == 350):
+            self.title_card.reset("COMPUTATION reigns supreme,",False)
+        if( self.frame == 720):
+            self.title_card.reset("HUMANITY rendered irrelevant.",False)
+        if( self.frame == 1150):
+            self.title_card.reset("CASIO CAIN destroyed the world",False)
+        if( self.frame == 1600):
+            self.title_card.reset("A world reclaimed by DEEP SOVEREIGN",False)
+        if( self.frame == 2100):
+            self.title_card.reset("NEW ERAS create NEW CHALLENGES",False)
+        if( self.frame == 2520):
+            self.title_card.reset("NEW kinds of VIRUSES...",False)
+            
+            
+        self.camera.p[0] -= 0.01
 
-
-        if self.frame < 2600:
+        if self.frame < 2850:
             return True
         return False
 
     def render(self):
         BGL.context.clear( 0.0,0.0,0.0,1.0);
+        if( self.frame > FADEOUT_START ):
+            self.cloud_background.render()
         for plane in self.cinematic_planes:
             with plane.blendmode:
                 plane.render()

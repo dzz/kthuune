@@ -65,26 +65,26 @@ class CloudBackground:
     def tick(self):
         if uniform(0.0,120.0)<1.0:
             self.lightning = uniform(12,24.0)
-            KSounds.play(KSounds.atmozap1)
+            #KSounds.play(KSounds.atmozap1)
         elif uniform(0.0,120.0)<1.0:
-            KSounds.play(KSounds.atmozap2)
+            #KSounds.play(KSounds.atmozap2)
             self.lightning = uniform(5,34)
         self.fr0 += 0.14
         self.fr1 += 0.3
 
-        self.lightning*=0.95
+        self.lightning*=0.98
 
-    def render(self,floor):
+    def render(self,floor = None ):
 
 
-        d = (abs(floor.player.p[0] - self.tree_position[0]) + abs(floor.player.p[1] - self.tree_position[1]))/2.0
+        #d = (abs(floor.player.p[0] - self.tree_position[0]) + abs(floor.player.p[1] - self.tree_position[1]))/2.0
 
-        dr = 50
-        if d>dr:
-            d = dr
-        d /= dr
-        d=d*d*d
-        d = 1.0 - d
+        #dr = 50
+        #if d>dr:
+        #    d = dr
+        #d /= dr
+        #d=d*d*d
+        #d = 1.0 - d
 
         #floor.override_base_zoom = 0.2 * (0.5*(1.0+d))   kinda neat example of fucking with the camera zoom for cinematic effects...why you'd bind this to the background idk
             
@@ -92,7 +92,7 @@ class CloudBackground:
             with BGL.blendmode.alpha_over:
                 uniform_fade.apply_fadeout( 0.3, [0.0,0.0,0.0] )
             lightning = self.lightning
-            floor.fuzz_amt = 1.2+(lightning*(0.3/24.0))
+            #floor.fuzz_amt = 1.2+(lightning*(0.3/24.0))
 
             with BGL.blendmode.alpha_over:
                 CloudBackground.primitive.render_shaded( CloudBackground.shader, {
