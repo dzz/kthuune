@@ -41,9 +41,13 @@ class Game( BaseGame ):
     ###############
 
     def trigger_cinematic(self,key):
-        from .WarpCinematic import WarpCinematic
         if key == "warp":
+            from .Cinematics.WarpCinematic import WarpCinematic
             self.active_cinematic = WarpCinematic()
+            self.active_cinematic.game = self
+        if key == "intro":
+            from .Cinematics.IntroCinematic import IntroCinematic
+            self.active_cinematic = IntroCinematic()
             self.active_cinematic.game = self
         pass
 
@@ -442,13 +446,16 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         self.camera.set_player(self.player)
         self.player_dead_frames = 0
 
+        self.trigger_cinematic("intro")
+
     def render(self):
-        if( Game.main_menu):
-            Menu.render()
-            return
 
         if self.active_cinematic:
             self.active_cinematic.render()
+            return
+        elif( Game.main_menu):
+            Menu.render()
+            return
         else:
             with BGL.context.render_target( Game.god_buffer):
                 if not self.floor.custom_background:
@@ -492,6 +499,13 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
             self.prebuffer += 1
             return
 
+        if(self.active_cinematic):
+            cinematic_running = self.active_cinematic.tick()
+            if not cinematic_running:
+                self.active_cinematic = None
+            if self.active_cinematic:
+                return
+
         if self.main_menu:
             return Menu.tick()
         else:
@@ -503,12 +517,6 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         if(self.fade_amt< self.max_fade_amt):
             self.fade_amt += 1.0
 
-        if(self.active_cinematic):
-            cinematic_running = self.active_cinematic.tick()
-            if not cinematic_running:
-                self.active_cinematic = None
-            if self.active_cinematic:
-                return
 
         else:
             if self.doing_random_test:

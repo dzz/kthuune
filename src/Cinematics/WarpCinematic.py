@@ -1,6 +1,6 @@
 from Beagle import API as BGL
 from Newfoundland.Object import Object
-from .Background import Background
+from ..Background import Background
 
 class FakeCamera():
     def __init__(self):

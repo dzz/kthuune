@@ -22,6 +22,18 @@
             { "name" : "directional_bullet_pink", "directory" : "{package_path}/directional_bullet_pink/", "filtered" : false }
         ],
         "texture" : [
+
+            { "name" : "EarthLayer-cloudbg", "filename" : "{package_path}/cinema_earth/EarthLayer-cloudbg.png", "filtered" : false },
+            { "name" : "EarthLayer-mountains", "filename" : "{package_path}/cinema_earth/EarthLayer-mountains.png", "filtered" : false },
+            { "name" : "EarthLayer-parallax_clouds", "filename" : "{package_path}/cinema_earth/EarthLayer-parallax_clouds.png", "filtered" : false },
+            { "name" : "EarthLayer-parallax_clouds2", "filename" : "{package_path}/cinema_earth/EarthLayer-parallax_clouds2.png", "filtered" : false },
+            { "name" : "EarthLayer-reflectmtn", "filename" : "{package_path}/cinema_earth/EarthLayer-reflectmtn.png", "filtered" : false },
+            { "name" : "EarthLayer-sealev", "filename" : "{package_path}/cinema_earth/EarthLayer-sealev.png", "filtered" : false },
+            { "name" : "EarthLayer-ter1", "filename" : "{package_path}/cinema_earth/EarthLayer-ter1.png", "filtered" : false },
+            { "name" : "EarthLayer-ter2", "filename" : "{package_path}/cinema_earth/EarthLayer-ter2.png", "filtered" : false },
+            { "name" : "EarthLayer-ter3", "filename" : "{package_path}/cinema_earth/EarthLayer-ter3.png", "filtered" : false },
+            { "name" : "EarthLayer-ter_distant", "filename" : "{package_path}/cinema_earth/EarthLayer-ter_distant.png", "filtered" : false },
+
             { "name" : "fireball", "filename" : "{package_path}/fireball.png", "filtered" : false },
             { "name" : "icebullet", "filename" : "{package_path}/icebullet.png", "filtered" : false },
             { "name" : "owl", "filename" : "{package_path}/owl.png", "filtered" : false },
