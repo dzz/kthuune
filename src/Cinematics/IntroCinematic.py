@@ -238,6 +238,10 @@ class IntroCinematic():
             self.title_card.reset("NEW ERAS create NEW CHALLENGES",False)
         if( self.frame == 2520):
             self.title_card.reset("NEW kinds of VIRUSES...",False)
+
+        ## The Infection is Spreading 
+
+        
             
             
         self.camera.p[0] -= 0.01
