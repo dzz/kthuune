@@ -2,6 +2,7 @@ from Beagle import API as BGL
 from Newfoundland.Object import Object
 from random import uniform
 from math import sin,cos
+from .TitleCard import TitleCard
 
 class FakeCamera():
     def __init__(self):
@@ -100,12 +101,12 @@ class IntroCinematic():
             def default_ticker(plane):
 
                 plane._t += 0.1
-                fadein = float( 0.05 / float(id+1) )
+                fadein = float( 0.03 / float((id*2)+1) )
 
-                if(owner.frame<300): 
+                if(owner.frame<700) and (owner.frame>200): 
                     for i in range (0,3): 
                         plane.filter_color[i] = min(1.0,plane.filter_color[i] + fadein)
-                if(owner.frame>2100): 
+                if(owner.frame>2220): 
                     for i in range (0,3): 
                         plane.filter_color[i] = max(0.0,plane.filter_color[i] - fadein)
 
@@ -201,12 +202,29 @@ class IntroCinematic():
             )
 
         self.camera = FakeCamera()
+        self.title_card = TitleCard();
+        self.title_card.reset("4199 A.D.")
 
     def tick(self):
-
+        self.title_card.tick()
         for plane in self.cinematic_planes: plane.tick()
         self.frame = self.frame + 1.0
-        if self.frame < 3000:
+
+        if( self.frame == 400):
+            self.title_card.reset("COMPUTATION is supreme,",False)
+        if( self.frame == 600):
+            self.title_card.reset("HUMANITY irrelevant.",False)
+        if( self.frame == 1000):
+            self.title_card.reset("CASIO CAIN has destroyed the world",False)
+        if( self.frame == 1300):
+            self.title_card.reset("A world now consumed by DEEP SOVEREIGN",False)
+        if( self.frame == 1600):
+            self.title_card.reset("NEW ERAs bring NEW CHALLENGES...",False)
+        if( self.frame == 2000):
+            self.title_card.reset("...NEW kinds of VIRUSES...",False)
+
+
+        if self.frame < 2600:
             return True
         return False
 
@@ -215,5 +233,7 @@ class IntroCinematic():
         for plane in self.cinematic_planes:
             with plane.blendmode:
                 plane.render()
+        with BGL.blendmode.alpha_over:
+            self.title_card.render()
 
 
