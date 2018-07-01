@@ -62,9 +62,8 @@ class DungeonCamera (Camera):
             if(abs(pad.right_stick[0]) < 0.1): pad.right_stick[0] = 0.0
             if(abs(pad.right_stick[1]) < 0.1): pad.right_stick[1] = 0.0
 
-            aim_offset_x = (pad.right_stick[0]*18) + (self.player.v[0]*0.5)
-            aim_offset_y = (pad.right_stick[1]*18) + (self.player.v[1]*0.5)
-
+            aim_offset_x = (pad.right_stick[0]*18) + (self.player.v[0]*0.2)
+            aim_offset_y = (pad.right_stick[1]*18) + (self.player.v[1]*0.2)
 
 
             if not self.cinema_target:

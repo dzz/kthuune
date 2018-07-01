@@ -37,6 +37,8 @@ from .Universe.PlayerElements.PotionCountView import PotionCountView
 from .Universe.Particles.SplatterParticle import SplatterParticle
 from .Universe.Particles.Bird import Bird
 
+from .Universe.PlayerElements.BasicGun import BasicGun
+
 
 ## maybe copy this music...
 #
@@ -344,6 +346,9 @@ class KPlayer(Player):
         #PLAYER INIT
         #player init
         
+        self.aim_rad = 0.0
+        self.gun = BasicGun(self)
+
         self.rainbow_val = 0
         self.in_editor = False
         self.run_animation_alt = 0
@@ -733,6 +738,8 @@ class KPlayer(Player):
         if(rs_mag > 0.25 ):
             check_rad = atan2( self.RIGHT_STICK[1], self.RIGHT_STICK[0] ) 
          
+        self.aim_rad = check_rad
+
         md = (self.v[0]*self.v[0])+(self.v[1]*self.v[1])
         idx = (
             ((0-rad_2_index(check_rad,8))+5) % 8
@@ -1011,6 +1018,7 @@ class KPlayer(Player):
             self.deq_dm_message()
             self.dm_msg_cooldown = 0
             
+        self.gun.tick()
 
         #player tick
         if self.got_time > 0:
@@ -1186,7 +1194,7 @@ class KPlayer(Player):
             if(self.run_stamina<1.0):
                 self.flash_color = [ 1.0,0.6,0.6,1.0 ]
                 calc_speed *= 0.2
-            if(pad.button_down( BGL.gamepads.buttons.RIGHT_BUMPER) and Abilities.Dash):
+            if(self.RB_DOWN and Abilities.Dash):
                 if(self.run_stamina>0.0):
                     self.running = True
                     self.stamina_recharge_buffer = 10.0

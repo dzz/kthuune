@@ -34,7 +34,10 @@ class BasicProjectile(Object):
         self.light_color = [ 0.6,1.0,0.3,0.4 ]
         self.size = [ 0.5,0.5 ]
         self.snapshot_fields = [ 'p' ]
-        spd = 0.45 + uniform(0.001, 0.01)
+        if "override_spd" in kwargs:
+            spd = self.override_spd    
+        else:
+            spd = 0.45 + uniform(0.001, 0.01)
         self.vx = cos( self.rad )*spd
         self.vy = sin( self.rad )*spd
         self.attack_str = 8
