@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DB7990C5-73DE-4CB2-A5A3-B65F9D2E412F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>wrenk</RootNamespace>
+    <AssemblyName>wrenk</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="modelprops.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modelprops.Designer.cs">
+      <DependentUpon>modelprops.cs</DependentUpon>
+    </Compile>
+    <Compile Include="objeditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="objeditor.Designer.cs">
+      <DependentUpon>objeditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="propeditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="propeditor.Designer.cs">
+      <DependentUpon>propeditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="rescale.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="rescale.Designer.cs">
+      <DependentUpon>rescale.cs</DependentUpon>
+    </Compile>
+    <Compile Include="tileeditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tileeditor.Designer.cs">
+      <DependentUpon>tileeditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="wrenk.cs" />
+    <Compile Include="wrenk.Designer.cs">
+      <DependentUpon>wrenk.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="modelprops.resx">
+      <DependentUpon>modelprops.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="objeditor.resx">
+      <DependentUpon>objeditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="propeditor.resx">
+      <DependentUpon>propeditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="rescale.resx">
+      <DependentUpon>rescale.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tileeditor.resx">
+      <DependentUpon>tileeditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="wrenk.resx">
+      <DependentUpon>wrenk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
