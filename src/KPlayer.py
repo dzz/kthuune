@@ -393,6 +393,8 @@ class KPlayer(Player):
         self.RIGHT_DOWN = False
         self.LB_DOWN = False
         self.RB_DOWN = False
+        self.LEFT_STICK = [ 0.0, 0.0 ]
+        self.RIGHT_STICK = [ 0.0, 0.0 ]
 
         self.state = KPlayer.STATE_DEFAULT
         self.last_link = None
@@ -726,9 +728,14 @@ class KPlayer(Player):
         return batch
     
     def determine_texture(self):
+        check_rad = self.rad
+        rs_mag = abs(self.RIGHT_STICK[0]) + abs(self.RIGHT_STICK[1] )
+        if(rs_mag > 0.25 ):
+            check_rad = atan2( self.RIGHT_STICK[1], self.RIGHT_STICK[0] ) 
+         
         md = (self.v[0]*self.v[0])+(self.v[1]*self.v[1])
         idx = (
-            ((0-rad_2_index(self.rad,8))+5) % 8
+            ((0-rad_2_index(check_rad,8))+5) % 8
         )*8
 
         if self.run_animation_alt == 0:
@@ -802,7 +809,10 @@ class KPlayer(Player):
         self.total_kills += 1
         pass
 
-    def deal_with_buttons(self,pad):
+    def map_controller_state(self,pad):
+
+        self.LEFT_STICK = list(pad.left_stick)
+        self.RIGHT_STICK = list(pad.right_stick)
         self.X_PRESSED = pad.button_pressed( BGL.gamepads.buttons.X )
         self.Y_PRESSED = pad.button_pressed( BGL.gamepads.buttons.Y )
         self.A_PRESSED = pad.button_pressed( BGL.gamepads.buttons.A )
@@ -1054,7 +1064,7 @@ class KPlayer(Player):
             #self.light_color = [ 1.0,0.8,0.8,1.0 ]
             #self.light_radius = 15
         pad = self.controllers.get_virtualized_pad( self.num )
-        self.deal_with_buttons(pad)
+        self.map_controller_state(pad)
         used_term = self.route_terminal_input()
         if used_term:
             print("USED TERMINAL")
@@ -1206,8 +1216,8 @@ class KPlayer(Player):
                 self.dash_flash = True
                 calc_speed = self.speed * 0.001
 
-            if(self.aiming_beam.aiming):
-                calc_speed = calc_speed * 0.5
+            #if(self.aiming_beam.aiming):
+            #    calc_speed = calc_speed * 0.5
 
             self.filtered_speed = (self.filtered_speed*0.8) + (calc_speed*0.2)
 

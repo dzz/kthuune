@@ -13,7 +13,7 @@ import audio
 
 
 class Sequences:
-    start_level = "0.1"
+    start_level = "3.1"
     active_music_key = None
     titles = {
         "0" : { "title" : "Debug Area", "time_limit": 999, "music" : "KT-player/path/ship_music" },

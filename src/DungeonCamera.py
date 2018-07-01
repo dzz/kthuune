@@ -41,11 +41,10 @@ class DungeonCamera (Camera):
             aim_offset_x = 0.0
             aim_offset_y = 0.0
             isAiming = 0.0
-            if(self.player.aiming_beam.aiming):
-                isAiming = 1.0
-
-                aim_offset_x = cos( self.player.rad ) * 10
-                aim_offset_y = sin( self.player.rad ) * 10
+            #if(self.player.aiming_beam.aiming):
+            #    isAiming = 1.0
+            #   aim_offset_x = cos( self.player.rad ) * 10
+            #   aim_offset_y = sin( self.player.rad ) * 10
 
 
             sx = self.player.v[0]
