@@ -122,9 +122,8 @@ class SlashEffect(Object):
                             self.floor.create_object( SwordCrit( p = [ self.p[0], self.p[1]-15 ]))
             if self.stagger_cooldown==0:
                 self.fr+=1 
-
                 if self.fr >14:
-                    if self.floor.player.A_STATE[1] == False:
+                    if self.floor.player.A_DOWN == False:
                         self.fr = 20
                         self.visible = False
             else: 

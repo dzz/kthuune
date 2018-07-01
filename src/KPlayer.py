@@ -370,25 +370,30 @@ class KPlayer(Player):
         self.combo_reset_cooldown = 0
         self.link_count = 0
         self.invuln_frames = 0
-        self.X_PRESSED = False
-        self.X_STATE = [ False, False ]
-        self.A_PRESSED = False
-        self.A_STATE = [ False, False ]
-        self.B_PRESSED = False
-        self.B_STATE = [ False, False ]
-        self.Y_PRESSED = False
-        self.Y_STATE = [ False, False ]
-
-        self.LEFT_STATE = [ False, False ]
-        self.LEFT_PRESSED = False
-        self.RIGHT_STATE = [ False, False ]
-        self.RIGHT_PRESSED = False
-        self.UP_STATE = [ False, False ]
-        self.UP_PRESSED = False
-        self.DOWN_STATE = [ False, False ]
-        self.DOWN_PRESSED = False
 
         self.stimer = 0
+
+        self.X_PRESSED = False
+        self.Y_PRESSED = False
+        self.A_PRESSED = False
+        self.B_PRESSED = False
+        self.UP_PRESSED = False
+        self.DOWN_PRESSED = False
+        self.LEFT_PRESSED = False
+        self.RIGHT_PRESSED = False
+        self.LB_PRESSED = False
+        self.RB_PRESSED = False
+        self.X_DOWN = False
+        self.Y_DOWN = False
+        self.A_DOWN = False
+        self.B_DOWN = False
+        self.UP_DOWN = False
+        self.DOWN_DOWN = False
+        self.LEFT_DOWN = False
+        self.RIGHT_DOWN = False
+        self.LB_DOWN = False
+        self.RB_DOWN = False
+
         self.state = KPlayer.STATE_DEFAULT
         self.last_link = None
         self.hurt_flash_timer = 0
@@ -798,74 +803,30 @@ class KPlayer(Player):
         pass
 
     def deal_with_buttons(self,pad):
+        self.X_PRESSED = pad.button_pressed( BGL.gamepads.buttons.X )
+        self.Y_PRESSED = pad.button_pressed( BGL.gamepads.buttons.Y )
+        self.A_PRESSED = pad.button_pressed( BGL.gamepads.buttons.A )
+        self.B_PRESSED = pad.button_pressed( BGL.gamepads.buttons.B )
+        self.UP_PRESSED = pad.button_pressed( BGL.gamepads.buttons.DPAD_UP )
+        self.DOWN_PRESSED = pad.button_pressed( BGL.gamepads.buttons.DPAD_DOWN )
+        self.LEFT_PRESSED = pad.button_pressed( BGL.gamepads.buttons.DPAD_LEFT )
+        self.RIGHT_PRESSED = pad.button_pressed( BGL.gamepads.buttons.DPAD_RIGHT )
+        self.LB_PRESSED = pad.button_pressed( BGL.gamepads.buttons.LEFT_BUMPER )
+        self.RB_PRESSED = pad.button_pressed( BGL.gamepads.buttons.RIGHT_BUMPER )
 
-        self.X_STATE[0] = self.X_STATE[1]
-        self.X_STATE[1] = pad.button_down( BGL.gamepads.buttons.X )
-    
-        if self.X_STATE[1] is True and self.X_STATE[0] is False:
-            self.X_PRESSED = True
-        else:
-            self.X_PRESSED = False
+        self.X_DOWN = pad.button_down( BGL.gamepads.buttons.X )
+        self.Y_DOWN = pad.button_down( BGL.gamepads.buttons.Y )
+        self.A_DOWN = pad.button_down( BGL.gamepads.buttons.A )
+        self.B_DOWN = pad.button_down( BGL.gamepads.buttons.B )
+        self.UP_DOWN = pad.button_down( BGL.gamepads.buttons.DPAD_UP )
+        self.DOWN_DOWN = pad.button_down( BGL.gamepads.buttons.DPAD_DOWN )
+        self.LEFT_DOWN = pad.button_down( BGL.gamepads.buttons.DPAD_LEFT )
+        self.RIGHT_DOWN = pad.button_down( BGL.gamepads.buttons.DPAD_RIGHT )
+        self.LB_DOWN = pad.button_down( BGL.gamepads.buttons.LEFT_BUMPER )
+        self.RB_DOWN = pad.button_down( BGL.gamepads.buttons.RIGHT_BUMPER )
 
-        self.Y_STATE[0] = self.Y_STATE[1]
-        self.Y_STATE[1] = pad.button_down( BGL.gamepads.buttons.Y )
-    
-        if self.Y_STATE[1] is True and self.Y_STATE[0] is False:
-            self.Y_PRESSED = True
-        else:
-            self.Y_PRESSED = False
-
-        self.LEFT_STATE[0] = self.LEFT_STATE[1]
-        self.LEFT_STATE[1] = pad.button_down( BGL.gamepads.buttons.DPAD_LEFT )
-    
-        if self.LEFT_STATE[1] is True and self.LEFT_STATE[0] is False:
-            self.LEFT_PRESSED = True
-        else:
-            self.LEFT_PRESSED = False
-
-        self.RIGHT_STATE[0] = self.RIGHT_STATE[1]
-        self.RIGHT_STATE[1] = pad.button_down( BGL.gamepads.buttons.DPAD_RIGHT )
-    
-        if self.RIGHT_STATE[1] is True and self.RIGHT_STATE[0] is False:
-            self.RIGHT_PRESSED = True
-        else:
-            self.RIGHT_PRESSED = False
-
-        self.UP_STATE[0] = self.UP_STATE[1]
-        self.UP_STATE[1] = pad.button_down( BGL.gamepads.buttons.DPAD_UP )
-    
-        if self.UP_STATE[1] is True and self.UP_STATE[0] is False:
-            self.UP_PRESSED = True
-        else:
-            self.UP_PRESSED = False
-
-        self.DOWN_STATE[0] = self.DOWN_STATE[1]
-        self.DOWN_STATE[1] = pad.button_down( BGL.gamepads.buttons.DPAD_DOWN )
-    
-        if self.DOWN_STATE[1] is True and self.DOWN_STATE[0] is False:
-            self.DOWN_PRESSED = True
-        else:
-            self.DOWN_PRESSED = False
-
-        self.A_STATE[0] = self.A_STATE[1]
-        self.A_STATE[1] = pad.button_down( BGL.gamepads.buttons.A )
-    
-        if self.A_STATE[1] is True and self.A_STATE[0] is False:
-            self.A_PRESSED = True
-        else:
-            self.A_PRESSED = False
-
-        self.B_STATE[0] = self.B_STATE[1]
-        self.B_STATE[1] = pad.button_down( BGL.gamepads.buttons.B )
-    
-        if self.B_STATE[1] is True and self.B_STATE[0] is False:
-            self.B_PRESSED = True
-        else:
-            self.B_PRESSED = False
-
-        if self.X_STATE[1] is False:
+        if pad.button_down( BGL.gamepads.buttons.X ):
             self.snap_attack_frozen = False
-
 
         if self.Y_PRESSED:
             #if( self.health_count>0):
