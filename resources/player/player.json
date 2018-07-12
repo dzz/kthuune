@@ -25,7 +25,8 @@
             { "name" : "dust", "directory" : "{package_path}/dust/", "filtered" : false },
             { "name" : "explosion", "directory" : "{package_path}/explosion/", "filtered" : false },
             { "name" : "knight", "directory" : "{package_path}/knight/", "filtered" : false },
-            { "name" : "knight_sword", "directory" : "{package_path}/knight_sword/", "filtered" : false }
+            { "name" : "knight_sword", "directory" : "{package_path}/knight_sword/", "filtered" : false },
+            { "name" : "guns", "directory" : "{package_path}/guns/", "filtered" : false }
         ],
         "texture" : [
             { "name" : "lock", "filename" : "{package_path}/lock.png", "filtered" : false },
@@ -146,7 +147,10 @@
             { "name" : "ree1", "path" : "{package_path}/sounds/ree1.wav" },
             { "name" : "ree2", "path" : "{package_path}/sounds/ree2.wav" },
             { "name" : "time_totem", "path" : "{package_path}/sounds/time_totem.wav" },
-            { "name" : "tk_fail", "path" : "{package_path}/sounds/tk_fail.wav" }
+            { "name" : "tk_fail", "path" : "{package_path}/sounds/tk_fail.wav" },
+            { "name" : "sfx_bullet", "path" : "{package_path}/sounds/sfx_bullet.wav" },
+            { "name" : "sfx_reload", "path" : "{package_path}/sounds/sfx_reload.wav" },
+            { "name" : "sfx_non", "path" : "{package_path}/sounds/sfx_non.wav" }
         ]
     }
 }

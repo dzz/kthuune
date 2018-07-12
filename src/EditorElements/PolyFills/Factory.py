@@ -237,6 +237,19 @@ class Factory:
                 area.add_line("False") #is region
                 area.add_line("0") #width
                 area.add_line("0") #height
+
+    def make_dangerblocks( area, brush):
+        for x in range( brush.x1, brush.x2 ):
+            for y in range( brush.y1, brush.y2 ):
+                area.add_line("OBJECT")
+                area.add_line("dangerblock") #object type
+                area.add_line("{0}".format(x*2))
+                area.add_line("{0}".format(y*2)) 
+                area.add_line("{}")
+                area.add_line("False") #is region
+                area.add_line("0") #width
+                area.add_line("0") #height
+
     def make_hostages( area, brush):
         for x in range( brush.x1, brush.x2 ):
             for y in range( brush.y1, brush.y2 ):

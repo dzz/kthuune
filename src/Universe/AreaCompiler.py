@@ -31,6 +31,7 @@ from ..Abilities import Abilities
 from .Hazards.WormField import WormField
 from .Hazards.Firepot import Firepot
 from .Hazards.Spike import Spike
+from .Hazards.DangerBlock import DangerBlock
 from .Enemies.SnapEnemy import SnapEnemy
 from .Enemies.Acolyte import Acolyte
 from .Enemies.Spider import Spider
@@ -285,6 +286,9 @@ class AreaCompiler():
 
             if od["key"] in ["spike"]:
                 self.objects.append(Spike.parse(od,df))
+
+            if od["key"] in ["dangerblock"]:
+                self.objects.append(DangerBlock.parse(od,df))
 
             if od["key"] in ["firepot", "firepot_right" ]:
                 self.objects.append(Firepot.parse(od,df))

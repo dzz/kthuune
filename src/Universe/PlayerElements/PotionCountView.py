@@ -1,4 +1,6 @@
 from Beagle import API as BGL
+from .StatusCards import Card
+from .Hud import Hud
 
 class PotionCountView():
     shader = BGL.assets.get("beagle-2d/shader/beagle-2d")

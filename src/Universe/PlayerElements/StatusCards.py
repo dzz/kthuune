@@ -236,3 +236,33 @@ class PotionCard(Card):
             "rotation_local"       : 0.0,
             "filter_color"         : [1.0,1.0,1.0,1.0],
             "uv_translate"         : [ 0,0 ] }
+
+class GunCard(Card):
+    shader = BGL.assets.get("KT-player/shader/potion")
+
+    def render(self):
+        with BGL.blendmode.alpha_over:
+            Card.primitive.render_shaded( GunCard.shader, self.get_shader_params() )
+
+    def __init__(self, player):
+        self.fridx = choice( range(0,180) )
+        self.player = player
+
+    def tick(self):
+        self.fridx = (self.fridx + 1) %180
+
+    def get_shader_params(self):
+        return {
+            "flashamt" : [ self.player.potionFlash ],
+            "statusamt" : [ 1.0 ],
+            "statuscolor" : [ 1.0,1.0,1.0,1.0 ],
+            "tick" : [self.player.cardtick+40.0],
+            "texBuffer"            : self.player.gun.texture,
+            "translation_local"    : [ 0, 0 ],
+            "scale_local"          : [ 0.7,0.7 ],
+            "translation_world"    : [ 7.0,-3.2],
+            "scale_world"          : [1.0,1.0],
+            "view"                 : Hud.view,
+            "rotation_local"       : 0.0,
+            "filter_color"         : [1.0,1.0,1.0,1.0],
+            "uv_translate"         : [ 0,0 ] }

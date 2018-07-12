@@ -39,6 +39,13 @@ void main() {
         vec2 refl_offset = vec2( random(uv*1000+tick), random(uv*-3000+tick))*r_amt;*/
 
     vec2 floor_uv = get_floor_uv(uv+noisey_offset);
+
+
+    //floor_uv -= vec2(0.1,0.5);
+    //floor_uv.y *= (1.0)+(floor_uv.x*0.1);
+    //floor_uv += vec2(0.1,0.5);
+
+
     vec4 floor_texel = texture( floor_buffer, floor_uv );
     //vec4 reflect_texel = texture( reflect_map, (floor_uv+(camera_position*3))+refl_offset );
 
@@ -52,6 +59,13 @@ void main() {
     light_texel *= 1.0-(object_drop_hint.a*0.25);
 
     light_texel.rgb*= (shadow_texel.a*shadow_texel.rgb);
+
+    vec3 orgb = light_texel.rgb;
+    light_texel.rgb*=0.7;
+    light_texel.rgb*=light_texel.rgb;
+    light_texel.rgb += (orgb*0.5);
+
+    
 
 
 /*

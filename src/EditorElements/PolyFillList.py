@@ -27,6 +27,7 @@ from .PolyFills.telekine import telekine
 from .PolyFills.owl import owl
 from .PolyFills.eglan import eglan
 from .PolyFills.spike_field import spike_field
+from .PolyFills.dangerblock import dangerblock
 from .PolyFills.terminal import terminal
 from .PolyFills.trigger import trigger
 from .PolyFills.spider import spider
@@ -73,6 +74,7 @@ class PolyFillList:
                 "eglan" : eglan,
                 "time_totem" : time_totem,
                 "spike_field" : spike_field,
+                "dangerblock" : dangerblock,
                 "terminal" : terminal,
                 "trigger" : trigger,
                 "spider" : spider

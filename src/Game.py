@@ -452,7 +452,7 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         self.camera.set_player(self.player)
         self.player_dead_frames = 0
 
-        #self.trigger_cinematic("intro")
+        self.trigger_cinematic("intro")
 
     def render(self):
 

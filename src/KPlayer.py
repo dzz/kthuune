@@ -32,7 +32,7 @@ from .Universe.PlayerElements.PlayerInvSlot import PlayerInvSlot
 from .Universe.PlayerElements.Hud import Hud
 from .Universe.PlayerElements.Cooldowns import Cooldown,SwordCooldown,TelekineCooldown
 from .Universe.PlayerElements.TerminalRenderer import TerminalRenderer
-from .Universe.PlayerElements.StatusCards import HeartCard, TelekineCard, WandCard, PotionCard, SwordCard
+from .Universe.PlayerElements.StatusCards import HeartCard, TelekineCard, WandCard, PotionCard, SwordCard, GunCard
 from .Universe.PlayerElements.PotionCountView import PotionCountView
 from .Universe.Particles.SplatterParticle import SplatterParticle
 from .Universe.Particles.Bird import Bird
@@ -388,6 +388,16 @@ class KPlayer(Player):
         self.RIGHT_PRESSED = False
         self.LB_PRESSED = False
         self.RB_PRESSED = False
+        self.X_REL = False
+        self.Y_REL = False
+        self.A_REL = False
+        self.B_REL = False
+        self.UP_REL = False
+        self.DOWN_REL = False
+        self.LEFT_REL = False
+        self.RIGHT_REL = False
+        self.LB_REL = False
+        self.RB_REL = False
         self.X_DOWN = False
         self.Y_DOWN = False
         self.A_DOWN = False
@@ -624,13 +634,13 @@ class KPlayer(Player):
 
         
 
-        #self.potioncard.render()
-        #self.potioncountview.render()
+        self.potioncard.render()
+        self.potioncountview.render()
+        if self.gun.fireable:
+            self.guncard.render()
 
         #self.wandcard.render()
 
-
-        
         with BGL.blendmode.alpha_over:
             self.swordcard.render()
             if(self.terminal_size>0):
@@ -666,6 +676,7 @@ class KPlayer(Player):
         self.wandcard = WandCard(self)
         self.telekinecard = TelekineCard(self)
         self.potioncard = PotionCard(self)
+        self.guncard = GunCard(self)
         self.potioncountview = PotionCountView(self)
         #self.hp = 100
         self.dash_amt = 1.0
@@ -830,6 +841,16 @@ class KPlayer(Player):
         self.RIGHT_PRESSED = pad.button_pressed( BGL.gamepads.buttons.DPAD_RIGHT )
         self.LB_PRESSED = pad.button_pressed( BGL.gamepads.buttons.LEFT_BUMPER )
         self.RB_PRESSED = pad.button_pressed( BGL.gamepads.buttons.RIGHT_BUMPER )
+        self.X_REL = pad.button_released( BGL.gamepads.buttons.X )
+        self.Y_REL = pad.button_released( BGL.gamepads.buttons.Y )
+        self.A_REL = pad.button_released( BGL.gamepads.buttons.A )
+        self.B_REL = pad.button_released( BGL.gamepads.buttons.B )
+        self.UP_REL = pad.button_released( BGL.gamepads.buttons.DPAD_UP )
+        self.DOWN_REL = pad.button_released( BGL.gamepads.buttons.DPAD_DOWN )
+        self.LEFT_REL = pad.button_released( BGL.gamepads.buttons.DPAD_LEFT )
+        self.RIGHT_REL = pad.button_released( BGL.gamepads.buttons.DPAD_RIGHT )
+        self.LB_REL = pad.button_released( BGL.gamepads.buttons.LEFT_BUMPER )
+        self.RB_REL = pad.button_released( BGL.gamepads.buttons.RIGHT_BUMPER )
 
         self.X_DOWN = pad.button_down( BGL.gamepads.buttons.X )
         self.Y_DOWN = pad.button_down( BGL.gamepads.buttons.Y )
@@ -1055,6 +1076,7 @@ class KPlayer(Player):
         self.wandcard.tick()
         self.telekinecard.tick()
         self.potioncard.tick()
+        self.guncard.tick()
 
 
 
