@@ -457,6 +457,8 @@ class DungeonFloor( Floor ):
         else:
             return self.group_to_owl[idx]
 
+    def get_forced_offset(self):
+        return None
 
 def get_DF():
     return DungeonFloor

@@ -31,6 +31,9 @@ class DungeonCamera (Camera):
         self.p[0] = self.player.p[0]
         self.p[1] = self.player.p[1]
 
+    def get_forced_offset(self):
+        return self.player.floor.get_forced_offset()
+
     def tick(self):
 
         if self.cinema_target:
@@ -65,10 +68,14 @@ class DungeonCamera (Camera):
             aim_offset_x = (pad.right_stick[0]*5) + (self.player.v[0]*0.2)
             aim_offset_y = (pad.right_stick[1]*5) + (self.player.v[1]*0.2)
 
-
             if not self.cinema_target:
-                pX = self.player.p[0] + (self.player.v[0]*0.15)
-                pY = self.player.p[1] + (self.player.v[1]*0.15)
+                fo = self.get_forced_offset()
+                if not fo:
+                    pX = self.player.p[0] + (self.player.v[0]*0.15)
+                    pY = self.player.p[1] + (self.player.v[1]*0.15)
+                else:
+                    pX = fo[0]
+                    pY = fo[1]
             else:
                 pX = self.cinema_target.p[0]
                 pY = self.cinema_target.p[1]
