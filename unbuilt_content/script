@@ -1,0 +1,80 @@
+C000 Introduction
+----
+
+FADE IN OVER ORIGINAL CITY BACKGROUND PANNING, WITH ORIGINAL SHIP FLYING THROUGH IT
+
+AS PAN GOES TO KILN CLOUDS, FLASH ORDINATOR SPRITE, LARGE, IN CENTER FRAME
+
+FADE TO BLACK, DOWNWARD SHIMMER ON ORDINATOR HEAD
+
+VECTOR LORD FACE APPEARS, REPLACING ORDINATOR
+
+THERE IS A FADEOUT
+
+VECTORLORD FADES IN OVER A WHITE BACKGROUND
+
+GAMEPLAY FADES IN WITH NO HUD
+
+XAA) vectorlord is now in a white world surrounded by dangerblocks
+
+hud elements fade in when interactions occur that effect a stat
+
+player eventually finds edges, all roads lead north
+
+effect is achieved by having tiles all white and background a pulsing purple effect, as in current main menu
+
+player goes north. edges vibrate in a chromasplit fashion. this effect is achieved by using the faux-ssao layer to drive edge detection
+
+player reaches a tall man who is a doorway to a picture frame with a bright, primary coloured world depicted behind him. 
+
+XAB) the player can also go left or right which will take them to two NPCs, who represnet a yin and yang dynamic
+
+talking to both will create an electrical field which attaches to the player. when both electrical fields, which should be animated as arcs, the man who is a doorway will allow entry into the picture frame.
+
+-- as the player traverses between XAA and XAB the background will crossfade from the original pulsating purple circuits, to a peachy "dusk on the prarie" sunset
+
+The player traverses the door
+
+FADE OUT
+
+C001 Main(Void)
+----
+
+BLACK VOID WITH HINT OF STARS BACKGROUND
+
+A blue-cyan-white beam of light expands horizontally, vertically centered in frame
+a spinning vectorlord sprite move through the beam of light, from south to north
+
+FADE OUT
+
+C002 ? ? : : 
+----
+
+BLACK VOID WITH HINT OF STARS BACKGROUND
+
+player is now suspended in space and must move north to step on the platform. the player is moving from unconstrained space, to the constrained space of the platform.
+
+there are three chargeplates evenly spaced on the platform. the player must charge all of them. 
+
+the chargeplates are connected to an owl who watches the player.  
+
+When the chargeplates are charged, the owl will explode into white light.
+
+FADE TO BLACK
+
+C003 Act I.
+        Beginning at the ROM Cafe
+-----
+
+FOREST BACKGROUND
+
+
+
+
+
+
+
+
+
+
+
