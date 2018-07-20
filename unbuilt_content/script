@@ -67,6 +67,55 @@ C003 Act I.
 -----
 
 FOREST BACKGROUND
+CHURCH TILES
+
+Player must navigate an entry way with spikes to the west
+
+Vignetting effect used to distinguish between INT and EXT 
+
+to the north is a wall, with laterns, and vents. underneath this, is the bartender(Irith) a spooky figure reminiscent of the doorway man
+
+there are two characters to the south. One is a raven like creature(Zorus). The other is a smoking, skeleton like figure in a ragged trench coat (Carnus). 
+
+to the east is a corridor with green living plants. By contrast, the rest of the world looks dead and skeletal. The room has an eerie turqouise glow. 
+
+A dilapidated computer terminal is here, encorached on by vines. It has an amber screen. The player may learn the lore of the CONTROL PROCESS MODULE,
+a story of engineers and businessmen - ending with one of the engineers digitizing himself and starting the ROM Cafe, a sort of incubation zone
+for new binaries to come to term with their existence. What is described is more lush than where the player finds themselves.
+
+The player may talk to Zorus:
+
+    Oh, neat...
+    ...fresh meat!
+
+The player may talk to Carnus:
+
+    VECTORLORD, is that what you are?
+    ...I see.
+    Do you know where you are?
+    We're underneath the discs. 
+    There are more places like this.
+    We'll see if you get that far!
+
+To which Zorus responds:
+
+    SQUAK!
+    Don't stay here too long. 
+
+The player may talk to Irif:
+
+    ...
+    a new binary?
+    times are dark indeed...
+    system complexity is increasing...
+    I can't remember the last time we had a 
+    LORD series through here. 
+    I wish you luck, I suppose.
+    Have a potion. (player receives 1x health potion)
+     
+(Subtext: VECTORLORD is not completely binary, and has some humanity,)
+
+
 
 
 
