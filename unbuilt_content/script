@@ -127,12 +127,13 @@ The player talks to GREYBEARD:
     (pause / hilight )
     Take this CMOS CHIP, it will take you where you must go.
 
-Player inserts CMOS in the Atrium 
+Player inserts CMOS in the Atrium - Then they choose their STARTING WEAPON (for projectile/GLOVE)
 
 { REPEAT OF C003 }
 
 ==================
 
+"...Welcome to Platter 0"
 
 LEVEL 1
 LEVEL 2
@@ -151,12 +152,748 @@ BOSS #1
 Act II.
 -------
 
+ROM Cafe
+
+"...Welcome to Platter 1"
+
 
 ACT III.
 -------
 
+ROM CAFE
+
+"...Welcome to Platter 2"
+
 
 EPILOGUE
 --------
+
+
+
+
+~~~~APPENDIX~~~~~
+
+Reference for WEAPON system
+
+=============================================================================
+[3.0]  BASIC WEAPONS  :::::::::::::::::::::::::::::::::::::::::::::::::::::::
+=============================================================================
+At the start of the game, you will be asked to select your initial weapon
+type. The selection is very important because you will be stucked with a
+weapon type everytime you start over.
+
+=============================================================================
+F O R C E                                                      BASIC WEAPONS
+=============================================================================
+Force is basically a bullet-based projectile weapon. The most prominent trait
+of Force is rapid fire, meaning that hits that came out from the weapons are
+fast and plenty. The second most prominent feature is the size of the shots,
+which is the biggest of all. Any combination of weapons with a Force will
+posses this characteristic, so if you need a weapon type that can spread
+widely, able to fire many shots at a time without a lag, this is your choice.
+Force based weapons has very good firing reach, as good as Lightning but with
+one distinctive trait that separates a Force and a Lighting: Force weapons
+cannot pass through barriers such as walls or dividers. In terms of damage,
+Force is a bit higher than Lightning, second to Fire.
+
+When To Use Force:
+  ---------------------------
+- Too Many Enemies On Screen.
+  ---------------------------
+  Force based weapons will help you to keep the enemies away because of its
+  extensive firing. If you have a lot of enemies on screen that like to
+  charge at your, Force will at least prevent them from getting close to you.
+  This is particularly useful when fighting against those small soldiers that
+  love to kick and throw you as you get close to them. They might be small
+  but annoying as hell.
+
+  -------------------------
+- You Need Big Firing Range
+  -------------------------
+  Weapon combinations with a Force will always have the upper advantage of
+  having big firing/shooting range. If precise firing is not your thing, you
+  are better off with Force. This is why Force is great for chaotic full
+  screen fighting as well as for dealing with bosses because you can just
+  aim the shots anywhere and guarantee that it will hit any enemy.
+
+
+=============================================================================
+L I G H T N I N G                                              BASIC WEAPONS
+=============================================================================
+Lightning is a weapon type that fires thin blue energy ray (sort of like a
+blue laser beam). Using a Lightning weapon assumes better precision and
+skills in firing the shots in a particular direction (unlike Force) because
+Lightning can only be aimed at one direction at a time. If combined with a
+weapon element, the resulting combination is a weapon type that posses
+limited hit/attack area even though Lightning can travel towards the end of
+the screen. Lightning's best property is its ability to go through barriers
+such as an enemy bullet, walls or any physical dividers that other weapons
+cannot touch. It can even pass through the enemies' body. Damage wise,
+Lightning is the third most damaging weapon after Force.
+
+When To Use Lightning:
+  -------------------------------------------
+- The Enemy Is Protected By A Shield/Barrier.
+  -------------------------------------------
+  A few bosses in the game actually makes it harder for you to hit them by
+  protecting themselves with distracting elements such as homing bombs,
+  bubbles, secondary enemies on the screen, multiple hit blasts or their
+  protective body parts. Things can get even harder if the enemy can only be
+  hit at specific times, very much like a turtle withdrawing into its shell.
+  For this you need Lightning so that even if you cannot destroy all the
+  distracting elements, at least the enemy suffers some damage.
+
+
+=============================================================================
+F I R E                                                        BASIC WEAPONS
+=============================================================================
+Fire is the most powerful weapon in this game. Any weapon element combined
+with Fire will be very powerful, in fact Fire based hybrids top the list
+of most powerful weapons. The bad thing is, Fire based weapons are very
+limited in attack range: the worst of all four. Because of its tremendous
+power, some combinations of Fire based weapons can even extinguished enemy's
+projectile attack such as bullets, lasers, energy force or stop a blast.
+That's how powerful this weapon is.
+
+When To Use Fire:
+  ------------------------------
+- The Enemy Life Points Is Huge.
+  ------------------------------
+  This is very straight forward but comes with a catch: if you are able to
+  get close to the enemy, then it's fine or else forget it. Fire based
+  weapons are very bad for long range attacks and can be suicidal if being
+  used. If you are going against bosses, Fire is not usually a good choice
+  unless you are very skillful in approaching the enemy.
+  
+  -------------------------------------------------------------------
+- You Need To Project Yourself/Your Partner From The Enemies Attacks.
+  -------------------------------------------------------------------
+  Fire based hybrids such as 'Fire + Chaser' or 'Fire + Lightning' are
+  extremely damaging but comes with very limited range. You can benefit
+  from this weapon by NOT TO ATTACK THE ENEMY but to PROTECT. Yes, examples
+  of the two weapon hybrids are so powerful that they can vaporise
+  enemy bullets, bombs, stray energy beams or even gigantic blast upon
+  contact. You can perform a strategy of one player protecting the other
+  player who is actually doing the attacking. This can be very useful when
+  fighting against bosses such as the 7 Force.
+
+
+=============================================================================
+C H A S E R                                                    BASIC WEAPONS
+=============================================================================
+Chaser is the least damaging weapon in the game. The best trait of Chaser is
+its homing ability. In other word, Chaser based weapons are able to seek out
+enemies without being aimed properly. Chaser will only attack enemies or any
+elements on the screen that can be destroyed, very suitable if you unsure of
+which body part of the enemies that can receive damage.
+
+When To Use Chaser
+  ---------------------------
+- Damage Is Not Your Priority
+  ---------------------------
+  Very well said. If you need to vanquish an enemy in the shortest time
+  possible, ignore this weapon or else you are wasting your time. For normal
+  battles against minor enemies, Chaser based weapons are fine. Against
+  bosses, you are tempting prepare a lot of time spent of firing (and
+  dodging).
+  
+  ---------------------------
+- Precise Aiming Is Difficult
+  ---------------------------
+  There are times when the enemies are very hard to be hit, either because
+  they are protected by some sort of barrier or protective body parts (of a
+  machine) or if the vulnerable area is out of reach (even with long range
+  weapons such as Force or Lightning). This is when Chaser works best
+  because you don't have to aim the shots at the right direction: the Chaser
+  will do the hard work for you. It can also be said that if you want an
+  effortless battle you can always choose this weapon type.
+
+
+
+=============================================================================
+[4.0]  WEAPON HYBRIDS  ::::::::::::::::::::::::::::::::::::::::::::::::::::::
+=============================================================================
+Two basic weapons can be combined together to form a hybrid (or combination)
+that possesses the traits of the two. This is one the best part of Gunstar
+Heroes as you can switch between one hybrid to another in order to fit the
+fighting needs at the time. Did I mention that it is so fun too? Anyway,
+at the end of each hybrid descriptions are ratings for the traits possessed
+by the hybrid. Here's what the rating points actually meant:
+
+Damage        :  The amount of damage produced by this hybrid on the enemy.
+Range         :  The hitting range that the shots fired from the weapon can
+                 cover. 
+Hit Factor    :  The amount of area that the shots can cover at one time.
+                 A particular hybrid might that has bigger points for Range
+                 (usually Lightning Hybrids) doesn't necessarily attain big
+                 points for Hit Factor (usually assigned for Force or
+                 Chaser hybrids).
+Rapidity      :  The rate of how fast (or how rapid) the shots are fired.
+Aiming        :  The effort needed in aiming the weapons to hit the enemy
+                 precisely. More effort needed will result in lower points
+                 (Lightning hybrids likely).
+
+
+------------------------------------------------------------------------------
+F O R C E  +  F O R C E
+==============================================================================
+This is basically a souped up version of the basic Force. You'll get bigger
+and wider shots, fired at an intense, very rapid pace. The shots fired from
+this weapon travels out in a Y shaped style: a straight firing line that
+branches out into two randomly swivering paths. So you'll get an ever bigger
+and wider shooting zone from this behaviour.
+
+------------------------
+WHY THIS WEAPON IS COOL:
+------------------------
+- The biggest plus is of course the huge shots being fired. You can focus to
+  hit more than one enemy at a time, very useful when dealing with a crowded
+  battle area. For body-area specific enemies such as stage bosses, this
+  weapon is highly suitable in increasing your chance of hitting the right
+  vulnerable spot, very good for bosses that moves around a lot or those
+  bosses that hides the vulnerable spot during a specific time frame.
+- This weapon is not actually very powerful, as least not as powerful as Fire
+  based hybrids. Because of its very rapid firing pace, the enemies receive
+  more hits at one time, meaning more life points is drained away
+  during a continuos firing streak. As I have said before, Force weapons are
+  very good in keeping the enemy at bay, especially this hybrid. When dealing
+  with a single boss (unaided), this weapon is perfect in keeping a safe
+  distance between yourself and the enemy while at the same time inflicting
+  damage.
+
+-----------------------
+WHY THIS WEAPON IS BAD:
+-----------------------
+- Sometimes you will be fighting against enemies that can take huge damage
+  points before being defeated. Higher level enemies such as bosses sometimes
+  are able to move around even when they are receiving hits. This can be bad
+  because this weapon's firing shots will be obstructed by the enemy as he/she
+  (or it) gets closer and closer to you. Because Force weapons don't posses
+  the ability to shot through elements, this would means that all of the
+  fired shots are absorbed by the enemy (until the enemy is destroy). If
+  there are more than one enemies on screen at one time, you'll be unable to
+  protect yourself from their attacks.
+
+--------------------
+FIXED OR FREE SHOTS?
+--------------------
+- Both are okay because you don't need to aim the shots clearly since the
+  shots are big enough anyway
+  
+-----------------------
+|  Damage      6/10   |
+|  Range       7/10   |
+|  Hit Factor  6/10   |
+|  Rapidity    9/10   |
+|  Aiming      6/10   |
+-----------------------
+
+
+
+------------------------------------------------------------------------------
+F O R C E  +  L I G H T N I N G
+==============================================================================
+From the looks of this weapon, it doesn't really detract much from the basic
+Lightning. What you get from this hybrid is rapid laser shots that stray
+(or spread into many direction) as you change the direction of your weapon's
+aim. The fired shots are even more rapid than the basic Lightning, benefiting
+from the union with the Force. Damage is not really great but at least you
+are able to use the ability of Lightning's penetrative shot with Force's
+nimble launching speed. There's a catch though: if you wanted to launch stray
+shots, you need to 'wave' the direction aim of your weapon. What this means
+is to constantly change the direction of your aim weapon. If not you will
+only be firing at one straight line. Notice that you get two very evident
+weapons traits from this union. Not all hybrids showcase this behaviour
+clearly.
+
+------------------------
+WHY THIS WEAPON IS COOL:
+------------------------
+- This weapons highlights the most prominent features of Force and Lightning,
+  so if you need a weapon that is able to fire shot at many areas at one time
+  and being able to pass through obstructive elements: this is your cup of tea.
+  It is fine for regular enemies and bosses but there is no clear indication
+  that it is better for a particular enemy type. This is because damage wise,
+  this weapon is very much average class.
+
+-----------------------
+WHY THIS WEAPON IS BAD:
+-----------------------
+- Having two great features in one weapon usually means that you will have to
+  sacrifice something for that. For this, this weapon inflicts average damage
+  to the enemies. When fighting against regular enemies such as the soldiers,
+  it is not really perfect but good enough. Against bosses, the damage is
+  quite small and you might take more time defeating them. However, this is
+  not really a big hindrance for you as you are able to hit more vulnerable
+  area than more powerful weapons (such as Fire based combinations) due to
+  its long range (and penetrative abilities). As a conclusion, using this
+  weapon is not really a bad thing after all.
+
+--------------------
+FIXED OR FREE SHOTS?
+--------------------
+- Fixed Shots is a better option because this enables you to aim at multiple
+  direction without moving around a lot. You'll tap the 'stray' shots ability
+  much better too especially when fighting the bosses. Free Shots Mode is
+  okay but most of the time you will be firing in a straight line which
+  defeats the purpose of using this weapon to the max. You can still fire the
+  'stray' shot but this would mean jumping around or moving back and forth
+  to change the direction of your aim. Rather troublesome and risky in my
+  opinion.
+
+-----------------------
+|  Damage      5/10   |
+|  Range       8/10   |
+|  Hit Factor  6/10   |
+|  Rapidity    7/10   |
+|  Aiming      5/10   |
+-----------------------
+
+
+
+------------------------------------------------------------------------------
+F O R C E  +  F I R E
+==============================================================================
+With this weapon combination, you'll be firing big fireballs that will spread
+(or rather explode) into multiple similarly sized fireballs upon contact with
+anything solid (walls, enemies, the ground, etc). The size of the fireballs
+is the same as the single size of the shot produced by the 'Force + Force'
+hybrid. The firing speed is a bit slower as you'll be launching about 2
+fireballs in one second. The fireballs as being said before, will explode as
+it comes into contact with anything solid. It can also be triggered to explode
+by letting go of the the fire button (B button by default), useful if it is
+hard to aim properly. The damage produced by this weapon is very good and
+highly suitable for fast demolition.
+
+------------------------
+WHY THIS WEAPON IS COOL:
+------------------------
+- Despite of the slower firing speed, this weapon is even better for hitting
+  multiple enemies because of the widespread explosion. Imagine a series of
+  chain explosions damaging the enemies (and we are talking about powerful
+  explosions here). For single bosses, this weapons is lovely for long range
+  attacks. You still need to aim though because the fireballs will not explode
+  if they don't touch the enemies' body (or body parts).
+
+-----------------------
+WHY THIS WEAPON IS BAD:
+-----------------------
+- For close combat, you are taking a risk using this. The shots fired is not
+  fast enough even though the damage is big and the explosions are wide. Most
+  of the time, the enemy will surpassed you by hitting you first so that you
+  are unable to fire at them. The most rational way to get back at them is to
+  do 'button tapping' or else pressing the fire button and then releasing it
+  rapidly. This is done to trigger the explosions without actually having the
+  balls to hit the enemy. The end result is a fire shield that surrounds your
+  player. This can be very tedious to do and you are better off doing physical
+  attacks instead.
+- Not all of the environments are actually constructed of 'solid' elements
+  that can cause the balls to explode upon contact. If the enemy is the type
+  that move from one point to another very fast, you'll be having a hard time
+  to hit or even benefit from the explosion trait. The slow firing pace doesn't
+  help much either by constantly missing the enemy.
+
+--------------------
+FREE OR FIXED SHOTS?
+--------------------
+- Fixed Shot definitely. Keep in mind that this weapon is better used from a
+  far distance and using it in Fixed Shot mode helps you to aim better and of
+  course safer too. Free Shot mode is suitable if you are just firing at one
+  direction most of the time. Still, even in this mode, it is highly advisable
+  to fire the shots from afar. You don't have enough time to let the balls to
+  hit the enemy up close.
+
+-----------------------
+|  Damage      8/10   |
+|  Range       7/10   |
+|  Hit Area    7/10   |
+|  Rapidity    4/10   |
+|  Aiming      6/10   |
+-----------------------
+
+
+
+------------------------------------------------------------------------------
+F O R C E  +  C H A S E R
+==============================================================================
+Visually, this weapon looks exactly like the 'Force + Force' hybrid without
+the 'Y' shaped shooting behaviour. Instead you'll get a straight line of big
+orange bullet balls that aims automatically at the enemies. The homing
+behaviour of this weapon type is very specific because the straight line shots
+can only 'bend' itself about 80 degrees from its neutral (straight) point.
+If you are firing straight up, this means that the shots are able to move
+either 80 degress to the left of the right. If you are firing straight forward,
+the shots can move 80 degress upwards or downwards. The rapidity of the shots
+is the same as the 'Force + Force' combination but the damage is the lowest
+for a Force hybrid.
+
+------------------------
+WHY THIS WEAPON IS COOL:
+------------------------
+- This is a rapid-firing, wide shot, homing weapon. It combines the 'push back'
+  factor of the Force weapon with the homing skills of Chaser. Even though it
+  can only focus on one enemy at one time, the fired shots are released in a
+  continuos pace. This creates a 'string' like appearance of the orange bullet
+  shots. Other enemies can still be whipped by this 'string' line even though
+  the shots are not aimed directly at them. The switching pace, from one enemy
+  to another is fast, ensuring that you'll constantly hit any enemy within the
+  'bending' range.
+
+-----------------------
+WHY THIS WEAPON IS BAD:
+-----------------------
+- For one, this is an exclusive one-enemy-at-one-time weapon. The weapon does
+  not discriminate between enemy types as it only focus on firing at the enemy
+  nearest to its firing line. If there are many enemies on screen, you'll see
+  that the weapon will randomly shot at the enemies even though that particular
+  enemy is not your main target. This can be annoying when fighting against
+  enemies that fires demolishable missiles, bullets or bombs because you cannot
+  hit them properly.
+- Another limiting factor is the 'bending' range of this weapon. This is the
+  only hybrid type of Chaser that requires you to do some aiming. When the
+  weapon is all 'stretched out' and cannot reach out anymore, you need to
+  change the direction of your aim.
+
+--------------------
+FREE OR FIXED SHOTS?
+--------------------
+- No hard rule since it can used finely for both mode. Fixed Shot Mode is good
+  if you constantly changes your aim to fit the 'bending' restriction. Free
+  Shot is still good because you only need to change the direction your
+  character is facing as the shots is able to adjust itself.
+
+-----------------------
+|  Damage      5/10   |
+|  Range       6/10   |
+|  Hit Area    6/10   |
+|  Rapidity    8/10   |
+|  Aiming      6/10   |
+-----------------------
+
+
+
+------------------------------------------------------------------------------
+L I G H T N I N G  +  L I G H T N I N G
+==============================================================================
+This hybrid produces a constant stream of blue Lightning rays. Unlike the
+'Force + Lightning' hybrid, the ray can only be aimed at one direction at
+a time. Since this is a pure Lightning hybrid, it can obviously pass through
+anything. The high energy lightning ray is powerful, which should rightly be
+so considering the fired stream is thin and good enough to hit limited number
+of enemies.
+
+------------------------
+WHY THIS WEAPON IS COOL:
+------------------------
+- Imagine a weapon that acts like a straight blue line that pass through
+  anything and that's what you get with this. You can hit multiple enemies
+  at one time as long as they can be hit in a straight line. All of the
+  enemies receive the same amount of damage by a single hit since there is
+  no 'protective effect' of the shot. This is made possible by the ability
+  of the ray to pass through any substance. Other weapon type that is not
+  combined with a Lightning will experience the mentioned 'protective effect'
+  to some extent, which is the phenomenon that causes any shots fired by the
+  weapon to be absorbed by the enemy until they are destroy (or until they
+  dodge the shots). This causes any other enemies that is not receiving the
+  hits to be 'protected' by their comrade. If they do receive any hits, the
+  damage attained will usually be milder since fewer shots actually get to
+  them.
+
+-----------------------
+WHY THIS WEAPON IS BAD:
+-----------------------
+- As said before, this weapon type can only be aimed at one particular
+  direction. Even if can pass through anything, is constantly and rapidly
+  fired, it is still not good enough to destroy many enemies at a time.
+  To actually achieve the feat of destroying many enemies, you just have to
+  aim the shot precisely which made it better off be used in Fixed Shot Mode.
+  With this being said, the firing area of this weapon is very, very limited.
+
+-------------------
+FREE OR FIXED SHOT?
+-------------------
+- Reading from the description above, you will immediately know that this
+  weapon is born to be used in Fixed Shot Mode. As a general rule, all
+  Lightning based hybrids are better off be used in Fixed Shot Mode except
+  'Lightning + Chaser'.
+
+-----------------------
+|  Damage      7/10   |
+|  Range       8/10   |
+|  Hit Area    5/10   |
+|  Rapidity    8/10   |
+|  Aiming      4/10   |
+-----------------------
+
+
+
+------------------------------------------------------------------------------
+LIGHTNING + FIRE
+==============================================================================
+This is by far one of the top two most powerful weapon in this game. The fire
+power of this weapon is so immense that it can destroy a few more harming
+elements thrown by the enemy which includes stray bullets, energy bursts,
+grenades, laser and energy blasts (to name a few). All the other weapons
+combinations in this game (except the 'Fire + Chaser' hybrid) are unable to
+produce destructive powers as great as this. The mentioned harming elements
+would normally be able to pass through the shots of the other weapon
+combinations: requiring you to dodge them while firing at the enemy. The bad
+side of this weapon is the range, which is the shortest of all of the hybrids.
+The resultant outcome of this hybrid is a blue, sword-like high energy beam
+(think of the light-sabre in Star Wars movie).
+
+------------------------
+WHY THIS WEAPON IS COOL:
+------------------------
+- The most obvious reason is the outstanding fire power. This weapon can be
+  utilised best for close range combat due to its very limited reach. That
+  would mean that this weapon is great for almost all circumstances except
+  for bosses where long range firing is the most ideal style (most of the
+  time).
+- Certain enemies have the tendency to send projectiles flying towards you.
+  This makes it difficult to aim your shots and dodging their projectiles at
+  the same time. Rather that using the strategy of firing at the suitable
+  period (such as when the enemy is reloading), you can attempt to counter
+  their attacks by negating or absorbing the projectiles with the weapon. If
+  you are playing a two player game, the user of this weapon can be the
+  protector (or the shielder), while the other player can focus on firing at
+  the enemy.
+
+-----------------------
+WHY THIS WEAPON IS BAD:
+-----------------------
+- Range is extremely limited. You are taking a risk of trying to use the
+  fire power advantage when fighting against enemies that are either fast
+  moving, uses its entire body to attack, or those that launches projectiles
+  to hit you. Even though this weapon is able to counter almost all of the
+  enemies' projectiles, it is virtually impossible for you to hit all of
+  them precisely. Remember that this is a Lightning hybrid weapon, you can
+  only aim at one direction. Use this weapon wisely.
+
+-------------------
+FREE OR FIXED SHOT?
+-------------------
+- Any one is okay depending on the desired usage: Free Shot Mode for offensive
+  playing and Fixed Shot Mode for defensive strategy.
+
+-----------------------
+|  Damage     10/10   |
+|  Range       4/10   |
+|  Hit Area    4/10   |
+|  Rapidity    8/10   |
+|  Aiming      4/10   |
+-----------------------
+
+
+
+------------------------------------------------------------------------------
+L I G H T N I N G  +  C H A S E R
+==============================================================================
+This is one of the fastest moving weapon in this game. With this hybrid you
+get a single stream of blue Lightning ray that chases the enemy. The homing
+trait of this hybrid is the same as the 'Force + Chaser' combination as it
+can only focus on one enemy at one time. There are many positive aspects of
+this hybrid. One, the Lightning stream moves at a very fast rate, faster
+then the 'Chaser + Chaser' combination. As it switches between one target
+to another, any enemies on its journey path will be receiving the damage
+as well. Secondly, you don't need to aim this weapon at all since it can
+find its target automatically. Because this is a Lightning hybrid, it can
+directly pass through the vulnerable area of an enemy without being stopped
+by obstructions (and we are talking about a weapon that seeks its target).
+With all those good stuff, the damage is surely average.
+
+------------------------
+WHY THIS WEAPON IS COOL:
+------------------------
+- It's fast, targets the vulnerable part without much hesitation and require
+  no effort in aiming. You can keep the button pressed and only move the
+  D-Pad to avoid the enemies' attacks.
+
+-----------------------
+WHY THIS WEAPON IS BAD:
+-----------------------
+- The worst bit of this weapon is its single focus. Once it hits a target,
+  it will keep damaging that target until the target is destroyed. If you
+  are dealing with a lot of enemies, make sure that they can be destroyed
+  quickly by the Lightning ray or else you are defenceless. You can switch
+  the focus of the ray by letting go of the fire button and pressing it
+  again so that it can finds a new target. Sometimes, the Lightning ray
+  can be 'distracted' by attacking elements that you don't intent to hit.
+  It can even lost focus by hitting the wrong body part of the enemy that
+  don't receive damage at all.
+
+-------------------
+FREE OR FIXED SHOT?
+-------------------
+- Free Shot Mode definitely. No question.
+
+-----------------------
+|  Damage      6/10   |
+|  Range       8/10   |
+|  Hit Area    7/10   |
+|  Rapidity    6/10   |
+|  Aiming      8/10   |
+-----------------------
+
+
+
+------------------------------------------------------------------------------
+F I R E  +  F I R E
+==============================================================================
+The flame thrower. This is nothing more than a longer version of the basic
+Fire. By changing the direction of your weapon's aim, you are able to 'shake'
+the flame around. The flame stream is continuous, so as you move around or as
+you change the firing aim, the entire flame trail will follow you to your
+current position. This is great to estimate the range of hit that the weapon
+can reach. The flame trail is composed of a few medium sized fire balls that
+is able to stretch when you 'shake' them. This makes it possible to extend the
+range of the shot. If you need to hit even further, release the fire button
+and the rest of the flame will disperse into tiny burst of flame. You can treat
+this behaviour similarly as the 'Force + Lightning' combination by 'shaking'
+the firing aim to get stray shots. Range is still limited but at least it is
+a bit longer than the basic Fire version. Damage is still good being a Fire
+hybrid.
+
+------------------------
+WHY THIS WEAPON IS COOL:
+------------------------
+- Powerful, good range (even for a Fire hybrid) and extremely versatile.
+  Suitable for any situation be it when fighting against normal enemies or
+  bosses. This is truly one of the most balanced weapon in this game.
+
+-----------------------
+WHY THIS WEAPON IS BAD:
+-----------------------
+- Again, not much. Range is limited but you can get around this limitation
+  by doing the 'shaking' or treating it like an ordinary projectile weapon:
+  press and release the fire button.
+
+-------------------
+FREE OR FIXED SHOT?
+-------------------
+- Depending on the situation, these two firing modes can be used
+  interchangingly. If you need to be at a safe distance from the enemy, then
+  Fixed Shot Mode is a great choice. With this, you are able to aim the flame
+  more accurately without moving too much, and... you have better angle to do
+  the 'shaking' or sending bursts of flame towards your enemy. Free Shot Mode
+  is perfect to incinerate large crowds of enemy as the flaming trail can act
+  as a 'wiping' tool that clears anything on its path. Very cool huh?
+
+-----------------------
+|  Damage      8/10   |
+|  Range       7/10   |
+|  Hit Area    7/10   |
+|  Rapidity    7/10   |
+|  Aiming      6/10   |
+-----------------------
+
+
+
+------------------------------------------------------------------------------
+F I R E  +  C H A S E R
+==============================================================================
+This hybrid produces a burst of flame that chases over the enemies on the
+screen. Like most other Chaser hybrids (except 'Chaser + Chaser'), the focus
+of attacking is only on one enemy at a time. There are two ways of how you
+can use this weapon. First you can just press the fire button and let the
+flame finds its target automatically. While this works good, the travelling
+speed of the flame is slow, the slowest of all Chaser hybrids. Using it this
+way is not suitable when there are too many enemies on the screen. The second
+approach is to 'control' the direction of where the flame can go. Any
+movements that you made with the D-Pad will translate exactly as to where the
+flame will go. To increases the speed of the flame, keep on pressing a
+particular direction key on the D-Pad for a longer period. By controlling the
+flame, the chasing trait is ignored until you let go of the D-Pad (by not
+pressing it at all). Damage produced is very good, second to the 'Lightning
++ Fire' combination. This is another weapon that is also able to vanquish the
+enemies harming elements such as missiles, stray bullets, bombs or grenades,
+blasts etc., very much like what the 'Lightning + Fire' combination is able
+to do.
+
+------------------------
+WHY THIS WEAPON IS COOL:
+------------------------
+- One word: DAMAGE. This is the second most powerful weapon you can use in
+  this game. Against bosses, this weapon is a dream. You can protect yourself
+  and your partner or... you can use this weapon for what it does best,
+  causing major pain. Being second in terms of damage still makes it a great
+  choice due to its longer and further reach. Speed can be slow but that can
+  be increased by controlling it manually. As a 'shielding' weapon, if you
+  have mastered the controlling aspects, it works much better than the
+  'Lightning + Fire' combination because you are able to destroy the harming
+  elements further away before it even gets to you.
+
+-----------------------
+WHY THIS WEAPON IS BAD:
+-----------------------
+- You cannot treat this weapon like your regular Chaser hybrid, as in press
+  the fire button and let the weapon take care of anything on screen. If you
+  want this kind of effect, you must stand still at one spot while the flame
+  does all the chasing... with a slow speed. If it takes quite some time to
+  destroy an enemy, the flame will linger around, moving up and down, back and
+  forth in order to do some damage. So that means the enemy will only be
+  receiving damage when the flame touches them. To counter all of these
+  limitations, you need to control the flame manually. By doing this, the flame
+  speed can be increased many folds, the moving behaviour can be determined,
+  and the enemy target can also be chosen. Remember though that, this actually
+  means moving your character around a lot. It is very likely that you can hit
+  the enemy or its attacking projectiles just to control the direction of the
+  flame. With its slow speed and single attacking focus, this weapon is surely
+  not a choice for close range combat unless you are able to do the controlling.
+
+-------------------
+FREE OR FIXED SHOT?
+-------------------
+- Very self explanatory: Fixed Shot.
+
+-----------------------
+|  Damage      9/10   |
+|  Range       7/10   |
+|  Hit Area    4/10   |
+|  Rapidity    5/10   |
+|  Aiming      3/10   |
+-----------------------
+
+
+
+------------------------------------------------------------------------------
+C H A S E R  +  C H A S E R
+==============================================================================
+The ultimate Chaser weapon. This hybrid produces star-shaped, green homing
+projectiles that travels at an amazing speed. Unlike all other Chaser hybrids,
+the star shots fired are plenty, making it possible to hit multiple enemies
+at the same time. You don't need to aim the weapon at all even though you can
+still do so to let the stars travel less further in hitting the target by
+pointing the aim at the enemy. Damage is the most minimal of all the hybrids,
+but considering how fast the stars hit the enemy plus the number of enemies
+that it can attack, the accumulated inflicted damage is considerably huge.
+
+------------------------
+WHY THIS WEAPON IS COOL:
+------------------------
+- Fast and plenty shots. The most ideal usage of this weapon is when fighting
+  against a lot enemies on screen at the same time. Even though the damage is
+  not big, it is still better to have guaranteed shots than using a powerful
+  weapon that is difficult to aim. The almighty lazy man's weapon.
+
+-----------------------
+WHY THIS WEAPON IS BAD:
+-----------------------
+- Nothing much except the damage. If you need a weapon that can kill enemies
+  in an instant, stay away from this.
+
+--------------------
+FIXED OR FREE SHOTS?
+--------------------
+- Free Shot Mode all the way.
+
+-----------------------
+|  Damage      6/10   |
+|  Range       7/10   |
+|  Hit Area    8/10   |
+|  Rapidity    8/10   |
+|  Aiming      8/10   |
+-----------------------
+
 
 
