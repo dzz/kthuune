@@ -79,6 +79,8 @@ there are two characters to the south. One is a raven like creature(Zorus). The 
 
 to the east is a corridor with green living plants. By contrast, the rest of the world looks dead and skeletal. The room has an eerie turqouise glow. 
 
+There is a slot in the ground for a CMOS CHIP.
+
 A dilapidated computer terminal is here, encorached on by vines. It has an amber screen. The player may learn the lore of the CONTROL PROCESS MODULE,
 a story of engineers and businessmen - ending with one of the engineers digitizing himself and starting the ROM Cafe, a sort of incubation zone
 for new binaries to come to term with their existence. What is described is more lush than where the player finds themselves.
@@ -108,22 +110,53 @@ The player may talk to Irif:
     a new binary?
     times are dark indeed...
     system complexity is increasing...
-    I can't remember the last time we had a 
-    LORD series through here. 
+    I can't remember the last time we had a LORD series through here. 
     I wish you luck, I suppose.
     Have a potion. (player receives 1x health potion)
-     
-(Subtext: VECTORLORD is not completely binary, and has some humanity,)
+
+{ adds a potion slot -- refill based on kills, and reusable, highlight in HUD } 
+
+When all three characters have been spoken to, a GREYBEARD materializes in the middle of the main area of the ROM cafe. 
+
+The player talks to GREYBEARD:
+
+    VECTORLORD, you are nearly ready
+    I am GB01, One of the GB series which created you
+    (pause)
+    your SWORD will defend you, your GLOVE will help you purge this world of its scourage. {Icons float from GB001}
+    (pause / hilight )
+    Take this CMOS CHIP, it will take you where you must go.
+
+Player inserts CMOS in the Atrium 
+
+{ REPEAT OF C003 }
+
+==================
 
 
+LEVEL 1
+LEVEL 2
+LEVEL 3
+rest
+LEVEL 4
+LEVEL 5
+LEVEL 6
+rest
+LEVEL 7
+LEVEL 8
+
+BOSS #1
 
 
+Act II.
+-------
 
 
+ACT III.
+-------
 
 
-
-
-
+EPILOGUE
+--------
 
 
