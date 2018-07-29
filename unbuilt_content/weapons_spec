@@ -41,5 +41,4 @@ SEEK x EXPLO
     seek bullets, AOE and spawn delay before seek bullets on hit
 
 EXPLO x EXPLO
-    (unique)
-    slow, large, triple dispersion explosion
+    triangle dispersion
