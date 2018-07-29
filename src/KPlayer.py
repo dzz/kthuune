@@ -163,7 +163,7 @@ class KPlayer(Player):
  
     def attempt_snap_attack(self, snap = True):
 
-        self.floor.create_object(FireConcentrator( p = list(self.p)))
+        #self.floor.create_object(FireConcentrator( p = list(self.p)))
 
         self.telekineFlash = 1.0
         #teleportCost = 10.0

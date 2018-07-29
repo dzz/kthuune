@@ -46,6 +46,8 @@ class DungeonFloor( Floor ):
         {
             "trigger_callbacks" : {},
             "spawners" : [],
+            "forced_progression" : None,
+            "forced_offset" : None,
             "genocide_enabled" : True,
             "CustomBackground" : None,
             "level_started" : False,
@@ -339,6 +341,7 @@ class DungeonFloor( Floor ):
         self.renderable_tooltips.extend(newtooltips)
 
 
+
     def tick(self):
         if self.CustomBackground:
             CustomBackground.tick()
@@ -359,6 +362,10 @@ class DungeonFloor( Floor ):
         #    def h():
         #        enemy.floor.camera.grab_cinematic( enemy, 30 )
         #    return h
+
+
+        if(self.forced_progression):
+            self.handle_forced_progression()
 
         if(self.playing_genocide()):
             self.genocide_flash_timeout -= 1
@@ -457,8 +464,20 @@ class DungeonFloor( Floor ):
         else:
             return self.group_to_owl[idx]
 
+    def start_forced_progression(self,vx,vy):
+        self.forced_progression = (vx,vy)
+        self.forced_offset = [ self.player.p[0], self.player.p[1] ]
+
+    def end_forced_progression(self):
+        self.forced_offset = None
+        self.forced_progression = None
+
     def get_forced_offset(self):
-        return None
+        return self.forced_offset
+    
+    def handle_forced_progression(self):
+        self.forced_offset[0] += self.forced_progression[0]
+        self.forced_offset[1] += self.forced_progression[1]
 
 def get_DF():
     return DungeonFloor

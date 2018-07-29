@@ -12,8 +12,16 @@ from .Universe.ShipComputer import ElderMessage
 import audio
 
 
+def build_bimodal_fp_trigger(vx, vy):
+    def handler(trigger):
+        if trigger.floor.forced_progression:
+            trigger.floor.end_forced_progression()
+        else:
+            trigger.floor.start_forced_progression(vx,vy)
+    return handler
+
 class Sequences:
-    start_level = "3.1"
+    start_level = "z"
     active_music_key = None
     titles = {
         "0" : { "title" : "Debug Area", "time_limit": 999, "music" : "KT-player/path/ship_music" },
@@ -33,6 +41,7 @@ class Sequences:
         "tt" : { "title" : "Instant Cooking", "time_limit" : 15, "music" : "KT-player/path/trixymixy" }, #debug state here, or make failure more quick & reinforcing
         "A0" :{ "title" :  "Pontiff Predicament", "time_limit" : 45, "music" : "KT-player/path/trixymixy" },
         "A1" :{ "title" :  "Slapped on the Wrist", "time_limit" : 40, "music" : "KT-player/path/trixymixy" },
+        "z" :{ "title" :  "fptest", "time_limit" : 40, "music" : "KT-player/path/trixymixy" },
     }
     found = []
     current_index = 0
@@ -306,5 +315,9 @@ class Sequences:
         floor = Sequences.buildarea_default( Game, area_def, sequence )
         return floor
 
+    def buildarea_z(Game,area_def,sequence):
+        floor = Sequences.buildarea_default( Game, area_def, sequence )
+        floor.trigger_callbacks[0] = build_bimodal_fp_trigger(0.3,0.0)
+        return floor
 
          
