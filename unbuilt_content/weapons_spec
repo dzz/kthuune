@@ -1,0 +1,45 @@
+BASE weapons are linear, single bullet weapons, varying mostly in there
+rate of fire and power
+
+FORCE - medium rate, medium power
+LIGHTNING -low rate, fast velocity, high power
+SEEK - fast rate, fast velocity, low power, *seeks
+EXPLO - low rate, low velocity, very high power, *aoe damage on hit
+
+
+FORCExFORCE
+    triangle dispersion
+
+FORCExLIGHTNING
+    ( unique )
+    lightning velocity and rate
+    force damage
+
+FORCExSEEK
+    force, but bullets seek
+
+FORCExEXPLO
+    ( unique )
+    force bullets, AOE and spawn bullets on hit
+
+LIGHTNING x LIGHTNING
+    triangle dispersion
+
+LIGHTNING x SEEK
+    ( unique )
+    lightning, but bullets seek
+
+LIGHTNING x EXPLO
+    ( unique )
+    lightning bullets, AOE and spawn bullets on hit
+
+SEEK x SEEK
+    triangle dispersion, delay before seek
+
+SEEK x EXPLO
+    (unique)
+    seek bullets, AOE and spawn delay before seek bullets on hit
+
+EXPLO x EXPLO
+    (unique)
+    slow, large, triple dispersion explosion
