@@ -428,6 +428,8 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
         Menu.controllers = self.controllers
 
         self.player         = self.create_tickable( self.create_player() )
+        BGL.keyboard.register_keydown_handler("1", lambda: self.player.gun.cycle_1())
+        BGL.keyboard.register_keydown_handler("2", lambda: self.player.gun.cycle_2())
         #self.player         = ( self.create_player() )
 
         ### ENTRY POINT
@@ -625,3 +627,5 @@ tilescale =2, width = area_def["width"]*2, height = area_def["height"]*2, camera
 
         #if self.player.sequence_kills >= 4:
         #    self.next_sequence(True)
+
+

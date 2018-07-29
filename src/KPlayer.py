@@ -29,7 +29,6 @@ from .Universe.PlayerElements.SlashEffect import SlashEffect
 from .Universe.PlayerElements.HealthBubble import HealthBubble
 from .Universe.PlayerElements.Sword import Sword
 from .Universe.PlayerElements.PlayerInvSlot import PlayerInvSlot
-from .Universe.PlayerElements.Hud import Hud
 from .Universe.PlayerElements.Cooldowns import Cooldown,SwordCooldown,TelekineCooldown
 from .Universe.PlayerElements.TerminalRenderer import TerminalRenderer
 from .Universe.PlayerElements.StatusCards import HeartCard, TelekineCard, WandCard, PotionCard, SwordCard, GunCard

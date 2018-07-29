@@ -15,18 +15,15 @@
             { "name" : "vl2d_idle", "directory" : "{package_path}/vl2d_idle/", "filtered" : false , "debug" : true },
             { "name" : "vl2d_walk", "directory" : "{package_path}/vl2d_walk/", "filtered" : false },
             { "name" : "vl2d_swipe", "directory" : "{package_path}/vl2d_swipe/", "filtered" : false },
-            { "name" : "vl3d_run", "directory" : "{package_path}/vl3d_run/", "filtered" : true },
-            { "name" : "vl3d_walk", "directory" : "{package_path}/vl3d_walk/", "filtered" : true },
-            { "name" : "vl3d_hit", "directory" : "{package_path}/vl3d_hit/", "filtered" : true },
-            { "name" : "vl3d_idle", "directory" : "{package_path}/vl3d_idle/", "filtered" : true },
-            { "name" : "vl3d_sword", "directory" : "{package_path}/vl3d_sword/", "filtered" : true, "reverse" : true },
             { "name" : "transporter_flash", "directory" : "{package_path}/transporter_flash/", "filtered" : false },
             { "name" : "worldbubble", "directory" : "{package_path}/menu/worldbubble/", "filtered" : false },
             { "name" : "dust", "directory" : "{package_path}/dust/", "filtered" : false },
             { "name" : "explosion", "directory" : "{package_path}/explosion/", "filtered" : false },
-            { "name" : "knight", "directory" : "{package_path}/knight/", "filtered" : false },
-            { "name" : "knight_sword", "directory" : "{package_path}/knight_sword/", "filtered" : false },
-            { "name" : "guns", "directory" : "{package_path}/guns/", "filtered" : false }
+            { "name" : "guns", "directory" : "{package_path}/guns/", "filtered" : false },
+            { "name" : "bullets_level1", "directory" : "{package_path}/bullets_level1/", "filtered" : false },
+            { "name" : "bullets_level2", "directory" : "{package_path}/bullets_level2/", "filtered" : false },
+            { "name" : "weapon_icons", "directory" : "{package_path}/weapon_icons/", "filtered" : false },
+            { "name" : "weapon_spheres", "directory" : "{package_path}/weapon_spheres/", "filtered" : false }
         ],
         "texture" : [
             { "name" : "lock", "filename" : "{package_path}/lock.png", "filtered" : false },

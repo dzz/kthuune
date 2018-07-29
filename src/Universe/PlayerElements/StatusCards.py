@@ -238,11 +238,19 @@ class PotionCard(Card):
             "uv_translate"         : [ 0,0 ] }
 
 class GunCard(Card):
+
+    icons = BGL.assets.get("KT-player/animation/weapon_icons")
+    spheres = BGL.assets.get("KT-player/animation/weapon_spheres")
+
     shader = BGL.assets.get("KT-player/shader/potion")
 
     def render(self):
         with BGL.blendmode.alpha_over:
-            Card.primitive.render_shaded( GunCard.shader, self.get_shader_params() )
+            if(self.player.gun.slot2 is None):
+                Card.primitive.render_shaded( GunCard.shader, self.get_shader_params(0) )
+            else:
+                Card.primitive.render_shaded( GunCard.shader, self.get_shader_params(0) )
+                Card.primitive.render_shaded( GunCard.shader, self.get_shader_params(1) )
 
     def __init__(self, player):
         self.fridx = choice( range(0,180) )
@@ -251,18 +259,49 @@ class GunCard(Card):
     def tick(self):
         self.fridx = (self.fridx + 1) %180
 
-    def get_shader_params(self):
-        return {
-            "flashamt" : [ self.player.potionFlash ],
-            "statusamt" : [ 1.0 ],
-            "statuscolor" : [ 1.0,1.0,1.0,1.0 ],
-            "tick" : [self.player.cardtick+40.0],
-            "texBuffer"            : self.player.gun.texture,
-            "translation_local"    : [ 0, 0 ],
-            "scale_local"          : [ 0.7,0.7 ],
-            "translation_world"    : [ 7.0,-3.2],
-            "scale_world"          : [1.0,1.0],
-            "view"                 : Hud.view,
-            "rotation_local"       : 0.0,
-            "filter_color"         : [1.0,1.0,1.0,1.0],
-            "uv_translate"         : [ 0,0 ] }
+    def get_shader_params(self,right):
+        if(self.player.gun.slot2 is None):
+            return {
+                "flashamt" : [ self.player.potionFlash ],
+                "statusamt" : [ 1.0 ],
+                "statuscolor" : [ 1.0,1.0,1.0,1.0 ],
+                "tick" : [self.player.cardtick+40.0],
+                "texBuffer"            : GunCard.icons[self.player.gun.slot1],
+                "translation_local"    : [ 0, 0 ],
+                "scale_local"          : [ 0.7,0.7 ],
+                "translation_world"    : [ 7.0,-3.2],
+                "scale_world"          : [1.0,1.0],
+                "view"                 : Hud.view,
+                "rotation_local"       : 0.0,
+                "filter_color"         : [1.0,1.0,1.0,1.0],
+                "uv_translate"         : [ 0,0 ] }
+        else:
+            if right==0:
+                return {
+                    "flashamt" : 0.0,
+                    "statusamt" : [ 1.0 ],
+                    "statuscolor" : [ 1.0,1.0,1.0,1.0 ],
+                    "tick" : [self.player.cardtick+40.0],
+                    "texBuffer"            : GunCard.icons[self.player.gun.slot1],
+                    "translation_local"    : [ -0.9, 0.2 ],
+                    "scale_local"          : [ 0.45,0.45 ],
+                    "translation_world"    : [ 7.0,-3.4],
+                    "scale_world"          : [1.0,1.0],
+                    "view"                 : Hud.view,
+                    "rotation_local"       : 0.0,
+                    "filter_color"         : [1.0,1.0,1.0,1.0],
+                    "uv_translate"         : [ 0,0 ] }
+            return {
+                "flashamt" : 0.0,
+                "statusamt" : [ 1.0 ],
+                "statuscolor" : [ 1.0,1.0,1.0,1.0 ],
+                "tick" : [self.player.cardtick+40.0],
+                "texBuffer"            : GunCard.icons[self.player.gun.slot2],
+                "translation_local"    : [ 0.7, -0.3 ],
+                "scale_local"          : [ 0.51,0.51 ],
+                "translation_world"    : [ 7.0,-3.4],
+                "scale_world"          : [1.0,1.0],
+                "view"                 : Hud.view,
+                "rotation_local"       : 0.0,
+                "filter_color"         : [1.0,1.0,1.0,1.0],
+                "uv_translate"         : [ 0,0 ] }

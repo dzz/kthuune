@@ -32,7 +32,7 @@ class Firepot(Object):
         self.light_radius *= 1.02
         if(self._fr == 50):
             self.light_radius = 1.5
-            bolt = BasicProjectile( p = [ self.p[0], self.p[1] ], rad = self.fire_rad, animation = "orange" ) 
+            bolt = BasicProjectile( p = [ self.p[0], self.p[1] ], rad = self.fire_rad, animation = 0  ) 
             self.floor.create_object( bolt )
             bolt.lifespan = 40
             bolt.rad += uniform(-0.04,0.04)

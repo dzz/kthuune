@@ -21,7 +21,7 @@ def build_bimodal_fp_trigger(vx, vy):
     return handler
 
 class Sequences:
-    start_level = "z"
+    start_level = "0"
     active_music_key = None
     titles = {
         "0" : { "title" : "Debug Area", "time_limit": 999, "music" : "KT-player/path/ship_music" },

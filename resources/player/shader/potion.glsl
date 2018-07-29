@@ -24,17 +24,20 @@ bool shade_blue() {
 }
 
 void main(void) {
-    vec4 smpl_base = texture(texBuffer,uv)* ((0.5)+(uv.y*0.5));
-
-    vec3 flash_color = vec3(1.0,1.0,1.0)*flashamt;
-
-    //if(uv.y > (1.0-statusamt) ) {
-    if( shade_blue() ) {
-        smpl_base.rgb *= vec3(1.0,1.0,1.0) + (flash_color*uv.y);
-    }
-
-    smpl_base.rgb += (flash_color*(1.0-uv.y));
-
+    vec4 smpl_base = texture(texBuffer,uv);
     gl_FragColor = smpl_base;
+//
+//    vec4 smpl_base = texture(texBuffer,uv)* ((0.5)+(uv.y*0.5));
+//
+//    vec3 flash_color = vec3(1.0,1.0,1.0)*flashamt;
+//
+//    //if(uv.y > (1.0-statusamt) ) {
+//    if( shade_blue() ) {
+//        smpl_base.rgb *= vec3(1.0,1.0,1.0) + (flash_color*uv.y);
+//    }
+//
+//    smpl_base.rgb += (flash_color*(1.0-uv.y));
+//
+//    gl_FragColor = smpl_base;
 }
 

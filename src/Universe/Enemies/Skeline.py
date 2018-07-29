@@ -197,7 +197,7 @@ class Skeline(SnapEnemy):
         #x = self.floor.player.p[0] - self.p[0]
         #y = self.floor.player.p[1] - self.p[1]
         #rad = atan2(y,x)
-        self.floor.create_object( BasicProjectile( p = [ self.p[0], self.p[1] ], rad = self.target_rad, animation = "pink" ) )
+        self.floor.create_object( BasicProjectile( p = [ self.p[0], self.p[1] ], rad = self.target_rad, animation = 2 ) )
         KSounds.play_eproj()
 
     def get_shader_params(self):

@@ -151,4 +151,4 @@ class Stork(SnapEnemy):
         #for x in range(0,num_shots):
         #    self.floor.create_object( BasicProjectile( p = [ self.p[0], self.p[1] ], rad = rad * x ) )
         x = self.fire_idx
-        self.floor.create_object( BasicProjectile( p = [ self.p[0], self.p[1] ], rad = rad * x, animation = "bright" ) )
+        self.floor.create_object( BasicProjectile( p = [ self.p[0], self.p[1] ], rad = rad * x, animation = 1 ) )

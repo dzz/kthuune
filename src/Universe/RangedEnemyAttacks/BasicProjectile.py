@@ -7,17 +7,43 @@ from ..LevelEffects.SpikeyWave import SpikeyWave
 from ..Particles.SplatterParticle import SplatterParticle
 from ...KSounds import KSounds
 
+bullets_level1 = BGL.assets.get("KT-player/animation/bullets_level1")
+bullets_level2 = BGL.assets.get("KT-player/animation/bullets_level2")
+
 class BasicProjectile(Object):
     textures =  {
         "default" : BGL.assets.get("KT-player/texture/flare"),
         "ice" : BGL.assets.get("KT-forest/texture/icebullet"),
     }
     
-    animations = {
-        "orange": BGL.assets.get("KT-forest/animation/directional_bullet_orange"),
-        "bright": BGL.assets.get("KT-forest/animation/directional_bullet_bright"),
-        "pink": BGL.assets.get("KT-forest/animation/directional_bullet_pink")
-    }
+
+    animations = [
+        #"orange": 
+            BGL.assets.get("KT-forest/animation/directional_bullet_orange"),
+        #"bright": 
+            BGL.assets.get("KT-forest/animation/directional_bullet_bright"),
+        #"pink": 
+            BGL.assets.get("KT-forest/animation/directional_bullet_pink"),
+        #"FORCE" :   
+            bullets_level1[0:3],
+        #"LIGHTNING" : 
+            bullets_level1[5:8],
+        #"SEEK" : 
+            bullets_level1[10:13],
+        #"EXPLO" : 
+            bullets_level1[15:18],
+        #"FORCExLIGHT" : 
+            bullets_level2[0:3],
+        #"FORCExEXPLO" : 
+            bullets_level2[3:6],
+        #"LIGHTxSEEK" : 
+            bullets_level2[6:9],
+        #"LIGHTxEXPLO" : 
+            bullets_level2[9:12],
+        # SEEKxEXPLO
+            bullets_level2[12:15],
+    ]
+
 
     def __init__(self,**kwargs):
         Object.__init__(self,**kwargs)
